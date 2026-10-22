@@ -38,6 +38,16 @@ def wrap(angle):
     return math.atan2(math.sin(angle), math.cos(angle))
 
 
+def route_needs_crossing(points):
+    """Conservatively test the remaining axis-aligned route against inflated C."""
+    for a, b in zip(points, points[1:]):
+        if max(min(a[0], b[0]), 4.2) <= min(max(a[0], b[0]), 5.8) and max(
+            min(a[1], b[1]), 0.95
+        ) <= min(max(a[1], b[1]), 5.05):
+            return True
+    return False
+
+
 def synchronized(callback):
     """Serialize externally scheduled callbacks; never hold this lock across await."""
 
@@ -428,7 +438,7 @@ class BusManager(Node):
                     ):
                         self.begin_stop('INVALID_ROUTE')
                         return
-                    if self.route_prefix:
+                    if self.route_prefix and (len(ids) < 2 or ids[1] != self.route_prefix):
                         ids = [self.route_prefix, *ids]
                     self.route = ids
                     targets = [tuple(self.config['nodes'][n]) for n in ids]
@@ -534,7 +544,12 @@ class BusManager(Node):
             else:
                 return
         if self.token:
-            if state and state.owner_id != 'bus' and not inside:
+            if (
+                state
+                and state.owner_id != 'bus'
+                and not inside
+                and now - self.last_renewed > self.p['crossing_ack_timeout_sec']
+            ):
                 self.token = ''
                 return
             # Release only after travelling beyond C, or safe terminal cleanup outside C.
@@ -542,7 +557,14 @@ class BusManager(Node):
             operation = 'RELEASE' if cleared else 'RENEW'
             if operation == 'RENEW' and now - self.last_renewed < self.p['crossing_renew_sec']:
                 return
-        elif self.goal and not self.stop_reason and self.targets and inside:
+        elif (
+            self.goal
+            and not self.stop_reason
+            and self.targets
+            and pose[0] < 5.8
+            and (inside or 2.5 <= pose[0] and 0.95 <= pose[1] <= 5.05)
+        ):
+            # Acquire before the five-metre ETA checkpoint, not only at the stop margin.
             operation = 'ACQUIRE'
         else:
             return
@@ -576,6 +598,19 @@ class BusManager(Node):
                 else (self.smoothed_speed + alpha * (speed - self.smoothed_speed))
             )
             self.last_speed_at = now
+        crossing = self.state('crossing', 0.5)
+        owned = (
+            crossing
+            and crossing.valid
+            and crossing.state == 'OWNED'
+            and crossing.owner_id == 'bus'
+            and crossing.token == self.token
+            and bool(self.token)
+            and now - self.last_renewed <= self.p['crossing_ack_timeout_sec']
+        )
+        if route_needs_crossing(points) and not owned:
+            self.eta = -1.0
+            return
         if self.phase == 'BOARD' or self.phase == 'COMPLETE':
             self.eta = 0.0
         elif self.phase in ('WAIT', 'SAFE_STOP') or self.smoothed_speed is None:

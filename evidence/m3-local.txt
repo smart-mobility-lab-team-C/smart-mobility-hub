@@ -1,0 +1,39 @@
+M3 local clean verification: FAIL
+Run: evidence/runs/m3-20261022T162059Z
+Source commit: 28e7c38de77d26e70aa5b23964a8d352eac6b725
+Worktree at capture: clean. Runtime UID/GID: 1000:1000.
+Image: sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b
+Environment: Ubuntu 24.04.5 / ROS 2 Jazzy / Python 3.12.3 in the pinned container.
+Host Ubuntu 22.04 preserved; machine has two virtual CPUs and approximately 4 GB RAM.
+
+Commands actually executed:
+docker build -t smh-m3 -f containers/Dockerfile .
+docker run --rm --name smh-m3-acceptance --user 1000:1000 -e HOME=/tmp -v "$PWD:/workspace" smh-m3 bash scripts/m3_container.sh /workspace/evidence/runs/m3-20261022T162059Z
+python3 scripts/check_docs.py
+python3 scripts/check_m1.py
+python3 -m unittest discover -s tests -v
+bash -n scripts/m3_container.sh
+git diff --check
+
+Observed clean container outcomes:
+- Eight packages built; all 23 generated interfaces inspected.
+- ament_flake8 and ament_pep257 PASS.
+- colcon test-result: 39 tests, zero errors/failures/skips.
+- M2 real-process regression: all 18 cases PASS.
+- M3 acceptance: FAIL in nominal_docking_01 before sending the goal;
+  /safety/reset_state rejected queue_stale. Overall container exit 1.
+
+The VM traces contain multi-second observation/heartbeat gaps. The independent
+safety paths inhibited motion; watchdog thresholds were not relaxed. The cause
+of the host timing gaps is not established. Development probes, including individual
+successful missions, are not a substitute for ten passing versioned nominal runs.
+All failed raw reports/logs remain ignored under evidence/runs, with hashes in
+m3-local.json. Development runs include changing/uncommitted source and are diagnostic,
+not versioned acceptance. This record preserves the failed clean run regardless of
+later hosted outcomes.
+
+Local T05/T06 full acceptance: NOT RUN to completion on this clean run.
+Independent source review and teammate reproduction: BLOCKED (one contributor).
+Other full T01-T18 rows: NOT RUN. Hosted results are indexed separately when available.
+
+Hashes and per-case results: evidence/m3-local.json.

@@ -583,7 +583,10 @@ def verify(probe, processes, nominal_runs):
         try:
             started = time.monotonic()
             _, result = probe.send(120)
-            assert probe.wait(lambda: probe.samples['arrival'].state == 'WAIT', 80)
+            assert probe.wait(lambda: probe.bus().pose.x >= 2.6, 65)
+            probe.pause(0.6)
+            assert not probe.samples['arrival'].eta_valid, 'unknown crossing wait became zero'
+            assert probe.wait(lambda: probe.samples['arrival'].state == 'WAIT', 20)
             probe.pause(2.0)
             assert probe.bus().pose.x < 4.0 and not probe.moving()
             assert not probe.samples['arrival'].eta_valid

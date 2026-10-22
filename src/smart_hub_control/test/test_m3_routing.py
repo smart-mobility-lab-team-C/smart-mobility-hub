@@ -100,3 +100,14 @@ def test_freshness_boundary_and_invalid_snapshots(monkeypatch):
     assert not valid_edges(SimpleNamespace(edges=[edge, edge]), {'A-N'})
     edge.mean_speed_mps = float('nan')
     assert not valid_edges(SimpleNamespace(edges=[edge]), {'A-N'})
+
+
+def test_remaining_crossing_wait_region():
+    """Keep wait unknown before/across C, while allowing ETA once C is behind the bus."""
+    from smart_hub_control.bus import route_needs_crossing
+
+    assert route_needs_crossing([(1, 2), (1, 4), (8, 4)])
+    assert route_needs_crossing([(3, 4), (8, 4)])
+    assert route_needs_crossing([(5, 4), (8, 4)])
+    assert not route_needs_crossing([(6.1, 4), (8, 4)])
+    assert not route_needs_crossing([(11, 2), (11, 4), (8, 4)])
