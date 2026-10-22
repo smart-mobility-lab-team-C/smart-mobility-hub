@@ -123,3 +123,21 @@ Scenario reset acknowledges all nodes after cancellation/zero and seeded reset;
 clear-stop rejects hazards/stale inputs/asserted stop/nonzero motion and never
 restarts a mission. Shared callback state needs synchronization and bounded async
 retries. Progress across replans still needs an explicit runtime definition.
+
+## M2 runtime additions and resolved policies
+
+[M2](m2.md) records user-approved numeric policies, watchdogs, crossing state
+semantics and the reset handshake. Public M1 message/service/action schemas remain
+unchanged. `/bus/odom` uses `nav_msgs/Odometry`, 20 Hz reliable volatile depth 10,
+`bus/odom` with child `bus/base_link`, matching the documented bus-equivalent frame
+chain. Both odometry streams carry measured linear and angular velocities;
+clear/reset require exact zero for both simulated agents.
+
+Internal `/safety/reset_state`, `/safety/finish_reset`, `/crossing/reset_state`
+and `/sim/reset_world` use `ResetScenario`. Only the coordinator owns the public
+`/scenario/reset`. No mission servers participate until their milestone implements
+the corresponding cancellation/acknowledgement behavior. Measured door/barrier
+status heartbeat is 10 Hz in this simulator, with a 0.5 s local watchdog for door
+safety; this is a declared M2 choice where the assignment specifies no rate.
+Evaluator-only `/sim/evaluator/ground_truth` is `VehicleStateArray`, 10 Hz R10 in
+`map`; it is excluded from all control subscriptions.

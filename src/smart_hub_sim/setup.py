@@ -1,4 +1,4 @@
-"""Install the smart_hub_sim skeleton without runtime entry points."""
+"""Install the M2 sim package and runtime entry points."""
 from glob import glob
 
 from setuptools import find_packages, setup
@@ -13,11 +13,12 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/config', glob('config/*.yaml')),
     ],
+    entry_points={'console_scripts': ['scenario_runner = smart_hub_sim.scenario_runner:main']},
     install_requires=['setuptools'],
     tests_require=['pytest'],
     zip_safe=True,
     maintainer='Smart Mobility Hub team',
     maintainer_email='maintainers@example.invalid',
-    description='M1 package skeleton; no runtime nodes.',
+    description='Seeded simulator and independent actuator watchdogs.',
     license='LicenseRef-Proprietary',
 )

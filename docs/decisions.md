@@ -37,3 +37,21 @@ Use geometric intersection for all crossing edges, including W–Cn. Runtime
 parameters absent from the sources remain unresolved. See [source review](m1.md)
 for exact provenance and outstanding acceptance/delivery blockers. No merge is
 authorized by this milestone implementation.
+
+## M2 decisions (2026-10-22)
+
+M2 is authorized by the coordinated Luna implementation request. M1 PR #4 is
+merged with successful tooling, m1 and ros-container checks; no submitted reviews
+or independent reproduction record were found. Those human gates remain open.
+Use the lead plus up to three `gpt-6-luna` medium workers with disjoint ownership;
+centralize Git and combined ROS execution. The standard workflow is recorded in
+[codex-workflow.md](codex-workflow.md).
+
+The user explicitly approved angular cap 1 rad/s, zero future-stamp tolerance,
+1 s crossing lease/renewal timeout and exact-zero simulated measured-stop policy;
+car motion/headway remain M4. The fixed 0.05 s step follows the required 20 Hz
+simulator. M2 uses wall-backed ROS acquisition stamps and monotonic watchdogs,
+no `/clock`. Runtime details, internal reset services and limits are in [M2](m2.md).
+Do not enable unobserved obstacles in this baseline; that startup configuration
+is rejected. Independent source review/reproduction and later scenario/mission
+acceptance cannot be inferred from worker reviews or pure tests.

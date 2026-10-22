@@ -2,7 +2,7 @@
 <package format="3">
   <name>smart_hub_sim</name>
   <version>0.1.0</version>
-  <description>M1 Smart Mobility Hub package skeleton.</description>
+  <description>Seeded simulator and independent actuator watchdogs.</description>
   <maintainer email="maintainers@example.invalid">Smart Mobility Hub team</maintainer>
   <license>LicenseRef-Proprietary</license>
   <buildtool_depend>ament_python</buildtool_depend>

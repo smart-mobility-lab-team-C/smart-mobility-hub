@@ -1,6 +1,6 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2–M8 remain NOT RUN; proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and real-node acceptance are tracked in [M2 status](m2.md); M3–M8 remain NOT RUN. Proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|

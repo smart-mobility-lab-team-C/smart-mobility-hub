@@ -41,3 +41,16 @@ Run ament_flake8, ament_pep257 and colcon test-result --verbose. Mocks support u
 ## Result template
 
 For every row record: status; actual command; commit; run IDs/seeds; threshold; observed value; sample count; individual results; aggregate statistics; evidence paths; failure/blocker reason. Missing/partial runs remain NOT RUN or BLOCKED, never PASS.
+
+## M2 prerequisite probes
+
+`scripts/verify_m2.py` runs real simulator, supervisor, arbiter and reset processes
+with controlled synthetic inputs and isolated ROS domains for occupancy faults.
+It records startup zero, five candidate-expiry/queue-loss/frozen-stamp/E-stop/recovery/supervisor-
+loss trials, invalid observations/commands, physical crossing entry/lease hold,
+and reset acknowledgements/rejections. [M2](m2.md) and the committed evidence index
+record executed outcomes. This establishes prerequisite behavior only: there are
+no mission controllers yet, so these probes do not close T16–T18 across mission
+phases, nor any other complete scenario row. Frozen source-stamp logic also has
+pure boundary tests; real-node repeated-stamp and missing-publication probes
+remain separately identified in the report.
