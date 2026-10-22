@@ -39,3 +39,42 @@ are in [m2-local.txt](../evidence/m2-local.txt); the small
 dumps. Full raw logs remain ignored under `evidence/runs/m2-20261022T145000Z/`.
 Earlier failed runs retain FAIL status. See [M2](m2.md) for scope and independent
 review gates; no complete T01–T18 scenario acceptance is implied.
+
+## M2 implementation closure (2026-10-23)
+
+Implementation and automated acceptance: **PASS**.
+[PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5)
+merged on 2026-10-22 at `6c25993525bf083214c14fdbb8abab224a5a75bd`.
+The original local records above remain unchanged: source
+`5a7e44082dea408d6ffacfc87aec6ec3936aee9d`, run `m2-20261022T145000Z`,
+30 colcon tests with zero errors/failures/skips, and 18 passing real-process cases.
+Subsequent PR commits contain evidence/documentation only.
+
+Hosted workflows inspected on 2026-10-23 all report completed/success:
+
+| Revision | M0 checks | M1 contracts and packages | M2 simulator and safety |
+|---|---|---|---|
+| PR head `e3dd60623952f6ae92cb3a454ff79c91444f6ad2` | [PASS](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39799053591) | [PASS](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39799053648) | [PASS](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39799053751) |
+| Merge `6c25993525bf083214c14fdbb8abab224a5a75bd` | [PASS](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39799706032) | [PASS](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39799706131) | [PASS](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39799706128) |
+
+Independent source review and teammate clean-checkout reproduction: **BLOCKED**.
+The GitHub contributors endpoint currently lists one contributor, `qrtman`;
+a different human reviewer/member is required. The historical local records retain
+their capture-time NOT RUN status. Neither agent review nor CI closes this gate.
+Full T01–T18 scenario acceptance remains **NOT RUN**. M3 is next and remains NOT RUN.
+
+Closure verification commands (2026-10-23):
+
+```bash
+gh pr view 5 --json state,mergedAt,mergeCommit
+gh pr checks 5
+gh api 'repos/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs?head_sha=6c25993525bf083214c14fdbb8abab224a5a75bd'
+gh api repos/smart-mobility-lab-team-C/smart-mobility-hub/contributors
+python3 scripts/check_docs.py
+git diff --check
+```
+
+Observed: PR merged at the recorded SHA; all four PR jobs passed across three
+workflows; all three merge workflows completed successfully; one contributor;
+local Markdown links PASS; whitespace check exited 0. Runtime evidence was inspected,
+not rerun. This closure changes only M2 status, the milestone plan and this index.
