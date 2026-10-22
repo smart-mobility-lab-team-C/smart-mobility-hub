@@ -1,0 +1,69 @@
+M2 local acceptance evidence
+Source commit: 5a7e44082dea408d6ffacfc87aec6ec3936aee9d
+Run: evidence/runs/m2-20261022T145000Z
+Worktree at capture: clean; runtime UID/GID 1000:1000.
+Ubuntu 24.04.5 / Python 3.12.3 / ROS 2 Jazzy; rclpy 7.1.12-1noble.20260912.162354.
+Host Ubuntu 22.04.5 preserved; ROS runs inside the Ubuntu 24.04 container.
+Image: sha256:f35c88f7ce5ceacbed5f672528efc27db0eb5ac8f3cfccc1141fe5ecfcb23752
+
+Commands actually executed:
+docker build -t smh-m2 -f containers/Dockerfile .
+docker run --rm --user 1000:1000 -e HOME=/tmp -v "$PWD:/workspace" smh-m2 bash scripts/m2_container.sh /workspace/evidence/runs/m2-20261022T145000Z
+python3 scripts/check_docs.py
+python3 -m unittest discover -s tests -v
+git diff --check
+
+Observed: container script exit 0; eight-package clean build; 23 generated interface shows and exact field/type assertions;
+ament_flake8 and ament_pep257 PASS; colcon test-result: 30 tests, zero errors/failures/skips;
+18 real-process acceptance cases PASS. M0 unit regression: five tests PASS (not ROS evidence).
+
+real_processes_and_services_ready: PASS; case duration 0.000009 s
+simulator_observations_ready: PASS; case duration 0.000009 s
+startup_zero_motion: PASS; case duration 0.401237 s
+crossing_exclusive_acquire_release: PASS; case duration 2.057624 s
+candidate_expiry_repetitions: PASS; case duration 3.157414 s
+  latencies_sec: N=5, individual=[0.5032439390006402, 0.5137981990001208, 0.4990643760002058, 0.4975650520000272, 0.49242285000036645], mean=0.501219, max=0.513798
+queue_staleness_unknown_and_stop: PASS; case duration 5.989588 s
+  freeze_to_zero_sec: N=5, individual=[1.02194919700014, 1.0244640350001646, 1.0178293979997761, 1.0243843850003032, 1.0238546720001978], mean=1.022496, max=1.024464
+frozen_queue_source_stamp: PASS; case duration 6.093576 s
+  freeze_to_unknown_and_zero_sec: N=5, individual=[1.0651142670003537, 1.0649376029996347, 1.0581407990002845, 1.0390975410000465, 1.0619706769994082], mean=1.057852, max=1.065114
+invalid_queue_denies_motion: PASS; case duration 0.401009 s
+nonfinite_candidate_rejected: PASS; case duration 0.033620 s
+estop_latch_and_recovery_repetitions: PASS; case duration 2.000695 s
+  latencies_sec: N=5, individual=[0.05193268499988335, 0.012154433999967296, 0.011243379999541503, 0.01664122399961343, 0.015379875000689935], mean=0.021470, max=0.051933
+  simulated_velocity_stop_sec: N=5, individual=[0.08960912299971824, 0.10607276499922591, 0.101004780999574, 0.10052075600015087, 0.10203618300056405], mean=0.099849, max=0.106073
+clear_stop_rejects_stale_inputs: PASS; case duration 8.000152 s
+scenario_reset_acceptance: PASS; case duration 0.136654 s
+  bus_pose: N=3, individual=[1.0, 2.0, 0.0], mean=1.000000, max=2.000000
+  robot_pose: N=3, individual=[3.0, 6.0, 0.0], mean=3.000000, max=6.000000
+scenario_reset_stale_rejection: PASS; case duration 1.410110 s
+reset_missing_participant: PASS; case duration 3.806733 s
+scenario_parameter_dump: PASS; case duration 0.000018 s
+isolated_crossing_occupied_release_and_expiry: PASS; case duration 6.668246 s
+full_graph_physical_crossing_entry_and_expiry: PASS; case duration 15.704857 s
+  entry_pose: N=2, individual=[4.219999999999998, 2.0], mean=3.110000, max=4.220000
+adapter_stops_after_supervisor_loss: PASS; case duration 11.043693 s
+  measured_stop_sec: N=5, individual=[0.4997113190001983, 0.5003561339999578, 0.4956892879999941, 0.49926366900035646, 0.5004852740003116], mean=0.499101, max=0.500485
+
+E-stop latency is monotonic publication-to-observed-zero, an upper bound on supervisor receipt-to-zero output.
+Simulated velocity stop is reported separately; it is not physical chassis evidence.
+Command expiry threshold is 0.5 s; 0.65 s observer bound includes 20 Hz gate / 10 Hz evaluator scheduling.
+Queue source freshness is 1 s; repeated-source and missing-publication tests are separate.
+Parameter dumps are actual ROS CLI observations. The seed parameter is the startup seed (17);
+reset tests explicitly request seed 99 and recovery seed 102; isolated workers start at 17.
+
+Prior development and clean-run failures remain FAIL in ignored evidence/runs directories:
+m2-debug-20261022, m2-debug2-20261022, m2-20261022T143000Z, m2-20261022T143500Z,
+m2-20261022T144000Z, m2-20261022T144500Z. Causes included feedback/service/topic discovery races,
+premature clear-debounce assertions, and CLI daemon parameter discovery. Safety denials were preserved.
+The earlier 51b7adb clean run passed its then-current 29-test/18-case suite; later hardening required a fresh run.
+
+Independent human contract review and teammate clean-checkout reproduction: NOT RUN.
+T01-T18 full scenario/mission acceptance: NOT RUN. Agent review and CI do not replace teammate reproduction.
+No merge, hardware, Gazebo, Nav2, mission controller or real-video result is claimed.
+
+Hashes:
+raw_acceptance_sha256: b7456627a67912dede105caee58dc4968274045765d05afba10e50786cf0f187
+transcript_sha256: c66bede414a4489b0bf2a2b8d22b96131627938bda0a932eb1397ffe1661c897
+source_manifest_sha256: a83bdac224f8ccf70bf909211981113d82abb5624ef7f1f05c2097de723921e5
+package_versions_sha256: 62061409314e1b4fd8bf9704885560c330d3bcaee157f3bdd3c218638e9ac8fe

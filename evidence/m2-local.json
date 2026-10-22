@@ -1,0 +1,449 @@
+{
+  "cases": [
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 8.985000022221357e-06,
+      "name": "real_processes_and_services_ready",
+      "observations": {
+        "processes": {
+          "crossing_arbiter": null,
+          "reset_coordinator": null,
+          "safety_supervisor": null,
+          "scenario_runner": null
+        },
+        "ready": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 9.189999218506273e-06,
+      "name": "simulator_observations_ready",
+      "observations": {
+        "observed_vehicle_ids": [
+          "bus",
+          "robot"
+        ],
+        "ready": true,
+        "truth_vehicle_ids": [
+          "bus",
+          "robot"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.4012366209999527,
+      "name": "startup_zero_motion",
+      "observations": {
+        "bus_zero": true,
+        "robot_zero": true,
+        "sample_count": 14
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 2.057623951000096,
+      "name": "crossing_exclusive_acquire_release",
+      "observations": {
+        "clear_release_granted": true,
+        "competing_grant_denied": true,
+        "first_token_granted": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 3.157413771999927,
+      "name": "candidate_expiry_repetitions",
+      "observations": {
+        "latencies_sec": [
+          0.5032439390006402,
+          0.5137981990001208,
+          0.4990643760002058,
+          0.4975650520000272,
+          0.49242285000036645
+        ],
+        "repetitions": 5,
+        "safe_movement": {
+          "bus_pose": [
+            1.0,
+            2.0
+          ],
+          "center_separation_m": 4.473926239892652,
+          "crossing_clearance_proven": true,
+          "robot_pose": [
+            3.004,
+            6.0
+          ]
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 5.989587636000579,
+      "name": "queue_staleness_unknown_and_stop",
+      "observations": {
+        "command_stopped": true,
+        "crossing_unknown": true,
+        "freeze_to_zero_sec": [
+          1.02194919700014,
+          1.0244640350001646,
+          1.0178293979997761,
+          1.0243843850003032,
+          1.0238546720001978
+        ],
+        "repetitions": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 6.093575566999789,
+      "name": "frozen_queue_source_stamp",
+      "observations": {
+        "freeze_to_unknown_and_zero_sec": [
+          1.0651142670003537,
+          1.0649376029996347,
+          1.0581407990002845,
+          1.0390975410000465,
+          1.0619706769994082
+        ],
+        "live_receipts": true,
+        "repetitions": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.40100905500003137,
+      "name": "invalid_queue_denies_motion",
+      "observations": {
+        "crossing_unknown": true,
+        "valid_false_deny_motion": true,
+        "zero_command_after_input_sec": 0.36655994600005215
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.03362009600004967,
+      "name": "nonfinite_candidate_rejected",
+      "observations": {
+        "nan_candidate_rejected": true,
+        "zero_command_after_injection_sec": 0.033603021999624616
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 2.0006947510000828,
+      "name": "estop_latch_and_recovery_repetitions",
+      "observations": {
+        "latencies_sec": [
+          0.05193268499988335,
+          0.012154433999967296,
+          0.011243379999541503,
+          0.01664122399961343,
+          0.015379875000689935
+        ],
+        "repetitions": 5,
+        "simulated_velocity_stop_sec": [
+          0.08960912299971824,
+          0.10607276499922591,
+          0.101004780999574,
+          0.10052075600015087,
+          0.10203618300056405
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 8.000152264999997,
+      "name": "clear_stop_rejects_stale_inputs",
+      "observations": {
+        "fresh_stationary_accepted": true,
+        "repetitions": 5,
+        "stale_reasons": [
+          "queue_stale",
+          "queue_stale",
+          "queue_stale",
+          "queue_stale",
+          "queue_stale"
+        ],
+        "stale_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.13665410300018266,
+      "name": "scenario_reset_acceptance",
+      "observations": {
+        "bus_pose": [
+          1.0,
+          2.0,
+          0.0
+        ],
+        "post_reset_world_restored": true,
+        "pre_reset_robot_speed_mps": 0.0,
+        "robot_pose": [
+          3.0,
+          6.0,
+          0.0
+        ],
+        "run_id": "9142cb1b-b037-4d6c-b59d-fef31147f3d9",
+        "seed": 99,
+        "unknown_scenario_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.4101100420002695,
+      "name": "scenario_reset_stale_rejection",
+      "observations": {
+        "reason": "/safety/reset_state:queue_stale",
+        "stale_reset_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 3.8067325639995033,
+      "name": "reset_missing_participant",
+      "observations": {
+        "recovery_run_id": "6b71a5aa-8f0b-4a94-a6d3-40dd521cd40a",
+        "rejected": true,
+        "response_sec": 1.002637808000145,
+        "safe_reset_recovered": true,
+        "simulator_restarted": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.75280001712963e-05,
+      "name": "scenario_parameter_dump",
+      "observations": {
+        "all_dumps_nonempty": true,
+        "nodes": [
+          "/hub_coordinator",
+          "/reset_coordinator",
+          "/safety_supervisor",
+          "/scenario_runner"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 6.668246238000393,
+      "name": "isolated_crossing_occupied_release_and_expiry",
+      "observations": {
+        "cases": [
+          {
+            "detail": "crossing service and state topic discovered",
+            "name": "arbiter_ready",
+            "status": "PASS"
+          },
+          {
+            "detail": "valid empty crossing observed",
+            "name": "fresh_observation",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED",
+            "name": "acquire_first_owner",
+            "status": "PASS"
+          },
+          {
+            "detail": "TOKEN_OR_CLEARANCE_REQUIRED",
+            "name": "release_rejected_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "UNSAFE_OR_UNKNOWN",
+            "name": "reset_rejected_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "expired_owner_not_reassigned_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED",
+            "name": "reassign_after_proven_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "RELEASED",
+            "name": "release_after_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "RESET",
+            "name": "reset_after_proven_clear",
+            "status": "PASS"
+          }
+        ],
+        "status": "PASS",
+        "stderr_tail": "[WARN] [1792680401.866805055] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680401.867658019] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n",
+        "worker_domain_id": 145
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 15.704857087000164,
+      "name": "full_graph_physical_crossing_entry_and_expiry",
+      "observations": {
+        "cases": [
+          {
+            "detail": "simulator, safety, crossing, reset ready",
+            "name": "full_graph_ready",
+            "status": "PASS"
+          },
+          {
+            "detail": "both final commands zero",
+            "name": "initial_zero",
+            "status": "PASS"
+          },
+          {
+            "detail": "bus stopped with its full footprint before region C",
+            "name": "unowned_bus_stops_before_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "stopped bus leaves C available",
+            "name": "upstream_wait_is_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED; attempts=1",
+            "name": "bus_acquires_before_entry",
+            "status": "PASS"
+          },
+          {
+            "detail": "evaluator pose confirms full bus footprint in C under ownership",
+            "name": "owned_bus_enters_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "competitor_denied_while_bus_inside",
+            "status": "PASS"
+          },
+          {
+            "detail": "owner retained in HOLD after lease expiry while footprint occupies C",
+            "name": "expired_lease_holds_occupied_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "no_transfer_after_lease_expiry",
+            "status": "PASS"
+          },
+          {
+            "detail": "RENEWED",
+            "name": "expired_owner_can_restore_heartbeat",
+            "status": "PASS"
+          },
+          {
+            "detail": "bus remains owner after matching-token renewal",
+            "name": "renewal_restores_only_same_owner",
+            "status": "PASS"
+          },
+          {
+            "detail": "/crossing/reset_state:UNSAFE_OR_UNKNOWN",
+            "name": "reset_rejected_while_occupied",
+            "status": "PASS"
+          }
+        ],
+        "entry_pose": [
+          4.219999999999998,
+          2.0
+        ],
+        "status": "PASS",
+        "stderr_tail": "[WARN] [1792680408.563825875] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680408.563910286] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n",
+        "unowned_stop_x_m": 3.9800000000000026,
+        "worker_domain_id": 146
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 11.043692807000298,
+      "name": "adapter_stops_after_supervisor_loss",
+      "observations": {
+        "evaluator_ground_truth_used": true,
+        "measured_stop_sec": [
+          0.4997113190001983,
+          0.5003561339999578,
+          0.4956892879999941,
+          0.49926366900035646,
+          0.5004852740003116
+        ],
+        "repetitions": 5,
+        "supervisor_terminated_while_moving": true
+      },
+      "status": "PASS"
+    }
+  ],
+  "environment": {
+    "clock": "monotonic latency; ROS stamps for freshness",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "ros_distro": "jazzy",
+    "ros_domain_id": "72"
+  },
+  "parameter_dumps": {
+    "/hub_coordinator": {
+      "returncode": 0,
+      "stderr": "[WARN] [1792680389.723045346] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680389.723374985] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n[WARN] [1792680391.774384979] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680391.774458955] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n",
+      "stdout": "/hub_coordinator:\n  ros__parameters:\n    crossing_clear_sec: 2.0\n    crossing_lease_sec: 1.0\n    queue_confidence_min: 0.5\n    start_type_description_service: true\n    use_sim_time: false\n\n"
+    },
+    "/reset_coordinator": {
+      "returncode": 0,
+      "stderr": "[WARN] [1792680395.529580462] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680395.530975330] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n[WARN] [1792680398.097386289] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680398.097447425] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n",
+      "stdout": "/reset_coordinator:\n  ros__parameters:\n    start_type_description_service: true\n    use_sim_time: false\n\n"
+    },
+    "/safety_supervisor": {
+      "returncode": 0,
+      "stderr": "[WARN] [1792680385.195948943] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680385.195967996] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n[WARN] [1792680387.253294776] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680387.253485613] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n",
+      "stdout": "/safety_supervisor:\n  ros__parameters:\n    angular_speed_limit: 1.0\n    bus_speed_limit: 0.4\n    command_timeout_sec: 0.5\n    future_tolerance_sec: 0.0\n    queue_confidence_min: 0.5\n    robot_speed_limit: 0.25\n    start_type_description_service: true\n    use_sim_time: false\n\n"
+    },
+    "/scenario_runner": {
+      "returncode": 0,
+      "stderr": "[WARN] [1792680380.219775463] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680380.220140904] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n[WARN] [1792680382.691304319] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.\n[WARN] [1792680382.691589017] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.\n",
+      "stdout": "/scenario_runner:\n  ros__parameters:\n    angular_speed_limit: 1.0\n    bus_speed_limit: 0.4\n    command_timeout_sec: 0.5\n    future_tolerance_sec: 0.0\n    obstacle_enabled: false\n    robot_speed_limit: 0.25\n    seed: 17\n    start_type_description_service: true\n    use_sim_time: false\n\n"
+    }
+  },
+  "provenance": {
+    "colcon_tests": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 30
+    },
+    "image_id": "sha256:f35c88f7ce5ceacbed5f672528efc27db0eb5ac8f3cfccc1141fe5ecfcb23752",
+    "os": "Ubuntu 24.04.5 LTS",
+    "package_versions_sha256": "62061409314e1b4fd8bf9704885560c330d3bcaee157f3bdd3c218638e9ac8fe",
+    "raw_acceptance_sha256": "b7456627a67912dede105caee58dc4968274045765d05afba10e50786cf0f187",
+    "ros": "Jazzy",
+    "run_id": "m2-20261022T145000Z",
+    "scope": "M2 simulation only; T01-T18 and independent teammate reproduction NOT RUN",
+    "source_commit": "5a7e44082dea408d6ffacfc87aec6ec3936aee9d",
+    "source_manifest_sha256": "a83bdac224f8ccf70bf909211981113d82abb5624ef7f1f05c2097de723921e5",
+    "transcript_sha256": "c66bede414a4489b0bf2a2b8d22b96131627938bda0a932eb1397ffe1661c897",
+    "uid": 1000,
+    "worktree": "clean at capture"
+  },
+  "schema": "smart-mobility-hub/m2-verification-v1",
+  "status": "PASS"
+}
