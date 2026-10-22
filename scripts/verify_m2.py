@@ -656,7 +656,8 @@ def _physical_crossing_worker() -> int:
             lambda: all(process.poll() is None for process in processes.values())
             and probe.crossing_client.service_is_ready()
             and probe.reset_client.service_is_ready()
-            and bool(probe.latest(probe.ground_truth)),
+            and bool(probe.latest(probe.ground_truth))
+            and bool(probe.robot_commands and probe.bus_commands and probe.safety_states),
             STARTUP_TIMEOUT_SEC,
         )
         expect('full_graph_ready', ready, 'simulator, safety, crossing, reset ready')
