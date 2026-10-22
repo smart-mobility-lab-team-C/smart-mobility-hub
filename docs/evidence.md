@@ -81,6 +81,9 @@ not rerun. This closure changes only M2 status, the milestone plan and this inde
 
 ## M3 verification in progress
 
+The [M3 handoff](m3-handoff.md) records the active hosted rerun, the earlier
+pre-M3 regression failure, and the steps to resume reviewing evidence.
+
 [PR #7](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/7)
 contains the scoped M3 implementation. The [local index](../evidence/m3-local.json)
 and [command/result record](../evidence/m3-local.txt) preserve the failed clean run
