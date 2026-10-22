@@ -1,0 +1,12 @@
+# Assignment section 7, printed p12.
+string bus_id
+string bay_id
+float32 max_duration_sec
+---
+bool success
+string final_state
+string reason
+---
+string phase
+float32 distance_remaining_m
+float32 eta_sec

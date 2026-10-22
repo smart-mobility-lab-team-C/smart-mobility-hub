@@ -27,3 +27,8 @@ Large bags/videos stay out of normal Git history. Keep a small evidence index an
 ## Clean reproduction
 
 A different member starts a fresh checkout on the target environment, follows setup, builds, launches representative scenarios, runs verification and checks included model/data. Record deviations and rerun after fixes.
+
+M1 commands, versions, outcomes and log hashes are recorded in
+[evidence/m1-local.txt](../evidence/m1-local.txt). Raw local logs stay ignored under
+`evidence/m1-local/`; hosted M1 CI uploads its full results as an artifact.
+See [M1 status](m1.md) for acceptance and independent review gates.

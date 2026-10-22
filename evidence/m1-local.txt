@@ -1,0 +1,58 @@
+M1 local validation — 2026-10-22
+Validated source commit: 4acb53dfed2843e2d3de68536b10c298e07e9e26
+Base: origin/main 64940d1; branch: feat/m1-contracts-interfaces
+Source transferred from preserved ../smart-mobility-hub; no usable Git metadata there.
+Image: sha256:0d673af3a8bfc67c00c8596afe65fa96ebddef53076602a6a9cb5bd31513b48d
+Runtime: Ubuntu 24.04.5 LTS; ROS_DISTRO=jazzy; Python 3.12.3; UID:GID=1000:1000
+rclpy: 7.1.12-1noble.20260912.162354; rosidl generators: 1.6.1-1noble.20260911.052510
+
+Commands and observed outcomes:
+$ docker build -t smh-m1 -f containers/Dockerfile .
+PASS exit 0
+$ docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/arlen/projects/smart-mobility-hub-checkout:/workspace smh-m1 bash scripts/m1_container.sh /workspace/evidence/m1-local
+Final run: PASS exit 0; started 2026-10-22 13:43:31 UTC
+Inside script: static map/interface check; ament_flake8; ament_pep257; colcon build; generated interface inspection; colcon test; colcon test-result --verbose.
+Build: 8 packages finished. Interfaces: 23/23 show/import/construction/field checks PASS.
+Lint: 23 Python files PASS. colcon: 14 tests, 0 errors, 0 failures, 0 skipped.
+$ python3 scripts/check_m1.py
+PASS: 23 definitions; 8 packages; map bounds/permissions/connectivity; 10/14 m routes; 6 crossing edges.
+$ python3 -m unittest discover -s tests -v
+PASS: 5 existing M0 tests.
+$ bash -n scripts/m1_container.sh
+PASS exit 0
+$ python3 scripts/check_docs.py
+PASS local Markdown targets
+
+Earlier failures retained locally:
+first-lint-failure.log: FAIL 2 lint findings; fixed continuation indentation and import grouping.
+empty-tests-failure.log: FAIL colcon exit 5 in 7 Python packages (zero tests); fixed pytest registration and package quality checks.
+
+Raw logs are ignored local artifacts; CI uploads its own results. SHA-256:
+a6f1afe19330e62373e44fc41e68ad58d31fdc864ae6862ce208c53c90ea31bd  evidence/m1-local/transcript.log
+62061409314e1b4fd8bf9704885560c330d3bcaee157f3bdd3c218638e9ac8fe  evidence/m1-local/package-versions.tsv
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  evidence/m1-local/exit-code.txt
+c7f740b992d7d339e9a9595ebeb41451dd6c0a045b3c30536e502756303d126f  evidence/m1-local/first-lint-failure.log
+4735c9c62e8fd9e655ffb0be4ddf7710a7df2791816936e81a8353d378889aab  evidence/m1-local/empty-tests-failure.log
+68d70734ceb0c3e82d3b2939565d32fd0d8ade921f3d3b12c7690a6904b94bfb  src/smart_hub_sim/config/map_m1.yaml
+b533ae798e6f9a8e85512220acad63cbb1ef3644dc540dc7b5666b4eb66f7ec3  docs/contracts/m1-fields.json
+42b3712051a2dca571e6f190de9dbccc71afe0b05fefc58bd7365adc8b5d907f  scripts/check_m1.py
+3d386d6ce41a7429a00c44157b0279a4048edba01a98f0492d43c426257974f3  scripts/inspect_m1_interfaces.py
+ffc842d9896be7bb6c2f351d23d02dd62381526f293c1a3c431001b83ff681a4  scripts/m1_container.sh
+d85038eff36a90625e5b15364c6a253d20806fb7438ac940a0c9044c04b89c15  containers/Dockerfile
+
+Independent teammate contract review/reproduction: NOT RUN.
+T01–T18 and M2–M8: NOT RUN. No simulator/mission behavior or runtime safety claim.
+Original snapshot blocker history superseded by this checkout validation. No permission changes or merge.
+
+Delivery attempt:
+$ git push -u origin feat/m1-contracts-interfaces
+FAIL exit 1: remote refused creation/update of .github/workflows/m1.yml without OAuth workflow scope.
+Local source commit 4acb53d and validation documentation commit 9235b82 exist.
+Push/PR BLOCKED pending human GitHub scope refresh; PR description prepared in /tmp/smh-m1-pr.md.
+
+Delivery blocker RESOLVED: user completed workflow scope refresh.
+$ git push -u origin feat/m1-contracts-interfaces
+PASS exit 0; new branch published.
+$ gh pr create --base main --head feat/m1-contracts-interfaces --title 'feat(m1): add map contracts, ROS interfaces and package skeletons' --body-file /tmp/smh-m1-pr.md
+PASS: https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/4
+No merge performed. Independent review/reproduction remains NOT RUN.

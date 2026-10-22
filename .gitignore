@@ -5,3 +5,5 @@ evidence/runs/
 build/
 install/
 log/
+evidence/m1-local/
+evidence/m1-ci/

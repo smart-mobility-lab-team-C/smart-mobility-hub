@@ -86,3 +86,12 @@ flowchart TD
   PASS --> REPORT["Report and submission"]
   FAIL --> REPORT
 ```
+
+## M1 package skeletons
+
+All eight proposed package boundaries now exist under `src/`. Interfaces use
+ament_cmake/rosidl; the other seven use ament_python with declared dependencies
+and resource/package installation metadata. The simulator package installs the
+M1 map configuration. No console entry points or placeholder runtime nodes are
+installed. The map belongs to smart_hub_sim; safety and adapters remain distinct
+future runtime responsibilities. Build and review evidence is tracked in [M1](m1.md).

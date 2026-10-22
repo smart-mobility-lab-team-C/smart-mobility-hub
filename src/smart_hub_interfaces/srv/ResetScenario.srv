@@ -1,0 +1,8 @@
+# Assignment section 7, printed p10.
+string scenario_id
+uint32 seed
+bool preserve_logs
+---
+bool success
+string run_id
+string reason
