@@ -1,6 +1,6 @@
 # Automation contracts
 
-M0 bootstrap and doctor are implemented for the container workflow; see [M0](m0.md). Documentation link checks are also implemented. Other scripts below remain planned API contracts. Container validation is BLOCKED locally; implementation is not verification.
+M0 bootstrap and doctor are implemented for the container workflow; see [M0](m0.md). Documentation link checks are also implemented. Other scripts below remain planned API contracts. Local container build and ROS delivery pass; see [observed status](m0-status.md) for remaining gates.
 
 | Proposed command | Required behavior | Success evidence |
 |---|---|---|

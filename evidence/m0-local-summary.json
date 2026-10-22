@@ -1,0 +1,52 @@
+{
+  "host": "Oracle VirtualBox Ubuntu 22.04.5 x86_64",
+  "git_version": "2.34.1",
+  "docker_version": "29.9.2",
+  "container_os": "Ubuntu 24.04.5",
+  "container_python": "3.12.3",
+  "ros_distro": "jazzy",
+  "image_id": "sha256:b1ff9218167913c30667b64f948fb0bd067e62e6eeb86d86ba5e6d1b666c1f90",
+  "runs": [
+    {
+      "run_id": "20261022T125330Z-60cf38ba",
+      "status": "PASS",
+      "started_at": "20261022T125330Z",
+      "ended_at": "2026-10-22T12:56:41.616206+00:00",
+      "command": "bash scripts/bootstrap.sh --install",
+      "local_commit": null,
+      "source_commit": "286110007f89848d50950424fa6fb6eea1efd2bf",
+      "source_note": "Dockerfile and scripts verified byte-for-byte against PR commit Git blob hashes; local directory is an authenticated connector snapshot, not a Git checkout. Other planning files differ by trailing whitespace.",
+      "dockerfile_sha256": "cb23af7548b7fa7c18f8b6c8ca0b509ab089aa3dee58642756aaf9cb4d59706e",
+      "transcript_sha256": "4d9d0b94a022c81c77ba0b56f432dc99e29f7bb74dd2412b18f6317eef439894",
+      "proof": [
+        "PASS: real ROS talker/listener delivery",
+        "[INFO] [1792673800.828742009] [listener]: I heard: [Hello World: 1]"
+      ]
+    },
+    {
+      "run_id": "20261022T125651Z-1b401b54",
+      "status": "PASS",
+      "started_at": "20261022T125651Z",
+      "ended_at": "2026-10-22T12:56:56.909905+00:00",
+      "command": "bash scripts/bootstrap.sh --install",
+      "local_commit": null,
+      "source_commit": "286110007f89848d50950424fa6fb6eea1efd2bf",
+      "source_note": "Dockerfile and scripts verified byte-for-byte against PR commit Git blob hashes; local directory is an authenticated connector snapshot, not a Git checkout. Other planning files differ by trailing whitespace.",
+      "dockerfile_sha256": "cb23af7548b7fa7c18f8b6c8ca0b509ab089aa3dee58642756aaf9cb4d59706e",
+      "transcript_sha256": "9465a56334550236f4e0218a4258dcdf88de27176141f09462f4aa358ee39df8",
+      "proof": [
+        "PASS: real ROS talker/listener delivery",
+        "[INFO] [1792673815.936548745] [listener]: I heard: [Hello World: 1]"
+      ]
+    }
+  ],
+  "ci": {
+    "run_id": 39778433532,
+    "status": "success",
+    "source_commit": "286110007f89848d50950424fa6fb6eea1efd2bf"
+  },
+  "remaining": [
+    "Local private Git authentication/personal branch push",
+    "Independent teammate review and fresh-checkout reproduction"
+  ]
+}

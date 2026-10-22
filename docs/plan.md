@@ -1,6 +1,6 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling is implemented with local ROS validation BLOCKED (see [status](m0-status.md)); all later milestones remain NOT RUN; proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with Git authentication and independent review/reproduction BLOCKED (see [status](m0-status.md)); all later milestones remain NOT RUN; proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|
