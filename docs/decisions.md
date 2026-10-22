@@ -26,3 +26,14 @@ No performance measurements, test passes, installation success or calendar commi
 ## M0 execution update
 
 D01 is superseded for the current machine: user selected the existing Oracle VirtualBox Ubuntu 22.04 host. Run Jazzy in an Ubuntu 24.04 container; preserve host OS. M0 only is authorized now. Scoped PRs may merge after actual checks and independent review pass. See [M0 workflow](m0.md) and [status](m0-status.md). No repository permissions are changed.
+
+## M1 decisions (2026-10-22)
+
+M1 is authorized by the current implementation request, superseding the earlier
+M0-only scope statement. Adopt the user's approved derived coordinates, no team
+namespace, YAML map, Python package boundaries, and synchronized nested headers.
+Preserve assignment service direction for readiness despite handbook wording.
+Use geometric intersection for all crossing edges, including W–Cn. Runtime
+parameters absent from the sources remain unresolved. See [source review](m1.md)
+for exact provenance and outstanding acceptance/delivery blockers. No merge is
+authorized by this milestone implementation.

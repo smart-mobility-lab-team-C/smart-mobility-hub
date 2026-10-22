@@ -69,3 +69,57 @@ World frame map; robot chain map → robot/odom → robot/base_link, with bus eq
 - [ ] Rates, QoS, publisher ownership, frames and validity verified.
 - [ ] colcon build and ros2 interface show captured.
 - [ ] Real-node timing, cancellation and stale input checks captured.
+
+
+## M1 transcription and endpoint ownership
+
+The 14 messages, six services and three actions are now transcribed in
+`src/smart_hub_interfaces`; [field register](contracts/m1-fields.json) records every
+field and section. See [M1 review/status](m1.md) for source hashes, header policy,
+source discrepancies and build blockers. The preceding freeze checklist remains
+open until generated ROS checks and independent review execute.
+
+Publisher ownership for the topic table above, in the same order: scenario_runner
+(camera); passenger_detector (queue); demand_predictor (demand); scenario_runner
+(vehicles); bus_manager (arrival); scenario_runner (slot observations);
+parking_manager (parking state); traffic_monitor (edges); hub_coordinator
+(crossing); scenario_runner/driver (odom, one authority); robot_manager (robot
+candidate); safety_supervisor (robot final); bus_manager (bus candidate);
+safety_supervisor (bus final); operator/scenario_runner (estop);
+safety_supervisor (safety); all decision nodes (transition events);
+dashboard_marker_publisher (markers). Real sensor/driver adapters replace their
+simulation source; they must not become competing publishers.
+
+| Auxiliary endpoint | Contract | Owner / consumer | Rate and semantics |
+|---|---|---|---|
+| /robot/confirm_ready | std_srvs/Trigger service | robot_manager server; button/dashboard client | Event; success only in WAIT_READY at pickup; 20 s readiness deadline |
+| /bus/door_request | std_msgs/Bool, reliable volatile keep-last 1 | bus_manager → safety/actuator_bridge | On change; true requests open; measured stopped/docked interlock |
+| /bus/door_open | std_msgs/Bool, reliable volatile keep-last 1 | actuator_bridge → bus_manager/safety | Measured status; true means open; propulsion needs confirmed closure |
+| /parking/barrier_request | std_msgs/Bool, reliable volatile keep-last 1 | parking_manager → actuator_bridge | On change; true requests open; valid owner and fresh clear entrance required |
+| /parking/barrier_open | std_msgs/Bool, reliable volatile keep-last 1 | actuator_bridge → parking_manager | Observed status; true means open; request is never acknowledgment |
+
+Assignment pp16–17 fixes auxiliary QoS but supplies no numeric status publication
+rate. On-change request policy and parking request ownership are M1 design choices;
+status heartbeat/freshness must be declared before runtime use. Bool has no source
+stamp: local receipt watchdogs and independent measured interlocks are required;
+never infer safety from an old status. These topics have no geometric frame.
+
+Map observations use map metres/radians; odometry uses robot/odom with
+robot/base_link child (bus equivalents). Candidate TwistStamped uses the agent's
+base frame. Final Twist is interpreted in the same base frame without a header.
+Counts are people, confidence and density dimensionless [0,1], speeds m/s,
+ETA/cost/deadlines seconds, expires_at ROS time. Header stamps are acquisition time
+for observations; prediction/state/event stamps identify their computation or
+transition while retaining source-age validity internally. Nested observations
+share one acquisition timestamp. Monotonic time measures local receipt age,
+watchdogs and latency; ROS time stamps data and reservation expiry, with one
+consistent use_sim_time policy per run. No /clock publisher exists in M1.
+
+Service targets, action feedback and terminal rules above remain mandatory.
+Reservations accept TTL 5–120 s (client default 30 s); crossing operations are
+ACQUIRE/RENEW/RELEASE with matching ownership tokens. A denied/expired resource,
+invalid input, timeout, cancellation or NO_ROUTE cannot imply success or motion.
+Scenario reset acknowledges all nodes after cancellation/zero and seeded reset;
+clear-stop rejects hazards/stale inputs/asserted stop/nonzero motion and never
+restarts a mission. Shared callback state needs synchronization and bounded async
+retries. Progress across replans still needs an explicit runtime definition.
