@@ -43,3 +43,9 @@ d85038eff36a90625e5b15364c6a253d20806fb7438ac940a0c9044c04b89c15  containers/Doc
 Independent teammate contract review/reproduction: NOT RUN.
 T01–T18 and M2–M8: NOT RUN. No simulator/mission behavior or runtime safety claim.
 Original snapshot blocker history superseded by this checkout validation. No permission changes or merge.
+
+Delivery attempt:
+$ git push -u origin feat/m1-contracts-interfaces
+FAIL exit 1: remote refused creation/update of .github/workflows/m1.yml without OAuth workflow scope.
+Local source commit 4acb53d and validation documentation commit 9235b82 exist.
+Push/PR BLOCKED pending human GitHub scope refresh; PR description prepared in /tmp/smh-m1-pr.md.
