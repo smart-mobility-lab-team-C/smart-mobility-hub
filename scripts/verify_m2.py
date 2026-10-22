@@ -1098,9 +1098,19 @@ def _main_crossing(probe: Probe) -> dict:
     )
     _assert(clear, 'crossing did not become valid and clear')
     probe.spin_for(2.05)
-    first = probe.call(
-        probe.crossing_client, _crossing_request('bus', 'ACQUIRE')
-    )
+    acquire_deadline = time.monotonic() + 5.0
+    first = None
+    for _ in range(25):
+        remaining = acquire_deadline - time.monotonic()
+        if remaining <= 0.0:
+            break
+        first = probe.call(
+            probe.crossing_client, _crossing_request('bus', 'ACQUIRE'),
+            timeout=min(1.0, remaining))
+        if first.granted or first.reason not in ('CLEAR_DEBOUNCE', 'UNKNOWN'):
+            break
+        probe.spin_for(min(0.2, max(0.0, acquire_deadline - time.monotonic())))
+    _assert(first is not None, 'crossing acquisition deadline expired')
     _assert(first.granted and first.token, f'first acquire denied: {first.reason}')
     second = probe.call(
         probe.crossing_client, _crossing_request('robot', 'ACQUIRE')
