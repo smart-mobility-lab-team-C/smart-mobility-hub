@@ -32,3 +32,10 @@ M1 commands, versions, outcomes and log hashes are recorded in
 [evidence/m1-local.txt](../evidence/m1-local.txt). Raw local logs stay ignored under
 `evidence/m1-local/`; hosted M1 CI uploads its full results as an artifact.
 See [M1 status](m1.md) for acceptance and independent review gates.
+
+M2 local clean-run commands, source commit, versions, per-case outcomes and hashes
+are in [m2-local.txt](../evidence/m2-local.txt); the small
+[JSON record](../evidence/m2-local.json) retains observed metrics and live parameter
+dumps. Full raw logs remain ignored under `evidence/runs/m2-20261022T145000Z/`.
+Earlier failed runs retain FAIL status. See [M2](m2.md) for scope and independent
+review gates; no complete T01–T18 scenario acceptance is implied.

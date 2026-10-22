@@ -1,0 +1,28 @@
+name: M2 simulator and safety
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  m2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check_docs.py
+      - run: docker build -t smh-m2 -f containers/Dockerfile .
+      - name: Clean Jazzy build and real-node fault checks
+        run: |
+          mkdir -p evidence/runs/m2-ci-metadata
+          git rev-parse HEAD > evidence/runs/m2-ci-metadata/commit.txt
+          docker image inspect smh-m2 > evidence/runs/m2-ci-metadata/image.json
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp -v "$PWD:/workspace" smh-m2 \
+            bash scripts/m2_container.sh /workspace/evidence/runs/m2-ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m2-results
+          path: evidence/runs/
