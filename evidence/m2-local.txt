@@ -67,3 +67,5 @@ raw_acceptance_sha256: b7456627a67912dede105caee58dc4968274045765d05afba10e50786
 transcript_sha256: c66bede414a4489b0bf2a2b8d22b96131627938bda0a932eb1397ffe1661c897
 source_manifest_sha256: a83bdac224f8ccf70bf909211981113d82abb5624ef7f1f05c2097de723921e5
 package_versions_sha256: 62061409314e1b4fd8bf9704885560c330d3bcaee157f3bdd3c218638e9ac8fe
+
+Machine specification at evidence capture: {"Architecture": "x86_64", "CPU(s)": "2", "Hypervisor vendor": "KVM", "MemTotal": "4010352 kB", "Model name": "13th Gen Intel(R) Core(TM) i5-13420H", "Virtualization type": "full"}

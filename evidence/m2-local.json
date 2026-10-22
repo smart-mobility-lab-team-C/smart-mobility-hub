@@ -432,6 +432,14 @@
       "tests": 30
     },
     "image_id": "sha256:f35c88f7ce5ceacbed5f672528efc27db0eb5ac8f3cfccc1141fe5ecfcb23752",
+    "machine": {
+      "Architecture": "x86_64",
+      "CPU(s)": "2",
+      "Hypervisor vendor": "KVM",
+      "MemTotal": "4010352 kB",
+      "Model name": "13th Gen Intel(R) Core(TM) i5-13420H",
+      "Virtualization type": "full"
+    },
     "os": "Ubuntu 24.04.5 LTS",
     "package_versions_sha256": "62061409314e1b4fd8bf9704885560c330d3bcaee157f3bdd3c218638e9ac8fe",
     "raw_acceptance_sha256": "b7456627a67912dede105caee58dc4968274045765d05afba10e50786cf0f187",
