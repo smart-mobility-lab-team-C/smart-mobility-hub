@@ -70,6 +70,9 @@ class ScenarioRunner(Node):
         self.declare_parameter('m3_mode', False)
         self.declare_parameter('initial_passengers', 6)
         self.declare_parameter('passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY)
+        self.set_parameters([self.get_parameter_or(
+            'passenger_arrivals_sec', rclpy.Parameter(
+                'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, []))])
         self.declare_parameter('pedestrian_present', False)
         self.declare_parameter('publish_queue', True)
         self.declare_parameter('publish_bus_odom', True)

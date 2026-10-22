@@ -721,6 +721,7 @@ def main():
         )
     except Exception as error:
         report['error'] = repr(error)
+        report['traceback'] = traceback.format_exc()
     finally:
         for process in processes.values():
             try:
