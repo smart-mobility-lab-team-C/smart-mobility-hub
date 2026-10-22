@@ -1339,9 +1339,19 @@ def _test_missing_participant(probe: Probe, processes: dict, log_dir: Path) -> d
     _assert(ready_for_reset, 'restored observations did not reach all safety participants')
     probe.ground_truth.clear()
     reset_started = time.monotonic()
-    recovery = probe.call(
-        probe.reset_client, _service_request('m2_baseline', 102), timeout=4.0
-    )
+    recovery_deadline = time.monotonic() + 4.0
+    recovery = None
+    for _ in range(10):
+        remaining = recovery_deadline - time.monotonic()
+        if remaining <= 0.0:
+            break
+        recovery = probe.call(
+            probe.reset_client, _service_request('m2_baseline', 102),
+            timeout=min(1.1, remaining))
+        if recovery.success or recovery.reason != 'PARTICIPANT_UNAVAILABLE':
+            break
+        probe.spin_for(min(0.3, max(0.0, recovery_deadline - time.monotonic())))
+    _assert(recovery is not None, 'service discovery recovery deadline expired')
     _assert(recovery.success,
             f'safe reset recovery after missing participant failed: {recovery.reason}')
     converged = probe.wait_sample_after(
