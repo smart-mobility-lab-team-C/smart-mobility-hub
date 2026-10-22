@@ -1,0 +1,154 @@
+{
+  "host": "Oracle VirtualBox Ubuntu 22.04.5 x86_64",
+  "git_version": "2.34.1",
+  "docker_version": "29.9.2",
+  "container_os": "Ubuntu 24.04.5",
+  "container_python": "3.12.3",
+  "ros_distro": "jazzy",
+  "image_id": "sha256:b1ff9218167913c30667b64f948fb0bd067e62e6eeb86d86ba5e6d1b666c1f90",
+  "runs": [
+    {
+      "run_id": "20261022T125330Z-60cf38ba",
+      "status": "PASS",
+      "started_at": "20261022T125330Z",
+      "ended_at": "2026-10-22T12:56:41.616206+00:00",
+      "command": "bash scripts/bootstrap.sh --install",
+      "local_commit": null,
+      "source_commit": "286110007f89848d50950424fa6fb6eea1efd2bf",
+      "source_note": "Dockerfile and scripts verified byte-for-byte against PR commit Git blob hashes; local directory is an authenticated connector snapshot, not a Git checkout. Other planning files differ by trailing whitespace.",
+      "dockerfile_sha256": "cb23af7548b7fa7c18f8b6c8ca0b509ab089aa3dee58642756aaf9cb4d59706e",
+      "transcript_sha256": "4d9d0b94a022c81c77ba0b56f432dc99e29f7bb74dd2412b18f6317eef439894",
+      "proof": [
+        "PASS: real ROS talker/listener delivery",
+        "[INFO] [1792673800.828742009] [listener]: I heard: [Hello World: 1]"
+      ]
+    },
+    {
+      "run_id": "20261022T125651Z-1b401b54",
+      "status": "PASS",
+      "started_at": "20261022T125651Z",
+      "ended_at": "2026-10-22T12:56:56.909905+00:00",
+      "command": "bash scripts/bootstrap.sh --install",
+      "local_commit": null,
+      "source_commit": "286110007f89848d50950424fa6fb6eea1efd2bf",
+      "source_note": "Dockerfile and scripts verified byte-for-byte against PR commit Git blob hashes; local directory is an authenticated connector snapshot, not a Git checkout. Other planning files differ by trailing whitespace.",
+      "dockerfile_sha256": "cb23af7548b7fa7c18f8b6c8ca0b509ab089aa3dee58642756aaf9cb4d59706e",
+      "transcript_sha256": "9465a56334550236f4e0218a4258dcdf88de27176141f09462f4aa358ee39df8",
+      "proof": [
+        "PASS: real ROS talker/listener delivery",
+        "[INFO] [1792673815.936548745] [listener]: I heard: [Hello World: 1]"
+      ]
+    }
+  ],
+  "ci": {
+    "run_id": 39778433532,
+    "status": "success",
+    "source_commit": "286110007f89848d50950424fa6fb6eea1efd2bf"
+  },
+  "remaining": [
+    "Independent teammate review and reproduction; local documentation commit push is recorded in PR history"
+  ],
+  "clean_checkout_validation": {
+    "path": "/home/arlen/projects/smart-mobility-hub-checkout",
+    "source_commit": "c439abfb1ada59e33e3843cd0aa1624d8fdbbd01",
+    "account": "qrtman",
+    "clone": "PASS",
+    "no_cache_build": "PASS",
+    "smoke": "PASS",
+    "image_id": "sha256:736a5fa361e43717a446c4fd4435ac8f434ebd16c8434f01304bb1e09348e299",
+    "runs": [
+      {
+        "run_id": "20261022T130741Z-clean-build",
+        "metadata": {
+          "command": [
+            "docker",
+            "build",
+            "--no-cache",
+            "-f",
+            "containers/Dockerfile",
+            "-t",
+            "smart-mobility-hub:m0",
+            "."
+          ],
+          "commit": "c439abfb1ada59e33e3843cd0aa1624d8fdbbd01",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        "transcript_sha256": "be85bb2fa50f1123a8dcece6299ff05ad7b314f82e123fb07541018187504df6",
+        "proof": []
+      },
+      {
+        "run_id": "20261022T131618Z-f2c3f313",
+        "metadata": {
+          "status": "PASS",
+          "command": [
+            "bootstrap",
+            "--install"
+          ],
+          "commit": "c439abfb1ada59e33e3843cd0aa1624d8fdbbd01",
+          "dirty": false,
+          "host": {
+            "schema_version": 1,
+            "checks": [
+              {
+                "name": "host",
+                "status": "PASS",
+                "detail": "Ubuntu 22.04.5 LTS; x86_64"
+              },
+              {
+                "name": "virtualization",
+                "status": "PASS",
+                "detail": "oracle"
+              },
+              {
+                "name": "disk",
+                "status": "PASS",
+                "detail": "23052103680 bytes free; simulator capacity unverified"
+              },
+              {
+                "name": "memory",
+                "status": "PASS",
+                "detail": "MemTotal:        4010352 kB"
+              },
+              {
+                "name": "git",
+                "status": "PASS",
+                "detail": "available"
+              },
+              {
+                "name": "docker",
+                "status": "PASS",
+                "detail": "available"
+              },
+              {
+                "name": "docker_daemon",
+                "status": "PASS",
+                "detail": "accessible"
+              },
+              {
+                "name": "git_checkout",
+                "status": "PASS",
+                "detail": "checkout available"
+              },
+              {
+                "name": "git_write_auth",
+                "status": "BLOCKED",
+                "detail": "Not probed: verify by pushing a personal branch; no credentials inspected"
+              }
+            ]
+          },
+          "started_at": "20261022T131618Z",
+          "image": "smart-mobility-hub:m0",
+          "dockerfile_sha256": "cb23af7548b7fa7c18f8b6c8ca0b509ab089aa3dee58642756aaf9cb4d59706e",
+          "ended_at": "2026-10-22T13:16:24.273655+00:00"
+        },
+        "transcript_sha256": "92dc22f2b4a8e6089d49da17e5134cff615871a7f8de4c0325dc42251e20da3a",
+        "proof": [
+          "PASS: real ROS talker/listener delivery",
+          "[INFO] [1792674983.445395146] [listener]: I heard: [Hello World: 1]"
+        ]
+      }
+    ],
+    "independent_reproduction": "NOT RUN; same agent and host"
+  }
+}

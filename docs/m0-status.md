@@ -1,6 +1,6 @@
 # M0 observed status
 
-Date: 2026-10-22. Overall gate: BLOCKED. Tooling implementation is separate from ROS verification.
+Date: 2026-10-22. Overall gate: BLOCKED on independent teammate review/reproduction. Local Git authentication, clean clone, no-cache build and ROS delivery now PASS. Local container build and ROS delivery now PASS. The initial preparation results below are retained as history.
 
 Source baseline: `53c1560379caa9d2398a8578c63edd936eb35fc7` on main. This record accompanies the implementation commit; identify the tested revision from the PR commit containing it. Local files were obtained through the authenticated GitHub connector because host Git is absent. Local Git push authentication was not verified.
 
@@ -29,3 +29,31 @@ The five unit tests use mocks for subprocess failures only; they do not establis
 2. Clone the PR branch, run doctor, then bootstrap check/install. Retain the resulting evidence directory and repeat the install to check rerun behavior.
 3. Teammate reproduces from a fresh checkout/container and reviews the PR. Attach actual commit/run IDs and update this table.
 4. Merge only after local M0 checks, CI, personal branch push and independent review satisfy the documented gates. M1 remains a separate task.
+
+## Local validation after prerequisite installation
+
+Git 2.34.1 and Docker 29.9.2 installed by the user; normal-user Docker daemon access confirmed. `bash scripts/bootstrap.sh --check` returned 0 for runtime prerequisites. Doctor still reports the separate Git checkout/write-auth gates as BLOCKED.
+
+`bash scripts/bootstrap.sh --install` returned 0 twice, using separate ephemeral containers:
+
+- `20261022T125330Z-60cf38ba`: initial build PASS; real C++ talker to Python listener delivery PASS.
+- `20261022T125651Z-1b401b54`: cached rerun PASS; real delivery PASS again.
+
+Container identity check confirmed Ubuntu 24.04.5, Python 3.12.3 and ROS Jazzy. Image ID, transcript checksums and actual received-message excerpts are in [the evidence index](../evidence/m0-local-summary.json). Full local metadata/transcripts remain in the ignored run directories named above. No local Git commit is fabricated: tested runtime files were verified against PR commit `286110007f89848d50950424fa6fb6eea1efd2bf` using Git blob hashes.
+
+Hosted [M0 CI run](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39778433532) also completed successfully at that commit. Local shell syntax, five unit tests and Markdown links passed again. ROS emits a deprecation warning for ROS_LOCALHOST_ONLY; delivery succeeds and no timing acceptance claim is made.
+
+Remaining gates: local private-repository authentication and personal branch push, independent teammate review and clean-checkout/no-cache reproduction. Two fresh containers from the same built image establish local rerun behavior, not independent reproduction. T01–T18 remain NOT RUN.
+
+## Authenticated clean-checkout validation
+
+GitHub CLI sign-in completed by the user; account `qrtman`. Authenticated `git ls-remote` succeeded. `git clone --branch feat/m0-container-workflow https://github.com/smart-mobility-lab-team-C/smart-mobility-hub.git /home/arlen/projects/smart-mobility-hub-checkout` succeeded at `c439abfb1ada59e33e3843cd0aa1624d8fdbbd01`; the checkout was clean before validation. The earlier snapshot directory is preserved. Use the new checkout for future Git work.
+
+- `docker build --no-cache -f containers/Dockerfile -t smart-mobility-hub:m0 .`: PASS, run `20261022T130741Z-clean-build`. Ubuntu mirror downloads were slow and retried; package installation finished successfully.
+- `bash scripts/bootstrap.sh --install`: PASS, run `20261022T131618Z-f2c3f313`, source commit recorded with dirty=false. Real C++ talker/Python listener delivery confirmed.
+- Five unit tests, shell syntax and local Markdown checks: PASS in the clean checkout.
+- `gh pr view 2 --json reviewDecision,statusCheckRollup`: tooling and ros-container checks SUCCESS; no teammate review recorded at inspection.
+
+[Evidence index](../evidence/m0-local-summary.json) includes the actual clean-build and smoke metadata and transcript hashes. The updated documentation commit is pushed using local authenticated Git; its push establishes the local branch-write gate in PR history. Doctor intentionally leaves manual write-auth as BLOCKED rather than inferring it from a read-only probe; use this recorded push evidence for that gate.
+
+This is same-agent reproduction on the same VM, not independent teammate verification. M0 remains pending that review/reproduction; no merge or M1 implementation has been performed.
