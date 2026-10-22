@@ -1,6 +1,6 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 source and local real-node acceptance pass, with independent review/reproduction outstanding, as tracked in [M2 status](m2.md); M3–M8 remain NOT RUN. Proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd`, with successful hosted M0/M1/M2 checks (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). Independent source review and teammate reproduction are BLOCKED because the project currently has one contributor; these human gates remain unresolved. See [M2 status](m2.md). M3 is the next implementation milestone; M3–M8 and full T01–T18 scenario acceptance remain NOT RUN. Proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|
