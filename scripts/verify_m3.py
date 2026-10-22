@@ -14,6 +14,7 @@ import time
 import traceback
 
 from action_msgs.msg import GoalStatus
+from ament_index_python.packages import get_package_prefix
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 import rclpy
@@ -224,6 +225,7 @@ class Probe(Node):
 
     def cancel_goal(self, handle, result):
         """Measure accepted-cancel to observed zero and confirmed action cancellation."""
+        requested = time.monotonic()
         response = self.future(handle.cancel_goal_async())
         accepted = time.monotonic()
         assert response.goals_canceling, 'cancel denied: ' + str(response)
@@ -240,8 +242,9 @@ class Probe(Node):
                 for t, m in self.history['command']
                 if t >= accepted and m.linear.x == 0 and m.angular.z == 0
             )
-            - accepted
+            - requested
         )
+        assert latency <= 0.5
         terminal = self.future(result, 3)
         assert terminal.status == GoalStatus.STATUS_CANCELED, str(terminal)
         assert self.wait(lambda: self.bus().speed_mps == 0, 0.3), 'truth stop not observed'
@@ -703,8 +706,12 @@ def main():
         for name, command in commands.items():
             log = (directory / (name + '.log')).open('w')
             logs.append(log)
+            package, executable, *arguments = command
+            installed = Path(get_package_prefix(package)) / 'lib' / package / executable
+            invocation = [str(installed), *arguments]
+            report.setdefault('actual_commands', {})[name] = invocation
             processes[name] = subprocess.Popen(
-                ['ros2', 'run', *command],
+                invocation,
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 start_new_session=True,

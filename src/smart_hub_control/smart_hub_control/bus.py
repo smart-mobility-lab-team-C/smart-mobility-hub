@@ -749,9 +749,11 @@ class BusManager(Node):
         elif abs(target[1] - pose[1]) < 1e-6:
             desired = 0.0 if target[0] > pose[0] else math.pi
         error = wrap(desired - pose[2])
-        self.set_phase('APPROACH' if self.distance > 1.0 else 'DOCK')
-        self.update_eta(pose, now, error)
+        points = [pose[:2], *self.targets]
+        self.distance = sum(math.dist(a, b) for a, b in zip(points, points[1:]))
         if abs(error) > 1e-9:
+            self.set_phase('APPROACH' if self.distance > 1.0 else 'DOCK')
+            self.update_eta(pose, now, error)
             self.command(0.0, max(-1.0, min(1.0, 2.0 * error)))
             return
         if intersects_crossing(pose[0], pose[1], 0.56):
@@ -771,6 +773,8 @@ class BusManager(Node):
         if door.data:
             self.begin_stop('DOOR_OPEN_WHILE_APPROACHING')
             return
+        self.set_phase('APPROACH' if self.distance > 1.0 else 'DOCK')
+        self.update_eta(pose, now, error)
         cap = self.p['bus_speed_limit']
         if final and distance <= self.p['final_approach_distance'] + 0.08:
             cap = self.p['final_approach_speed']
