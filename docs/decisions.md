@@ -21,3 +21,8 @@
 - Current official ROS installation retrieval before bootstrap coding.
 
 No performance measurements, test passes, installation success or calendar commitments are established by this documentation.
+
+
+## M0 execution update
+
+D01 is superseded for the current machine: user selected the existing Oracle VirtualBox Ubuntu 22.04 host. Run Jazzy in an Ubuntu 24.04 container; preserve host OS. M0 only is authorized now. Scoped PRs may merge after actual checks and independent review pass. See [M0 workflow](m0.md) and [status](m0-status.md). No repository permissions are changed.

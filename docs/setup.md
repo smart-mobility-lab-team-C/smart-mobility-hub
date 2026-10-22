@@ -1,3 +1,7 @@
+# Current environment
+
+Use [the M0 container workflow](m0.md) for the selected Oracle VirtualBox Ubuntu 22.04 host. The instructions below describe the earlier Windows alternative, not the current machine.
+
 # Windows → WSL2 → Ubuntu 24.04 setup
 
 Status: documented target, not executed on a teammate's computer.
@@ -95,3 +99,4 @@ Checked 2026-10-22:
 - Microsoft WSL installation: https://learn.microsoft.com/en-us/windows/wsl/install
 - Official Codex CLI: https://learn.chatgpt.com/docs/codex/cli
 - ROS Jazzy installation (retrieve before implementing): https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
+

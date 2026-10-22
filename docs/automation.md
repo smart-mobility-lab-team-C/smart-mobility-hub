@@ -1,6 +1,6 @@
 # Automation contracts
 
-These scripts are planned API contracts. They are not present or runnable yet.
+M0 bootstrap and doctor are implemented for the container workflow; see [M0](m0.md). Documentation link checks are also implemented. Other scripts below remain planned API contracts. Container validation is BLOCKED locally; implementation is not verification.
 
 | Proposed command | Required behavior | Success evidence |
 |---|---|---|
@@ -30,3 +30,4 @@ Windows feature enablement/reboot, Linux account creation, administrator passwor
 ## CI rollout
 
 First add documentation checks. Once code exists, add Ubuntu/Jazzy build and unit/launch tests; then seeded headless regressions and scheduled/manual full trials. A hosted Ubuntu job does not verify WSL display or local performance. No green badge until the corresponding workflow actually runs. Keep workflow token permissions minimal; do not expose credentials to untrusted PR code.
+
