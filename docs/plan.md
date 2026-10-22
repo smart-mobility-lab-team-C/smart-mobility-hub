@@ -1,6 +1,6 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. Every milestone currently has status NOT RUN; proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling is implemented with local ROS validation BLOCKED (see [status](m0-status.md)); all later milestones remain NOT RUN; proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|
@@ -31,3 +31,4 @@ After M0/M1, estimate remaining person-hours per gate. Assign an owner and revie
 1. Complete M0 on one Windows computer and preserve its installation transcript.
 2. Review contracts and map against both PDFs, resolving any extraction ambiguity.
 3. Build M1 and run real ROS interface/build checks before dividing node implementation.
+

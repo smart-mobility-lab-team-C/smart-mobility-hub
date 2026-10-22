@@ -2,7 +2,7 @@
 
 ROS 2 Jazzy + Python simulation-first team project.
 
-**Status: planning documentation only.** No project code, bootstrap scripts, ROS build, or acceptance tests have been verified. Target: Windows → WSL2 → Ubuntu 24.04; Codex CLI and the repository run inside Ubuntu.
+**Status: M0 tooling implemented; local ROS validation BLOCKED.** No simulator or mission code exists. Current target: Oracle VirtualBox Ubuntu 22.04 host with an Ubuntu 24.04/Jazzy container. See [M0 workflow](docs/m0.md) and [observed status](docs/m0-status.md). The WSL instructions remain an alternative setup.
 
 ## Start here
 
@@ -27,3 +27,4 @@ Implemented, built, executed, and verified are separate states. A requirement is
 Development documentation contains external reference links. The final submission must contain no external links; packaging must prepare a separate submission copy, include required assets directly, and audit it.
 
 Read [AGENTS.md](AGENTS.md) before using a coding agent.
+

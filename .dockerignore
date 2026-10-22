@@ -1,0 +1,7 @@
+.git
+.cache
+evidence/runs
+__pycache__
+build
+install
+log
