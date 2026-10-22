@@ -10,7 +10,12 @@ setup(
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    entry_points={'console_scripts': ['crossing_arbiter = smart_hub_control.crossing:main']},
+    entry_points={'console_scripts': [
+        'crossing_arbiter = smart_hub_control.crossing:main',
+        'route_planner = smart_hub_control.routing:main',
+        'bus_manager = smart_hub_control.bus:main',
+        'm3_synthetic_roads = smart_hub_control.fixtures:main',
+    ]},
     install_requires=['setuptools'],
     tests_require=['pytest'],
     zip_safe=True,

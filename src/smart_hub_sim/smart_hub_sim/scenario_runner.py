@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 from threading import RLock
 import time
@@ -10,12 +11,15 @@ import uuid
 
 from geometry_msgs.msg import TransformStamped, Twist
 from nav_msgs.msg import Odometry
+from rcl_interfaces.msg import SetParametersResult
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import Image
 from smart_hub_interfaces.msg import (
     CrossingState,
+    HubEvent,
+    QueueState,
     SafetyState,
     SlotObservation,
     SlotObservationArray,
@@ -23,10 +27,12 @@ from smart_hub_interfaces.msg import (
     VehicleStateArray,
 )
 from smart_hub_interfaces.srv import ResetScenario
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, String
+from std_srvs.srv import Trigger
 from tf2_ros import TransformBroadcaster
 
 from .geometry import intersects_crossing
+from .passengers import PassengerQueue
 from .world import (
     AgentState,
     BUS_RADIUS,
@@ -61,6 +67,20 @@ class ScenarioRunner(Node):
     def __init__(self) -> None:
         super().__init__('scenario_runner')
         self.declare_parameter('seed', 17)
+        self.declare_parameter('m3_mode', False)
+        self.declare_parameter('initial_passengers', 6)
+        self.declare_parameter('passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY)
+        self.declare_parameter('pedestrian_present', False)
+        self.declare_parameter('publish_queue', True)
+        self.declare_parameter('publish_bus_odom', True)
+        self.m3_mode = bool(self.get_parameter('m3_mode').value)
+        self.passengers = PassengerQueue(
+            int(self.get_parameter('seed').value),
+            int(self.get_parameter('initial_passengers').value),
+            self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
+                'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, [])).value)
+        self.goal_id = ''
+        self.add_on_set_parameters_callback(self._validate_m3_parameters)
         self.declare_parameter('obstacle_enabled', False)
         self.declare_parameter('command_timeout_sec', 0.5)
         self.declare_parameter('robot_speed_limit', 0.25)
@@ -140,11 +160,70 @@ class ScenarioRunner(Node):
         self._reset_srv = self.create_service(
             ResetScenario, '/sim/reset_world', self._reset_scenario
         )
+        self._queue_pub = (self.create_publisher(QueueState, '/hub/queue', _qos(10))
+                           if self.m3_mode else None)
+        self._boarding_pub = self.create_publisher(HubEvent, '/hub/events', _qos(100))
+        self._run_pub = self.create_publisher(String, '/sim/run_id', _qos(1, True))
+        self.create_subscription(String, '/sim/bus_goal_id', self._goal_id, _qos(1))
+        self._run_pub.publish(String(data=self._run_id))
+        if self.m3_mode:
+            self.create_service(Trigger, '/sim/add_passenger', self._add_passenger)
         self._tf = TransformBroadcaster(self)
         self._timer = self.create_timer(DT_SEC, self._step)
         self.get_logger().info(
             f'M2 simulator ready: seed={seed} run_id={self._run_id}'
         )
+
+    def _validate_m3_parameters(self, parameters):
+        """Reject malformed dynamic queue settings before reset consumes them."""
+        for parameter in parameters:
+            if parameter.name == 'initial_passengers' and not 0 <= parameter.value <= 1000:
+                return SetParametersResult(successful=False, reason='invalid initial count')
+            if parameter.name == 'passenger_arrivals_sec' and any(
+                    not math.isfinite(t) or t < 0 for t in parameter.value):
+                return SetParametersResult(successful=False, reason='invalid arrival schedule')
+            if parameter.name == 'm3_mode':
+                return SetParametersResult(successful=False, reason='m3_mode is startup only')
+        return SetParametersResult(successful=True)
+
+    def _add_passenger(self, request, response):
+        """Inject one labelled synthetic arrival at the current simulation time."""
+        identity = f'{self.passengers.seed}-p{self.passengers.next_id:04d}'
+        self.passengers.next_id += 1
+        self.passengers.waiting.append((identity, self.world.tick_count * DT_SEC))
+        response.success, response.message = True, identity
+        return response
+
+    def _goal_id(self, message):
+        """Associate synthetic boarding with the active bus action only."""
+        self.goal_id = message.data
+
+    def _passenger_tick(self, stamp):
+        """Advance synthetic arrivals/boarding without exposing future schedules to control."""
+        if not self.m3_mode:
+            return
+        elapsed = self.world.tick_count * DT_SEC
+        safe = (self.world.bus.linear_x == 0 and self.world.bus.angular_z == 0 and
+                self.world.door_open)
+        for record in self.passengers.tick(elapsed, self.world.door_open, safe, self.goal_id):
+            event = HubEvent()
+            event.header.stamp = stamp
+            event.header.frame_id = 'map'
+            event.run_id, event.scenario_id = self._run_id, 'm3_baseline'
+            event.entity_id = record['passenger_id']
+            event.event = 'PASSENGER_BOARDED'
+            event.reason = json.dumps(record, sort_keys=True)
+            event.correlation_id = record['goal_id']
+            self._boarding_pub.publish(event)
+        if self._tick % 4 == 0 and self.get_parameter('publish_queue').value:
+            queue = QueueState()
+            queue.header.stamp = stamp
+            queue.header.frame_id = 'map'
+            queue.zone_id = 'Q'
+            queue.count = len(self.passengers.waiting)
+            queue.confidence, queue.valid = 1.0, True
+            queue.crossing_occupied = bool(self.get_parameter('pedestrian_present').value)
+            self._queue_pub.publish(queue)
 
     def _validated_parameter(
         self,
@@ -435,7 +514,8 @@ class ScenarioRunner(Node):
             self.world.bus, 'bus', (1.0, 2.0), stamp
         )
         self._odom_pub.publish(robot_odom)
-        self._bus_odom_pub.publish(bus_odom)
+        if self.get_parameter('publish_bus_odom').value:
+            self._bus_odom_pub.publish(bus_odom)
         self._tf.sendTransform([*robot_transforms, *bus_transforms])
 
     def _publish_interlocks(self) -> None:
@@ -469,6 +549,7 @@ class ScenarioRunner(Node):
             self._tick += 1
             stamp = self._stamp()
             tick = self._tick
+        self._passenger_tick(stamp)
         self._publish_odom_and_tf(stamp)
         if tick % 2 == 0:
             self._publish_vehicles(stamp)
@@ -523,12 +604,18 @@ class ScenarioRunner(Node):
                 )
                 return response
             self.world.reset(int(request.seed))
+            self.passengers = PassengerQueue(
+                int(request.seed), int(self.get_parameter('initial_passengers').value),
+                self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
+                    'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, [])).value)
+            self.goal_id = ''
             self._commands = {
                 'bus': ((0.0, 0.0), now),
                 'robot': ((0.0, 0.0), now),
             }
             self._run_id = str(uuid.uuid4())
             self._tick = 0
+            self._run_pub.publish(String(data=self._run_id))
             response.success = True
             response.run_id = self._run_id
             response.reason = 'seeded m2_baseline reset complete; command leases flushed'

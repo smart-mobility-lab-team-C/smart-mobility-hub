@@ -54,3 +54,13 @@ no mission controllers yet, so these probes do not close T16–T18 across missio
 phases, nor any other complete scenario row. Frozen source-stamp logic also has
 pure boundary tests; real-node repeated-stamp and missing-publication probes
 remain separately identified in the report.
+
+## M3 execution scope
+
+`scripts/verify_m3.py` exercises real route, bus action, simulator, safety,
+crossing and reset nodes with explicit synthetic queue/road inputs. It is intended
+to close T05–T06 only after ten nominal docking runs and all S3 fault/door/ETA
+checks pass; current results are tracked in [M3](m3.md). Pure routing enumerator
+and queue tests support the implementation but do not close T11–T12, perception,
+mission-phase safety repetition or any other complete scenario row. M3 fault
+probes are additional prerequisites; T16–T18 remain NOT RUN.

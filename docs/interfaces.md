@@ -141,3 +141,18 @@ status heartbeat is 10 Hz in this simulator, with a 0.5 s local watchdog for doo
 safety; this is a declared M2 choice where the assignment specifies no rate.
 Evaluator-only `/sim/evaluator/ground_truth` is `VehicleStateArray`, 10 Hz R10 in
 `map`; it is excluded from all control subscriptions.
+
+## M3 runtime additions
+
+[M3](m3.md) preserves every public M1 schema. `route_planner` owns `/route/compute`;
+`bus_manager` owns `/bus/dock`, `/hub/bus_arrival` (2 Hz R10), bus candidates
+(20 Hz R1), and on-change door requests (R1). Action feedback is 2 Hz.
+Only `safety_supervisor` publishes final bus motion. Control uses fresh transformed
+bus odometry and observed vehicles; evaluator truth remains evaluation-only.
+
+M3 synthetic bringup opts into simulator-owned `/hub/queue` (5 Hz R10) and a
+labelled fixture-owned `/traffic/edges` (2 Hz R10). Neither implements perception
+or traffic monitoring. Internal bay/goal/run/arrival/reset endpoints, ownership,
+QoS, watchdogs and invalid-value conventions are documented in M3. Public reset
+remains `/scenario/reset`, owned by reset_coordinator; M3 adds explicit bus
+prepare/finish acknowledgements within the existing total 1 s deadline.

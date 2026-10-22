@@ -16,6 +16,8 @@ class ResetCoordinator(Node):
     def __init__(self):
         """Create asynchronous clients without blocking executor callbacks."""
         super().__init__('reset_coordinator')
+        self.declare_parameter('include_bus', False)
+        self.include_bus = bool(self.get_parameter('include_bus').value)
         self.busy = False
         self._crossing = None
         self._safety = None
@@ -28,6 +30,9 @@ class ResetCoordinator(Node):
         self.group = ReentrantCallbackGroup()
         endpoints = ('/safety/reset_state', '/crossing/reset_state',
                      '/sim/reset_world', '/safety/finish_reset')
+        if self.include_bus:
+            endpoints = ('/bus/prepare_reset', *endpoints[:-1],
+                         '/bus/finish_reset', endpoints[-1])
         self._participants = [
             self.create_client(ResetScenario, endpoint, callback_group=self.group)
             for endpoint in endpoints]
@@ -86,7 +91,7 @@ class ResetCoordinator(Node):
                 if not acknowledgement.success:
                     response.reason = client.srv_name + ':' + acknowledgement.reason
                     return response
-                if index == 0:
+                if client.srv_name == '/safety/reset_state':
                     snapshot = self._safety
                     if not (snapshot and snapshot[1] >= requested_at and
                             not snapshot[0].stop_latched and
@@ -96,7 +101,7 @@ class ResetCoordinator(Node):
                         self._hold_waiter = future
                         await future
                         self._hold_waiter = None
-                if index == 1:
+                if client.srv_name == '/crossing/reset_state':
                     snapshot = self._crossing
                     if not (snapshot and snapshot[1] >= requested_at and
                             snapshot[0].valid and not snapshot[0].owner_id and
@@ -109,7 +114,8 @@ class ResetCoordinator(Node):
                 if acknowledgement.run_id:
                     response.run_id = acknowledgement.run_id
             response.success = True
-            response.reason = 'ALL_M2_PARTICIPANTS_ACKNOWLEDGED'
+            response.reason = ('ALL_M3_PARTICIPANTS_ACKNOWLEDGED' if self.include_bus else
+                               'ALL_M2_PARTICIPANTS_ACKNOWLEDGED')
         except Exception as error:
             response.reason = str(error)
         finally:
