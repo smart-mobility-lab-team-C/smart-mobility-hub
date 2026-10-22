@@ -20,6 +20,8 @@ CLEARANCE = 0.2
 BUS_SPEED_CAP = 0.4
 ROBOT_SPEED_CAP = 0.25
 ANGULAR_SPEED_CAP = 1.0
+POSE_NOISE_BOUND_M = 0.02
+YAW_NOISE_BOUND_RAD = 0.01
 EDGE_TOLERANCE = 1e-6
 
 # Assignment section 3.1, printed p4; coordinates are from map_m1.yaml.
@@ -236,9 +238,9 @@ class World:
         """Return a noisy perception sample from the isolated observation RNG."""
         rng = self.observation_rng
         return (
-            agent.x + rng.gauss(0.0, 0.02),
-            agent.y + rng.gauss(0.0, 0.02),
-            agent.yaw + rng.gauss(0.0, 0.01),
+            agent.x + rng.uniform(-POSE_NOISE_BOUND_M, POSE_NOISE_BOUND_M),
+            agent.y + rng.uniform(-POSE_NOISE_BOUND_M, POSE_NOISE_BOUND_M),
+            agent.yaw + rng.uniform(-YAW_NOISE_BOUND_RAD, YAW_NOISE_BOUND_RAD),
         )
 
     def ground_truth(self) -> Sequence[Tuple[str, str, AgentState]]:

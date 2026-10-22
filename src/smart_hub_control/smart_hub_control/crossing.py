@@ -10,6 +10,7 @@ from rclpy.qos import DurabilityPolicy, QoSProfile
 from smart_hub_interfaces.msg import CrossingState, HubEvent, QueueState, VehicleStateArray
 from smart_hub_interfaces.srv import RequestCrossing, ResetScenario
 from smart_hub_sim.geometry import intersects_crossing, swept_clear
+from smart_hub_sim.world import POSE_NOISE_BOUND_M
 
 
 class CrossingArbiter(Node):
@@ -33,6 +34,7 @@ class CrossingArbiter(Node):
         self.vehicles = None
         self.owner = self.token = ''
         self.expiry = 0.0
+        self._lease_lost = False
         self.clear_since = None
         self.waiters = OrderedDict()
         self.previous = None
@@ -72,12 +74,15 @@ class CrossingArbiter(Node):
                 not math.isfinite(queue.confidence) or
                 not self.confidence_min <= queue.confidence <= 1):
             return False, False, True
+        stamp = self.vehicles[0].header.stamp
+        age = self.get_clock().now().nanoseconds * 1e-9 - (
+            stamp.sec + stamp.nanosec * 1e-9)
         seen = set()
         occupied = False
         for vehicle in self.vehicles[0].vehicles:
             values = (vehicle.pose.x, vehicle.pose.y, vehicle.pose.theta, vehicle.speed_mps)
             if (not vehicle.valid or not all(math.isfinite(v) for v in values) or
-                    vehicle.vehicle_id in seen or vehicle.kind not in ('bus', 'robot', 'car') or
+                    vehicle.vehicle_id in seen or vehicle.kind not in ('bus', 'robot') or
                     (vehicle.vehicle_id in ('bus', 'robot') and
                      vehicle.kind != vehicle.vehicle_id)):
                 return False, queue.crossing_occupied, True
@@ -86,7 +91,10 @@ class CrossingArbiter(Node):
             position = (vehicle.pose.x, vehicle.pose.y)
             if not swept_clear(position, position, radius, (), ()):
                 return False, queue.crossing_occupied, True
-            occupied |= intersects_crossing(vehicle.pose.x, vehicle.pose.y, radius)
+            occupied |= intersects_crossing(
+                vehicle.pose.x, vehicle.pose.y,
+                radius + math.sqrt(2.0) * POSE_NOISE_BOUND_M +
+                max(0.0, age) * (0.25 if vehicle.kind == 'robot' else 0.4))
         if not {'bus', 'robot'}.issubset(seen):
             return False, queue.crossing_occupied, True
         return True, queue.crossing_occupied, occupied
@@ -95,6 +103,9 @@ class CrossingArbiter(Node):
         """Age leases without ever releasing an occupied or unknown crossing."""
         now = time.monotonic()
         valid, pedestrian, occupied = self.observe()
+        if self.owner and now > self.expiry and not self._lease_lost:
+            self._lease_lost = True
+            self.clear_since = None
         if valid and not pedestrian and not occupied:
             if self.clear_since is None:
                 self.clear_since = now
@@ -121,6 +132,7 @@ class CrossingArbiter(Node):
         if request.operation == 'RENEW':
             if matching and valid and not pedestrian:
                 self.expiry = now + self.lease_sec
+                self._lease_lost = False
                 response.granted, response.token, response.reason = True, self.token, 'RENEWED'
             else:
                 response.reason = 'INVALID_OR_EXPIRED_TOKEN'
@@ -149,6 +161,7 @@ class CrossingArbiter(Node):
                 self.owner = request.requester_id
                 self.token = uuid.uuid4().hex
                 self.expiry = now + self.lease_sec
+                self._lease_lost = False
                 del self.waiters[self.owner]
                 response.granted, response.token, response.reason = True, self.token, 'ACQUIRED'
         self.tick()

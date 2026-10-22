@@ -75,3 +75,20 @@ def test_observation_consumption_cannot_change_motion_and_reset_replays_noise():
     sampled.reset(41)
     assert sampled.noisy_pose(sampled.robot) == first
     assert sampled.robot == World(seed=41).robot
+
+
+def test_pose_noise_respects_declared_clearance_error_bound():
+    """A bounded observation error makes footprint-based clearance conservative."""
+    import math
+
+    from smart_hub_sim.geometry import intersects_crossing
+    from smart_hub_sim.world import POSE_NOISE_BOUND_M
+
+    world = World(seed=19)
+    world.bus.x, world.bus.y = 4.21, 2.0
+    assert intersects_crossing(world.bus.x, world.bus.y, 0.3)
+    for _ in range(1000):
+        x, y, _ = world.noisy_pose(world.bus)
+        assert abs(x - world.bus.x) <= POSE_NOISE_BOUND_M
+        assert abs(y - world.bus.y) <= POSE_NOISE_BOUND_M
+        assert intersects_crossing(x, y, 0.3 + math.sqrt(2) * POSE_NOISE_BOUND_M)

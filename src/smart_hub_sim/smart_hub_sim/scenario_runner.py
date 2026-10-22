@@ -239,6 +239,11 @@ class ScenarioRunner(Node):
     def _crossing_allows(self, agent: str, now: float) -> bool:
         """Require a recent valid exclusive owner and clear pedestrian measurement."""
         state = self._crossing
+        other = self.world.robot if agent == 'bus' else self.world.bus
+        other_radius = ROBOT_RADIUS if agent == 'bus' else BUS_RADIUS
+        # An independent physical interlock prevents entry even if observations err.
+        if intersects_crossing(other.x, other.y, other_radius):
+            return False
         return bool(
             state is not None
             and now - self._crossing_received <= self.CROSSING_TTL_SEC
