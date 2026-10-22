@@ -385,10 +385,11 @@ def _parameter_dumps() -> dict:
     ):
         try:
             result = subprocess.run(
-                ['ros2', 'param', 'dump', node_name],
+                ['ros2', 'param', 'dump', '--no-daemon', '--spin-time', '2',
+                 '--timeout', '3', node_name],
                 text=True,
                 capture_output=True,
-                timeout=5.0,
+                timeout=10.0,
                 check=False,
             )
             dumps[node_name] = {
