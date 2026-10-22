@@ -1,6 +1,6 @@
 # M0 observed status
 
-Date: 2026-10-22. Overall gate: BLOCKED on local Git authentication and independent review/reproduction. Local container build and ROS delivery now PASS. The initial preparation results below are retained as history.
+Date: 2026-10-22. Overall gate: BLOCKED on independent teammate review/reproduction. Local Git authentication, clean clone, no-cache build and ROS delivery now PASS. Local container build and ROS delivery now PASS. The initial preparation results below are retained as history.
 
 Source baseline: `53c1560379caa9d2398a8578c63edd936eb35fc7` on main. This record accompanies the implementation commit; identify the tested revision from the PR commit containing it. Local files were obtained through the authenticated GitHub connector because host Git is absent. Local Git push authentication was not verified.
 
@@ -44,3 +44,16 @@ Container identity check confirmed Ubuntu 24.04.5, Python 3.12.3 and ROS Jazzy. 
 Hosted [M0 CI run](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39778433532) also completed successfully at that commit. Local shell syntax, five unit tests and Markdown links passed again. ROS emits a deprecation warning for ROS_LOCALHOST_ONLY; delivery succeeds and no timing acceptance claim is made.
 
 Remaining gates: local private-repository authentication and personal branch push, independent teammate review and clean-checkout/no-cache reproduction. Two fresh containers from the same built image establish local rerun behavior, not independent reproduction. T01–T18 remain NOT RUN.
+
+## Authenticated clean-checkout validation
+
+GitHub CLI sign-in completed by the user; account `qrtman`. Authenticated `git ls-remote` succeeded. `git clone --branch feat/m0-container-workflow https://github.com/smart-mobility-lab-team-C/smart-mobility-hub.git /home/arlen/projects/smart-mobility-hub-checkout` succeeded at `c439abfb1ada59e33e3843cd0aa1624d8fdbbd01`; the checkout was clean before validation. The earlier snapshot directory is preserved. Use the new checkout for future Git work.
+
+- `docker build --no-cache -f containers/Dockerfile -t smart-mobility-hub:m0 .`: PASS, run `20261022T130741Z-clean-build`. Ubuntu mirror downloads were slow and retried; package installation finished successfully.
+- `bash scripts/bootstrap.sh --install`: PASS, run `20261022T131618Z-f2c3f313`, source commit recorded with dirty=false. Real C++ talker/Python listener delivery confirmed.
+- Five unit tests, shell syntax and local Markdown checks: PASS in the clean checkout.
+- `gh pr view 2 --json reviewDecision,statusCheckRollup`: tooling and ros-container checks SUCCESS; no teammate review recorded at inspection.
+
+[Evidence index](../evidence/m0-local-summary.json) includes the actual clean-build and smoke metadata and transcript hashes. The updated documentation commit is pushed using local authenticated Git; its push establishes the local branch-write gate in PR history. Doctor intentionally leaves manual write-auth as BLOCKED rather than inferring it from a read-only probe; use this recorded push evidence for that gate.
+
+This is same-agent reproduction on the same VM, not independent teammate verification. M0 remains pending that review/reproduction; no merge or M1 implementation has been performed.
