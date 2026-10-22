@@ -1,0 +1,11 @@
+# Assignment section 7, printed p10.
+string start_node
+string goal_node
+string agent_type
+string[] excluded_edges
+---
+bool success
+string[] node_ids
+geometry_msgs/Point[] waypoints
+float32 estimated_cost_sec
+string reason

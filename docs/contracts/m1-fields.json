@@ -1,0 +1,194 @@
+{
+  "msg/QueueState.msg": [
+    "std_msgs/Header header",
+    "string zone_id",
+    "uint32 count",
+    "float32 confidence",
+    "bool valid",
+    "bool crossing_occupied"
+  ],
+  "msg/DemandPrediction.msg": [
+    "std_msgs/Header header",
+    "uint32 horizon_sec",
+    "float32 predicted_count",
+    "float32 baseline_count",
+    "string model_id",
+    "bool valid"
+  ],
+  "msg/VehicleState.msg": [
+    "string vehicle_id",
+    "string kind",
+    "geometry_msgs/Pose2D pose",
+    "float32 speed_mps",
+    "string edge_id",
+    "bool valid"
+  ],
+  "msg/VehicleStateArray.msg": [
+    "std_msgs/Header header",
+    "VehicleState[] vehicles"
+  ],
+  "msg/BusArrival.msg": [
+    "std_msgs/Header header",
+    "string bus_id",
+    "string state",
+    "float32 eta_sec",
+    "bool eta_valid",
+    "bool door_open"
+  ],
+  "msg/SlotObservation.msg": [
+    "string slot_id",
+    "bool occupied",
+    "float32 confidence",
+    "bool valid"
+  ],
+  "msg/SlotObservationArray.msg": [
+    "std_msgs/Header header",
+    "SlotObservation[] slots"
+  ],
+  "msg/ParkingSlot.msg": [
+    "string slot_id",
+    "string state",
+    "string vehicle_id",
+    "string reservation_id",
+    "builtin_interfaces/Time expires_at"
+  ],
+  "msg/ParkingState.msg": [
+    "std_msgs/Header header",
+    "ParkingSlot[] slots",
+    "uint32 available_count"
+  ],
+  "msg/EdgeState.msg": [
+    "string edge_id",
+    "float32 mean_speed_mps",
+    "float32 density_ratio",
+    "bool blocked",
+    "bool valid"
+  ],
+  "msg/EdgeStateArray.msg": [
+    "std_msgs/Header header",
+    "EdgeState[] edges"
+  ],
+  "msg/CrossingState.msg": [
+    "std_msgs/Header header",
+    "string owner_id",
+    "string token",
+    "string state",
+    "bool pedestrian_present",
+    "bool valid"
+  ],
+  "msg/SafetyState.msg": [
+    "std_msgs/Header header",
+    "bool stop_latched",
+    "bool motion_permitted",
+    "string reason"
+  ],
+  "msg/HubEvent.msg": [
+    "std_msgs/Header header",
+    "string run_id",
+    "string scenario_id",
+    "string entity_id",
+    "string event",
+    "string reason",
+    "string correlation_id"
+  ],
+  "srv/ReserveParking.srv": [
+    "string request_id",
+    "string vehicle_id",
+    "string preferred_slot",
+    "float32 ttl_sec",
+    "---",
+    "bool success",
+    "string reservation_id",
+    "string slot_id",
+    "builtin_interfaces/Time expires_at",
+    "string reason"
+  ],
+  "srv/ReleaseParking.srv": [
+    "string request_id",
+    "string reservation_id",
+    "string vehicle_id",
+    "---",
+    "bool success",
+    "string reason"
+  ],
+  "srv/ComputeRoute.srv": [
+    "string start_node",
+    "string goal_node",
+    "string agent_type",
+    "string[] excluded_edges",
+    "---",
+    "bool success",
+    "string[] node_ids",
+    "geometry_msgs/Point[] waypoints",
+    "float32 estimated_cost_sec",
+    "string reason"
+  ],
+  "srv/RequestCrossing.srv": [
+    "string requester_id",
+    "string operation",
+    "string token",
+    "---",
+    "bool granted",
+    "string token",
+    "string reason"
+  ],
+  "srv/ResetScenario.srv": [
+    "string scenario_id",
+    "uint32 seed",
+    "bool preserve_logs",
+    "---",
+    "bool success",
+    "string run_id",
+    "string reason"
+  ],
+  "srv/ClearSafetyStop.srv": [
+    "string operator_id",
+    "string acknowledgement",
+    "---",
+    "bool success",
+    "string reason"
+  ],
+  "action/DockBus.action": [
+    "string bus_id",
+    "string bay_id",
+    "float32 max_duration_sec",
+    "---",
+    "bool success",
+    "string final_state",
+    "string reason",
+    "---",
+    "string phase",
+    "float32 distance_remaining_m",
+    "float32 eta_sec"
+  ],
+  "action/EscortPassenger.action": [
+    "string request_id",
+    "string passenger_id",
+    "string pickup_node",
+    "string destination_node",
+    "float32 max_duration_sec",
+    "---",
+    "bool success",
+    "string final_node",
+    "float32 travelled_distance_m",
+    "string reason",
+    "---",
+    "string phase",
+    "float32 progress",
+    "float32 distance_remaining_m"
+  ],
+  "action/NavigateTo.action": [
+    "string request_id",
+    "string goal_node",
+    "float32 max_duration_sec",
+    "---",
+    "bool success",
+    "string final_node",
+    "float32 final_error_m",
+    "string reason",
+    "---",
+    "string phase",
+    "float32 progress",
+    "float32 distance_remaining_m"
+  ]
+}

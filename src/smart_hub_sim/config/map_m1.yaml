@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "frame": "map",
+  "units": {
+    "position": "m",
+    "yaw": "rad",
+    "speed": "m/s",
+    "time": "s"
+  },
+  "bounds": {
+    "x": [
+      0,
+      12
+    ],
+    "y": [
+      0,
+      8
+    ]
+  },
+  "axes": {
+    "x": "east",
+    "y": "north",
+    "z": "up"
+  },
+  "source": {
+    "geometry": "Assignment sections 2\u20133, printed pp3\u20134",
+    "derived_nodes": "N, Cn, Cs, J, U: user-approved M1 plan; corroborated by handbook Appendix A Listing A.1 (printed p20)",
+    "edges": "Assignment section 3.1, printed p4",
+    "limits": "Assignment section 3.3, printed p4",
+    "bus_docked_speed": "Assignment sections 10.2 and 18.6, printed pp16,25"
+  },
+  "nodes": {
+    "A": [
+      1,
+      2
+    ],
+    "E": [
+      11,
+      2
+    ],
+    "B": [
+      8,
+      4
+    ],
+    "R": [
+      3,
+      6
+    ],
+    "D": [
+      9,
+      1
+    ],
+    "P1": [
+      8,
+      6.5
+    ],
+    "P2": [
+      9.5,
+      6.5
+    ],
+    "P3": [
+      11,
+      6.5
+    ],
+    "W": [
+      5,
+      6
+    ],
+    "N": [
+      1,
+      4
+    ],
+    "Cn": [
+      5,
+      4
+    ],
+    "Cs": [
+      5,
+      2
+    ],
+    "J": [
+      9,
+      2
+    ],
+    "U": [
+      11,
+      4
+    ]
+  },
+  "derived_nodes": [
+    "N",
+    "Cn",
+    "Cs",
+    "J",
+    "U"
+  ],
+  "zones": {
+    "C": {
+      "x": [
+        4.5,
+        5.5
+      ],
+      "y": [
+        1.25,
+        4.75
+      ]
+    },
+    "Q": {
+      "x": [
+        2,
+        6
+      ],
+      "y": [
+        5,
+        7
+      ]
+    }
+  },
+  "obstacles": {
+    "O": {
+      "center": [
+        7,
+        2
+      ],
+      "radius": 0.35,
+      "injection": "scenario-controlled; not permanently blocked at startup"
+    }
+  },
+  "directed": false,
+  "edge_id_rule": "lexicographically sorted endpoint names joined by ASCII hyphen",
+  "edges": [
+    {
+      "id": "A-Cs",
+      "nodes": [
+        "A",
+        "Cs"
+      ],
+      "agents": [
+        "bus",
+        "car"
+      ]
+    },
+    {
+      "id": "Cs-J",
+      "nodes": [
+        "Cs",
+        "J"
+      ],
+      "agents": [
+        "bus",
+        "car",
+        "robot"
+      ]
+    },
+    {
+      "id": "E-J",
+      "nodes": [
+        "E",
+        "J"
+      ],
+      "agents": [
+        "bus",
+        "car",
+        "robot"
+      ]
+    },
+    {
+      "id": "A-N",
+      "nodes": [
+        "A",
+        "N"
+      ],
+      "agents": [
+        "bus",
+        "car"
+      ]
+    },
+    {
+      "id": "Cn-N",
+      "nodes": [
+        "Cn",
+        "N"
+      ],
+      "agents": [
+        "bus",
+        "car"
+      ]
+    },
+    {
+      "id": "B-Cn",
+      "nodes": [
+        "B",
+        "Cn"
+      ],
+      "agents": [
+        "bus",
+        "car",
+        "robot"
+      ]
+    },
+    {
+      "id": "B-U",
+      "nodes": [
+        "B",
+        "U"
+      ],
+      "agents": [
+        "bus",
+        "car",
+        "robot"
+      ]
+    },
+    {
+      "id": "E-U",
+      "nodes": [
+        "E",
+        "U"
+      ],
+      "agents": [
+        "bus",
+        "car",
+        "robot"
+      ]
+    },
+    {
+      "id": "R-W",
+      "nodes": [
+        "R",
+        "W"
+      ],
+      "agents": [
+        "robot"
+      ]
+    },
+    {
+      "id": "Cn-W",
+      "nodes": [
+        "Cn",
+        "W"
+      ],
+      "agents": [
+        "robot"
+      ]
+    },
+    {
+      "id": "Cn-Cs",
+      "nodes": [
+        "Cn",
+        "Cs"
+      ],
+      "agents": [
+        "robot"
+      ]
+    },
+    {
+      "id": "D-J",
+      "nodes": [
+        "D",
+        "J"
+      ],
+      "agents": [
+        "robot"
+      ]
+    },
+    {
+      "id": "P3-U",
+      "nodes": [
+        "P3",
+        "U"
+      ],
+      "agents": [
+        "car"
+      ]
+    },
+    {
+      "id": "P2-P3",
+      "nodes": [
+        "P2",
+        "P3"
+      ],
+      "agents": [
+        "car"
+      ]
+    },
+    {
+      "id": "P1-P2",
+      "nodes": [
+        "P1",
+        "P2"
+      ],
+      "agents": [
+        "car"
+      ]
+    }
+  ],
+  "footprint_radius_m": {
+    "robot": 0.2,
+    "bus": 0.3,
+    "car": 0.3
+  },
+  "limits": {
+    "robot_speed_mps": 0.25,
+    "bus_speed_mps": 0.4,
+    "clearance_m": 0.2,
+    "command_timeout_sec": 0.5,
+    "perception_freshness_sec": 1.0,
+    "stop_command_latency_sec": 0.2,
+    "arrival_position_m": 0.2,
+    "arrival_yaw_rad": 0.17,
+    "arrival_hold_sec": 1.0,
+    "crossing_clear_debounce_sec": 2.0,
+    "sim_step_sec": 0.05,
+    "bus_docked_speed_below_mps": 0.02
+  },
+  "unresolved_parameters": [
+    "car speed cap",
+    "angular speed cap",
+    "future timestamp tolerance",
+    "edge capacity and safe headway",
+    "crossing lease duration",
+    "robot measured stopped threshold"
+  ]
+}

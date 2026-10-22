@@ -1,0 +1,11 @@
+# Assignment section 7, printed p10.
+string request_id
+string vehicle_id
+string preferred_slot
+float32 ttl_sec
+---
+bool success
+string reservation_id
+string slot_id
+builtin_interfaces/Time expires_at
+string reason

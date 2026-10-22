@@ -1,0 +1,8 @@
+# Assignment section 7, printed p10.
+string requester_id
+string operation
+string token
+---
+bool granted
+string token
+string reason

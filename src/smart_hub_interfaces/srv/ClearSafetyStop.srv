@@ -1,0 +1,6 @@
+# Assignment section 7, printed p10.
+string operator_id
+string acknowledgement
+---
+bool success
+string reason

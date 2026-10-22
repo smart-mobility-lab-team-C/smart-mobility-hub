@@ -1,0 +1,15 @@
+# Assignment section 7, printed p12.
+string request_id
+string passenger_id
+string pickup_node
+string destination_node
+float32 max_duration_sec
+---
+bool success
+string final_node
+float32 travelled_distance_m
+string reason
+---
+string phase
+float32 progress
+float32 distance_remaining_m

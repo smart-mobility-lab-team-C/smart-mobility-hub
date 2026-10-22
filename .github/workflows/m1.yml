@@ -1,0 +1,29 @@
+name: M1 contracts and packages
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  m1:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check_m1.py
+      - run: python3 scripts/check_docs.py
+      - run: docker build -t smh-m1 -f containers/Dockerfile .
+      - name: Clean workspace build and generated interface checks
+        run: |
+          mkdir -p evidence/m1-ci
+          git rev-parse HEAD > evidence/m1-ci/commit.txt
+          docker image inspect smh-m1 > evidence/m1-ci/image.json
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp -v "$PWD:/workspace" smh-m1 \
+            bash scripts/m1_container.sh /workspace/evidence/m1-ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m1-results
+          path: evidence/m1-ci/
