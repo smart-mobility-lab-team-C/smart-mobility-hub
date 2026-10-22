@@ -49,3 +49,10 @@ $ git push -u origin feat/m1-contracts-interfaces
 FAIL exit 1: remote refused creation/update of .github/workflows/m1.yml without OAuth workflow scope.
 Local source commit 4acb53d and validation documentation commit 9235b82 exist.
 Push/PR BLOCKED pending human GitHub scope refresh; PR description prepared in /tmp/smh-m1-pr.md.
+
+Delivery blocker RESOLVED: user completed workflow scope refresh.
+$ git push -u origin feat/m1-contracts-interfaces
+PASS exit 0; new branch published.
+$ gh pr create --base main --head feat/m1-contracts-interfaces --title 'feat(m1): add map contracts, ROS interfaces and package skeletons' --body-file /tmp/smh-m1-pr.md
+PASS: https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/4
+No merge performed. Independent review/reproduction remains NOT RUN.
