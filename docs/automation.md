@@ -62,6 +62,14 @@ FAIL, BLOCKED and NOT RUN separately. Large raw evidence remains ignored; commit
 small result indexes that identify the exact run. Independent local reproduction
 is a separate human gate.
 
+For the observed `/bus/prepare_reset` timeout, source a locally built Jazzy
+workspace and run `python3 scripts/verify_reset.py --output
+evidence/runs/reset-UNIQUE/report.json`. The default five repetitions use seeds
+300–304 and the real M3 graph. Coordinator and bus logs distinguish service
+delivery, lock acquisition, zero/door/pose observations and coroutine completion.
+This focused probe is diagnostic-only and cannot close docking or M4 scenario
+rows. After a repair, rerun the full fresh-workspace acceptance command above.
+
 ## Optional hosted verification
 
 [Hosted verification](../.github/workflows/verify.yml) and the M0–M3 diagnostic

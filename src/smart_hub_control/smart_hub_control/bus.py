@@ -104,6 +104,8 @@ class BusManager(Node):
         self.reset_hold = False
         self.reset_waiter = None
         self.reset_deadline = 0.0
+        self.reset_started = 0.0
+        self.reset_observation = None
         self.phase = 'IDLE'
         self.reason = ''
         self.correlation = ''
@@ -652,7 +654,18 @@ class BusManager(Node):
             self.crossing_step(now, pose)
         if self.reset_waiter and not self.reset_waiter.done():
             door = self.state('door', 0.5)
-            if self.goal is None and self.zero_measured() and door and not door.data:
+            zero = self.goal is None and self.zero_measured()
+            observation = (self.goal is not None, zero, door.data if door else None,
+                           pose is not None)
+            if observation != self.reset_observation:
+                self.get_logger().info(json.dumps({
+                    'event': 'bus_reset_observation',
+                    'elapsed_sec': now - self.reset_started,
+                    'goal_active': observation[0], 'zero_measured': zero,
+                    'door_open': observation[2], 'pose_valid': observation[3],
+                }, sort_keys=True))
+                self.reset_observation = observation
+            if zero and door and not door.data:
                 self.reset_waiter.set_result(True)
             elif now >= self.reset_deadline:
                 self.reset_waiter.set_result(False)
@@ -845,7 +858,15 @@ class BusManager(Node):
 
     async def prepare_reset(self, request, response):
         """Hold new goals and await terminal/zero/closed acknowledgement before world reset."""
+        received_at = time.monotonic()
+        self.get_logger().info(json.dumps({
+            'event': 'bus_reset_received', 'monotonic': received_at,
+        }))
         with self.lock:
+            self.get_logger().info(json.dumps({
+                'event': 'bus_reset_lock_acquired',
+                'lock_wait_sec': time.monotonic() - received_at,
+            }))
             if request.scenario_id != 'm2_baseline' or self.reset_waiter:
                 response.reason = 'UNKNOWN_OR_BUSY'
                 return response
@@ -854,10 +875,17 @@ class BusManager(Node):
             self.door(False)
             if self.goal:
                 self.begin_stop('SCENARIO_RESET')
-            self.reset_deadline = time.monotonic() + 0.8
+            self.reset_started = time.monotonic()
+            self.reset_deadline = self.reset_started + 0.8
+            self.reset_observation = None
             waiter = Future(executor=self.executor)
             self.reset_waiter = waiter
+            self.get_logger().info(json.dumps({'event': 'bus_reset_waiting_for_zero'}))
         response.success = await waiter
+        self.get_logger().info(json.dumps({
+            'event': 'bus_reset_complete', 'success': response.success,
+            'elapsed_sec': time.monotonic() - received_at,
+        }))
         with self.lock:
             self.reset_waiter = None
             response.reason = 'BUS_ZERO_CLOSED' if response.success else 'BUS_RESET_UNCONFIRMED'

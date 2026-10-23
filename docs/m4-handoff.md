@@ -152,6 +152,12 @@ per-participant request/acknowledgement times and safety/crossing observation
 waits into the normal node logs. These diagnostic records do not change the
 one-second deadline, reset order, public interfaces or acceptance thresholds.
 
+That single-campaign run (`0114139`) passed all 53 package tests and 18 M2 cases,
+then failed again at `/bus/prepare_reset` before any later reset participant was
+called. `scripts/verify_reset.py` provides a focused real-node local diagnostic;
+bus logs now distinguish callback receipt, lock acquisition and the observed
+zero/closed-door conditions. Its runs do not establish scenario acceptance.
+
 The M3 prerequisite failed during its first nominal case because the scenario
 reset exceeded its one-second deadline. Its result is recorded as FAIL, not
 reclassified as an environment-only issue. The same VM had a separate M0
