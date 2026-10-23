@@ -63,6 +63,12 @@ details are in [M3 status](m3.md).
   any docking goal. It ran against base commit `7e51a0f` with the local readiness
   probe edit. The result, trace and transcript hashes are indexed in
   [the M3 verification index](../evidence/m3-verification-attempts.json).
+- Clean run `m3-0588216-20261023-rerun` on commit `05882166ca9a8cda9b8929f3ed2286cb5a330fcd`
+  passed build, quality, 23 interface inspections, 40 colcon tests and all 18
+  M2 cases. Its first nominal M3 goal ended with `SAFETY_STOP` after a 17.0 s
+  local observation gap; the trace records `vehicles_stale` followed by
+  `crossing_unknown`. This is a FAIL for that attempted mission and does not
+  establish the readiness-probe case. The trace and result hashes are indexed.
 - The probe now waits up to 2 s for fresh door, bus-truth and supervisor samples
   before the boarding-interruption goal. It records the last observed state and
   age on timeout. The runtime remains unchanged, so an immediate goal in an
@@ -74,9 +80,9 @@ traces stay under ignored `evidence/runs/` directories.
 
 ## Resume steps
 
-1. Run the complete clean Jazzy pipeline again on the readiness-probe source.
-   Keep each attempt in a unique directory and inspect the first failure if it
-   stops before all 24 M3 cases complete.
+1. Push the scoped readiness-probe commit to PR #7 and inspect the hosted clean
+   Jazzy run. The two latest local failures occurred at reset and during a
+   nominal mission, before the boarding-interruption probe ran.
 2. Only after all 24 cases pass, add a successful evidence record with source
    commit, environment, parameters, metrics and artifact hashes. Preserve every
    earlier failure. Then update M3, plan, test matrix, requirements, README and

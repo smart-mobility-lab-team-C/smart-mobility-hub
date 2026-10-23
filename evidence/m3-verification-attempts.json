@@ -2,6 +2,7 @@
   "schema": "smart-mobility-hub/m3-verification-attempts-v1",
   "updated": "2026-10-23",
   "acceptance_status": "NOT RUN",
+  "latest_complete_pipeline_attempt": "FAIL",
   "t05_t06_status": "NOT RUN",
   "attempts": [
     {
@@ -87,6 +88,44 @@
         "m2_regression_sha256": "5861d70c55a28fde2227c9b2ee574e7308a4fccc048b2b39e4f27f50a006e96f",
         "transcript_sha256": "7babd6aeaf24853b5a32d1eb251dfe61fa892dc29120a704755839956edcb66d",
         "readiness_probe_source_sha256": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2"
+      }
+    },
+    {
+      "id": "local-m3-0588216-20261023-rerun",
+      "source_commit": "05882166ca9a8cda9b8929f3ed2286cb5a330fcd",
+      "worktree": "clean",
+      "environment": {
+        "os": "Ubuntu 24.04.5 LTS",
+        "ros": "Jazzy",
+        "python": "3.12.3",
+        "container_image": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b"
+      },
+      "status": "FAIL",
+      "build_and_quality": "PASS",
+      "interfaces_inspected": 23,
+      "colcon_tests": {
+        "count": 40,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "m2_real_process_cases": {
+        "count": 18,
+        "status": "PASS"
+      },
+      "m3": {
+        "failed_case": "nominal_docking_01",
+        "result": "SAFETY_STOP",
+        "elapsed_sec": 41.232,
+        "trace_observation": "A 17.0 s gap in local observations was followed by vehicles_stale and crossing_unknown supervisor states, then SAFE_STOP."
+      },
+      "artifacts": {
+        "acceptance": "evidence/runs/m3-0588216-20261023-rerun/m3/acceptance.json",
+        "acceptance_sha256": "aefe55e3e25b3e7e2079cd978361b7813c18a30ea355368386ed1f8e3c097ac5",
+        "trace": "evidence/runs/m3-0588216-20261023-rerun/m3/trace.jsonl",
+        "trace_sha256": "7f2f2a53c5e07a6d017f68f041e1e1dc040ba3d5457fd85f8b3e6445042c74df",
+        "m2_regression_sha256": "c0da31a9dc1ab3e9fc2d01af06e28742e76e9e0b30418166d75b1a1f15d8710e",
+        "transcript_sha256": "64ea01f7fa015387e65c2f637a14a430c5206374e2edca158d5705357c6f7511"
       }
     }
   ],

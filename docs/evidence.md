@@ -96,9 +96,13 @@ regression cases passed. M3 then failed in the initial reset with `queue_stale`,
 before a nominal goal. A later local clean run with the readiness-probe edit
 passed build, quality, 23 interface inspections, 40 colcon tests and all 18 M2
 real-node regression cases, then failed its first M3 reset with
-`PARTICIPANT_UNAVAILABLE`. The hosted attempt passed ten nominal docking runs
-and failed the boarding-interruption case before the readiness wait was added.
-Neither result closes M3 or T05–T06; current acceptance remains NOT RUN.
+`PARTICIPANT_UNAVAILABLE`. A second clean local run passed the same build and
+regression gates, then ended its first nominal mission with `SAFETY_STOP` after
+a 17.0 s local observation gap (`vehicles_stale`, then `crossing_unknown`). The
+hosted attempt passed ten nominal docking runs and failed the boarding-interruption
+case before the readiness wait was added. Each attempt and trace hash is listed
+in the M3 attempt index. These individual outcomes do not close M3 or T05–T06;
+complete acceptance remains NOT RUN.
 
 The source uses the existing watchdog bounds; traces show multi-second host timing
 gaps, with the underlying cause unconfirmed. Raw logs/traces remain ignored; hashes
