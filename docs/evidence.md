@@ -252,3 +252,14 @@ Capture exit 0 means collection completed, not acceptance PASS. Full M0–M3 sui
 NOT RUN. One successful no-image attempt does not establish repair or image
 publication as the cause. Raw artifacts remain local; hashes and terminal results
 are indexed in `evidence/vm-gap-reopened.json`. No runtime/watchdog changes.
+
+## M4 continuation — local checks, ROS acceptance open
+
+The M4 branch now includes sensor-backed parking/traffic ROS adapters, independent
+simulator barrier interlocks, reset acknowledgments, an integrated launch and
+real-node acceptance/plot tooling. [M4 handoff](m4-handoff.md) describes the scope;
+[local evidence](../evidence/m4-local.json) records actual checks and blockers.
+T07–T10 remain NOT RUN. The hosted workflow has been extended to invoke the M4
+runner, but this continuation has no hosted result. Missing local Jazzy setup and
+Docker socket permissions block local ROS build/integration. No permissions were
+changed, no branch was merged, and no M4 scenario PASS is claimed.

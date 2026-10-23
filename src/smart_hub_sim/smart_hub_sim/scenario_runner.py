@@ -19,6 +19,7 @@ from sensor_msgs.msg import Image
 from smart_hub_interfaces.msg import (
     CrossingState,
     HubEvent,
+    ParkingState,
     QueueState,
     SafetyState,
     SlotObservation,
@@ -65,9 +66,26 @@ class ScenarioRunner(Node):
     CROSSING_TTL_SEC = 0.5
 
     def __init__(self) -> None:
+        """Initialize simulator sources, independent adapters and validated runtime settings."""
         super().__init__('scenario_runner')
         self.declare_parameter('seed', 17)
         self.declare_parameter('m3_mode', False)
+        self.declare_parameter('m4_mode', False)
+        self.m4_mode = bool(self.get_parameter('m4_mode').value)
+        self.declare_parameter('occupied_slots', ['P1'])
+        self.declare_parameter('invalid_slots', [''])
+        self.declare_parameter('publish_parking', True)
+        self.declare_parameter('freeze_parking', False)
+        self.declare_parameter('publish_vehicles', True)
+        self.declare_parameter('freeze_vehicles', False)
+        self.declare_parameter('entry_vehicle_id', '')
+        self.declare_parameter('passage_occupied', False)
+        self.declare_parameter('publish_entrance', True)
+        self.declare_parameter('publish_barrier_status', True)
+        self._frozen_parking = None
+        self._frozen_vehicles = None
+        self._parking_state = None
+        self._parking_received = 0.0
         self.declare_parameter('initial_passengers', 6)
         self.declare_parameter('passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY)
         self.set_parameters([self.get_parameter_or(
@@ -142,6 +160,14 @@ class ScenarioRunner(Node):
         self._barrier_pub = self.create_publisher(
             Bool, '/parking/barrier_open', _qos(1)
         )
+        if self.m4_mode:
+            self._entrance_pub = self.create_publisher(Bool, '/parking/entrance_clear', _qos(1))
+            self._entry_pub = self.create_publisher(String, '/parking/entry_vehicle_id', _qos(1))
+            self._bay_pub = self.create_publisher(Bool, '/sim/bay_clear', _qos(1))
+            self.create_subscription(Bool, '/parking/barrier_heartbeat',
+                                     self._barrier_heartbeat, _qos(1))
+            self.create_subscription(ParkingState, '/parking/state',
+                                     self._on_parking_state, _qos(1, True))
         self._bus_cmd_sub = self.create_subscription(
             Twist, '/bus/cmd_vel', self._bus_command, _qos(1)
         )
@@ -185,7 +211,10 @@ class ScenarioRunner(Node):
             if parameter.name == 'passenger_arrivals_sec' and any(
                     not math.isfinite(t) or t < 0 for t in parameter.value):
                 return SetParametersResult(successful=False, reason='invalid arrival schedule')
-            if parameter.name == 'm3_mode':
+            if parameter.name in ('occupied_slots', 'invalid_slots') and not (
+                    set(parameter.value) <= {'P1', 'P2', 'P3', ''}):
+                return SetParametersResult(successful=False, reason='unknown parking slot')
+            if parameter.name in ('m3_mode', 'm4_mode'):
                 return SetParametersResult(successful=False, reason='m3_mode is startup only')
         return SetParametersResult(successful=True)
 
@@ -304,10 +333,21 @@ class ScenarioRunner(Node):
         with self._lock:
             self.world.door_request = bool(message.data)
 
+    def _on_parking_state(self, message):
+        """Receive owner-bearing state independently from unstamped barrier commands."""
+        self._parking_state = message
+        self._parking_received = time.monotonic()
+
     def _barrier_request(self, message: Bool) -> None:
-        """Remember barrier requests while the ownerless M2 barrier stays closed."""
+        """Record a short actuator lease; opening still needs independent interlocks."""
         with self._lock:
             self.world.barrier_request = bool(message.data)
+
+    def _barrier_heartbeat(self, message):
+        """Renew the actuator lease only when on-change intent also requests opening."""
+        with self._lock:
+            self.world.barrier.command(bool(message.data and self.world.barrier_request),
+                                       time.monotonic())
 
     @staticmethod
     def _path_needs_crossing(
@@ -401,23 +441,40 @@ class ScenarioRunner(Node):
             truth.vehicles.append(
                 self._vehicle_record(vehicle_id, kind, state, noisy=False)
             )
-        self._vehicles_pub.publish(observations)
+        if self.m4_mode and self.get_parameter('freeze_vehicles').value:
+            if self._frozen_vehicles is None:
+                self._frozen_vehicles = observations
+            observations = self._frozen_vehicles
+        else:
+            self._frozen_vehicles = None
+        if not self.m4_mode or self.get_parameter('publish_vehicles').value:
+            self._vehicles_pub.publish(observations)
         self._truth_pub.publish(truth)
 
     def _publish_parking(self, stamp) -> None:
         """Publish synthetic slot observations using the observation-only RNG."""
+        if self.m4_mode and not self.get_parameter('publish_parking').value:
+            return
         message = SlotObservationArray()
         message.header.stamp = stamp
         message.header.frame_id = 'map'
         for slot_id in ('P1', 'P2', 'P3'):
             observation = SlotObservation()
             observation.slot_id = slot_id
-            observation.occupied = False
+            observation.occupied = (self.m4_mode and
+                                    slot_id in self.get_parameter('occupied_slots').value)
             observation.confidence = max(
                 0.0, min(1.0, self.world.observation_rng.gauss(0.97, 0.01))
             )
-            observation.valid = True
+            observation.valid = not (self.m4_mode and
+                                     slot_id in self.get_parameter('invalid_slots').value)
             message.slots.append(observation)
+        if self.m4_mode and self.get_parameter('freeze_parking').value:
+            if self._frozen_parking is None:
+                self._frozen_parking = message
+            message = self._frozen_parking
+        else:
+            self._frozen_parking = None
         self._parking_pub.publish(message)
 
     def _publish_image(self, stamp) -> None:
@@ -526,9 +583,33 @@ class ScenarioRunner(Node):
         door = Bool()
         door.data = self.world.door_open
         self._door_pub.publish(door)
+        if self.m4_mode:
+            now = time.monotonic()
+            clear = not self.get_parameter('passage_occupied').value
+            identity = self.get_parameter('entry_vehicle_id').value
+            if self.get_parameter('publish_entrance').value:
+                self._entrance_pub.publish(Bool(data=clear))
+                self._entry_pub.publish(String(data=identity))
+            self._bay_pub.publish(Bool(data=math.hypot(
+                self.world.robot.x - 8, self.world.robot.y - 4) > .8))
+            state = self._parking_state
+            live = bool(state and self._header_is_fresh(state.header, 1.0)
+                        and now - self._parking_received <= 1.0)
+            ros_now = self.get_clock().now().nanoseconds * 1e-9
+            owner = live and any(
+                slot.vehicle_id == identity and identity and slot.reservation_id
+                and slot.state in ('RESERVED', 'OCCUPIED')
+                and slot.expires_at.sec + slot.expires_at.nanosec * 1e-9 > ros_now
+                for slot in state.slots)
+            safe = bool(self._safety and now - self._safety_received <= .5
+                        and self._header_is_fresh(self._safety.header, .5)
+                        and not self._safety.stop_latched
+                        and self._safety.reason != 'reset_in_progress')
+            self.world.barrier.update(now, clear, owner, safe)
         barrier = Bool()
         barrier.data = self.world.barrier_open
-        self._barrier_pub.publish(barrier)
+        if not self.m4_mode or self.get_parameter('publish_barrier_status').value:
+            self._barrier_pub.publish(barrier)
 
     def _step(self) -> None:
         """Advance physics and emit each configured topic at its target rate."""
@@ -597,6 +678,7 @@ class ScenarioRunner(Node):
                 and crossing_fresh_and_clear
                 and not self._safety.stop_latched
                 and zero_measured
+                and not (self.m4_mode and self.get_parameter('passage_occupied').value)
             )
             if not allowed:
                 response.success = False
@@ -612,6 +694,9 @@ class ScenarioRunner(Node):
                 self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
                     'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, [])).value)
             self.goal_id = ''
+            self._parking_state = None
+            self._parking_received = 0.0
+            self._frozen_parking = self._frozen_vehicles = None
             self._commands = {
                 'bus': ((0.0, 0.0), now),
                 'robot': ((0.0, 0.0), now),

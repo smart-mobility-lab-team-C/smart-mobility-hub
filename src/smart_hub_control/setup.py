@@ -11,6 +11,8 @@ setup(
         ('share/' + package_name, ['package.xml']),
     ],
     entry_points={'console_scripts': [
+        'parking_manager = smart_hub_control.m4_nodes:parking_main',
+        'traffic_monitor = smart_hub_control.m4_nodes:traffic_main',
         'crossing_arbiter = smart_hub_control.crossing:main',
         'route_planner = smart_hub_control.routing:main',
         'bus_manager = smart_hub_control.bus:main',
