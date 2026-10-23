@@ -11,7 +11,7 @@ import tempfile
 import time
 import unittest
 
-from gap_tools import analyze, timed
+from gap_tools import analyze, report, timed
 
 
 def timeline(layer, gap=False):
@@ -88,6 +88,23 @@ class GapAnalysisTests(unittest.TestCase):
             timed(sink, 'callback', fail)()
         self.assertEqual([r['phase'] for r in sink.rows], ['start', 'end'])
         self.assertEqual(sink.rows[0]['call'], sink.rows[1]['call'])
+
+    def test_reanalysis_does_not_count_exported_context(self):
+        """Repeated analysis must not ingest its own copied gap-window records."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / 'run.json').write_text(json.dumps({'active_start': 0, 'active_end': 3}))
+            (root / 'raw.jsonl').write_text(
+                '\n'.join(json.dumps(r) for r in timeline('probe', True)) + '\n')
+            self.assertEqual(report(root), report(root))
+
+    def test_incomplete_startup(self):
+        """A failed startup cannot establish an active mission gap or a clean run."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / 'run.json').write_text(json.dumps({
+                'active_start': 0, 'active_end': 3, 'active_interval_established': False}))
+            self.assertEqual(report(root)['status'], 'INCOMPLETE_STARTUP')
 
     def test_real_sampler_suspension(self):
         """A paused process is localized while an independent process continues."""

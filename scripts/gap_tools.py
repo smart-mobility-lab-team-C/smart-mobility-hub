@@ -128,6 +128,8 @@ def load_records(directory, start=float('-inf'), end=float('inf')):
     """Read complete records; retain truncated-tail warnings after interrupted capture."""
     records, warnings = [], []
     for path in sorted(Path(directory).rglob('*.jsonl')):
+        if path.name.startswith('gap-'):
+            continue  # Generated context is a copy, never an additional acquisition.
         for number, line in enumerate(path.open(), 1):
             try:
                 record = json.loads(line)
