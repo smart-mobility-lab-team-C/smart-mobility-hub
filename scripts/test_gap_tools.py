@@ -51,6 +51,21 @@ class GapAnalysisTests(unittest.TestCase):
         self.assertFalse(analyze(timeline('host', True), 2, 3)['windows'])
         self.assertFalse(analyze(timeline('host'), 0, 3)['windows'])
 
+    def test_slow_contract_stream_is_context_only(self):
+        """Jitter on a nominal 2 Hz stream cannot establish a half-second stall."""
+        rows = [{'t': t, 'topic': 'arrival'} for t in (0, 0.51, 1.02, 1.53)]
+        self.assertFalse(analyze(rows, 0, 2)['windows'])
+
+    def test_source_clock_and_missing_headers(self):
+        """Keep acquisition-clock jumps distinct from unstamped receipt gaps."""
+        rows = [{'t': t, 'layer': 'observer', 'stage': 'odom', 'source_wall': t + 100}
+                for t in (0, 0.1, 1.1)]
+        result = analyze(rows, 0, 2)
+        self.assertAlmostEqual(result['windows'][0]['gaps'][0]['source_delta_sec'], 1.0)
+        for row in rows:
+            row['source_wall'] = None
+        self.assertIsNone(analyze(rows, 0, 2)['windows'][0]['gaps'][0]['source_delta_sec'])
+
     def test_callback_failure(self):
         """Failed callbacks retain matching entry and exit records."""
         class Sink:

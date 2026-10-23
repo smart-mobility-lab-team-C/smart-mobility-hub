@@ -99,8 +99,13 @@ def sample(output, registry, layer):
             sequence += 1
             stream.write(json.dumps({
                 't': time.monotonic(), 'wall': time.time(), 'pid': os.getpid(),
+                'boottime': time.clock_gettime(time.CLOCK_BOOTTIME),
                 'sequence': sequence, 'layer': layer, 'stage': 'sample', 'processes': processes,
                 'load': read_optional('/proc/loadavg'),
+                'uptime': read_optional('/proc/uptime'),
+                'cpu_totals': '\n'.join(
+                    line for line in (read_optional('/proc/stat') or '').splitlines()
+                    if line.startswith('cpu')),
                 'memory': '\n'.join(
                     line for line in (read_optional('/proc/meminfo') or '').splitlines()
                     if line.startswith(('MemAvailable:', 'SwapFree:'))),
@@ -154,7 +159,7 @@ def analyze(records, start, end, threshold=0.5):
         layer, _, stage, phase = key
         periodic = stage in ('sample', 'thread_heartbeat', 'executor_heartbeat',
                              'truth', 'odom', 'safety', 'crossing', 'queue',
-                             'command', 'door', 'arrival', 'vehicles')
+                             'command', 'door', 'vehicles')
         periodic |= stage in ('sim.step', 'safety.tick') and phase == 'start'
         if not periodic:
             continue

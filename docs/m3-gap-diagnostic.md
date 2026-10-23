@@ -33,8 +33,9 @@ Linux observations, not inferred causes.
 `run.json` declares each active interval, commands, seed, parameter snapshots,
 terminal result and injected faults. Startup/shutdown samples remain available
 but do not establish gaps. `analysis.json` reports periodic-stream gaps over
-0.5 seconds, acquisition-clock jumps, slow callbacks, cadence and protective
-stop events. Each `gap-NNN.jsonl` contains available five-second context on both
+0.5 seconds on streams faster than 2 Hz, acquisition-clock jumps, slow callbacks, cadence and protective
+stop events. Arrival/feedback at 2 Hz remain context only because their ordinary
+period equals the gap threshold. Each `gap-NNN.jsonl` contains available five-second context on both
 sides. Abruptly interrupted/truncated captures retain warnings. Missing
 independent coverage stays unresolved. A run without a gap is NOT_REPRODUCED.
 

@@ -191,6 +191,7 @@ def attempt(args):
                 dict(zip(names, map(message_to_ordereddict, values))), indent=2) + '\n')
         probe.params('scenario_runner', initial_passengers=0)
         metadata['run_id'] = probe.reset(300)
+        metadata['pre_goal_readiness'] = probe.boarding_goal_readiness()
         _, result = probe.send()
         if args.pause_node:
             assert probe.wait(probe.moving, 20), 'injection requires observed bus motion'
@@ -227,6 +228,7 @@ def campaign(args):
     root = Path(args.output).resolve()
     deadline = time.monotonic() + args.seconds
     results = []
+    comparisons = []
     image_test_due = False
     for index in range(args.runs):
         if time.monotonic() >= deadline:
@@ -268,12 +270,22 @@ def campaign(args):
         metadata = json.loads((directory / 'run.json').read_text())
         results.append({'directory': directory.name, 'status': metadata['status'],
                         'analysis': analysis['status'], 'windows': len(analysis['windows'])})
+        comparisons.append({
+            'directory': directory.name, 'instrumented': instrument,
+            'image_bypassed': no_image, 'mission_status': metadata['status'],
+            'cadence': analysis['cadence'], 'callback_metrics': analysis['callback_metrics'],
+        })
         if analysis['windows'] and instrument and not no_image and not args.pause_node:
             image_test_due = True
         print(json.dumps(results[-1]), flush=True)
     (root / 'campaign.json').write_text(json.dumps({
         'acceptance_eligible': False, 'max_runs': args.runs, 'max_seconds': args.seconds,
         'attempts': results,
+    }, indent=2) + '\n')
+    (root / 'overhead-comparison.json').write_text(json.dumps({
+        'interpretation': 'Compare baseline/instrumented cadence; uncontrolled scheduling '
+                          'and failed missions prevent causal overhead estimates.',
+        'attempts': comparisons,
     }, indent=2) + '\n')
 
 
