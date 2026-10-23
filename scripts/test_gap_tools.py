@@ -35,6 +35,12 @@ class GapAnalysisTests(unittest.TestCase):
         result = analyze(rows, 0, 3)
         self.assertIn('ROS_delivery_or_publisher_gap', result['windows'][0]['classification'])
 
+    def test_near_threshold_host_delay(self):
+        """A correlated host delay just below threshold cannot exonerate the host."""
+        host = [r for r in timeline('host') if not 11 < r['t'] * 10 < 15]
+        result = analyze(host + timeline('container', True), 0, 3)
+        self.assertIn('correlated_host_sampling_delay', result['windows'][0]['classification'])
+
     def test_probe_pause(self):
         """An independent observer separates a local probe pause."""
         rows = timeline('host') + timeline('container') + timeline('observer')
@@ -107,7 +113,18 @@ class GapAnalysisTests(unittest.TestCase):
                     for line in path.read_text().splitlines()]
             result = analyze(rows, min(r['t'] for r in rows), max(r['t'] for r in rows))
             self.assertTrue(result['windows'])
-            self.assertIn('container_scheduling_gap', result['windows'][0]['classification'])
+            # A real VM pause may overlap the injected fault. Assert the measured layer,
+            # rather than assuming that the test host remained continuously scheduled.
+            target = [r for r in rows if r['layer'] == 'container']
+            self.assertGreater(max(b['t'] - a['t'] for a, b in zip(target, target[1:])), 0.7)
+            for window in result['windows']:
+                host_delay = window['sampler_max_interval_sec']['host']
+                if host_delay > 0.5:
+                    self.assertIn('host_sampling_gap', window['classification'])
+                elif host_delay > 0.25:
+                    self.assertIn('correlated_host_sampling_delay', window['classification'])
+                else:
+                    self.assertIn('container_scheduling_gap', window['classification'])
 
 
 if __name__ == '__main__':

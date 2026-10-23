@@ -55,10 +55,12 @@ def timed(recorder, stage, function):
         call = time.monotonic_ns()
         recorder.emit(stage, phase='start', call=call)
         start = time.monotonic()
+        cpu_start = time.thread_time()
         try:
             return function(*args, **kwargs)
         finally:
-            recorder.emit(stage, phase='end', call=call, duration=time.monotonic() - start)
+            recorder.emit(stage, phase='end', call=call, duration=time.monotonic() - start,
+                          cpu_duration=time.thread_time() - cpu_start)
     return invoke
 
 
@@ -180,6 +182,14 @@ def analyze(records, start, end, threshold=0.5):
             windows.append({'start': gap['start'], 'end': gap['end'], 'gaps': [gap]})
     for window in windows:
         layers = {g['stream'][0] for g in window['gaps']}
+        sampler_intervals = {}
+        for layer in ('host', 'container'):
+            intervals = [b['t'] - a['t'] for key, rows in streams.items()
+                         if key[0] == layer and key[2] == 'sample'
+                         for a, b in zip(rows, rows[1:])
+                         if a['t'] <= window['end'] and b['t'] >= window['start']]
+            sampler_intervals[layer] = max(intervals) if intervals else None
+        window['sampler_max_interval_sec'] = sampler_intervals
         observer_coverage = any(k[0] == 'observer' and rows[0]['t'] <= window['start']
                                 and rows[-1]['t'] >= window['end']
                                 for k, rows in streams.items())
@@ -190,6 +200,9 @@ def analyze(records, start, end, threshold=0.5):
                                  for k, rows in streams.items())
         if 'host' in layers:
             classification = 'host_sampling_gap; VM/host scheduling cause unresolved'
+        elif (host_coverage and sampler_intervals['host'] is not None
+              and sampler_intervals['host'] > threshold / 2):
+            classification = 'correlated_host_sampling_delay; timing layer unresolved'
         elif 'container' in layers and host_coverage:
             classification = 'container_scheduling_gap; host sampler continued'
         elif host_coverage and container_coverage:
@@ -197,6 +210,8 @@ def analyze(records, start, end, threshold=0.5):
                 classification = 'ROS_delivery_or_publisher_gap; system samplers continued'
             elif 'probe' in layers and observer_coverage:
                 classification = 'probe_local_gap; independent observer continued'
+            elif 'probe' in layers:
+                classification = 'unresolved; independent observer coverage incomplete'
             elif 'observer' in layers:
                 classification = 'observer_local_gap; system samplers continued'
             else:

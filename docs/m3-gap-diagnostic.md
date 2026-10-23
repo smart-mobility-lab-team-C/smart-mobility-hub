@@ -28,7 +28,8 @@ Default Docker time namespaces share that VM's monotonic clock. Wall-backed ROS
 acquisition stamps and fixed-step simulation time are distinct. Files record
 wall and monotonic clocks; missing headers remain null. Process CPU ticks,
 scheduling counters, memory pressure and cgroup CPU throttling counters are raw
-Linux observations, not inferred causes.
+Linux observations, not inferred causes. Callback spans also record thread CPU
+time to separate CPU work from elapsed time when a callback is interrupted.
 
 `run.json` declares each active interval, commands, seed, parameter snapshots,
 terminal result and injected faults. Startup/shutdown samples remain available
@@ -37,7 +38,8 @@ but do not establish gaps. `analysis.json` reports periodic-stream gaps over
 stop events. Arrival/feedback at 2 Hz remain context only because their ordinary
 period equals the gap threshold. Each `gap-NNN.jsonl` contains available five-second context on both
 sides. Abruptly interrupted/truncated captures retain warnings. Missing
-independent coverage stays unresolved. A run without a gap is NOT_REPRODUCED.
+independent coverage stays unresolved. A correlated host-sampler delay above
+0.25 seconds also prevents attributing a near-threshold gap to the container. A run without a gap is NOT_REPRODUCED.
 
 If an instrumented attempt exhibits a gap, the next attempt bypasses image
 creation/publication inside the diagnostic subprocess only. A different outcome
