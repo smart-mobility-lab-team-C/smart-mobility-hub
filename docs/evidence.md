@@ -192,3 +192,16 @@ revision above remains explicit. M0–M3 legacy workflows are manual-only. VM
 investigation is parked; no M4 implementation, merge, repository-permission or
 branch-protection change is included. Independent human review/reproduction
 remain BLOCKED; other scenario rows retain their prior NOT RUN status.
+
+## Observation-gap investigation reopened (2026-10-24)
+
+The user reopened the VM investigation after CI delivery. The
+[new diagnostic record](../evidence/vm-gap-reopened.json) retains an idle
+per-CPU capture and a fresh three-attempt ROS campaign: all three missions
+**FAIL** with protective stops, all three analyses observe gaps, and independent
+samplers pinned across all four CPUs also stall. A user-supplied earlier kernel
+excerpt reports guest soft lockup and unrelated system-service watchdog timeouts.
+These observations do not establish a specific fix. See the
+[diagnostic update](m3-gap-diagnostic.md#investigation-reopened--2026-10-24) for
+commands, scope, the missing physical-host log and before/after acceptance.
+Hosted acceptance is unchanged; local repair and post-fix acceptance are NOT RUN.

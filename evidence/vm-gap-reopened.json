@@ -1,0 +1,348 @@
+{
+  "status": "UNRESOLVED: reproduced; no fix applied",
+  "source_commit": "97e22568b68a6f7cdd0f6b2e638a546acc9cf434",
+  "branch": "fix/vm-observation-gaps",
+  "date_kst": "2026-10-24",
+  "acceptance_eligible": false,
+  "runtime_and_watchdog_changes": false,
+  "command": "python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output evidence/runs/gap-reopen-20261024",
+  "campaign_exit_code": 0,
+  "campaign_exit_code_note": "Zero means diagnostic capture completed; it does not mean missions passed.",
+  "fresh_build": "PASS: 8 packages in 41.9 seconds",
+  "attempts": [
+    {
+      "name": "00-baseline",
+      "status": "MISSION_FAILED",
+      "terminal": {
+        "status": 6,
+        "result": {
+          "success": false,
+          "final_state": "SAFE_STOP",
+          "reason": "SAFETY_STOP"
+        }
+      },
+      "seed": 300,
+      "instrumented": false,
+      "image_bypassed": false,
+      "analysis_status": "GAP_OBSERVED",
+      "windows": [
+        {
+          "start": 14557.389219052,
+          "end": 14559.491717884,
+          "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+          "sampler_max_interval_sec": {
+            "host": 1.9851069690012082,
+            "container": 1.9995845270004793
+          }
+        },
+        {
+          "start": 14559.882406128,
+          "end": 14564.995002595,
+          "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+          "sampler_max_interval_sec": {
+            "host": 4.9911602980009775,
+            "container": 5.088740308001434
+          }
+        }
+      ]
+    },
+    {
+      "name": "01-instrumented",
+      "status": "MISSION_FAILED",
+      "terminal": {
+        "status": 6,
+        "result": {
+          "success": false,
+          "final_state": "SAFE_STOP",
+          "reason": "SAFETY_STOP"
+        }
+      },
+      "seed": 300,
+      "instrumented": true,
+      "image_bypassed": false,
+      "analysis_status": "GAP_OBSERVED",
+      "windows": [
+        {
+          "start": 14576.7542579,
+          "end": 14577.353538812,
+          "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+          "sampler_max_interval_sec": {
+            "host": 0.5235127480009396,
+            "container": 0.527660036999805
+          }
+        },
+        {
+          "start": 14577.666993718,
+          "end": 14579.054128386,
+          "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+          "sampler_max_interval_sec": {
+            "host": 1.2073782679999567,
+            "container": 1.2001694519985904
+          }
+        },
+        {
+          "start": 14579.134816088,
+          "end": 14586.934940572,
+          "classification": "correlated_host_sampling_delay; timing layer unresolved",
+          "sampler_max_interval_sec": {
+            "host": 7.804299618001096,
+            "container": 7.788919214000998
+          }
+        }
+      ]
+    },
+    {
+      "name": "02-no-image",
+      "status": "MISSION_FAILED",
+      "terminal": {
+        "status": 6,
+        "result": {
+          "success": false,
+          "final_state": "SAFE_STOP",
+          "reason": "SAFETY_STOP"
+        }
+      },
+      "seed": 300,
+      "instrumented": true,
+      "image_bypassed": true,
+      "analysis_status": "GAP_OBSERVED",
+      "windows": [
+        {
+          "start": 14596.042692433,
+          "end": 14596.872402698,
+          "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+          "sampler_max_interval_sec": {
+            "host": 0.693872650999765,
+            "container": 0.6926089489988954
+          }
+        },
+        {
+          "start": 14629.942975338,
+          "end": 14636.100054149,
+          "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+          "sampler_max_interval_sec": {
+            "host": 6.0012936260009155,
+            "container": 6.043699154999558
+          }
+        }
+      ]
+    }
+  ],
+  "idle_per_cpu": {
+    "capture": {
+      "start_monotonic": 14371.766704288,
+      "end_monotonic": 14461.843835794,
+      "commands": [
+        [
+          "taskset",
+          "-c",
+          "0",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu0",
+          "--output",
+          "evidence/runs/cpu-gap-20261024/cpu0.jsonl"
+        ],
+        [
+          "taskset",
+          "-c",
+          "1",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu1",
+          "--output",
+          "evidence/runs/cpu-gap-20261024/cpu1.jsonl"
+        ],
+        [
+          "taskset",
+          "-c",
+          "2",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu2",
+          "--output",
+          "evidence/runs/cpu-gap-20261024/cpu2.jsonl"
+        ],
+        [
+          "taskset",
+          "-c",
+          "3",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu3",
+          "--output",
+          "evidence/runs/cpu-gap-20261024/cpu3.jsonl"
+        ]
+      ],
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "samplers": {
+      "cpu0": {
+        "samples": 888,
+        "max_interval_sec": 0.11425749899899529,
+        "intervals_over_0_5_sec": 0
+      },
+      "cpu1": {
+        "samples": 881,
+        "max_interval_sec": 0.12089038800149865,
+        "intervals_over_0_5_sec": 0
+      },
+      "cpu2": {
+        "samples": 880,
+        "max_interval_sec": 0.11896114800038049,
+        "intervals_over_0_5_sec": 0
+      },
+      "cpu3": {
+        "samples": 880,
+        "max_interval_sec": 0.13640412499989907,
+        "intervals_over_0_5_sec": 0
+      }
+    }
+  },
+  "mission_capture_per_cpu": {
+    "capture": {
+      "start_monotonic": 14488.054825497,
+      "end_monotonic": 14690.688825792,
+      "commands": [
+        [
+          "taskset",
+          "-c",
+          "0",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu0",
+          "--output",
+          "evidence/runs/gap-reopen-20261024/per-cpu/cpu0.jsonl"
+        ],
+        [
+          "taskset",
+          "-c",
+          "1",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu1",
+          "--output",
+          "evidence/runs/gap-reopen-20261024/per-cpu/cpu1.jsonl"
+        ],
+        [
+          "taskset",
+          "-c",
+          "2",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu2",
+          "--output",
+          "evidence/runs/gap-reopen-20261024/per-cpu/cpu2.jsonl"
+        ],
+        [
+          "taskset",
+          "-c",
+          "3",
+          "python3",
+          "scripts/gap_tools.py",
+          "sample",
+          "--layer",
+          "cpu3",
+          "--output",
+          "evidence/runs/gap-reopen-20261024/per-cpu/cpu3.jsonl"
+        ]
+      ],
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "samplers": {
+      "cpu0": {
+        "samples": 1732,
+        "max_interval_sec": 7.788707013998646,
+        "intervals_over_0_5_sec": 6,
+        "active_mission_max_interval_sec": 7.788707013998646
+      },
+      "cpu1": {
+        "samples": 1726,
+        "max_interval_sec": 7.800361771000098,
+        "intervals_over_0_5_sec": 7,
+        "active_mission_max_interval_sec": 7.800361771000098
+      },
+      "cpu2": {
+        "samples": 1724,
+        "max_interval_sec": 7.7993847239995375,
+        "intervals_over_0_5_sec": 7,
+        "active_mission_max_interval_sec": 6.007811501000106
+      },
+      "cpu3": {
+        "samples": 1727,
+        "max_interval_sec": 7.803533724998488,
+        "intervals_over_0_5_sec": 7,
+        "active_mission_max_interval_sec": 5.971634079000069
+      }
+    }
+  },
+  "user_supplied_kernel_evidence": {
+    "origin": "User pasted output of sudo journalctl -k -b --no-pager | tail -100; agent did not execute privileged commands.",
+    "timestamp_kst": "2026-10-24 01:13:39",
+    "soft_lockup": "watchdog: BUG: soft lockup - CPU#0 stuck for 1069s! [swapper/0:0]",
+    "stack": "pv_native_safe_halt -> arch_cpu_idle -> default_idle_call -> cpuidle_idle_call -> do_idle",
+    "clocksource": "Long readout interval, skipping watchdog check: cs_nsec: 1146320535597 wd_nsec: 1146320490078",
+    "system_service_watchdog_timeouts": [
+      "systemd-oomd",
+      "systemd-timesyncd",
+      "snapd",
+      "systemd-journald"
+    ],
+    "interpretation": "Guest-wide kernel/timer/scheduling disruption is reported. This earlier event is not temporally correlated to the new campaign and does not distinguish host pause, clock error or hypervisor fault."
+  },
+  "next_boundary": "Physical-host VBox.log: host OS/version, VirtualBox build, HM/NEM backend, CPU execution cap and pause/resume events. Requested from user; not accessible from the guest.",
+  "fix_acceptance": [
+    "Identify and record one environment change with before/after timing capture.",
+    "Repeat the same nominal reproduction without >=0.5-second gaps in critical fast streams or independent samplers.",
+    "Run fresh M2/M3 suite with original thresholds: 18 M2 cases, all 24 M3 cases and ten nominal docks."
+  ],
+  "sources": [
+    "https://www.virtualbox.org/manual/ch12.html"
+  ],
+  "sha256": {
+    "evidence/runs/gap-reopen-20261024/00-baseline/run.json": "1ea666f1c2c35692811c80160f8217b2812d7aa48dbd7cd5d243106a2617f437",
+    "evidence/runs/gap-reopen-20261024/00-baseline/analysis.json": "f4bb8617b366186c282bc2e8344e2edd801bb36607ebbecdfa3ef82c7d8c4541",
+    "evidence/runs/gap-reopen-20261024/01-instrumented/run.json": "81f0ce27341d95dcf61328663086de83ba5cc4c00b62a15e1f9d91d201f1626c",
+    "evidence/runs/gap-reopen-20261024/01-instrumented/analysis.json": "6b05d22a4dc30f292ff678ef96efd6e728a4fd84c1d2dcda3a7e5466430797cb",
+    "evidence/runs/gap-reopen-20261024/02-no-image/run.json": "49f8f2921784e87ae38c746434b61a100e4875285b213b0e9dcb6b02d2b20a10",
+    "evidence/runs/gap-reopen-20261024/02-no-image/analysis.json": "c24f893b92a7a943856c0d3fa9060709a29cd1856e07c465ec0f4406931eb3c8",
+    "evidence/runs/cpu-gap-20261024/cpu0.jsonl": "6cff9acacce7192e4c276089518489fac15ee8ec372aebe0888c44b81c2fbd45",
+    "evidence/runs/cpu-gap-20261024/cpu1.jsonl": "b56849205ce76241bd88cbcdbb2115b5991755c7552da5e562ab1d457b449257",
+    "evidence/runs/cpu-gap-20261024/cpu2.jsonl": "0204cb8eec55f53d89cb8e0e21a0dc6b7a538fccc107183b0e93c3572aa50474",
+    "evidence/runs/cpu-gap-20261024/cpu3.jsonl": "7bdc9da729afa5eb347ef6c64ee23e5e27067cc3e6ff7c73c9de95374cc19d6c",
+    "evidence/runs/cpu-gap-20261024/run.json": "6d6b1ce826bb1561a6615b8978a80b83e65b205f3289e3fd1f74113c3e2cfd1d",
+    "evidence/runs/gap-reopen-20261024/per-cpu/cpu0.jsonl": "a8a75821f11e55217a0b039b0cab7a6fe3ca6646655ae6eea07ce76511fd67b0",
+    "evidence/runs/gap-reopen-20261024/per-cpu/cpu1.jsonl": "35767475239b34de90e483e9be375cfa532c7f26395f2fddc78480774bcc6f9f",
+    "evidence/runs/gap-reopen-20261024/per-cpu/cpu2.jsonl": "2f52aef688a0f0d78d9e72c6e87ef0b773e4035aa48cf8867ec2f79ae711aed3",
+    "evidence/runs/gap-reopen-20261024/per-cpu/cpu3.jsonl": "4abe3965db0d080546266cb44565e2592bc5f28f025f33fe51d1dff666a61bab",
+    "evidence/runs/gap-reopen-20261024/per-cpu/run.json": "14790d6b6bcfd1965269b111bd46c31392c977d28e929033969d6335a9b70d91",
+    "evidence/runs/gap-reopen-20261024/environment.json": "ab6aa5fbffa697012fdd582ad2e0d7add9700e184a35022518ddb35861aac8e7",
+    "evidence/runs/gap-reopen-20261024/build.log": "367bc36034190632fddd3b93febf76beabfb67e2bb167f2c968c1e18de95825f",
+    "evidence/runs/gap-reopen-20261024/host.jsonl": "8c68d6fc650783b2f873e604a1c3fec71616360000ed1bf467c1ff4594c56007",
+    "evidence/runs/gap-reopen-20261024/container.jsonl": "1eb7cc50d91758fd6edc58d2da4df4cf390dfee3ca5df467fda1220a0e3c9fce"
+  }
+}

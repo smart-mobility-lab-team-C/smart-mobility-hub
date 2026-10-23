@@ -127,3 +127,58 @@ localization criteria and artifact hashes. Raw attempts remain under
 `evidence/runs/gap-reanalysis-20261023`. Original analysis is retained, including
 the initial 2 Hz false detections and interrupted preflight. The index identifies
 the corrected analyzer version rather than rewriting those captures.
+
+## Investigation reopened — 2026-10-24
+
+User requested fixing the observation gaps after hosted CI consolidation. The
+investigation is active again on `fix/vm-observation-gaps`. **No fix has been
+applied or verified.** Runtime source, public interfaces and watchdog bounds
+remain unchanged. The [new evidence index](../evidence/vm-gap-reopened.json)
+records the following independent local observations.
+
+A 90-second idle capture pinned one existing `gap_tools.py sample` process to
+each virtual CPU using `taskset -c N`. No sampler interval exceeded 0.5 s; maxima
+were 0.114, 0.121, 0.119 and 0.136 s for CPUs 0–3 respectively. This is an idle
+NOT_REPRODUCED observation, not proof of a fix or ROS acceptance.
+
+The next fresh diagnostic build completed eight packages in 41.9 s. Command:
+
+```bash
+python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output evidence/runs/gap-reopen-20261024
+```
+
+Baseline, instrumented and image-bypassed attempts all ended **MISSION_FAILED**
+with `SAFE_STOP` / `SAFETY_STOP`; all three analyses report **GAP_OBSERVED**.
+Independent samplers pinned to all four virtual CPUs stalled during the loaded
+capture. Whole-capture maximum intervals were 7.789, 7.800, 7.799 and 7.804 s.
+The index retains mission-interval metrics separately from whole-capture metrics.
+The runner exit code was zero because diagnostic collection completed, not
+because missions passed. Raw evidence and the exact sampler commands remain
+under ignored `evidence/runs/cpu-gap-20261024` and
+`evidence/runs/gap-reopen-20261024`; final hashes are in the new index.
+
+A user-supplied kernel-log excerpt also reports an earlier event at 01:13:39 KST:
+CPU 0 stuck for 1,069 s in `swapper/0`, a stack through `pv_native_safe_halt` and
+CPU idle functions, a long clocksource readout interval, and watchdog timeouts
+in systemd-oomd, systemd-timesyncd, snapd and journald. The agent could not read
+this permission-restricted log; the user ran the read-only command themselves.
+That event is not temporally correlated with the new campaign. These messages
+support investigation of guest-wide timing/scheduling disruption but do not
+identify whether the physical host paused, the clock jumped, or virtualization
+failed.
+
+The missing next evidence is the physical host's `VBox.log`, requested from the
+user. Oracle's [official troubleshooting guide](https://www.virtualbox.org/manual/ch12.html)
+identifies this log as containing the host OS, VirtualBox build, VM configuration,
+virtualization details and state transitions. Open VirtualBox Manager outside
+Ubuntu, select the VM and open Logs / Show Log. Inspect its header and HM/NEM,
+CPU execution-cap and pause/resume entries before choosing an environment change.
+Keep the raw log local: it can contain host paths and other machine details.
+No physical-host settings, guest clocksource, kernel boot parameters or security
+features have been changed on an unverified hypothesis.
+
+Fix acceptance requires a recorded, specific before/after environment change,
+repeating the same reproduction without half-second gaps in critical fast
+streams/independent samplers, and then a fresh unchanged M2/M3 suite (18 M2 cases,
+24 M3 cases and ten nominal docks). Until then the local fault is unresolved;
+hosted M3 acceptance and all earlier failed attempts retain their own statuses.

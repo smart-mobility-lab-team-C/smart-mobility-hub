@@ -16,7 +16,7 @@ No deadline or available team hours have been confirmed. Use acceptance gates be
 
 Route service starts in M3 and gains its full oracle suite in M6. Safety is required from M2; do not wait until M7 to implement it.
 
-Hosted verification is consolidated before M4: see the [CI evidence](evidence.md#faster-hosted-verification-2026-10-24-kst--2026-10-23-utc) and [workflow policy](automation.md#canonical-hosted-verification). PC quick checks and hosted Ubuntu/Jazzy integration have separate evidence. The VM investigation is parked; M4 has not started.
+Hosted verification is consolidated before M4: see the [CI evidence](evidence.md#faster-hosted-verification-2026-10-24-kst--2026-10-23-utc) and [workflow policy](automation.md#canonical-hosted-verification). PC quick checks and hosted Ubuntu/Jazzy integration have separate evidence. The VM observation-gap investigation has been reopened at the user's request; see the [current diagnostic](m3-gap-diagnostic.md#investigation-reopened--2026-10-24). M4 has not started.
 
 ## Work cycle
 
