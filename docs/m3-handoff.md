@@ -1,94 +1,55 @@
 # M3 handoff — 2026-10-23 (KST)
 
-This note captures the active M3 implementation and verification state so work
-can resume without reconstructing the run history. M3 policy choices and design
-details are in [M3 status](m3.md).
+M3 implementation and automated acceptance are **PASS**. T05 and T06 are
+**PASS** after the hosted real-node run. M4 is the next implementation milestone.
+The policies and evidence are in [M3 status](m3.md) and the
+[M3 attempt index](../evidence/m3-verification-attempts.json).
 
-## Current work
+## Accepted hosted run
 
-- Branch: `feat/m3-bus-mission`, based on merged M2 closure `d58e8f5`.
-- Checkout head at this handoff update: `7e51a0ff4fc72b95a9a18af59cec0eb05962a4b6`,
-  with a local edit to `scripts/verify_m3.py` adding the bounded readiness wait.
-- [Draft PR #7](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/7)
-  is open. It contains route planning, bus docking, passenger boarding, reset
-  coordination, fault probes and the CI harness.
-- The selected retry, final speed, ETA, edge freshness and boarding policies
-  are written in [M3 status](m3.md#authority-and-runtime-policies).
-- The current local edit to `docs/m3.md` records that passenger entry/boarding
-  timestamps use fixed-step simulation time while door dwell uses monotonic wall
-  time. Preserve this clarification.
+- [PR #7](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/7)
+- [Hosted M3 run](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39962241472)
+- Tested PR head: `15220d9f7110a93a8229b180ed8f0349d053701a`; workflow checkout commit:
+  `c30d131c438ccaa255ed4c254e452912e223ca5f`; clean worktree.
+- Environment: Ubuntu 24.04.5, ROS Jazzy, Python 3.12.3, container image
+  `sha256:9be9a18be6e76159908731cf386651eee0c917d060de5abf37036e5624e3871b`.
+- All five PR workflows passed: tooling, ROS container, M1, M2 and M3.
+- Clean pipeline: build and quality PASS; 23 interface inspections PASS; 40
+  colcon tests PASS with zero errors/failures/skips; 18 M2 real-node regressions
+  PASS; all 24 M3 cases PASS.
+- Ten nominal docking runs passed at seeds 300–309. Maximum position error was
+  0.05 m, maximum yaw error below 1e-9 rad, and maximum ETA error at 5 m was
+  0.600 s. Measured door-open duration was 8.096–8.207 s. Boarding-interruption
+  cancellation completed in 0.0252 s; approach cancellation completed in
+  0.0208 s. Both are below the 0.5 s limit.
+- The artifact `m3-results` (ID `12506307537`) contains the trace, case report,
+  seven parameter dumps, package versions and build/test logs. The attempt index
+  records artifact hashes and the selected parameter values.
 
-## Verification state
+## Readiness probe and retained failures
 
-**Automated M3 acceptance is unresolved. Do not mark T05/T06 PASS yet.**
+The boarding-interruption probe now waits up to 2 s for fresh closed-door,
+stopped-bus and supervisor-clearance observations before sending the next goal.
+It records each value and receipt age; a timeout includes the last observed
+state. Bus runtime rejection behavior and all watchdog limits are unchanged.
 
-- Latest PR checks before the verification edit: tooling, ROS container, M1 and
-  M2 workflows are PASS.
-- M3 run [39815691216, attempt 2](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39815691216)
-  completed FAIL. The clean build, quality checks, 23 interface inspections,
-  40 colcon tests, 18 M2 real-node cases and ten nominal docking runs passed.
-  `arrival_during_boarding_and_interruption` failed because the next goal was
-  rejected before the probe observed the separate supervisor-clearance update.
-  Its trace shows the measured door closing at monotonic 928.882 s and the
-  supervisor publishing `motion_permitted=true`, `stop_latched=false` at 928.928 s.
-  Artifact and trace hashes are recorded in
-  [the M3 verification index](../evidence/m3-verification-attempts.json).
-- Attempt 1 of that same run failed before M3 missions: the unchanged M2
-  `reset_missing_participant` regression did not observe restored participants
-  in time, and a subsequent adapter supervisor-loss trial consequently ran
-  while safety remained in reset. The M3 source did not change M2 runtime or
-  `scripts/verify_m2.py`.
-- That failed attempt still built all packages and passed 40 colcon tests.
-  Retain the failure in the record even if the rerun passes.
-- A later local development probe on current source `8a3bf78` also rejected a
-  nominal goal before motion. Its host-input cause is unresolved; this run is
-  diagnostic only and is not in the concise local acceptance index. Ten focused
-  routing/passenger tests passed, including the new ETA-region check.
-- The clean local run at source `28e7c38` passed build, lint, 23 interface
-  inspections, 39 colcon tests and all 18 M2 real-process regressions. It failed
-  at initial reset (`queue_stale`) before sending an M3 goal. The complete local
-  M3/T05/T06 acceptance therefore remains unestablished. See
-  [local result](../evidence/m3-local.txt) and
-  [local index](../evidence/m3-local.json).
-- Earlier hosted source `1a5fdb5` passed 24 M3 cases including ten nominal
-  runs, but predates the current ETA/crossing ownership correction. It is useful
-  diagnostic evidence only, not acceptance for the current source.
-- Independent source review and teammate reproduction remain BLOCKED because
-  there is one contributor. Full T01–T18 acceptance remains NOT RUN apart from
-  any specific milestone probes explicitly recorded as complete.
+Earlier failed attempts remain indexed with their original results: the hosted
+attempt before this change passed ten nominal runs but failed the interruption
+goal; the first local rerun failed its initial M3 reset with
+`PARTICIPANT_UNAVAILABLE`; the second local rerun stopped at `SAFETY_STOP` after
+a 17.0 s observation gap. A separate older local failure at `queue_stale` and
+the first attempt of hosted run 39815691216 are also preserved. That attempt
+failed M2 cases `reset_missing_participant` and
+`adapter_stops_after_supervisor_loss` before M3 ran. These failures were not
+combined into the successful hosted result.
 
-- Local clean run `m3-readiness-20261023-rerun1` passed build, quality,
-  23 interface inspections, 40 colcon tests and all 18 M2 real-node regression
-  cases, then failed its first M3 reset with `PARTICIPANT_UNAVAILABLE`, before
-  any docking goal. It ran against base commit `7e51a0f` with the local readiness
-  probe edit. The result, trace and transcript hashes are indexed in
-  [the M3 verification index](../evidence/m3-verification-attempts.json).
-- Clean run `m3-0588216-20261023-rerun` on commit `05882166ca9a8cda9b8929f3ed2286cb5a330fcd`
-  passed build, quality, 23 interface inspections, 40 colcon tests and all 18
-  M2 cases. Its first nominal M3 goal ended with `SAFETY_STOP` after a 17.0 s
-  local observation gap; the trace records `vehicles_stale` followed by
-  `crossing_unknown`. This is a FAIL for that attempted mission and does not
-  establish the readiness-probe case. The trace and result hashes are indexed.
-- The probe now waits up to 2 s for fresh door, bus-truth and supervisor samples
-  before the boarding-interruption goal. It records the last observed state and
-  age on timeout. The runtime remains unchanged, so an immediate goal in an
-  inhibited supervisor state is still rejected.
+Independent assignment/source review and a different member's clean-checkout
+reproduction remain **BLOCKED** because there is one contributor. These human
+gates are separate from hosted automated acceptance. T01–T04 and T07–T18 remain
+**NOT RUN**; M3 probes do not close those scenario rows.
 
-The host VM showed multi-second heartbeat gaps. Their cause is unconfirmed and
-watchdog limits were not weakened. Debug runs are not acceptance evidence; raw
-traces stay under ignored `evidence/runs/` directories.
+## Next work
 
-## Resume steps
-
-1. Push the scoped readiness-probe commit to PR #7 and inspect the hosted clean
-   Jazzy run. The two latest local failures occurred at reset and during a
-   nominal mission, before the boarding-interruption probe ran.
-2. Only after all 24 cases pass, add a successful evidence record with source
-   commit, environment, parameters, metrics and artifact hashes. Preserve every
-   earlier failure. Then update M3, plan, test matrix, requirements, README and
-   evidence index consistently; keep the human gate BLOCKED and unexecuted
-   scenario rows NOT RUN.
-3. Run `python3 scripts/check_docs.py` and `git diff --check`, review status
-   claims and artifact links, commit the scoped update, and push it to PR #7.
-   Mark PR #7 ready for review after successful verification; do not merge.
-
+Start M4 parking and congestion work according to [the dependency plan](plan.md).
+Keep PR #7 unmerged until an explicit merge instruction. Preserve all prior run
+artifacts and update the evidence index with any new reproduction or review.

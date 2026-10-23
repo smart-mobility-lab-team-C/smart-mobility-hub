@@ -1,10 +1,52 @@
 {
   "schema": "smart-mobility-hub/m3-verification-attempts-v1",
   "updated": "2026-10-23",
-  "acceptance_status": "NOT RUN",
-  "latest_complete_pipeline_attempt": "FAIL",
-  "t05_t06_status": "NOT RUN",
+  "acceptance_status": "PASS",
+  "latest_complete_pipeline_attempt": "PASS",
+  "milestone_status": "PASS: M3 automated acceptance",
+  "scenario_status": {
+    "T05": "PASS",
+    "T06": "PASS",
+    "T01_T04_and_T07_T18": "NOT RUN"
+  },
   "attempts": [
+    {
+      "id": "hosted-39815691216-attempt1",
+      "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39815691216",
+      "attempt": 1,
+      "artifact_id": 12441503455,
+      "artifact_name": "m3-results",
+      "pr_head": "8a3bf7817961d5c19fe270c3ee35342c33e315f9",
+      "workflow_checkout_commit": "017cb50b90965357ec5a79baa52377db82ecc46c",
+      "status": "FAIL",
+      "build_and_quality": "PASS",
+      "colcon_tests": {
+        "count": 40,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "m2_real_process_cases": {
+        "count": 18,
+        "failed": [
+          {
+            "name": "reset_missing_participant",
+            "detail": "restored observations did not reach all safety participants"
+          },
+          {
+            "name": "adapter_stops_after_supervisor_loss",
+            "detail": "trial remained in reset_in_progress with zero command before measured motion"
+          }
+        ]
+      },
+      "m3": "NOT RUN: pipeline stopped during M2 regression",
+      "artifacts": {
+        "m2_regression": "evidence/runs/m3-hosted-39815691216-attempt1/m3-ci/m2-regression.json",
+        "m2_regression_sha256": "9bbd8ee1bdaac270a68abf8ec18d8f4cfa684aa4e2e169e15e8de1be4e995279",
+        "transcript_sha256": "713539f929b8aebcc77ee04588ae93ada5776ff0801a8b761c6ffc021a679f77",
+        "source_sha256_manifest": "c51085f89ed97cc745d1258c55439f23581a3b9858ba3d87192a0a006a0062b4"
+      }
+    },
     {
       "id": "hosted-39815691216-attempt2",
       "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39815691216",
@@ -126,6 +168,166 @@
         "trace_sha256": "7f2f2a53c5e07a6d017f68f041e1e1dc040ba3d5457fd85f8b3e6445042c74df",
         "m2_regression_sha256": "c0da31a9dc1ab3e9fc2d01af06e28742e76e9e0b30418166d75b1a1f15d8710e",
         "transcript_sha256": "64ea01f7fa015387e65c2f637a14a430c5206374e2edca158d5705357c6f7511"
+      }
+    },
+    {
+      "id": "hosted-39962241472",
+      "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39962241472",
+      "artifact_id": 12506307537,
+      "artifact_name": "m3-results",
+      "artifact_size_bytes": 1885471,
+      "pr": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/7",
+      "tested_pr_head": "15220d9f7110a93a8229b180ed8f0349d053701a",
+      "workflow_checkout_commit": "c30d131c438ccaa255ed4c254e452912e223ca5f",
+      "worktree": "clean",
+      "started_utc": "2026-10-23T13:34:36Z",
+      "completed_utc": "2026-10-23T13:53:31Z",
+      "environment": {
+        "os": "Ubuntu 24.04.5 LTS",
+        "architecture": "x86_64",
+        "ros_distro": "Jazzy",
+        "ros_jazzy_ros_base": "0.11.0-1noble.20261006.035407",
+        "ros_jazzy_rclpy": "7.1.12-1noble.20260912.162354",
+        "python": "3.12.3",
+        "container_image_id": "sha256:9be9a18be6e76159908731cf386651eee0c917d060de5abf37036e5624e3871b"
+      },
+      "commands": [
+        "python3 scripts/check_docs.py",
+        "docker build -t smh-m3 -f containers/Dockerfile .",
+        "docker run --rm --user \"$(id -u):$(id -g)\" -e HOME=/tmp -v \"$PWD:/workspace\" smh-m3 bash scripts/m3_container.sh /workspace/evidence/runs/m3-ci"
+      ],
+      "workflow_checks": {
+        "tooling": "PASS",
+        "ros-container": "PASS",
+        "m1": "PASS",
+        "m2": "PASS",
+        "m3": "PASS"
+      },
+      "build_and_quality": "PASS",
+      "interfaces_inspected": 23,
+      "colcon_tests": {
+        "count": 40,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "m2_real_process_cases": {
+        "count": 18,
+        "status": "PASS"
+      },
+      "m3": {
+        "status": "PASS",
+        "cases_passed": 24,
+        "cases_total": 24,
+        "nominal_docking_runs": 10,
+        "nominal_seeds": [300, 309],
+        "position_error_m": {
+          "max": 0.049999998384818126,
+          "limit": 0.2
+        },
+        "yaw_error_rad": {
+          "max": 9.99720614172421e-10,
+          "limit": 0.17
+        },
+        "stable_hold_sec": 1.0,
+        "measured_door_open_sec": {
+          "min": 8.09633326200003,
+          "max": 8.206617375000064
+        },
+        "eta_error_at_5m_sec": {
+          "max": 0.599728853939439,
+          "limit": 3.0
+        },
+        "minimum_agent_separation_m": 2.0000000068472046,
+        "cancellation_latency_sec": {
+          "boarding_interruption": 0.02517941000007795,
+          "approach": 0.020822742000063954,
+          "limit": 0.5
+        },
+        "case_names": [
+          "nominal_docking_01",
+          "nominal_docking_02",
+          "nominal_docking_03",
+          "nominal_docking_04",
+          "nominal_docking_05",
+          "nominal_docking_06",
+          "nominal_docking_07",
+          "nominal_docking_08",
+          "nominal_docking_09",
+          "nominal_docking_10",
+          "arrival_during_boarding_and_interruption",
+          "cancel_during_approach",
+          "action_timeout",
+          "blocked_bay_wait",
+          "planner_timeout_retries_and_late_reply",
+          "no_route",
+          "frozen_edge_source_stamp",
+          "stale_bus_pose",
+          "estop_aborts_and_latches",
+          "pedestrian_before_crossing_entry",
+          "active_route_missing_feed",
+          "busy_goal_rejection",
+          "crossing_denial_renewal_loss_and_explicit_recovery",
+          "active_mission_reset"
+        ]
+      },
+      "parameters": {
+        "bus_manager": {
+          "bus_speed_limit": 0.4,
+          "final_approach_speed": 0.1,
+          "final_approach_distance": 1.0,
+          "eta_smoothing_sec": 1.0,
+          "edge_freshness_sec": 1.0,
+          "service_timeout_sec": 1.0,
+          "route_backoff_sec": 0.25,
+          "crossing_backoff_sec": 0.25,
+          "crossing_backoff_max_sec": 1.0,
+          "crossing_renew_sec": 0.25,
+          "crossing_ack_timeout_sec": 0.5,
+          "boarding_interval_sec": 8.0
+        },
+        "hub_coordinator": {
+          "crossing_clear_sec": 2.0,
+          "crossing_lease_sec": 1.0,
+          "queue_confidence_min": 0.5
+        },
+        "safety_supervisor": {
+          "queue_confidence_min": 0.5,
+          "command_timeout_sec": 0.5,
+          "robot_speed_limit": 0.25,
+          "bus_speed_limit": 0.4,
+          "angular_speed_limit": 1.0,
+          "future_tolerance_sec": 0.0
+        },
+        "scenario_runner": {
+          "m3_mode": true,
+          "initial_passengers": 6,
+          "publish_queue": true,
+          "publish_bus_odom": true,
+          "obstacle_enabled": false,
+          "use_sim_time": false
+        },
+        "all_seven_node_dumps": "retained in the m3-results artifact and individually hashed below"
+      },
+      "artifacts": {
+        "directory": "evidence/runs/m3-hosted-39962241472/m3-ci",
+        "acceptance": "evidence/runs/m3-hosted-39962241472/m3-ci/m3/acceptance.json",
+        "acceptance_sha256": "82970e080a974306d195331399307b2798e44f0122538cc24536d51409bc21ef",
+        "trace": "evidence/runs/m3-hosted-39962241472/m3-ci/m3/trace.jsonl",
+        "trace_sha256": "31c1abffeb1b6824aa2bd97518d35651a4869371309a70ce6d7b519920987bb3",
+        "m2_regression_sha256": "acfa9b2af71c0b2505201166e6b3acf028fe6f8637525bc09f789233a73afafe",
+        "transcript_sha256": "72f6dac1355db8faf46fec0daddbd1374f1a4272e6991870938fc89dbec40d72",
+        "source_sha256_manifest": "753191213655b387f416a30014ea547e9dd2a6fe8d8caba00bdb3302df793fc2",
+        "image_inspection_sha256": "c2a7babbd1d91de3fdd4e7e283ce32dc0eb8c6028487c65ec32064bc50298e5c",
+        "parameter_dumps_sha256": {
+          "bus_manager": "08c2885388aed394f1404f1935ce4271c883a9470cb3fa22a061dabce4e177e6",
+          "hub_coordinator": "d214df6167cff65103ebdb0268871ff9b35068ceb2b6308260aad7e5a84d32f7",
+          "m3_synthetic_roads": "576574e097917b95cc8fa95d52a531dcae7c4ab9b1840b99464007f2f90bc7e9",
+          "reset_coordinator": "425443b0d8968a5404b224c9c90f16567082cf76ec75494172916354f03b2a69",
+          "route_planner": "ee176fda93a14a927fe865ff3bba35b7ea5d744c0d9dd492a73cbe6429aea3c0",
+          "safety_supervisor": "a4f1d83d46aba453b823a99802ed2ad647ed2dc553f2c36181d2fbc457d38926",
+          "scenario_runner": "209ab1db19455318d9893c61b834165c1670f23741ffbe74e9ca65b7f9ad40df"
+        }
       }
     }
   ],
