@@ -1,8 +1,11 @@
 # T01–T18 verification plan
 
-Source: assignment §21 pp29–30 and relevant scenario sections. T05 and T06 are
-PASS from the hosted M3 real-node acceptance run. Every other scenario row is
-NOT RUN. M3 milestone probes do not close unrelated complete scenario rows.
+Source: assignment §21 pp29–30 and relevant scenario sections. Status below
+reflects the current local verification target. Historical hosted T05–T06 PASS
+results remain separately recorded. The latest local run (`d660a94`) passed two
+nominal docking missions; the third ended in `SAFETY_STOP` after a 0.888-second
+safety-observation gap, so local T05 is FAIL and T06 was not reached. See the
+[local attempt](../evidence/m4-local-cyclone-attempt.json).
 
 | ID | Area | Stimulus / repetitions | Acceptance | Status |
 |---|---|---|---|---|
@@ -10,8 +13,8 @@ NOT RUN. M3 milestone probes do not close unrelated complete scenario rows.
 | T02 | S1 occlusion/stale | 0.3 s occlusion, repeated/frozen frames | No duplicate count; invalid within 1.2 s freeze | NOT RUN |
 | T03 | S2 prediction | Unseen episode seeds | MAE/RMSE; MAE <= persistence; inference p95 <100 ms; no leakage | NOT RUN |
 | T04 | S2 dispatch | Threshold noise and stale forecast | One outstanding goal; explicit fallback | NOT RUN |
-| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | PASS |
-| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | PASS |
+| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | FAIL |
+| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | NOT RUN |
 | T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists | NOT RUN |
 | T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected | NOT RUN |
 | T09 | S5 congestion | Free flow, slow dense flow, obstruction | Correct labels; bounded scenario-defined delay; no stale-as-clear | NOT RUN |

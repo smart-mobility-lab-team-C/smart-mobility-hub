@@ -59,7 +59,9 @@ The local profile selects `rmw_cyclonedds_cpp`. In a same-source, same-image
 comparison on this VM, Cyclone DDS passed five reset repetitions while Fast DDS
 failed the first reset with `RESET_DEADLINE`. This is a project configuration
 choice, not an assignment requirement or proof of a general Fast DDS defect.
-The base image and middleware remain available for comparison. All nodes within
+The full local campaign still failed a later safety-observation check; this
+profile is not acceptance PASS. The base image and middleware remain available
+for comparison. All nodes within
 a run must use the recorded profile; public schemas, QoS and timing thresholds
 are unchanged. The package and selection are supported by the
 [official Jazzy Cyclone DDS documentation](https://docs.ros.org/en/jazzy/Installation/RMW-Implementations/DDS-Implementations/Working-with-Eclipse-CycloneDDS.html).
@@ -96,12 +98,13 @@ environment, not proof of local VM timing. The optional workflow retains image
 identity, UTC times and acceptance artifacts. GitHub Actions cache stores
 package-image layers only, never test results or build workspaces.
 
-## M4 acceptance path (execution pending)
+## M4 acceptance path and current result
 
 The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
-launches and default `m3_container.sh` behavior are preserved. The local Jazzy
-build and M2 checks passed; M3 failed its first reset deadline, so M4 acceptance
-was not reached. No hosted M4 result is recorded. See the [M4 handoff](m4-handoff.md)
+launches and default `m3_container.sh` behavior are preserved. The latest local Jazzy
+build and M2 checks passed; two M3 docking missions passed, then mission 3 stopped
+on a gap in safety observations. M4 acceptance was not reached. See the
+[local full-run result](../evidence/m4-local-cyclone-attempt.json). See the [M4 handoff](m4-handoff.md)
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).

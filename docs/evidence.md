@@ -264,3 +264,19 @@ results. Local Jazzy build, 53 package tests and 18 M2 cases passed. The M3
 prerequisite failed `RESET_DEADLINE`; T07–T10 remain NOT RUN. The hosted workflow
 invokes the M4 runner, but no hosted M4 result is recorded. No M4 scenario PASS is
 claimed.
+
+## Local verification policy and M4 attempt — 2026-10-24
+
+The user selected local execution and required documentation to distinguish
+assignment requirements from project workflow choices. GitHub Actions is optional;
+automatic triggers are removed in the local branch and take effect remotely only
+when that workflow change is pushed. No further hosted runs were launched.
+
+The [middleware diagnostic](../evidence/m4-local-diagnostics.json) records the
+same-source Cyclone/Fast DDS comparison without claiming scenario acceptance.
+The [fresh local attempt](../evidence/m4-local-cyclone-attempt.json) at `d660a94`
+passed eight package builds, 53 package tests and all 18 M2 cases. It passed two
+M3 nominal missions, then failed mission 3 with `SAFETY_STOP`. A 0.888-second gap
+in safety observations is retained alongside host timing and a trace window.
+Local T05 is FAIL; T06 and M4 T07–T10 were not reached. Historical hosted results
+remain separate and do not replace this local result.

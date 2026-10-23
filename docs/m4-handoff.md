@@ -1,13 +1,13 @@
 # M4 parking and congestion handoff
 
-Branch: `feat/m4-parking-traffic`. Software integration is implemented. A local
-Ubuntu 24.04/Jazzy Docker build completed on 2026-10-24. The M2 real-node
-regression passed all 18 cases; the chained M3 regression failed its first
-nominal case with `RESET_DEADLINE`, so M4 acceptance did not run. T07–T10 remain
-**NOT RUN**. The container image and ROS runtime are verified; details and
-reproduction records are in [local runtime evidence](../evidence/m4-jazzy-runtime.json).
-M5–M7 have not started, following the repository's one-milestone-at-a-time
-instruction.
+Implementation is on `main`; local verification changes are on
+`fix/local-m4-verification`. The latest fresh Ubuntu 24.04/Jazzy local run at
+`d660a94` passed the build, all 53 package tests, and 18 M2 cases. Two M3 docking
+missions passed; the third ended in `SAFETY_STOP` after a gap in safety-state
+observations. M4 was not reached, so T07–T10 remain **NOT RUN**. See the
+[local attempt](../evidence/m4-local-cyclone-attempt.json) and
+[diagnostic comparison](../evidence/m4-local-diagnostics.json). M5–M7 have not
+started under the one-milestone-at-a-time rule.
 
 The local runtime exposed two regression issues and fixed them on
 `fix/m4-jazzy-runner`: import ordering rejected by ament lint, and car routing
@@ -145,31 +145,25 @@ these are implemented probes, not results. The runner also implements the canoni
 t=20/45/60 faults with recovery. Actual source-sequence timing, moving
 integration and independent teammate reproduction still require validation.
 
-## Current blocker
+## Current local blocker
 
-The next local attempt stops the older project demonstration launch before
-starting one acceptance campaign. The reset coordinator now logs monotonic
-per-participant request/acknowledgement times and safety/crossing observation
-waits into the normal node logs. These diagnostic records do not change the
-one-second deadline, reset order, public interfaces or acceptance thresholds.
+The full local Cyclone campaign at `d660a94` passed two docking missions, then
+nominal mission 3 (seed 302) aborted with `SAFE_STOP/SAFETY_STOP`. The trace has a
+0.888-second gap in safety observations and a 0.762-second gap in final-command
+observations near the abort, while odometry continued. Independent host sampling
+had a largest interval of 0.185 seconds over the run. This does not distinguish
+a supervisor callback delay from DDS delivery delay; no supervisor callback
+profile was collected during this acceptance attempt. Thresholds remain unchanged.
 
-That single-campaign run (`0114139`) passed all 53 package tests and 18 M2 cases,
-then failed again at `/bus/prepare_reset` before any later reset participant was
-called. `scripts/verify_reset.py` provides a focused real-node local diagnostic;
-bus logs now distinguish callback receipt, lock acquisition and the observed
-zero/closed-door conditions. Its runs do not establish scenario acceptance.
+Earlier Fast DDS runs failed the one-second reset deadline. Reset diagnostics
+identified `/bus/prepare_reset` and intermittent callback delivery delays. The
+same-source middleware comparison passed five resets with Cyclone DDS and failed
+the first with Fast DDS. This supports the local project profile, not a general
+middleware-defect claim or a scenario PASS. Candidate callback/TF/executor changes
+were not stable and were reverted; retained runtime changes only add diagnostics.
 
-Candidate callback/TF/executor behavior changes did not produce a stable result
-and were reverted; only diagnostic logging remains. A controlled local
-same-source comparison then passed five resets under Cyclone DDS and failed the
-first reset under Fast DDS. `containers/Dockerfile.local` records the Cyclone
-profile as a project choice. A full fresh-workspace local M0–M4 run is still
-required before any additional scenario row can be marked PASS.
-
-The M3 prerequisite failed during its first nominal case because the scenario
-reset exceeded its one-second deadline. Its result is recorded as FAIL, not
-reclassified as an environment-only issue. The same VM had a separate M0
-development container running simulator processes during this run; this is
-relevant context, but the run does not establish that CPU contention caused the
-deadline miss. M4 T07–T10 remain NOT RUN until the M3 regression passes. Real-video
+Raw runs and the feed-gap context remain under
+`evidence/runs/m4-local-20261024-cyclone-full/`; the tracked result index records
+commit, image, configuration, seeds, outcomes and artifact hashes. M4 T07–T10
+remain NOT RUN until the M3 prerequisite and M4 checks pass locally. Real-video
 acceptance and independent teammate review remain separate human gates.

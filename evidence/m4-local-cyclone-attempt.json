@@ -1,0 +1,148 @@
+{
+  "schema": "smart-mobility-hub/m4-local-acceptance-attempt-v1",
+  "date": "2026-10-24",
+  "status": "FAIL",
+  "commit": "d660a947205cd7b06ab16ca764b38b4350b89107",
+  "worktree": "",
+  "seed_sequence_attempted": [
+    300,
+    301,
+    302
+  ],
+  "configuration": "map_m1.yaml defaults; containers/Dockerfile.local; rmw_cyclonedds_cpp; unchanged watchdogs and deadlines",
+  "model": null,
+  "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "elapsed_sec": 399.51730428199517,
+  "checks": {
+    "real_ros_smoke": "PASS",
+    "style": "PASS",
+    "build": "PASS: 8 packages",
+    "package_tests": "PASS: 53 tests, 0 errors/failures/skips",
+    "m2": {
+      "status": "PASS",
+      "cases": 18
+    },
+    "m3": {
+      "status": "FAIL",
+      "nominal_required": 10,
+      "nominal_attempted": 3,
+      "nominal_passed": 2,
+      "cases": [
+        {
+          "name": "nominal_docking_01",
+          "status": "PASS",
+          "observations": {
+            "run_id": "cd6856d2-3055-4132-9e33-b2a7b0d7a934",
+            "seed": 300,
+            "position_error_m": 0.030000001601646176,
+            "yaw_error_rad": 4.685037012730088e-10,
+            "eta_error_at_5m_sec": 0.2533657643434708,
+            "eta_invalid_duration_sampled_sec": 30.5,
+            "boarding": [],
+            "goal_id": "51901ec7f0c84e7eaad66c275976de7a",
+            "minimum_agent_separation_m": 1.9999999977844896,
+            "measured_door_open_sec": 8.180283582994889,
+            "initial_passengers": 0
+          },
+          "elapsed_sec": 65.63101740700222
+        },
+        {
+          "name": "nominal_docking_02",
+          "status": "PASS",
+          "observations": {
+            "run_id": "62934da3-bca7-4b7c-9830-fdd21095ae85",
+            "seed": 301,
+            "position_error_m": 0.03999999901720996,
+            "yaw_error_rad": 7.700405331883346e-10,
+            "eta_error_at_5m_sec": 0.41190245175675955,
+            "eta_invalid_duration_sampled_sec": 27.5,
+            "boarding": [
+              {
+                "boarding_sec": 53.800000000000004,
+                "entry_sec": 0.0,
+                "goal_id": "fab72c352225456ba5c18c302b048782",
+                "passenger_id": "301-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 55.800000000000004,
+                "entry_sec": 0.0,
+                "goal_id": "fab72c352225456ba5c18c302b048782",
+                "passenger_id": "301-p0001",
+                "slot": 2
+              }
+            ],
+            "goal_id": "fab72c352225456ba5c18c302b048782",
+            "minimum_agent_separation_m": 1.9999998282654667,
+            "measured_door_open_sec": 8.103288330996293,
+            "initial_passengers": 2
+          },
+          "elapsed_sec": 62.570109783999214
+        },
+        {
+          "name": "nominal_docking_03",
+          "status": "FAIL",
+          "reason": "AssertionError(\"smart_hub_interfaces.action.DockBus_GetResult_Response(status=6, result=smart_hub_interfaces.action.DockBus_Result(success=False, final_state='SAFE_STOP', reason='SAFETY_STOP'))\")",
+          "traceback": "Traceback (most recent call last):\n  File \"/tmp/smh-m3.PlWuhf/scripts/verify_m3.py\", line 324, in case\n    observed = operation()\n               ^^^^^^^^^^^\n  File \"/tmp/smh-m3.PlWuhf/scripts/verify_m3.py\", line 446, in <lambda>\n    if not case(f'nominal_docking_{index + 1:02}', lambda i=index: nominal(i)):\n                                                                   ^^^^^^^^^^\n  File \"/tmp/smh-m3.PlWuhf/scripts/verify_m3.py\", line 371, in nominal\n    assert terminal.status == GoalStatus.STATUS_SUCCEEDED, str(terminal)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: smart_hub_interfaces.action.DockBus_GetResult_Response(status=6, result=smart_hub_interfaces.action.DockBus_Result(success=False, final_state='SAFE_STOP', reason='SAFETY_STOP'))\n",
+          "elapsed_sec": 36.220665059001476
+        }
+      ]
+    },
+    "m4": "NOT RUN: M3 prerequisite failed"
+  },
+  "diagnosis": {
+    "schema": "smart-mobility-hub/local-feed-gap-v1",
+    "source_commit": "d660a947205cd7b06ab16ca764b38b4350b89107",
+    "seed": 302,
+    "interval_monotonic": [
+      35574.990200582,
+      35585.87837083
+    ],
+    "max_receipt_gap_last_15_sec": {
+      "odom": [
+        0.0903144699987024,
+        35575.412946495,
+        35575.503260965
+      ],
+      "truth": [
+        0.14531393899960676,
+        35566.285226035,
+        35566.430539974
+      ],
+      "queue": [
+        0.22804001499753213,
+        35570.260335524,
+        35570.488375539
+      ],
+      "safety": [
+        0.8881702480066451,
+        35579.990200582,
+        35580.87837083
+      ],
+      "command": [
+        0.7617658749950351,
+        35580.045484647,
+        35580.807250522
+      ],
+      "arrival": [
+        0.5889439260063227,
+        35574.414111488,
+        35575.003055414
+      ]
+    },
+    "host_samples": 3767,
+    "host_max_interval_sec": 0.18467312699795002,
+    "host_max_interval_near_stop_sec": 0.13085187900287565,
+    "interpretation": "Safety and final-command observations pause while simulator odometry continues. No supervisor callback trace was collected in this acceptance run; publisher/executor delay versus DDS delivery delay remains unresolved."
+  },
+  "evidence_directory": "evidence/runs/m4-local-20261024-cyclone-full",
+  "artifacts": {
+    "run.json": "5660ef4ec0fc81162c550cdf032596f0009cdbf906fdc5839a98a41d3e0b21b7",
+    "analysis.json": "d284dac056cf491817abeb1581cb2c377740b72c74c7dacf25962992ffd13372",
+    "acceptance/m2-regression.json": "6fedff4e24847a9d98bceebd65ce43581708cf030a079e2fc0a8f463d06cb017",
+    "acceptance/m3/acceptance.json": "7c83290b4503bb2cac5f7481bece00a97ad02d0436bb2b838f26f568efdd80c3",
+    "acceptance/source-sha256.txt": "83924f4db4af3eba2fea47d4ebe0766aef509b7e46c77381ecbc53133bff08ae",
+    "acceptance/package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259"
+  },
+  "scope": "Local acceptance attempt only. Historical hosted PASS results remain separately identified; no hosted results substitute for this local failure."
+}
