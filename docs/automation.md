@@ -27,60 +27,84 @@ Record resolved versions for reproduction. Pin downloads appropriately and verif
 
 Windows feature enablement/reboot, Linux account creation, administrator password, Codex/Git sign-in, provision of authorized video, source review, presentation participation, and final portal upload/validation remain human tasks.
 
-## CI rollout
+## Local verification default
 
-First add documentation checks. Once code exists, add Ubuntu/Jazzy build and unit/launch tests; then seeded headless regressions and scheduled/manual full trials. A hosted Ubuntu job does not verify WSL display or local performance. No green badge until the corresponding workflow actually runs. Keep workflow token permissions minimal; do not expose credentials to untrusted PR code.
+The assignment requires reproducible tests and measured evidence. GitHub Actions
+was a project workflow choice; no reviewed assignment requirement mandates it.
+The user's 2026-10-24 instruction selects local Ubuntu 24.04/Jazzy Docker
+verification as the default. Do not move verification to a hosted service because
+local tests fail. Investigate and retain local failures with their actual status.
+Update this policy and other affected documentation whenever workflow choices or
+their attributed source change.
 
+Run `bash scripts/check_fast.sh` on the local PC for syntax, tooling tests, M1
+source contracts and documentation links. This does not establish ROS acceptance.
+From the repository root, use the installed Jazzy image for full M4 verification:
 
-## Canonical hosted verification
+```sh
+sg docker -c 'docker buildx build --load -t smh-m4 -f containers/Dockerfile .'
+sg docker -c 'docker buildx build --load -t smh-m4-local -f containers/Dockerfile.local .'
+sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+  -v "$PWD:/workspace" smh-m4-local \
+  bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE-RUN-ID'
+```
 
-[Hosted verification](../.github/workflows/verify.yml) is the automatic PR/main
-workflow. Its check names are **Quick checks**, **Change classification**,
-**Jazzy integration**, and **Verification gate**. The gate always evaluates job
-results; a failed quick/classification job or missing required integration fails
-it. Repository permissions and branch protection settings are unchanged; any
-existing required milestone check names must be reviewed by the repository owner
-before adopting the new gate. M0–M3 workflows are retained as manual diagnostics.
+`sg docker` uses this user's configured Docker group when the current login has
+not inherited it. Run only one simulator/acceptance campaign at a time on this
+VM. Stop earlier project demonstration launches cleanly before a campaign;
+preserve their development shell and unrelated processes. Keep thresholds and
+watchdogs unchanged when diagnosing scheduler or observation gaps.
 
-Run `bash scripts/check_fast.sh` on the PC for shell syntax, Python compilation,
-M0 tooling tests, diagnostic-tool tests, CI policy tests, M1 source contracts and
-local documentation links. These checks do not establish ROS integration.
+The local profile selects `rmw_cyclonedds_cpp`. In a same-source, same-image
+comparison on this VM, Cyclone DDS passed five reset repetitions while Fast DDS
+failed the first reset with `RESET_DEADLINE`. This is a project configuration
+choice, not an assignment requirement or proof of a general Fast DDS defect.
+The full local campaign still failed a later safety-observation check; this
+profile is not acceptance PASS. The base image and middleware remain available
+for comparison. All nodes within
+a run must use the recorded profile; public schemas, QoS and timing thresholds
+are unchanged. The package and selection are supported by the
+[official Jazzy Cyclone DDS documentation](https://docs.ros.org/en/jazzy/Installation/RMW-Implementations/DDS-Implementations/Working-with-Eclipse-CycloneDDS.html).
 
-Draft PRs run quick checks only. Marking ready triggers classification and, when
-required, integration. The classifier diffs the PR base to its head cumulatively
-(including deleted and renamed paths). Only known top-level prose, `docs/*.md`
-(including subdirectories), and `evidence/` are exempt; `docs/contracts/` always
-requires integration. Source, scripts, containers, workflows, tests, unknown paths
-and unavailable/empty change sets require it. Changes to a PR base retrigger routing.
-Documentation/evidence-only skips explicitly record **ROS acceptance NOT RUN**;
-a green policy gate for a skip is not executed acceptance. Superseded runs on the
-same PR are canceled. Manual runs default to quick checks; select `full_suite`
-for fresh integration. Main pushes classify their complete push range.
+The container runner creates a fresh workspace, builds all packages, checks
+interfaces/style, runs colcon tests, then M2/M3/M4 real-node checks. It retains
+source and configuration hashes, commit/worktree identity, package versions,
+logs, measurements and explicit exit status under `evidence/runs/`. Preserve
+FAIL, BLOCKED and NOT RUN separately. Large raw evidence remains ignored; commit
+small result indexes that identify the exact run. Independent local reproduction
+is a separate human gate.
 
-The integration job builds one pinned-base Jazzy image with Buildx, loads it
-locally and never publishes it. The [Docker GitHub Actions cache](https://docs.docker.com/build/ci/github-actions/cache/)
-stores dependency image layers only (`scope=smh-jazzy`, `mode=max`). Export uses
-`ignore-error=true`, so cache export failure does not fail verification; build
-and test failures still fail. Build logs must be inspected to distinguish an
-actual cache export from a suppressed failure. The next normal integration run
-provides cache-reuse timing; do not schedule a mission suite just to benchmark.
+For the observed `/bus/prepare_reset` timeout, source a locally built Jazzy
+workspace and run `python3 scripts/verify_reset.py --output
+evidence/runs/reset-UNIQUE/report.json`. The default five repetitions use seeds
+300–304 and the real M3 graph. Coordinator and bus logs distinguish service
+delivery, lock acquisition, zero/door/pose observations and coroutine completion.
+This focused probe is diagnostic-only and cannot close docking or M4 scenario
+rows. After a repair, rerun the full fresh-workspace acceptance command above.
 
-`scripts/m3_container.sh` uses a new temporary colcon workspace every run: M0
-real talker/listener smoke, M1 source/lint/hash/generated-interface checks, fresh
-build and colcon tests, 18 M2 regression cases, and all 24 M3 cases (ten nominal
-docks). It retains versions, source hashes, commit/worktree, logs, and explicit
-exit status. Build/install/log directories and test results are never restored as
-acceptance evidence. Artifact `hosted-verification-RUN_ID-ATTEMPT` also contains
-image identity and UTC start/finish times; Buildx logs/build record retain cache
-and image build timing. Evidence/status updates must cite the actual run and
-commit and preserve failures separately from NOT RUN/BLOCKED checks.
+## Optional hosted verification
 
-## M4 acceptance path (execution pending)
+[Hosted verification](../.github/workflows/verify.yml) and the M0–M3 diagnostic
+workflows are manual-only in this checkout. Hosted runs require an explicit user
+request or a cited instructor requirement; pushing code alone is not such a
+request. This trigger change takes effect on GitHub when the workflow change is
+pushed. It does not cancel an already active run. Repository permissions and
+branch protection are unchanged.
 
-Hosted verification now invokes `scripts/m4_container.sh`, which reuses the
+When explicitly requested, select `full_suite=true` for the fresh Jazzy suite;
+otherwise only quick checks run. A successful skipped integration job is not ROS
+acceptance. Historical hosted results remain valid evidence for their recorded
+environment, not proof of local VM timing. The optional workflow retains image
+identity, UTC times and acceptance artifacts. GitHub Actions cache stores
+package-image layers only, never test results or build workspaces.
+
+## M4 acceptance path and current result
+
+The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
-launches and default `m3_container.sh` behavior are preserved. The local Jazzy
-build and M2 checks passed; M3 failed its first reset deadline, so M4 acceptance
-was not reached. No hosted M4 result is recorded. See the [M4 handoff](m4-handoff.md)
+launches and default `m3_container.sh` behavior are preserved. The latest local Jazzy
+build and M2 checks passed; two M3 docking missions passed, then mission 3 stopped
+on a gap in safety observations. M4 acceptance was not reached. See the
+[local full-run result](../evidence/m4-local-cyclone-attempt.json). See the [M4 handoff](m4-handoff.md)
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).

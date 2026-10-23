@@ -2,7 +2,17 @@
 
 ROS 2 Jazzy + Python simulation-first team project.
 
-**Status: M2 and M3 implementation and automated acceptance PASS; T05–T06 PASS; independent human review/reproduction BLOCKED.** M4 parking and traffic implementation is on `main`; its container build and M2 regression pass, while M3 regression failed on `RESET_DEADLINE`, leaving T07–T10 NOT RUN. See the [M4 handoff](docs/m4-handoff.md) and [local Jazzy runtime evidence](evidence/m4-jazzy-runtime.json). See [M3 status and policies](docs/m3.md) and the [verification evidence index](evidence/m3-verification-attempts.json). Current target: Oracle VirtualBox Ubuntu 22.04 host with an Ubuntu 24.04/Jazzy container. See [M2 acceptance](docs/m2.md) and [setup](docs/setup.md). The WSL instructions remain an alternative setup.
+Verification runs locally in the Ubuntu 24.04/Jazzy Docker environment by default.
+GitHub Actions is an optional project tool, not a recorded assignment requirement;
+hosted runs require an explicit request. See [verification policy](docs/automation.md#local-verification-default).
+
+**Current local status:** M2 passed all 18 regression cases. The latest local
+M3 campaign passed two docking missions, then the third ended in `SAFETY_STOP`
+after a gap in safety observations; M4 T07–T10 were not reached. Historical
+hosted M3/T05–T06 PASS results retain their original environment and do not
+replace this local result. See the [local attempt](evidence/m4-local-cyclone-attempt.json),
+[M4 handoff](docs/m4-handoff.md), and [setup](docs/setup.md).
+Independent human review/reproduction remains BLOCKED.
 
 ## Start here
 

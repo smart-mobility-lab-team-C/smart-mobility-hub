@@ -1,0 +1,101 @@
+{
+  "schema": "smart-mobility-hub/local-verification-diagnostics-v1",
+  "date": "2026-10-24",
+  "policy_source": "User instruction: local verification by default; update documentation when workflow choices change. GitHub Actions is not an assignment requirement.",
+  "full_local_attempt": {
+    "commit": "0114139d75236ad67696134f8b799159b845f601",
+    "directory": "evidence/runs/m4-local-20261024-single-campaign",
+    "build": "PASS: 8 packages",
+    "colcon_tests": "PASS: 53 tests",
+    "m2": "PASS: 18 cases",
+    "m3": "FAIL: RESET_DEADLINE at /bus/prepare_reset",
+    "m4": "NOT RUN",
+    "host_sample_count": 2577,
+    "max_host_sampling_interval_sec": 0.20811733300070046
+  },
+  "paired_reset_diagnostic": {
+    "acceptance_eligible": false,
+    "image_id": "sha256:1a812ce5f48c605145966be182810c5937cbe79dea2addf6de4f4b5c81415e4d",
+    "same_input_checks": {
+      "source_sha256": true,
+      "configuration_sha256": true,
+      "entrypoint_sha256": true,
+      "cpu_affinity": true
+    },
+    "configuration_sha256": "99d6c28b0e920e9d1569dd3e72e992af6a759c5d9a848fd6e611e1ac4da33251",
+    "source_commit": "fe259e6186bca25544bbdba58d3fa427683d31cb",
+    "worktree": " M scripts/verify_reset.py\n M src/smart_hub_bringup/smart_hub_bringup/reset.py\n M src/smart_hub_control/smart_hub_control/bus.py\n",
+    "source_sha256": {
+      "src/smart_hub_control/smart_hub_control/bus.py": "23ba533ade83af4d3c384c67960cf2635eb22c303409af44ee25ad0d7f4f9d50",
+      "src/smart_hub_bringup/smart_hub_bringup/reset.py": "0ef4a01dbe2f45ed975ee7680cc8ff5ad2af93e5eeb304fdd7982bda3e8f03ed",
+      "scripts/verify_reset.py": "826a869079fc97869f9ecca1fdc791c144232eaff89297ba90409b96a4fd8493"
+    },
+    "entrypoint_sha256": {
+      "scenario_runner": "7a0b955ca5be3feb6624b03c5bebc1864217b7cce5401669e5eb3568e52432a3",
+      "safety_supervisor": "850758116b9254b3b224199b498d989ac513427866fd3ffd380285cac1d77963",
+      "crossing_arbiter": "ac0eb68ca6d3687e3b1527cf1b3e4c391664a6fb6ac891f740ef5d055959ba4d",
+      "route_planner": "a3f4717051ec3c8fde39254dd08cb245866bc7562d23f599b584fb4f10f130e9",
+      "bus_manager": "cd631a2351fd7d7b7dd80ad1071cb2539a5e511569800c56d7f5283b93539514",
+      "m3_synthetic_roads": "fe982327976d0b4ada655c25ca8052fc51a985547bcfe100fe8b656255d982a0",
+      "reset_coordinator": "739e09be45c2a83937a5f64c17b377602b90b7939855416adc9e21542ef0e6bc"
+    },
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "cyclone": {
+      "rmw": "rmw_cyclonedds_cpp",
+      "status": "PASS",
+      "cases": 5,
+      "server_reset_timings": [
+        {
+          "seed": 300,
+          "elapsed_sec": 0.3440358760053641
+        },
+        {
+          "seed": 301,
+          "elapsed_sec": 0.2840644469979452
+        },
+        {
+          "seed": 302,
+          "elapsed_sec": 0.4354257740051253
+        },
+        {
+          "seed": 303,
+          "elapsed_sec": 0.36950177299877396
+        },
+        {
+          "seed": 304,
+          "elapsed_sec": 0.4880288610002026
+        }
+      ],
+      "directory": "evidence/runs/m4-local-20261024-reset-cyclone"
+    },
+    "fastdds": {
+      "rmw": "rmw_fastrtps_cpp",
+      "status": "FAIL",
+      "cases": 1,
+      "error": "AssertionError('RESET_DEADLINE')",
+      "directory": "evidence/runs/m4-local-20261024-reset-fastdds-paired"
+    },
+    "conclusion": "Cyclone is the selected local test profile for the next full run. This VM-specific comparison does not prove a general middleware defect or establish scenario acceptance."
+  },
+  "experimental_behavior_changes": "TF queue, callback-group, finish-wait, fast acknowledgement, CPU affinity and executor-yield candidates were not stable and are not retained as repairs. Original controller behavior is restored; diagnostic logging remains.",
+  "limitations": "Early exploratory diagnostic variants do not all have complete source provenance; they are retained locally and are not eligible acceptance evidence. Full fresh local M0-M4 acceptance of the selected profile remains pending."
+}

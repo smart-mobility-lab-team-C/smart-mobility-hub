@@ -1,18 +1,18 @@
 # M4 parking and congestion handoff
 
-Branch: `feat/m4-parking-traffic`. Software integration is implemented. A local
-Ubuntu 24.04/Jazzy Docker build completed on 2026-10-24. The M2 real-node
-regression passed all 18 cases; the chained M3 regression failed its first
-nominal case with `RESET_DEADLINE`, so M4 acceptance did not run. T07–T10 remain
-**NOT RUN**. The container image and ROS runtime are verified; details and
-reproduction records are in [local runtime evidence](../evidence/m4-jazzy-runtime.json).
-M5–M7 have not started, following the repository's one-milestone-at-a-time
-instruction.
+Implementation is on `main`; local verification changes are on
+`fix/local-m4-verification`. The latest fresh Ubuntu 24.04/Jazzy local run at
+`d660a94` passed the build, all 53 package tests, and 18 M2 cases. Two M3 docking
+missions passed; the third ended in `SAFETY_STOP` after a gap in safety-state
+observations. M4 was not reached, so T07–T10 remain **NOT RUN**. See the
+[local attempt](../evidence/m4-local-cyclone-attempt.json) and
+[diagnostic comparison](../evidence/m4-local-diagnostics.json). M5–M7 have not
+started under the one-milestone-at-a-time rule.
 
-The local runtime exposed two merged regression issues and fixed them on
+The local runtime exposed two regression issues and fixed them on
 `fix/m4-jazzy-runner`: import ordering rejected by ament lint, and car routing
 expectations still using the previous 0.40 m/s cap. Commits are `6ba2bd3` and
-`16e5918`. These fixes have not been merged.
+`16e5918`. Their file changes are included in the published `main` tree.
 
 The implementation is pushed to `main` in commit
 [`faf8769`](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/commit/faf87696472fe85bf001794fe990025f1d77ef75).
@@ -102,6 +102,10 @@ silently enables bus/robot motion.
 
 ## Verification and reproduction
 
+Local Ubuntu 24.04/Jazzy Docker runs are the default under the user's 2026-10-24
+instruction. GitHub Actions is optional project tooling, not a recorded professor
+requirement. See the [verification policy](automation.md#local-verification-default).
+
 Actual local outcomes and commands: [local evidence](../evidence/m4-local.json).
 The expanded suite includes ownership races, expiration, nearest allocation,
 capacity geometry, invalid individual sources, frozen clocks, sensing recovery,
@@ -111,8 +115,9 @@ Run in the supported Docker environment as the caller's non-root UID/GID:
 
 ```sh
 sg docker -c 'docker buildx build --load -t smh-m4 -f containers/Dockerfile .'
+sg docker -c 'docker buildx build --load -t smh-m4-local -f containers/Dockerfile.local .'
 sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
-  -v "$PWD:/workspace" smh-m4 \
+  -v "$PWD:/workspace" smh-m4-local \
   bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE-RUN-ID'
 ```
 
@@ -140,12 +145,25 @@ these are implemented probes, not results. The runner also implements the canoni
 t=20/45/60 faults with recovery. Actual source-sequence timing, moving
 integration and independent teammate reproduction still require validation.
 
-## Current blocker
+## Current local blocker
 
-The M3 prerequisite failed during its first nominal case because the scenario
-reset exceeded its one-second deadline. Its result is recorded as FAIL, not
-reclassified as an environment-only issue. The same VM had a separate M0
-development container running simulator processes during this run; this is
-relevant context, but the run does not establish that CPU contention caused the
-deadline miss. M4 T07–T10 remain NOT RUN until the M3 regression passes. Real-video
+The full local Cyclone campaign at `d660a94` passed two docking missions, then
+nominal mission 3 (seed 302) aborted with `SAFE_STOP/SAFETY_STOP`. The trace has a
+0.888-second gap in safety observations and a 0.762-second gap in final-command
+observations near the abort, while odometry continued. Independent host sampling
+had a largest interval of 0.185 seconds over the run. This does not distinguish
+a supervisor callback delay from DDS delivery delay; no supervisor callback
+profile was collected during this acceptance attempt. Thresholds remain unchanged.
+
+Earlier Fast DDS runs failed the one-second reset deadline. Reset diagnostics
+identified `/bus/prepare_reset` and intermittent callback delivery delays. The
+same-source middleware comparison passed five resets with Cyclone DDS and failed
+the first with Fast DDS. This supports the local project profile, not a general
+middleware-defect claim or a scenario PASS. Candidate callback/TF/executor changes
+were not stable and were reverted; retained runtime changes only add diagnostics.
+
+Raw runs and the feed-gap context remain under
+`evidence/runs/m4-local-20261024-cyclone-full/`; the tracked result index records
+commit, image, configuration, seeds, outcomes and artifact hashes. M4 T07–T10
+remain NOT RUN until the M3 prerequisite and M4 checks pass locally. Real-video
 acceptance and independent teammate review remain separate human gates.

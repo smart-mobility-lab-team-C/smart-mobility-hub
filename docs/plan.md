@@ -1,6 +1,6 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). M3 implementation and automated acceptance are now PASS; T05 and T06 are PASS from the hosted real-node run recorded in [M3 status](m3.md). Independent source review and teammate reproduction remain BLOCKED because the project currently has one contributor. M4 implementation is pushed to `main`; the local Jazzy build, package tests and M2 real-node regression pass. M3 regression hit `RESET_DEADLINE`, so M4 T07–T10 remain NOT RUN (see [M4 handoff](m4-handoff.md)). M5–M8 and all other T01–T18 scenario rows remain NOT RUN. Proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). Historical hosted M3/T05–T06 PASS results are recorded in [M3 status](m3.md); the current local campaign passed two nominal missions, then the third failed with `SAFETY_STOP` after a safety-observation gap. Independent source review and teammate reproduction remain BLOCKED because the project currently has one contributor. M4 implementation is pushed to `main`; the local Jazzy build, package tests and M2 real-node regression pass. The local Cyclone profile passed resets, but the full M3 campaign hit a safety-observation gap, so M4 T07–T10 remain NOT RUN (see [local result](../evidence/m4-local-cyclone-attempt.json) and [M4 handoff](m4-handoff.md)). M5–M8 and all other T01–T18 scenario rows remain NOT RUN. Proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|
@@ -16,7 +16,17 @@ No deadline or available team hours have been confirmed. Use acceptance gates be
 
 Route service starts in M3 and gains its full oracle suite in M6. Safety is required from M2; do not wait until M7 to implement it.
 
-Hosted verification is consolidated before M4: see the [CI evidence](evidence.md#faster-hosted-verification-2026-10-24-kst--2026-10-23-utc) and [workflow policy](automation.md#canonical-hosted-verification). PC quick checks and hosted Ubuntu/Jazzy integration have separate evidence. The VM observation-gap investigation has been reopened at the user's request; see the [current diagnostic](m3-gap-diagnostic.md#investigation-reopened--2026-10-24). M4 software and acceptance tooling are pushed to `main`. Local ROS build and M2 regression pass; M3's first reset failed its deadline, leaving M4 scenario acceptance NOT RUN. See the [M4 handoff](m4-handoff.md).
+Local Ubuntu 24.04/Jazzy Docker verification is the default under the user's
+2026-10-24 instruction; GitHub Actions is optional project tooling, not a recorded
+professor requirement. See the [verification policy](automation.md#local-verification-default).
+Historical hosted evidence is retained with its original environment. The VM
+observation-gap investigation remains relevant to local execution; see the
+[current diagnostic](m3-gap-diagnostic.md#investigation-reopened--2026-10-24).
+M4 software and acceptance tooling are on `main`. The next local run will use one
+active simulation campaign, retain reset phase timings if the failure recurs,
+and preserve the one-second reset deadline. The local full run passed M2 and two M3 docking missions, then stopped on a
+0.888-second gap in safety-state observations. Publisher/executor delay versus
+DDS delivery delay remains unresolved; M4 scenario acceptance remains NOT RUN. See the [M4 handoff](m4-handoff.md).
 
 ## Work cycle
 

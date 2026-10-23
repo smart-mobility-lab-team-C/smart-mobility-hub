@@ -6,6 +6,8 @@ Read docs/requirements.md, docs/interfaces.md, docs/test-matrix.md, and docs/pla
 
 Implement one requested milestone at a time. Preserve teammates' work. Do not replace unknown requirements with assumptions; record conflicts and source locations. No optional hardware, Gazebo, or Nav2 until the mandatory simulator passes.
 
+Distinguish assignment/instructor requirements from project workflow choices and user preferences. When a choice or its source changes, update the relevant documentation in the same change. Local Ubuntu 24.04/Jazzy verification is the default. GitHub Actions is optional tooling, not an assignment requirement; do not start hosted runs unless the user explicitly requests hosted verification or a cited instructor requirement mandates it. A request to push code alone does not authorize hosted verification.
+
 ## Engineering rules
 
 - Use Ubuntu 24.04, ROS 2 Jazzy, Python rclpy consistently; record versions.
