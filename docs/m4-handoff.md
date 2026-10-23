@@ -9,10 +9,10 @@ reproduction records are in [local runtime evidence](../evidence/m4-jazzy-runtim
 M5–M7 have not started, following the repository's one-milestone-at-a-time
 instruction.
 
-The local runtime exposed two merged regression issues and fixed them on
+The local runtime exposed two regression issues and fixed them on
 `fix/m4-jazzy-runner`: import ordering rejected by ament lint, and car routing
 expectations still using the previous 0.40 m/s cap. Commits are `6ba2bd3` and
-`16e5918`. These fixes have not been merged.
+`16e5918`. Their file changes are included in the published `main` tree.
 
 The implementation is pushed to `main` in commit
 [`faf8769`](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/commit/faf87696472fe85bf001794fe990025f1d77ef75).
@@ -101,6 +101,10 @@ not evaluator subscriptions or controls for real hardware. The launch never
 silently enables bus/robot motion.
 
 ## Verification and reproduction
+
+Local Ubuntu 24.04/Jazzy Docker runs are the default under the user's 2026-10-24
+instruction. GitHub Actions is optional project tooling, not a recorded professor
+requirement. See the [verification policy](automation.md#local-verification-default).
 
 Actual local outcomes and commands: [local evidence](../evidence/m4-local.json).
 The expanded suite includes ownership races, expiration, nearest allocation,

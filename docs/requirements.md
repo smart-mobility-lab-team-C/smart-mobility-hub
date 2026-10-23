@@ -30,3 +30,14 @@ This is the initial traceability register. Current implementation and observed c
 Before M1 is frozen, transcribe M1 node coordinates, graph directionality/agent restrictions, footprints, velocities, clearance and freshness thresholds from A §§2–3; compare interface details against A §§5–7; review scenario-specific algorithms in §§8–18. This register is an implementation map, not a replacement for those contracts. Preserve source section/page next to every resulting configuration and test criterion.
 
 Exact source details not yet represented in configuration must remain open; no guessed defaults may be promoted to requirements.
+
+## Verification environment and source of policy
+
+The assignment requires repeatable tests and measured evidence; the reviewed
+requirement register contains no requirement to use GitHub Actions. Hosted CI was
+a project tooling choice. The user's 2026-10-24 instruction makes local
+Ubuntu 24.04/Jazzy Docker execution the default and requires documentation to be
+updated whenever such workflow choices change. Hosted execution requires an
+explicit request or a cited instructor requirement. See the [local verification
+policy](automation.md#local-verification-default). Historical hosted results keep
+their original provenance and do not establish local-machine acceptance.

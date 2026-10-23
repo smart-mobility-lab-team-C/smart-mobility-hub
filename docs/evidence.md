@@ -141,7 +141,7 @@ on `ci/faster-hosted-verification`, retaining the diagnostic branch at
 `007292d9ef075899030800b9362d83aea6ca5de1`. The
 [verification index](../evidence/ci-hosted-verification.json) records commands,
 versions, actual results, run/artifact references and hashes. See
-[automation](automation.md#canonical-hosted-verification) for workflow/gate names
+[automation](automation.md#optional-hosted-verification) for workflow/gate names
 and local commands. Runtime source and M2/M3 evaluators are unchanged.
 
 `/usr/bin/time -p bash scripts/check_fast.sh` passed on the PC (Ubuntu 22.04.5,

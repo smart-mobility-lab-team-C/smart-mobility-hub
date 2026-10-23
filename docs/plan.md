@@ -16,7 +16,16 @@ No deadline or available team hours have been confirmed. Use acceptance gates be
 
 Route service starts in M3 and gains its full oracle suite in M6. Safety is required from M2; do not wait until M7 to implement it.
 
-Hosted verification is consolidated before M4: see the [CI evidence](evidence.md#faster-hosted-verification-2026-10-24-kst--2026-10-23-utc) and [workflow policy](automation.md#canonical-hosted-verification). PC quick checks and hosted Ubuntu/Jazzy integration have separate evidence. The VM observation-gap investigation has been reopened at the user's request; see the [current diagnostic](m3-gap-diagnostic.md#investigation-reopened--2026-10-24). M4 software and acceptance tooling are pushed to `main`. Local ROS build and M2 regression pass; M3's first reset failed its deadline, leaving M4 scenario acceptance NOT RUN. See the [M4 handoff](m4-handoff.md).
+Local Ubuntu 24.04/Jazzy Docker verification is the default under the user's
+2026-10-24 instruction; GitHub Actions is optional project tooling, not a recorded
+professor requirement. See the [verification policy](automation.md#local-verification-default).
+Historical hosted evidence is retained with its original environment. The VM
+observation-gap investigation remains relevant to local execution; see the
+[current diagnostic](m3-gap-diagnostic.md#investigation-reopened--2026-10-24).
+M4 software and acceptance tooling are on `main`. The next local run will use one
+active simulation campaign, retain reset phase timings if the failure recurs,
+and preserve the one-second reset deadline. M4 scenario acceptance remains NOT RUN
+until its real-node checks execute. See the [M4 handoff](m4-handoff.md).
 
 ## Work cycle
 

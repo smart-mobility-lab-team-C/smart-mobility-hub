@@ -2,6 +2,10 @@
 
 ROS 2 Jazzy + Python simulation-first team project.
 
+Verification runs locally in the Ubuntu 24.04/Jazzy Docker environment by default.
+GitHub Actions is an optional project tool, not a recorded assignment requirement;
+hosted runs require an explicit request. See [verification policy](docs/automation.md#local-verification-default).
+
 **Status: M2 and M3 implementation and automated acceptance PASS; T05–T06 PASS; independent human review/reproduction BLOCKED.** M4 parking and traffic implementation is on `main`; its container build and M2 regression pass, while M3 regression failed on `RESET_DEADLINE`, leaving T07–T10 NOT RUN. See the [M4 handoff](docs/m4-handoff.md) and [local Jazzy runtime evidence](evidence/m4-jazzy-runtime.json). See [M3 status and policies](docs/m3.md) and the [verification evidence index](evidence/m3-verification-attempts.json). Current target: Oracle VirtualBox Ubuntu 22.04 host with an Ubuntu 24.04/Jazzy container. See [M2 acceptance](docs/m2.md) and [setup](docs/setup.md). The WSL instructions remain an alternative setup.
 
 ## Start here
