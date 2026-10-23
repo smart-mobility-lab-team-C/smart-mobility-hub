@@ -108,11 +108,15 @@ barrier lease/occupancy tests and existing simulator/safety prerequisites.
 Run in the supported Docker environment as the caller's non-root UID/GID:
 
 ```sh
-docker build -t smh-m4 -f containers/Dockerfile .
-docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+sg docker -c 'docker buildx build --load -t smh-m4 -f containers/Dockerfile .'
+sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
   -v "$PWD:/workspace" smh-m4 \
-  bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE-RUN-ID
+  bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE-RUN-ID'
 ```
+
+This host's current login does not include its configured `docker` supplementary
+group. `sg docker -c` supplies that group for each Docker command; a newly started
+login session may inherit it directly.
 
 The M4 runner reuses the fresh M3 build, interface/style/colcon checks and M2/M3
 real-node regressions, then runs `verify_m4.py` in ROS domain 74. It retains
