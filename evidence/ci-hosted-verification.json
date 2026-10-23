@@ -1,0 +1,718 @@
+{
+  "scope": "Faster hosted verification only; no M4 or VM investigation",
+  "implementation_commit": "f4e80356ff48457d3ad66a5bd5f00c1a6f9c956f",
+  "preserved_diagnostic_branch": {
+    "name": "diagnostic/m3-observation-gap",
+    "head": "007292d9ef075899030800b9362d83aea6ca5de1"
+  },
+  "local": {
+    "os": "Ubuntu 22.04.5 LTS",
+    "python": "3.10.12",
+    "command": "/usr/bin/time -p bash scripts/check_fast.sh",
+    "status": "PASS",
+    "elapsed_wall_seconds": 1.98,
+    "tooling_and_policy_tests": 10,
+    "diagnostic_tests": 12,
+    "other_checks": [
+      "tracked shell syntax",
+      "Python compilation",
+      "M1 source contracts",
+      "Markdown links"
+    ],
+    "workflow_validation": {
+      "command": "/tmp/smh-actionlint/actionlint -shellcheck= -color",
+      "version": "1.7.12",
+      "status": "PASS",
+      "release_tar_sha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+      "checksum_status": "PASS: official release checksums match"
+    },
+    "ros_acceptance": "NOT RUN on PC; hosted separately",
+    "elapsed_samples": 1
+  },
+  "routing": [
+    {
+      "case": "draft",
+      "run_id": 39986924841,
+      "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39986924841",
+      "head_commit": "f4e80356ff48457d3ad66a5bd5f00c1a6f9c956f",
+      "conclusion": "success",
+      "jobs": {
+        "Quick checks": "success",
+        "Change classification": "success",
+        "Verification gate": "success",
+        "Jazzy integration": "skipped"
+      },
+      "logs_sha256": "31d3cb236be4269673552ed232c2a2b5af2fbe0df85af2d5a1a1997a379a7ba7"
+    },
+    {
+      "case": "documentation_only",
+      "run_id": 39987354788,
+      "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987354788",
+      "head_commit": "58146c0b045258e0a37c70a286e54fec9d19ada2",
+      "conclusion": "success",
+      "jobs": {
+        "Quick checks": "success",
+        "Change classification": "success",
+        "Verification gate": "success",
+        "Jazzy integration": "skipped"
+      },
+      "logs_sha256": "387c647479503bff5cd3b1f40072162fb66f3cc86daad3e55249508d32fb848e"
+    },
+    {
+      "case": "invalid_contract_and_failed_quick",
+      "run_id": 39987518475,
+      "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987518475",
+      "head_commit": "cc161fb8029b1f615af82a96ca68e85db7636783",
+      "conclusion": "failure",
+      "jobs": {
+        "Change classification": "success",
+        "Quick checks": "failure",
+        "Verification gate": "failure",
+        "Jazzy integration": "skipped"
+      },
+      "logs_sha256": "25298416046b7fd7352cf230f6495b6d8eead6ff7f60621880c00e31af31e73c"
+    }
+  ],
+  "full_suite": {
+    "run_id": 39987092612,
+    "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987092612",
+    "status": "PASS",
+    "head_commit": "f4e80356ff48457d3ad66a5bd5f00c1a6f9c956f",
+    "tested_merge_commit": "0206b495ba5cd319769b33b2d8213e0265170e8f",
+    "command": "docker run --rm --user \"$(id -u):$(id -g)\" -e HOME=/tmp -v \"$PWD:/workspace\" smh-verification:local bash scripts/m3_container.sh /workspace/evidence/runs/hosted-acceptance",
+    "started_utc": "2026-10-23T16:28:38Z",
+    "completed_utc": "2026-10-23T16:50:03Z",
+    "workflow_wall_seconds": 1285.0,
+    "acceptance_wall_seconds": 1121.0,
+    "timing_note": "UTC wall-clock job/step durations; evaluator latencies use monotonic time",
+    "jobs": {
+      "Change classification": "success",
+      "Quick checks": "success",
+      "Jazzy integration": "success",
+      "Verification gate": "success"
+    },
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:28:55Z",
+        "completed_at": "2026-10-23T16:28:57Z",
+        "wall_seconds": 2.0
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:28:57Z",
+        "completed_at": "2026-10-23T16:28:58Z",
+        "wall_seconds": 1.0
+      },
+      {
+        "name": "Run docker/setup-buildx-action@v4",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:28:58Z",
+        "completed_at": "2026-10-23T16:29:05Z",
+        "wall_seconds": 7.0
+      },
+      {
+        "name": "Build and load Jazzy image",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:29:05Z",
+        "completed_at": "2026-10-23T16:31:01Z",
+        "wall_seconds": 116.0
+      },
+      {
+        "name": "Fresh M0 through M3 acceptance",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:31:01Z",
+        "completed_at": "2026-10-23T16:49:42Z",
+        "wall_seconds": 1121.0
+      },
+      {
+        "name": "Retain acceptance evidence",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:49:42Z",
+        "completed_at": "2026-10-23T16:49:45Z",
+        "wall_seconds": 3.0
+      },
+      {
+        "name": "Post Build and load Jazzy image",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:49:45Z",
+        "completed_at": "2026-10-23T16:49:47Z",
+        "wall_seconds": 2.0
+      },
+      {
+        "name": "Post Run docker/setup-buildx-action@v4",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:49:47Z",
+        "completed_at": "2026-10-23T16:49:51Z",
+        "wall_seconds": 4.0
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:49:51Z",
+        "completed_at": "2026-10-23T16:49:52Z",
+        "wall_seconds": 1.0
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success",
+        "started_at": "2026-10-23T16:49:52Z",
+        "completed_at": "2026-10-23T16:49:52Z",
+        "wall_seconds": 0.0
+      }
+    ],
+    "environment": {
+      "os": "Ubuntu 24.04.5 LTS",
+      "ros_distro": "Jazzy",
+      "python": "3.12.3-0ubuntu2.1",
+      "rclpy": "7.1.12-1noble.20260912.162354",
+      "ros_base": "0.11.0-1noble.20261006.035407",
+      "image_id": "sha256:51d97cc70ee7bb42189b55b160524caab61f05839851f3f7dc0202fae5536528"
+    },
+    "m0_smoke": "PASS: real ROS talker/listener delivery",
+    "m1": {
+      "source_contracts": "PASS",
+      "flake8": "PASS",
+      "pep257": "PASS",
+      "hash_checks": "PASS",
+      "generated_interfaces": 23
+    },
+    "fresh_build": "PASS: 8 packages",
+    "colcon": {
+      "tests": 40,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "m2": {
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "real_processes_and_services_ready",
+          "status": "PASS"
+        },
+        {
+          "name": "simulator_observations_ready",
+          "status": "PASS"
+        },
+        {
+          "name": "startup_zero_motion",
+          "status": "PASS"
+        },
+        {
+          "name": "crossing_exclusive_acquire_release",
+          "status": "PASS"
+        },
+        {
+          "name": "candidate_expiry_repetitions",
+          "status": "PASS"
+        },
+        {
+          "name": "queue_staleness_unknown_and_stop",
+          "status": "PASS"
+        },
+        {
+          "name": "frozen_queue_source_stamp",
+          "status": "PASS"
+        },
+        {
+          "name": "invalid_queue_denies_motion",
+          "status": "PASS"
+        },
+        {
+          "name": "nonfinite_candidate_rejected",
+          "status": "PASS"
+        },
+        {
+          "name": "estop_latch_and_recovery_repetitions",
+          "status": "PASS"
+        },
+        {
+          "name": "clear_stop_rejects_stale_inputs",
+          "status": "PASS"
+        },
+        {
+          "name": "scenario_reset_acceptance",
+          "status": "PASS"
+        },
+        {
+          "name": "scenario_reset_stale_rejection",
+          "status": "PASS"
+        },
+        {
+          "name": "reset_missing_participant",
+          "status": "PASS"
+        },
+        {
+          "name": "scenario_parameter_dump",
+          "status": "PASS"
+        },
+        {
+          "name": "isolated_crossing_occupied_release_and_expiry",
+          "status": "PASS"
+        },
+        {
+          "name": "full_graph_physical_crossing_entry_and_expiry",
+          "status": "PASS"
+        },
+        {
+          "name": "adapter_stops_after_supervisor_loss",
+          "status": "PASS"
+        }
+      ]
+    },
+    "m3": {
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "nominal_docking_01",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_02",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_03",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_04",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_05",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_06",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_07",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_08",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_09",
+          "status": "PASS"
+        },
+        {
+          "name": "nominal_docking_10",
+          "status": "PASS"
+        },
+        {
+          "name": "arrival_during_boarding_and_interruption",
+          "status": "PASS"
+        },
+        {
+          "name": "cancel_during_approach",
+          "status": "PASS"
+        },
+        {
+          "name": "action_timeout",
+          "status": "PASS"
+        },
+        {
+          "name": "blocked_bay_wait",
+          "status": "PASS"
+        },
+        {
+          "name": "planner_timeout_retries_and_late_reply",
+          "status": "PASS"
+        },
+        {
+          "name": "no_route",
+          "status": "PASS"
+        },
+        {
+          "name": "frozen_edge_source_stamp",
+          "status": "PASS"
+        },
+        {
+          "name": "stale_bus_pose",
+          "status": "PASS"
+        },
+        {
+          "name": "estop_aborts_and_latches",
+          "status": "PASS"
+        },
+        {
+          "name": "pedestrian_before_crossing_entry",
+          "status": "PASS"
+        },
+        {
+          "name": "active_route_missing_feed",
+          "status": "PASS"
+        },
+        {
+          "name": "busy_goal_rejection",
+          "status": "PASS"
+        },
+        {
+          "name": "crossing_denial_renewal_loss_and_explicit_recovery",
+          "status": "PASS"
+        },
+        {
+          "name": "active_mission_reset",
+          "status": "PASS"
+        }
+      ],
+      "nominal_docking_runs": 10,
+      "nominal_observations": [
+        {
+          "run_id": "4430ae26-824f-40e3-aff2-871fda6dbd59",
+          "seed": 300,
+          "position_error_m": 0.04999999802130802,
+          "yaw_error_rad": 9.218131141498902e-10,
+          "eta_error_at_5m_sec": 0.5620369320605505,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [],
+          "goal_id": "a20fd728ade142edb33d3286a2ac6530",
+          "minimum_agent_separation_m": 2.0000000073529183,
+          "measured_door_open_sec": 8.102628530999993,
+          "initial_passengers": 0
+        },
+        {
+          "run_id": "f932a2dc-91dd-4a1a-9ea5-88977ae1e339",
+          "seed": 301,
+          "position_error_m": 0.04999999819090745,
+          "yaw_error_rad": 9.991031061697927e-10,
+          "eta_error_at_5m_sec": 0.5492650340605678,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [
+            {
+              "boarding_sec": 64.05,
+              "entry_sec": 0.0,
+              "goal_id": "445ddbebb099476897961ca82e2bde20",
+              "passenger_id": "301-p0000",
+              "slot": 1
+            },
+            {
+              "boarding_sec": 66.05,
+              "entry_sec": 0.0,
+              "goal_id": "445ddbebb099476897961ca82e2bde20",
+              "passenger_id": "301-p0001",
+              "slot": 2
+            }
+          ],
+          "goal_id": "445ddbebb099476897961ca82e2bde20",
+          "minimum_agent_separation_m": 2.000000007448374,
+          "measured_door_open_sec": 8.098478730999943,
+          "initial_passengers": 2
+        },
+        {
+          "run_id": "738a125f-eee2-4942-ba62-ec4127dc5b73",
+          "seed": 302,
+          "position_error_m": 0.04499999812347348,
+          "yaw_error_rad": 9.678690672613672e-10,
+          "eta_error_at_5m_sec": 0.5487988420605916,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [
+            {
+              "boarding_sec": 64.05,
+              "entry_sec": 0.0,
+              "goal_id": "eac3393addcd43bf973ca7936466b5ba",
+              "passenger_id": "302-p0000",
+              "slot": 1
+            },
+            {
+              "boarding_sec": 66.05,
+              "entry_sec": 0.0,
+              "goal_id": "eac3393addcd43bf973ca7936466b5ba",
+              "passenger_id": "302-p0001",
+              "slot": 2
+            },
+            {
+              "boarding_sec": 68.05,
+              "entry_sec": 0.0,
+              "goal_id": "eac3393addcd43bf973ca7936466b5ba",
+              "passenger_id": "302-p0002",
+              "slot": 3
+            },
+            {
+              "boarding_sec": 70.05,
+              "entry_sec": 0.0,
+              "goal_id": "eac3393addcd43bf973ca7936466b5ba",
+              "passenger_id": "302-p0003",
+              "slot": 4
+            }
+          ],
+          "goal_id": "eac3393addcd43bf973ca7936466b5ba",
+          "minimum_agent_separation_m": 2.000000006667787,
+          "measured_door_open_sec": 8.099882359000048,
+          "initial_passengers": 4
+        },
+        {
+          "run_id": "e114c8b1-2ed5-4c56-a03b-0cb9e77faa81",
+          "seed": 303,
+          "position_error_m": 0.04999999810208876,
+          "yaw_error_rad": 9.360023046079318e-10,
+          "eta_error_at_5m_sec": 0.5492193934696843,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [
+            {
+              "boarding_sec": 64.0,
+              "entry_sec": 0.0,
+              "goal_id": "9ba3f2c50ec44919817185857b90c572",
+              "passenger_id": "303-p0000",
+              "slot": 1
+            },
+            {
+              "boarding_sec": 66.0,
+              "entry_sec": 0.0,
+              "goal_id": "9ba3f2c50ec44919817185857b90c572",
+              "passenger_id": "303-p0001",
+              "slot": 2
+            },
+            {
+              "boarding_sec": 68.0,
+              "entry_sec": 0.0,
+              "goal_id": "9ba3f2c50ec44919817185857b90c572",
+              "passenger_id": "303-p0002",
+              "slot": 3
+            },
+            {
+              "boarding_sec": 70.0,
+              "entry_sec": 0.0,
+              "goal_id": "9ba3f2c50ec44919817185857b90c572",
+              "passenger_id": "303-p0003",
+              "slot": 4
+            }
+          ],
+          "goal_id": "9ba3f2c50ec44919817185857b90c572",
+          "minimum_agent_separation_m": 2.0001000053023095,
+          "measured_door_open_sec": 8.100175563999983,
+          "initial_passengers": 6
+        },
+        {
+          "run_id": "a34004d6-dd1c-4b8a-a688-4307a1a6f3ab",
+          "seed": 304,
+          "position_error_m": 0.04999999812640442,
+          "yaw_error_rad": 9.46481352521528e-10,
+          "eta_error_at_5m_sec": 0.40080275546972643,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [],
+          "goal_id": "84c1f2dcc54b4d11b65b50b0f649538e",
+          "minimum_agent_separation_m": 2.0001000052732727,
+          "measured_door_open_sec": 8.096254156999976,
+          "initial_passengers": 0
+        },
+        {
+          "run_id": "e31b2fa3-57cd-4796-843f-9dbbdb93e941",
+          "seed": 305,
+          "position_error_m": 0.04999999818857512,
+          "yaw_error_rad": 9.045864000448972e-10,
+          "eta_error_at_5m_sec": 0.3206939599999714,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [
+            {
+              "boarding_sec": 63.85,
+              "entry_sec": 0.0,
+              "goal_id": "425adff913ad427883c71dad5cd94e8d",
+              "passenger_id": "305-p0000",
+              "slot": 1
+            },
+            {
+              "boarding_sec": 65.85000000000001,
+              "entry_sec": 0.0,
+              "goal_id": "425adff913ad427883c71dad5cd94e8d",
+              "passenger_id": "305-p0001",
+              "slot": 2
+            }
+          ],
+          "goal_id": "425adff913ad427883c71dad5cd94e8d",
+          "minimum_agent_separation_m": 2.0000000073870066,
+          "measured_door_open_sec": 8.104503264999948,
+          "initial_passengers": 2
+        },
+        {
+          "run_id": "1a5cd5e2-8964-48b6-83a8-52decf560a97",
+          "seed": 306,
+          "position_error_m": 0.049999998148298,
+          "yaw_error_rad": 9.455960780291285e-10,
+          "eta_error_at_5m_sec": 0.5486884279395099,
+          "eta_invalid_duration_sampled_sec": 37.0,
+          "boarding": [
+            {
+              "boarding_sec": 64.05,
+              "entry_sec": 0.0,
+              "goal_id": "c749ee700f9a414a81b5d60e943e7c1b",
+              "passenger_id": "306-p0000",
+              "slot": 1
+            },
+            {
+              "boarding_sec": 66.05,
+              "entry_sec": 0.0,
+              "goal_id": "c749ee700f9a414a81b5d60e943e7c1b",
+              "passenger_id": "306-p0001",
+              "slot": 2
+            },
+            {
+              "boarding_sec": 68.05,
+              "entry_sec": 0.0,
+              "goal_id": "c749ee700f9a414a81b5d60e943e7c1b",
+              "passenger_id": "306-p0002",
+              "slot": 3
+            },
+            {
+              "boarding_sec": 70.05,
+              "entry_sec": 0.0,
+              "goal_id": "c749ee700f9a414a81b5d60e943e7c1b",
+              "passenger_id": "306-p0003",
+              "slot": 4
+            }
+          ],
+          "goal_id": "c749ee700f9a414a81b5d60e943e7c1b",
+          "minimum_agent_separation_m": 2.0000000075505984,
+          "measured_door_open_sec": 8.10068839400003,
+          "initial_passengers": 4
+        },
+        {
+          "run_id": "21290cf8-ba03-4ec5-8598-ca6a0184ebdd",
+          "seed": 307,
+          "position_error_m": 0.04999999810772777,
+          "yaw_error_rad": 9.847717928847692e-10,
+          "eta_error_at_5m_sec": 0.5485815069999944,
+          "eta_invalid_duration_sampled_sec": 37.0,
+          "boarding": [
+            {
+              "boarding_sec": 63.75,
+              "entry_sec": 0.0,
+              "goal_id": "7e769e88b5f942de8185de9380ad41c4",
+              "passenger_id": "307-p0000",
+              "slot": 1
+            },
+            {
+              "boarding_sec": 65.75,
+              "entry_sec": 0.0,
+              "goal_id": "7e769e88b5f942de8185de9380ad41c4",
+              "passenger_id": "307-p0001",
+              "slot": 2
+            },
+            {
+              "boarding_sec": 67.75,
+              "entry_sec": 0.0,
+              "goal_id": "7e769e88b5f942de8185de9380ad41c4",
+              "passenger_id": "307-p0002",
+              "slot": 3
+            },
+            {
+              "boarding_sec": 69.75,
+              "entry_sec": 0.0,
+              "goal_id": "7e769e88b5f942de8185de9380ad41c4",
+              "passenger_id": "307-p0003",
+              "slot": 4
+            }
+          ],
+          "goal_id": "7e769e88b5f942de8185de9380ad41c4",
+          "minimum_agent_separation_m": 2.0000000073258577,
+          "measured_door_open_sec": 8.09846921899998,
+          "initial_passengers": 6
+        },
+        {
+          "run_id": "4f637fa8-22c5-47ba-b06d-ea9cee6e60fb",
+          "seed": 308,
+          "position_error_m": 0.04499999819090672,
+          "yaw_error_rad": 9.273424016733246e-10,
+          "eta_error_at_5m_sec": 0.548859893000099,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [],
+          "goal_id": "40a7cdbed9e84b5493266f321aaf089d",
+          "minimum_agent_separation_m": 2.0000000078016003,
+          "measured_door_open_sec": 8.202388583000015,
+          "initial_passengers": 0
+        },
+        {
+          "run_id": "b4e6dbb5-fce8-476d-9c14-6d8bcea2bd13",
+          "seed": 309,
+          "position_error_m": 0.04999999818007347,
+          "yaw_error_rad": 9.64060589362292e-10,
+          "eta_error_at_5m_sec": 0.5489847519395425,
+          "eta_invalid_duration_sampled_sec": 37.5,
+          "boarding": [
+            {
+              "boarding_sec": 64.0,
+              "entry_sec": 0.0,
+              "goal_id": "f252ef4aa89444e6ba6f334dccfd6ebe",
+              "passenger_id": "309-p0000",
+              "slot": 1
+            },
+            {
+              "boarding_sec": 66.0,
+              "entry_sec": 0.0,
+              "goal_id": "f252ef4aa89444e6ba6f334dccfd6ebe",
+              "passenger_id": "309-p0001",
+              "slot": 2
+            }
+          ],
+          "goal_id": "f252ef4aa89444e6ba6f334dccfd6ebe",
+          "minimum_agent_separation_m": 2.000100005059792,
+          "measured_door_open_sec": 8.100167089000024,
+          "initial_passengers": 2
+        }
+      ],
+      "max_position_error_m": 0.04999999819090745,
+      "max_yaw_error_rad": 9.991031061697927e-10
+    },
+    "cache": {
+      "first_export_status": "PASS",
+      "scope": "smh-jazzy",
+      "observed_export_seconds": 52.5,
+      "log_evidence": [
+        "#13 sending cache export 52.5s done",
+        "#13 DONE 52.5s"
+      ],
+      "build_and_load_wall_seconds": 116.0,
+      "cached_step_markers": 0,
+      "note": "Export confirmed from logs; ignore-error alone would not prove export success"
+    },
+    "artifacts": [
+      {
+        "id": 12517771001,
+        "name": "smart-mobility-lab-team-C~smart-mobility-hub~D4SPDE.dockerbuild",
+        "size_in_bytes": 55752,
+        "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987092612/artifacts/12517771001"
+      },
+      {
+        "id": 12516234142,
+        "name": "hosted-verification-39987092612-1",
+        "size_in_bytes": 1904347,
+        "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987092612/artifacts/12516234142"
+      }
+    ],
+    "local_raw_directory": "evidence/runs/ci-verification/acceptance",
+    "sha256": {
+      "hosted-acceptance/m2-regression.json": "387ddb8a9545f188a9dca8da9c136cffa7d85f5878cbe8343c1e3afec14133da",
+      "hosted-acceptance/m3/acceptance.json": "122dece919544ffe4d668a12db72fe2df5602d32fe1c1a807712854c150e724a",
+      "hosted-acceptance/m3/trace.jsonl": "8ef711c903c7dc8e8ce70211eea77cc55e27705e25bbb81cfe8446ce1238aea5",
+      "hosted-acceptance/transcript.log": "d9843e99ad3b86915ad40f72edac0020df1d7becf4d8aa84d67b0df03595ff8f",
+      "hosted-acceptance/source-sha256.txt": "71180ad056621e14268dbb9165f3c523d1f769d269875f0ed52551787e6647bc",
+      "hosted-acceptance/package-versions.tsv": "62061409314e1b4fd8bf9704885560c330d3bcaee157f3bdd3c218638e9ac8fe",
+      "ci-metadata/image.json": "7d5e31f22faf7f63bea15254f419ff23195a51e3e83c1fa006adc2c5a69d105f"
+    },
+    "artifact_zip_sha256": "1ab5b1289147804e5cef13a989a16dcaa645ad07edbe11f8eed6a2781763f46c",
+    "workflow_logs_zip_sha256": "7ef20b766120404799a72ee31729a999ac5c2d20aff923f5bd8a528a8d08b7d5"
+  },
+  "cross_run_cache_reuse": {
+    "status": "NOT RUN",
+    "reason": "Measure on the next normal integration run; no extra mission suite solely for benchmarking"
+  },
+  "limitations": [
+    "Independent human source review and teammate reproduction remain BLOCKED",
+    "Runtime interfaces, watchdogs, safety thresholds and scenario acceptance scope unchanged",
+    "Repository permissions and branch protection settings unchanged"
+  ],
+  "fixture_pr": {
+    "number": 9,
+    "state": "closed, unmerged; remote and local fixture branches deleted",
+    "documentation_commit": "58146c0",
+    "invalid_contract_commit": "cc161fb"
+  },
+  "delivery": "Evidence-only follow-up remains a draft PR to avoid an extra mission suite solely for documentation/cache benchmarking. Accepted implementation is the head_commit above."
+}

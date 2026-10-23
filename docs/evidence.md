@@ -133,3 +133,62 @@ all mission failures and earlier interrupted captures remain explicit in the
 [diagnostic index](../evidence/m3-gap-diagnostic.json). Exact VM/hypervisor cause
 remains unconfirmed. This investigation changes no milestone acceptance or
 independent human review/reproduction status.
+
+## Faster hosted verification (2026-10-24 KST / 2026-10-23 UTC)
+
+The scoped CI implementation is `f4e80356ff48457d3ad66a5bd5f00c1a6f9c956f`
+on `ci/faster-hosted-verification`, retaining the diagnostic branch at
+`007292d9ef075899030800b9362d83aea6ca5de1`. The
+[verification index](../evidence/ci-hosted-verification.json) records commands,
+versions, actual results, run/artifact references and hashes. See
+[automation](automation.md#canonical-hosted-verification) for workflow/gate names
+and local commands. Runtime source and M2/M3 evaluators are unchanged.
+
+`/usr/bin/time -p bash scripts/check_fast.sh` passed on the PC (Ubuntu 22.04.5,
+Python 3.10.12): 10 tooling/policy tests, 12 diagnostic tests, tracked shell/Python
+syntax, source contracts and local Markdown links. One observed wall-time sample
+was 1.98 s; it is not ROS acceptance or a performance benchmark. Workflow syntax
+also passed `/tmp/smh-actionlint/actionlint -shellcheck= -color` (1.7.12).
+
+Hosted routing was exercised, not inferred solely from mocks:
+
+| Case | Observed result |
+|---|---|
+| [Draft PR](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39986924841) | Quick checks/classification/gate PASS; integration skipped, ROS NOT RUN |
+| [Ready implementation PR](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987092612) | Quick checks/classification PASS; integration selected |
+| [Documentation-only PR](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987354788) | Quick checks/classification/gate PASS; integration skipped, ROS NOT RUN |
+| [Invalid contract / failed quick check](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987518475) | Classification required integration; quick checks FAIL, integration skipped, final gate FAIL as required |
+
+The intentionally invalid contract existed only on temporary
+[PR #9](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/9),
+now closed without merging; its local/remote fixture branches were deleted.
+Cumulative-diff/contract-rename, unknown-path and manual-run decisions are also
+covered by local policy tests. Policy skips never count as executed acceptance.
+
+The [ready hosted suite](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987092612)
+completed **PASS** at implementation head `f4e8035` (tested PR merge commit
+`0206b495ba5cd319769b33b2d8213e0265170e8f`). Its artifact
+[hosted-verification-39987092612-1](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39987092612/artifacts/12516234142)
+contains the fresh Ubuntu 24.04.5/Jazzy/Python 3.12.3 run: M0 real talker/listener,
+M1 source/lint/hash checks, 23 generated interfaces, eight-package build,
+40 colcon tests (zero errors/failures/skips), 18/18 M2 regression cases and
+24/24 M3 cases including 10/10 nominal docks. Every individual M2/M3 outcome is
+indexed; full measurements, traces and package versions remain in the artifact.
+Image ID is
+`sha256:51d97cc70ee7bb42189b55b160524caab61f05839851f3f7dc0202fae5536528`.
+
+Observed UTC wall durations: workflow 1,285 s (21m25s), acceptance step 1,121 s
+(18m41s), image build/load 116 s. The Buildx logs explicitly show successful
+GitHub cache export (`sending cache export 52.5s done`, then `DONE 52.5s`);
+no cached build-step markers appeared in this first run. Cross-run reuse timing
+is **NOT RUN**, reserved for the next normal integration run; no extra long
+mission suite was scheduled solely for benchmarking. Evaluator latency clocks
+remain monotonic; these workflow durations are wall time, not safety latencies.
+
+[PR #8](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/8)
+returns to draft for this evidence-only follow-up, so its quick-only status does
+not claim a new ROS execution at the evidence commit. The accepted implementation
+revision above remains explicit. M0–M3 legacy workflows are manual-only. VM
+investigation is parked; no M4 implementation, merge, repository-permission or
+branch-protection change is included. Independent human review/reproduction
+remain BLOCKED; other scenario rows retain their prior NOT RUN status.
