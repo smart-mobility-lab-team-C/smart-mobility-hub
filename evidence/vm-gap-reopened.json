@@ -1,5 +1,5 @@
 {
-  "status": "UNRESOLVED: hypervisor Off and local VBS flag 0 reported; current log still NEM, runtime VBS=2, three post-change diagnostic missions failed",
+  "status": "UNRESOLVED: post-restart NEM persists and diagnostic gaps reproduced; VSM boot setting persistence awaiting verification",
   "source_commit": "97e22568b68a6f7cdd0f6b2e638a546acc9cf434",
   "branch": "fix/vm-observation-gaps",
   "date_kst": "2026-10-24",
@@ -943,5 +943,59 @@
       "Fresh current-session VBox.log and runtime VBS/hypervisor state",
       "If native VT-x active, repeat bounded diagnostic then unchanged full suite"
     ]
+  },
+  "post_vsm_restart_comparison": {
+    "status": "UNRESOLVED",
+    "boot_id": "d2ea5d86-d2bc-4ecb-8e7f-4f7c820e27b9",
+    "command": "python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output evidence/runs/gap-vsm-off-20261024",
+    "capture_returncode": 0,
+    "capture_is_acceptance": false,
+    "build": "8 packages, 36.9 seconds",
+    "attempts": [
+      {
+        "attempt": "00-baseline",
+        "status": "ERROR",
+        "error": "AssertionError('goal unexpectedly rejected')",
+        "terminal": null,
+        "analysis": "GAP_OBSERVED",
+        "gap_windows": 1
+      },
+      {
+        "attempt": "01-instrumented",
+        "status": "MISSION_FAILED",
+        "error": null,
+        "terminal": {
+          "status": 6,
+          "result": {
+            "success": false,
+            "final_state": "SAFE_STOP",
+            "reason": "SAFETY_STOP"
+          }
+        },
+        "analysis": "GAP_OBSERVED",
+        "gap_windows": 2
+      },
+      {
+        "attempt": "02-no-image",
+        "status": "MISSION_SUCCEEDED",
+        "error": null,
+        "terminal": {
+          "status": 4,
+          "result": {
+            "success": true,
+            "final_state": "COMPLETE",
+            "reason": "DOCKED_BOARDED_DOOR_CLOSED"
+          }
+        },
+        "analysis": "NOT_REPRODUCED",
+        "gap_windows": 0
+      }
+    ],
+    "host_max_sample_interval_sec": 2.698102705999986,
+    "host_log_sha256": "55b5b6354e5c3cd270f65a096ae6250702aa1085ba3ec27803f1089e083f07b2",
+    "backend": "NEM; VT-x unavailable; Windows hypervisor present",
+    "vsmlaunchtype_persistence": "UNKNOWN: awaiting current Windows boot enumeration",
+    "full_m0_m3_suite": "NOT RUN",
+    "artifacts": "evidence/runs/gap-vsm-off-20261024"
   }
 }

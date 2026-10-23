@@ -234,3 +234,21 @@ host-sampler interval. Windows event 12 confirms a real OS restart; the Device
 Guard query had no matching events. A distinct, reversible boot-level VSM launch
 test is prepared and NOT RUN. The same diagnostic index preserves observed
 results separately from proposed commands and missing causal explanations.
+
+
+## Latest restart comparison — 2026-10-24 03:57 KST
+
+Status: **UNRESOLVED**. Fresh VBox.log (opened 2026-10-23T18:52:53Z)
+still reports VT-x unavailable, a present Windows hypervisor and active NEM.
+Persistence of `vsmlaunchtype Off` is UNKNOWN pending Windows boot enumeration;
+this cannot yet be called a failed test of a confirmed saved VSM setting.
+
+Executed `python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output
+evidence/runs/gap-vsm-off-20261024`: fresh eight-package build in 36.9 s; baseline
+ERROR (goal rejected), instrumented MISSION_FAILED (SAFETY_STOP), no-image
+MISSION_SUCCEEDED with no reproduced gap in that attempt. The first two attempts
+recorded GAP_OBSERVED. Independent VM sampler maximum interval was 2.698103 s.
+Capture exit 0 means collection completed, not acceptance PASS. Full M0–M3 suite
+NOT RUN. One successful no-image attempt does not establish repair or image
+publication as the cause. Raw artifacts remain local; hashes and terminal results
+are indexed in `evidence/vm-gap-reopened.json`. No runtime/watchdog changes.
