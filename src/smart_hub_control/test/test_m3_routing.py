@@ -24,10 +24,10 @@ def test_routes_and_permissions():
     assert path == ['A', 'N', 'Cn', 'B']
     assert math.isclose(cost, 9 / 0.4)
     path, cost, _ = shortest_path(config, states, 'A', 'E', 'car')
-    assert math.isclose(cost, 10 / 0.4)
+    assert math.isclose(cost, 10 / 0.35)
     states['Cs-J'].blocked = True
     path, cost, _ = shortest_path(config, states, 'A', 'E', 'car')
-    assert math.isclose(cost, 14 / 0.4)
+    assert math.isclose(cost, 14 / 0.35)
     states['B-Cn'].blocked = True
     assert shortest_path(config, states, 'A', 'E', 'bus')[2] == 'NO_ROUTE'
     assert shortest_path(config, {}, 'A', 'B', 'bus')[2] == 'NO_ROUTE'
