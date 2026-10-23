@@ -13,7 +13,7 @@ from smart_hub_interfaces.msg import (
 from smart_hub_interfaces.srv import ReleaseParking, ReserveParking, ResetScenario
 from std_msgs.msg import Bool, String
 
-from .parking import Parking, entrance_distances
+from .parking import entrance_distances, Parking
 from .routing import fresh, load_map
 from .traffic import Traffic
 

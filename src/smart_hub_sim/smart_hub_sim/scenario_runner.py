@@ -19,8 +19,8 @@ from sensor_msgs.msg import Image
 from smart_hub_interfaces.msg import (
     CrossingState,
     HubEvent,
-    QueueState,
     ParkingState,
+    QueueState,
     SafetyState,
     SlotObservation,
     SlotObservationArray,
