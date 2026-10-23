@@ -147,6 +147,7 @@ def attempt(args):
         'image_bypassed': args.no_image, 'status': 'ERROR', 'commands': {},
         'acceptance_eligible': False,
         'injected_pause': args.pause_node,
+        'active_interval_established': False,
         'clocks': 'same-VM monotonic seconds; wall-backed ROS stamps; fixed-step physics',
     }
     register(directory.parent, directory.name + '/probe', os.getpid())
@@ -181,6 +182,8 @@ def attempt(args):
         assert probe.wait(lambda: probe.action.server_is_ready() and len(probe.samples) >= 8, 20)
         probe.pause(2.5)
         metadata['active_start'] = time.monotonic()
+        metadata['active_interval_established'] = True
+        probe.params('scenario_runner', initial_passengers=0)
         for node in ('scenario_runner', 'safety_supervisor', 'hub_coordinator',
                      'reset_coordinator', 'route_planner', 'bus_manager', 'm3_synthetic_roads'):
             client = AsyncParameterClient(probe, node)
@@ -189,7 +192,6 @@ def attempt(args):
             values = probe.future(client.get_parameters(names)).values
             (directory / (node + '-parameters.json')).write_text(json.dumps(
                 dict(zip(names, map(message_to_ordereddict, values))), indent=2) + '\n')
-        probe.params('scenario_runner', initial_passengers=0)
         metadata['run_id'] = probe.reset(300)
         metadata['pre_goal_readiness'] = probe.boarding_goal_readiness()
         _, result = probe.send()

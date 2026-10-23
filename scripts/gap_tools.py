@@ -86,8 +86,11 @@ def sample(output, registry, layer):
                     try:
                         item = json.loads(line)
                         pid = int(item['pid'])
+                        stat = read_optional(f'/proc/{pid}/stat')
+                        if stat is None:
+                            continue
                         processes[item['name']] = {
-                            'pid': pid, 'stat': read_optional(f'/proc/{pid}/stat'),
+                            'pid': pid, 'stat': stat,
                             'status': '\n'.join(
                                 line for line in (
                                     read_optional(f'/proc/{pid}/status') or '').splitlines()
@@ -257,7 +260,11 @@ def report(directory):
     metadata = json.loads((directory / 'run.json').read_text())
     records, warnings = load_records(
         directory, metadata['active_start'] - 5, metadata['active_end'] + 5)
-    result = analyze(records, metadata['active_start'], metadata['active_end'])
+    if metadata.get('active_interval_established', True):
+        result = analyze(records, metadata['active_start'], metadata['active_end'])
+    else:
+        result = {'status': 'INCOMPLETE_STARTUP', 'windows': [], 'cadence': {},
+                  'callback_metrics': {}, 'protective_stops': []}
     result['warnings'] = warnings
     for index, window in enumerate(result['windows']):
         path = directory / f'gap-{index:03d}.jsonl'
