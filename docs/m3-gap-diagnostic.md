@@ -200,3 +200,36 @@ without the Windows hypervisor, verify native VT-x in a fresh log, then repeat
 the unchanged reproduction and full M2/M3 acceptance. The human must perform the
 Windows administrator step/restart outside Ubuntu; host repair and post-repair
 verification remain **NOT RUN**. No ROS or watchdog change has been made.
+
+## First post-restart preflight — 2026-10-24
+
+The user returned after shutting down/restarting. A new guest boot is observed;
+raw metadata records boot ID, OS/kernel, CPU configuration, source and image.
+Local quick checks pass again (10 tooling/policy and 12 diagnostic tests).
+A fresh 90-second per-CPU idle capture has no >0.5 s intervals; maxima range from
+0.155 to 0.172 s. The pre-change idle test was also gap-free, so this does not
+establish repair.
+
+The new supplied host log opens at `2026-10-23T17:45:44.042919800Z` and matches
+four CPUs with cap 100%. Lines 605, 620 and 918 still report unavailable VT-x,
+a present Windows hypervisor and active NEM execution respectively. **Native
+VT-x backend preflight: FAIL.** Its short startup capture has no abandoned
+catch-up events; that is insufficient evidence of a repaired loaded system.
+An immutable local snapshot and hashes are retained under ignored
+`evidence/runs/vm-postrestart-20261024`, indexed in the
+[diagnostic evidence](../evidence/vm-gap-reopened.json).
+
+Windows command execution and Windows' own restart have not been verified.
+Read-only outputs requested from administrator PowerShell on the physical host:
+
+```powershell
+bcdedit /enum "{current}"
+Get-CimInstance Win32_ComputerSystem | Select-Object HypervisorPresent
+Get-CimInstance Win32_OperatingSystem | Select-Object LastBootUpTime
+```
+
+These distinguish an unapplied launch setting or missing physical-host restart
+from a host configuration that still launches the hypervisor. Further loaded
+ROS reproduction and M2/M3 acceptance are **NOT RUN** after this restart, held
+at the backend gate. No further Windows security feature changes are prescribed
+without those results. Runtime source, image and watchdogs are unchanged.

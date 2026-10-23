@@ -1,5 +1,5 @@
 {
-  "status": "UNRESOLVED: active NEM backend and severe timer lag confirmed; native VT-x A/B repair test NOT RUN",
+  "status": "UNRESOLVED: post-restart native VT-x preflight FAIL; active NEM persists",
   "source_commit": "97e22568b68a6f7cdd0f6b2e638a546acc9cf434",
   "branch": "fix/vm-observation-gaps",
   "date_kst": "2026-10-24",
@@ -314,7 +314,7 @@
     ],
     "interpretation": "Guest-wide kernel/timer/scheduling disruption is reported. This earlier event is not temporally correlated to the new campaign and does not distinguish host pause, clock error or hypervisor fault."
   },
-  "next_boundary": "Human applies documented reversible Windows hypervisor launch test and restarts physical host; agent checks fresh VBox.log and repeats unchanged reproduction after reconnecting.",
+  "next_boundary": "Read-only Windows bcdedit current entry, HypervisorPresent and LastBootUpTime requested to establish whether the launch setting and physical-host restart took effect.",
   "fix_acceptance": [
     "Identify and record one environment change with before/after timing capture.",
     "Repeat the same nominal reproduction without >=0.5-second gaps in critical fast streams or independent samplers.",
@@ -470,5 +470,101 @@
       "security feature toggles"
     ],
     "causality": "NEM is observed, but its causal role in the current observation gaps still requires before/after validation."
+  },
+  "post_restart_preflight": {
+    "date_kst": "2026-10-24",
+    "source_commit": "4d184d5",
+    "guest_boot_id": "ae5eac5f-ee93-4630-80f9-44de2266ccd7",
+    "host_backend_check": "FAIL: post-restart host log still reports active NEM fallback",
+    "windows_boot_setting": "UNVERIFIED: Windows command output requested from user",
+    "windows_restart": "UNVERIFIED: Windows LastBootUpTime requested; guest reboot is observed",
+    "host_log_filename": "smart-2026-10-24-02-46-33.log",
+    "host_log_snapshot": "evidence/runs/vm-postrestart-20261024/host-VBox.log",
+    "host_log_sha256": "86f479159df7397f5390c1ea539762da3b0e96102bd4f9f32d91a21d02db20cf",
+    "observations": [
+      {
+        "line": 1,
+        "text": "00:00:07.611333 VirtualBox VM 7.2.22 r175245 win.amd64 (Oct 19 2026 20:31:00) release log"
+      },
+      {
+        "line": 2,
+        "text": "00:00:07.611336 Log opened 2026-10-23T17:45:44.042919800Z"
+      },
+      {
+        "line": 4,
+        "text": "00:00:07.611347 OS Product: Windows 11"
+      },
+      {
+        "line": 5,
+        "text": "00:00:07.629919 OS Release: 10.0.26200.9168"
+      },
+      {
+        "line": 51,
+        "text": "00:00:07.841807   CpuExecutionCap   <integer> = 0x0000000000000064 (100)"
+      },
+      {
+        "line": 56,
+        "text": "00:00:07.841816   NumCPUs           <integer> = 0x0000000000000004 (4)"
+      },
+      {
+        "line": 605,
+        "text": "00:00:07.842509 HM: HMR3Init: Attempting fall back to NEM: VT-x is not available"
+      },
+      {
+        "line": 620,
+        "text": "00:00:07.867915 NEM: WHvCapabilityCodeHypervisorPresent is TRUE, so this might work..."
+      },
+      {
+        "line": 918,
+        "text": "00:00:07.870137 NEM: NEMR3Init: Snail execution mode is active!"
+      }
+    ],
+    "reported_timer_catchup_abandonments": 0,
+    "log_capture_note": "Short startup capture; absence of timer catch-up events does not establish repair.",
+    "quick_checks": {
+      "command": "bash scripts/check_fast.sh",
+      "status": "PASS",
+      "tooling_and_policy_tests": 10,
+      "diagnostic_tests": 12
+    },
+    "idle_capture": {
+      "duration_sec": 90,
+      "samplers": {
+        "cpu0": {
+          "samples": 867,
+          "max_interval_sec": 0.15499845800002277,
+          "intervals_over_0_5_sec": 0
+        },
+        "cpu1": {
+          "samples": 878,
+          "max_interval_sec": 0.1721192379999934,
+          "intervals_over_0_5_sec": 0
+        },
+        "cpu2": {
+          "samples": 868,
+          "max_interval_sec": 0.1584543280000048,
+          "intervals_over_0_5_sec": 0
+        },
+        "cpu3": {
+          "samples": 866,
+          "max_interval_sec": 0.16041982400000165,
+          "intervals_over_0_5_sec": 0
+        }
+      },
+      "interpretation": "NOT_REPRODUCED at idle; pre-change idle capture was also gap-free."
+    },
+    "loaded_reproduction": "NOT RUN: held at failed native VT-x preflight",
+    "full_m2_m3_acceptance": "NOT RUN after restart",
+    "runtime_image": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b",
+    "runtime_sources": "git diff --exit-code 97e2256 HEAD -- src scripts containers returned zero before this documentation update",
+    "raw_directory": "evidence/runs/vm-postrestart-20261024",
+    "sha256": {
+      "cpu0.jsonl": "66a823eb2959d74008162093f4d904cf399a624f5beed33916056b6b406d42db",
+      "cpu1.jsonl": "6e2c698310cd41bada641ec876802322f1c59e19022c8fbe673c5e5b3b0e1743",
+      "cpu2.jsonl": "776e4f64a1b2586d3e064db6bbc17f08fc7a784aff4b8e4a4d454a02bdce095c",
+      "cpu3.jsonl": "c658ae963049fe009eace00bc91d277db391e11bf300fbd70126f7abb6a45131",
+      "environment.json": "7c61e6c82d84f65058162ad4ef879f2be3c3d682868b541014aadbd0ab7c664e",
+      "host-VBox.log": "86f479159df7397f5390c1ea539762da3b0e96102bd4f9f32d91a21d02db20cf"
+    }
   }
 }

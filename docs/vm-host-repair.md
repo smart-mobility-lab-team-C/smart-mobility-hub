@@ -1,7 +1,9 @@
 # Windows host test for VM observation gaps
 
-Status: **NOT RUN**. This is the next repair experiment; successful repair is
-not established yet. The Linux guest cannot change or restart its physical
+Status: **FAIL at post-restart backend preflight**. The supplied new-session
+log still reports active NEM. Windows boot-setting output and physical-host
+LastBootUpTime are requested; the guest reboot alone is confirmed. Successful
+repair is not established yet. The Linux guest cannot change or restart its physical
 Windows host. The human performs the host steps below, then the agent verifies
 results after reconnecting. Save work and shut down Ubuntu normally before
 restarting the physical computer.
@@ -65,7 +67,9 @@ as an additional variable.
 
 The quoted `{current}` identifier is intentional for PowerShell. Microsoft
 [documents `hypervisorlaunchtype Off` / `Auto` and identifier syntax](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/bcdedit--set).
-The boot change is **NOT RUN** here; documentation review is not execution.
+The host command result has not been supplied, so execution of the intended
+Windows boot change remains unverified. The new VM session still uses NEM;
+backend verification is FAIL and post-change missions remain NOT RUN.
 
 ## Agent checks after reconnecting
 

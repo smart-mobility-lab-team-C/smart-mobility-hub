@@ -212,3 +212,10 @@ source line references and raw-log hashes are now in the same diagnostic index;
 raw host logs are not committed. The [Windows host experiment](vm-host-repair.md)
 provides the exact next change, rollback and post-restart acceptance checks.
 Execution on the physical host and post-repair ROS verification remain NOT RUN.
+
+The first new VM session after the user returned still reports active NEM:
+native VT-x backend preflight **FAIL**. Post-restart quick checks PASS and a
+90-second idle capture is gap-free, which does not establish a loaded fix.
+Windows boot-setting/restart verification is awaiting read-only host output;
+post-restart ROS missions and M2/M3 acceptance are NOT RUN. The same diagnostic
+index retains the new host-log snapshot hash and guest timing metadata.
