@@ -255,11 +255,12 @@ are indexed in `evidence/vm-gap-reopened.json`. No runtime/watchdog changes.
 
 ## M4 continuation — local checks, ROS acceptance open
 
-The M4 branch now includes sensor-backed parking/traffic ROS adapters, independent
-simulator barrier interlocks, reset acknowledgments, an integrated launch and
-real-node acceptance/plot tooling. [M4 handoff](m4-handoff.md) describes the scope;
-[local evidence](../evidence/m4-local.json) records actual checks and blockers.
-T07–T10 remain NOT RUN. The hosted workflow has been extended to invoke the M4
-runner, but this continuation has no hosted result. Missing local Jazzy setup and
-Docker socket permissions block local ROS build/integration. No permissions were
-changed, no branch was merged, and no M4 scenario PASS is claimed.
+The M4 implementation is on `main` and includes sensor-backed parking/traffic ROS
+adapters, independent simulator barrier interlocks, reset acknowledgments, an
+integrated launch and real-node acceptance/plot tooling. [M4 handoff](m4-handoff.md)
+describes the scope; [local implementation checks](../evidence/m4-local.json) and
+[local Jazzy runtime evidence](../evidence/m4-jazzy-runtime.json) record measured
+results. Local Jazzy build, 53 package tests and 18 M2 cases passed. The M3
+prerequisite failed `RESET_DEADLINE`; T07–T10 remain NOT RUN. The hosted workflow
+invokes the M4 runner, but no hosted M4 result is recorded. No M4 scenario PASS is
+claimed.

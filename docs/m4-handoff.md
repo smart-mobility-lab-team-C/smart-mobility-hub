@@ -14,8 +14,10 @@ The local runtime exposed two merged regression issues and fixed them on
 expectations still using the previous 0.40 m/s cap. Commits are `6ba2bd3` and
 `16e5918`. These fixes have not been merged.
 
-The first implementation slice is `58467c1`; the commit containing this updated
-handoff and `evidence/m4-local.json` identifies the continuation. No merge occurred.
+The implementation is pushed to `main` in commit
+[`faf8769`](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/commit/faf87696472fe85bf001794fe990025f1d77ef75).
+The tested source commit is `16e5918`; the local runtime report was added to the
+published tree after that run.
 
 ## Implemented behavior
 

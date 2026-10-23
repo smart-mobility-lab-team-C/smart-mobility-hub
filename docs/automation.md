@@ -80,6 +80,7 @@ commit and preserve failures separately from NOT RUN/BLOCKED checks.
 Hosted verification now invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
-launches and default `m3_container.sh` behavior are preserved. The extra M4 path
-is implemented but has not run in Jazzy for this continuation; see the
-[M4 handoff](m4-handoff.md) and [local evidence](../evidence/m4-local.json).
+launches and default `m3_container.sh` behavior are preserved. The local Jazzy
+build and M2 checks passed; M3 failed its first reset deadline, so M4 acceptance
+was not reached. No hosted M4 result is recorded. See the [M4 handoff](m4-handoff.md)
+and [local runtime evidence](../evidence/m4-jazzy-runtime.json).
