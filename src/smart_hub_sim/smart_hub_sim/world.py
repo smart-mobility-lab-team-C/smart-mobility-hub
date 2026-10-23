@@ -7,6 +7,7 @@ import math
 import random
 from typing import Optional, Sequence, Tuple
 
+from .barrier import Barrier
 from .geometry import segment_distance, swept_clear, swept_segments_clear
 
 
@@ -68,6 +69,7 @@ class World:
     """Seeded world with deterministic physics and a separate observation RNG."""
 
     def __init__(self, seed: int = 1, obstacle_enabled: bool = False) -> None:
+        """Initialize deterministic physics and independent observation state."""
         self.obstacle_enabled = obstacle_enabled
         self.reset(seed)
 
@@ -81,6 +83,7 @@ class World:
         self.tick_count = 0
         self.door_request = False
         self.barrier_request = False
+        self.barrier = Barrier()
 
     @property
     def obstacles(self) -> Tuple[Tuple[float, float, float], ...]:
@@ -231,8 +234,8 @@ class World:
 
     @property
     def barrier_open(self) -> bool:
-        """Return barrier state; M2 has no owner-bearing open authorization."""
-        return False
+        """Return measured simulated barrier position; startup is closed."""
+        return self.barrier.open
 
     def noisy_pose(self, agent: AgentState) -> Tuple[float, float, float]:
         """Return a noisy perception sample from the isolated observation RNG."""

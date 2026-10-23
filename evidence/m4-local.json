@@ -1,16 +1,298 @@
 {
-  "status": "PARTIAL",
-  "revision": "commit containing this file",
+  "schema": "smart-mobility-hub/m4-local-v2",
+  "status": "BLOCKED",
+  "recorded_utc": "2026-10-23T21:19:55.955618+00:00",
+  "revision": "commit containing this file; implementation source hashes below",
+  "base_commit": "58467c1ca46f25730257409ba75431026a9cfd30",
   "branch": "feat/m4-parking-traffic",
-  "configuration": "map_m1.yaml; 0.35 m/s; 0.80 m headway; deterministic unit fixtures",
-  "seed": null,
+  "environment": {
+    "python": "3.12.15",
+    "os_release": "PRETTY_NAME=\"Ubuntu 22.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"22.04\"\nVERSION=\"22.04.5 LTS (Jammy Jellyfish)\"\nVERSION_CODENAME=jammy\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=jammy\n",
+    "runtime": "host venv; no ROS integration"
+  },
+  "configuration": "map_m1.yaml; car speed 0.35 m/s, headway 0.80 m, source/receipt traffic TTL 0.65 s",
+  "seed": "deterministic fixtures and per-test seeds retained in hashed test sources",
   "model": null,
   "checks": [
-    {"command": "PYTHONPATH=src/smart_hub_control /tmp/smart-hub-m4-venv/bin/pytest -q src/smart_hub_control/test/test_m4_core.py", "status": "PASS", "tests": 4, "reservation_pairs": 20, "free_flow_trials": 10, "duration_sec": 1.53},
-    {"command": "/tmp/smart-hub-m4-venv/bin/flake8 src/smart_hub_control/smart_hub_control/{parking,traffic,m4_nodes}.py src/smart_hub_control/test/test_m4_core.py --max-line-length=99", "status": "PASS"},
-    {"command": "bash scripts/check_fast.sh", "status": "PASS"}
+    {
+      "command": "PYTHONPATH=src/smart_hub_control:src/smart_hub_sim:src/smart_hub_safety /tmp/smart-hub-m4-venv/bin/pytest -q src/smart_hub_control/test/test_m4_core.py src/smart_hub_sim/test/test_m4_barrier.py src/smart_hub_sim/test/test_m2_world.py src/smart_hub_sim/test/test_m3_passengers.py src/smart_hub_safety/test/test_m2_safety.py src/smart_hub_tests/test/test_m2_core.py --junitxml=/tmp/m4-final-tests.xml",
+      "status": "PASS",
+      "sample_count": 35,
+      "duration_sec": 1.636,
+      "reservation_pairs": 20,
+      "free_flow_repetitions": 10,
+      "evidence": "evidence/m4-unit.xml",
+      "individual_results": [
+        {
+          "name": "test_concurrent_pairs",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 1.349,
+          "status": "PASS"
+        },
+        {
+          "name": "test_expiry_release_and_invalid_ttl",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.009,
+          "status": "PASS"
+        },
+        {
+          "name": "test_traffic_freshness_geometry_and_free_flow",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.01,
+          "status": "PASS"
+        },
+        {
+          "name": "test_traffic_congestion_and_obstruction",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.031,
+          "status": "PASS"
+        },
+        {
+          "name": "test_debounce_requires_multiple_samples_and_recovers_after_loss",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.003,
+          "status": "PASS"
+        },
+        {
+          "name": "test_nearest_fallback_cache_bound_and_stale_token",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_traffic_monotonic_loss_and_noise_margin",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.003,
+          "status": "PASS"
+        },
+        {
+          "name": "test_slow_speed_uses_three_regular_publications_and_no_ghost_cars",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_source_cannot_make_its_road_empty_or_poison_healthy_edges",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_capacity_counts_footprints_and_headway_and_nearest_uses_graph",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.004,
+          "status": "PASS"
+        },
+        {
+          "name": "test_known_obstruction_remains_blocked_when_other_source_is_invalid",
+          "class": "src.smart_hub_control.test.test_m4_core",
+          "duration_sec": 0.002,
+          "status": "PASS"
+        },
+        {
+          "name": "test_barrier_requires_owner_safety_and_live_request",
+          "class": "src.smart_hub_sim.test.test_m4_barrier",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_barrier_holds_occupied_passage_until_clear",
+          "class": "src.smart_hub_sim.test.test_m4_barrier",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_world_replay_and_observation_noise_are_seeded_independently",
+          "class": "src.smart_hub_sim.test.test_m2_world",
+          "duration_sec": 0.006,
+          "status": "PASS"
+        },
+        {
+          "name": "test_world_rejects_off_graph_motion_and_accepts_permitted_edges",
+          "class": "src.smart_hub_sim.test.test_m2_world",
+          "duration_sec": 0.003,
+          "status": "PASS"
+        },
+        {
+          "name": "test_world_sweeps_motion_against_optional_obstacle",
+          "class": "src.smart_hub_sim.test.test_m2_world",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_runtime_geometry_matches_frozen_m1_map",
+          "class": "src.smart_hub_sim.test.test_m2_world",
+          "duration_sec": 0.003,
+          "status": "PASS"
+        },
+        {
+          "name": "test_observation_consumption_cannot_change_motion_and_reset_replays_noise",
+          "class": "src.smart_hub_sim.test.test_m2_world",
+          "duration_sec": 0.006,
+          "status": "PASS"
+        },
+        {
+          "name": "test_pose_noise_respects_declared_clearance_error_bound",
+          "class": "src.smart_hub_sim.test.test_m2_world",
+          "duration_sec": 0.004,
+          "status": "PASS"
+        },
+        {
+          "name": "test_capacity_and_slots[0]",
+          "class": "src.smart_hub_sim.test.test_m3_passengers",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_capacity_and_slots[2]",
+          "class": "src.smart_hub_sim.test.test_m3_passengers",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_capacity_and_slots[4]",
+          "class": "src.smart_hub_sim.test.test_m3_passengers",
+          "duration_sec": 0.004,
+          "status": "PASS"
+        },
+        {
+          "name": "test_capacity_and_slots[6]",
+          "class": "src.smart_hub_sim.test.test_m3_passengers",
+          "duration_sec": 0.005,
+          "status": "PASS"
+        },
+        {
+          "name": "test_arrivals_empty_slots_and_interruption",
+          "class": "src.smart_hub_sim.test.test_m3_passengers",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_same_goal_capacity_survives_reopen",
+          "class": "src.smart_hub_sim.test.test_m3_passengers",
+          "duration_sec": 0.005,
+          "status": "PASS"
+        },
+        {
+          "name": "test_source_age_includes_exact_freshness_boundary_and_rejects_future",
+          "class": "src.smart_hub_safety.test.test_m2_safety",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_candidate_accepts_approved_speed_and_angular_limits",
+          "class": "src.smart_hub_safety.test.test_m2_safety",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_candidate_rejects_wrong_frame_stale_nonfinite_and_unsupported_axes",
+          "class": "src.smart_hub_safety.test.test_m2_safety",
+          "duration_sec": 0.004,
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_zero_measured_twist_requires_all_components_zero",
+          "class": "src.smart_hub_safety.test.test_m2_safety",
+          "duration_sec": 0.003,
+          "status": "PASS"
+        },
+        {
+          "name": "test_segment_distance_projects_onto_segment_and_handles_degenerate_segment",
+          "class": "src.smart_hub_tests.test.test_m2_core",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_crossing_occupancy_includes_the_full_agent_footprint",
+          "class": "src.smart_hub_tests.test.test_m2_core",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_swept_clear_enforces_map_bounds_for_the_full_footprint",
+          "class": "src.smart_hub_tests.test.test_m2_core",
+          "duration_sec": 0.002,
+          "status": "PASS"
+        },
+        {
+          "name": "test_swept_clear_detects_obstacle_collision_and_added_clearance",
+          "class": "src.smart_hub_tests.test.test_m2_core",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_swept_clear_prevents_tunneling_through_an_obstacle",
+          "class": "src.smart_hub_tests.test.test_m2_core",
+          "duration_sec": 0.0,
+          "status": "PASS"
+        },
+        {
+          "name": "test_swept_clear_applies_clearance_to_other_agent_footprints",
+          "class": "src.smart_hub_tests.test.test_m2_core",
+          "duration_sec": 0.003,
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "command": "/tmp/smart-hub-m4-venv/bin/flake8 scripts/verify_m4.py scripts/plot_m4.py src/smart_hub_control/smart_hub_control/{parking,traffic,m4_nodes,routing}.py src/smart_hub_control/test/test_m4_core.py src/smart_hub_sim/smart_hub_sim/{barrier,world,scenario_runner}.py src/smart_hub_sim/test/test_m4_barrier.py src/smart_hub_bringup/launch/m4.launch.py src/smart_hub_bringup/smart_hub_bringup/reset.py --max-line-length=99",
+      "status": "PASS"
+    },
+    {
+      "command": "/tmp/smart-hub-m4-venv/bin/pydocstyle --convention=pep257 scripts/verify_m4.py scripts/plot_m4.py src/smart_hub_control/smart_hub_control/{parking,traffic,m4_nodes,routing}.py src/smart_hub_control/test/test_m4_core.py src/smart_hub_sim/smart_hub_sim/{barrier,world,scenario_runner}.py src/smart_hub_sim/test/test_m4_barrier.py src/smart_hub_bringup/launch/m4.launch.py src/smart_hub_bringup/smart_hub_bringup/reset.py",
+      "status": "PASS"
+    },
+    {
+      "command": "bash scripts/check_fast.sh",
+      "status": "PASS",
+      "evidence": "evidence/m4-local.txt"
+    },
+    {
+      "command": "/tmp/smart-hub-m4-venv/bin/python scripts/plot_m4.py /tmp/m4-plot-fixture.jsonl /tmp/m4-plot-fixture.png",
+      "status": "PASS",
+      "scope": "plot rendering smoke with artificial data; no scenario acceptance",
+      "output_sha256": "77e9f2f40b94565b777624898b88c0edd37e2ec80c1157e9984f2172437159c3"
+    },
+    {
+      "command": "bash scripts/m4_container.sh /tmp/smh-m4-real-attempt",
+      "status": "BLOCKED",
+      "exit_code": 1,
+      "reason": "/opt/ros/jazzy/setup.bash: No such file or directory; build not reached"
+    },
+    {
+      "command": "docker images --format '{{.Repository}}:{{.Tag}}'",
+      "status": "BLOCKED",
+      "exit_code": 1,
+      "reason": "permission denied accessing /var/run/docker.sock"
+    }
   ],
-  "T07_T10": "NOT RUN",
-  "ROS_build_integration": "BLOCKED: no host ros2; Docker socket permission denied",
-  "limitations": "See docs/m4-handoff.md. No measured ROS service or scenario timing, bags or barrier actuator acceptance."
+  "scenario_status": {
+    "T07": "NOT RUN",
+    "T08": "NOT RUN",
+    "T09": "NOT RUN",
+    "T10": "NOT RUN"
+  },
+  "ROS_build_colcon_ament_and_integration": "BLOCKED",
+  "hosted_M4_workflow": "NOT RUN",
+  "implementation_sha256": {
+    "containers/Dockerfile": "7d2ec3eb649e4b89bb45377fec41ca8421eeb4261f70a06b57967a8ebbbc0df0",
+    "scripts/m3_container.sh": "6b52d19a49369c6489ac67424c1772826954ca7ceed66a8b1dc71af92445c224",
+    "scripts/m4_container.sh": "d6bad7e4ee0f911ff7ed509ddd7d76380d5bd85b77112150a1a59f811f4e579f",
+    "scripts/plot_m4.py": "cf9db02f78e7232286b07aade55db273db48125d9390ad9558b06e2f06d9cc7e",
+    "scripts/verify_m4.py": "291564f216a80c75b6cb1e7879610455b719b9df468de9240b78c11f747df49a",
+    "src/smart_hub_bringup/launch/m4.launch.py": "7763221172d3d688aed949f0bd8c4b2f6c18805ecbbc8ce0da2bec9855a97a3e",
+    "src/smart_hub_bringup/smart_hub_bringup/reset.py": "264eca4cd8bf4aa2af3239cdd592968973679e5cc38197e7923704223cf152f8",
+    "src/smart_hub_control/smart_hub_control/m4_nodes.py": "46f41b4ddf3c9868535a0a8cb9c5e845f6f5105216bcb66cfea5a2b445c1e79b",
+    "src/smart_hub_control/smart_hub_control/parking.py": "ddb17c00bff3f600efcbedead28156b965c3d5885a2c94e29e15e5d00db702a0",
+    "src/smart_hub_control/smart_hub_control/routing.py": "84e6d038d9ff2ba2793a51018586d08e138aadcd92484cb13b9f72c11837cf50",
+    "src/smart_hub_control/smart_hub_control/traffic.py": "ed6e5c6d9bfd894b0af6ac44e3ee33c873641b230b83003e0be23fd95caba3af",
+    "src/smart_hub_control/test/test_m4_core.py": "0310fbffd244989e6dfcb1187898baf89fbbd11b9ac312a8bc57bfd5316051ec",
+    "src/smart_hub_sim/config/map_m1.yaml": "99d6c28b0e920e9d1569dd3e72e992af6a759c5d9a848fd6e611e1ac4da33251",
+    "src/smart_hub_sim/smart_hub_sim/barrier.py": "fb7963c861d0dcb116ad5f8ab6914efe16c2b2491094282e4be52344218fe763",
+    "src/smart_hub_sim/smart_hub_sim/scenario_runner.py": "2e3c50ae786d6881f453e031f79bfb79c0ddea0c6ad1c16ec9f771bebc8629e4",
+    "src/smart_hub_sim/smart_hub_sim/world.py": "4ef163a4fe61575c3b44c96fa28b58737a6c7d6e4f1f5270c4c5b6ae52830952",
+    "src/smart_hub_sim/test/test_m4_barrier.py": "ff42cf6943c09ece10bb57bb950d4df2b92f94f6862ef0070c97172b9f7ee8f9"
+  },
+  "limitations": "Pure tests are not ROS acceptance. See docs/m4-handoff.md; no real-node service/transition latency, bags or physical barrier acceptance exists for this revision."
 }

@@ -74,3 +74,12 @@ acceptance evidence. Artifact `hosted-verification-RUN_ID-ATTEMPT` also contains
 image identity and UTC start/finish times; Buildx logs/build record retain cache
 and image build timing. Evidence/status updates must cite the actual run and
 commit and preserve failures separately from NOT RUN/BLOCKED checks.
+
+## M4 acceptance path (execution pending)
+
+Hosted verification now invokes `scripts/m4_container.sh`, which reuses the
+fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
+in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
+launches and default `m3_container.sh` behavior are preserved. The extra M4 path
+is implemented but has not run in Jazzy for this continuation; see the
+[M4 handoff](m4-handoff.md) and [local evidence](../evidence/m4-local.json).

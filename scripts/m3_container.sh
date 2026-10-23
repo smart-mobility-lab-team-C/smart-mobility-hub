@@ -74,3 +74,11 @@ export ROS_LOCALHOST_ONLY=1
 python3 scripts/verify_m2.py --output "$results/m2-regression.json"
 export ROS_DOMAIN_ID=73
 python3 scripts/verify_m3.py --output "$results/m3/acceptance.json"
+
+if [ "${SMH_VERIFY_M4:-0}" = 1 ]; then
+  ament_flake8 scripts/verify_m4.py scripts/plot_m4.py
+  ament_pep257 scripts/verify_m4.py scripts/plot_m4.py
+  export ROS_DOMAIN_ID=74
+  python3 scripts/verify_m4.py --output "$results/m4/acceptance.json"
+  python3 scripts/plot_m4.py "$results/m4/trace.jsonl" "$results/m4/measurements.png"
+fi

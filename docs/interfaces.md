@@ -157,9 +157,30 @@ QoS, watchdogs and invalid-value conventions are documented in M3. Public reset
 remains `/scenario/reset`, owned by reset_coordinator; M3 adds explicit bus
 prepare/finish acknowledgements within the existing total 1 s deadline.
 
-## M4 work in progress
+## M4 implementation (acceptance open)
 
-Parking and traffic adapters are implemented on the M4 branch; integration and
-scenario acceptance remain open. See [M4 handoff](m4-handoff.md) for the internal
-entrance sensor contract, estimator policies, environment blocker and remaining
-work. M3 launches and fixture ownership are unchanged until M4 integration.
+M4 preserves all public schemas and M2/M3 launch behavior. Its separate launch
+uses traffic_monitor as the sole active road-state publisher and simulator-owned
+measured bay-clear sensing. Parking publishes 2 Hz plus changes (R1 transient-local),
+traffic publishes 2 Hz (R10), and public barrier requests remain on change (R1).
+
+Internal sensor/actuator endpoints are `/parking/entrance_clear` (Bool),
+`/parking/entry_vehicle_id` (String), and `/parking/barrier_heartbeat` (Bool), all
+10 Hz reliable volatile depth 1 with a 0.5 s receipt watchdog. Simulator sensing
+owns the first two; parking_manager owns the watchdog heartbeat. The simulator
+independently validates fresh ownership/expiry and physical passage clearance;
+heartbeat receipt is not measured barrier acknowledgment.
+
+`/parking/reset_state` and `/traffic/reset_state` use ResetScenario and require
+a fresh supervisor reset hold. `include_m4` adds both acknowledgments before
+world reset within the existing total deadline. Per-source invalidity must be
+preserved by upstream aggregators; synchronized arrays cannot silently restamp
+an old individual observation as fresh. `kind=obstacle` is a corridor-validated,
+zero-speed observed sentinel for the traffic monitor. Existing M2/M3 motion
+safety conservatively rejects unsupported extra entities.
+
+Traffic transition events carry JSON label/speed/density; UNKNOWN retains
+`valid=false`, and a fresh known obstruction can remain `blocked=true` while
+other records make density invalid. Parking reservation/release events use the
+service request ID as correlation ID. Full endpoint ownership, reset behavior,
+freshness policies and acceptance blockers are in the [M4 handoff](m4-handoff.md).
