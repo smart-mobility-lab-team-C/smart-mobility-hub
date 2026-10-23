@@ -182,3 +182,21 @@ repeating the same reproduction without half-second gaps in critical fast
 streams/independent samplers, and then a fresh unchanged M2/M3 suite (18 M2 cases,
 24 M3 cases and ten nominal docks). Until then the local fault is unresolved;
 hosted M3 acceptance and all earlier failed attempts retain their own statuses.
+
+## Host log supplied — 2026-10-24
+
+The current-session log matches four guest CPUs and confirms Windows 11,
+VirtualBox 7.2.22 r175245, CPU execution cap 100%, unavailable native VT-x and an
+active Windows Hyper-V/NEM backend. Its timer manager reports 71 abandoned
+catch-up attempts, with a largest reported virtual timer backlog of
+1,154.351354180 s. The earlier two-CPU log is retained separately. These are
+observed backend/timer facts, not proof that NEM caused each ROS gap.
+
+The [evidence index](../evidence/vm-gap-reopened.json) now includes both log
+hashes, line references and sanitized findings. Raw logs remain in the user's
+Downloads directory. The missing host identification is resolved. The next
+step is the [reversible Windows host test](vm-host-repair.md): temporarily boot
+without the Windows hypervisor, verify native VT-x in a fresh log, then repeat
+the unchanged reproduction and full M2/M3 acceptance. The human must perform the
+Windows administrator step/restart outside Ubuntu; host repair and post-repair
+verification remain **NOT RUN**. No ROS or watchdog change has been made.

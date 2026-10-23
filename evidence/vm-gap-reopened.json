@@ -1,5 +1,5 @@
 {
-  "status": "UNRESOLVED: reproduced; no fix applied",
+  "status": "UNRESOLVED: active NEM backend and severe timer lag confirmed; native VT-x A/B repair test NOT RUN",
   "source_commit": "97e22568b68a6f7cdd0f6b2e638a546acc9cf434",
   "branch": "fix/vm-observation-gaps",
   "date_kst": "2026-10-24",
@@ -314,14 +314,18 @@
     ],
     "interpretation": "Guest-wide kernel/timer/scheduling disruption is reported. This earlier event is not temporally correlated to the new campaign and does not distinguish host pause, clock error or hypervisor fault."
   },
-  "next_boundary": "Physical-host VBox.log: host OS/version, VirtualBox build, HM/NEM backend, CPU execution cap and pause/resume events. Requested from user; not accessible from the guest.",
+  "next_boundary": "Human applies documented reversible Windows hypervisor launch test and restarts physical host; agent checks fresh VBox.log and repeats unchanged reproduction after reconnecting.",
   "fix_acceptance": [
     "Identify and record one environment change with before/after timing capture.",
     "Repeat the same nominal reproduction without >=0.5-second gaps in critical fast streams or independent samplers.",
     "Run fresh M2/M3 suite with original thresholds: 18 M2 cases, all 24 M3 cases and ten nominal docks."
   ],
   "sources": [
-    "https://www.virtualbox.org/manual/ch12.html"
+    "https://www.virtualbox.org/manual/ch12.html",
+    "https://www.virtualbox.org/manual/ch14.html",
+    "https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/bcdedit--set",
+    "https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v",
+    "https://learn.microsoft.com/en-us/windows/wsl/faq"
   ],
   "sha256": {
     "evidence/runs/gap-reopen-20261024/00-baseline/run.json": "1ea666f1c2c35692811c80160f8217b2812d7aa48dbd7cd5d243106a2617f437",
@@ -344,5 +348,127 @@
     "evidence/runs/gap-reopen-20261024/build.log": "367bc36034190632fddd3b93febf76beabfb67e2bb167f2c968c1e18de95825f",
     "evidence/runs/gap-reopen-20261024/host.jsonl": "8c68d6fc650783b2f873e604a1c3fec71616360000ed1bf467c1ff4594c56007",
     "evidence/runs/gap-reopen-20261024/container.jsonl": "1eb7cc50d91758fd6edc58d2da4df4cf390dfee3ca5df467fda1220a0e3c9fce"
+  },
+  "host_logs": [
+    {
+      "filename": "smart-2026-10-23-11-32-33.log",
+      "role": "historical: 2 guest CPUs",
+      "sha256": "a26e21dc997005da50188972dc26f338c43020f96b5c4987a41498d32b96b57c",
+      "raw_log_location": "User Downloads; not committed because raw log includes host paths/machine details",
+      "observations": [
+        {
+          "line": 1,
+          "text": "00:00:09.811650 VirtualBox VM 7.2.22 r175245 win.amd64 (Oct 19 2026 20:31:00) release log"
+        },
+        {
+          "line": 2,
+          "text": "00:00:09.811652 Log opened 2026-10-22T10:50:25.200289300Z"
+        },
+        {
+          "line": 4,
+          "text": "00:00:09.811658 OS Product: Windows 11"
+        },
+        {
+          "line": 5,
+          "text": "00:00:09.811913 OS Release: 10.0.26200.9168"
+        },
+        {
+          "line": 52,
+          "text": "00:00:10.152016   CpuExecutionCap   <integer> = 0x0000000000000064 (100)"
+        },
+        {
+          "line": 57,
+          "text": "00:00:10.152026   NumCPUs           <integer> = 0x0000000000000002 (2)"
+        },
+        {
+          "line": 601,
+          "text": "00:00:10.152398 HM: HMR3Init: Attempting fall back to NEM: VT-x is not available"
+        },
+        {
+          "line": 616,
+          "text": "00:00:10.174834 NEM: WHvCapabilityCodeHypervisorPresent is TRUE, so this might work..."
+        },
+        {
+          "line": 914,
+          "text": "00:00:10.178650 NEM: NEMR3Init: Snail execution mode is active!"
+        }
+      ],
+      "timer_catchup_abandonments": 105,
+      "max_reported_timer_backlog_sec": 495.474777203,
+      "largest_backlog_event": {
+        "line": 2810,
+        "log_elapsed": "13:47:41.449799",
+        "reported_backlog_ns": 495474777203
+      }
+    },
+    {
+      "filename": "smart-2026-10-24-02-18-48.log",
+      "role": "current session: matches 4 guest CPUs",
+      "sha256": "6d8322b1683df0c35a291515754752be8b1ff598103a736238c5b2ab6810f6f4",
+      "raw_log_location": "User Downloads; not committed because raw log includes host paths/machine details",
+      "observations": [
+        {
+          "line": 1,
+          "text": "00:00:07.685380 VirtualBox VM 7.2.22 r175245 win.amd64 (Oct 19 2026 20:31:00) release log"
+        },
+        {
+          "line": 2,
+          "text": "00:00:07.685383 Log opened 2026-10-23T12:58:26.271840400Z"
+        },
+        {
+          "line": 4,
+          "text": "00:00:07.685394 OS Product: Windows 11"
+        },
+        {
+          "line": 5,
+          "text": "00:00:07.700353 OS Release: 10.0.26200.9168"
+        },
+        {
+          "line": 50,
+          "text": "00:00:07.917666   CpuExecutionCap   <integer> = 0x0000000000000064 (100)"
+        },
+        {
+          "line": 55,
+          "text": "00:00:07.917677   NumCPUs           <integer> = 0x0000000000000004 (4)"
+        },
+        {
+          "line": 604,
+          "text": "00:00:07.918088 HM: HMR3Init: Attempting fall back to NEM: VT-x is not available"
+        },
+        {
+          "line": 619,
+          "text": "00:00:07.941776 NEM: WHvCapabilityCodeHypervisorPresent is TRUE, so this might work..."
+        },
+        {
+          "line": 917,
+          "text": "00:00:07.944408 NEM: NEMR3Init: Snail execution mode is active!"
+        }
+      ],
+      "timer_catchup_abandonments": 71,
+      "max_reported_timer_backlog_sec": 1154.35135418,
+      "largest_backlog_event": {
+        "line": 2128,
+        "log_elapsed": "03:15:18.332048",
+        "reported_backlog_ns": 1154351354180
+      }
+    }
+  ],
+  "repair_experiment": {
+    "status": "NOT RUN",
+    "runbook": "docs/vm-host-repair.md",
+    "human_windows_commands": [
+      "bcdedit /enum \"{current}\"",
+      "bcdedit /set \"{current}\" hypervisorlaunchtype Off",
+      "Restart Windows using its normal UI"
+    ],
+    "rollback": "Restore initial hypervisorlaunchtype (Auto or absent) and restart Windows",
+    "not_changed": [
+      "VM CPU/RAM",
+      "guest clocksource",
+      "ROS source",
+      "watchdogs",
+      "security feature toggles"
+    ],
+    "causality": "NEM is observed, but its causal role in the current observation gaps still requires before/after validation."
   }
 }

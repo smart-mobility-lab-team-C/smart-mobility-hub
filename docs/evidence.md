@@ -205,3 +205,10 @@ These observations do not establish a specific fix. See the
 [diagnostic update](m3-gap-diagnostic.md#investigation-reopened--2026-10-24) for
 commands, scope, the missing physical-host log and before/after acceptance.
 Hosted acceptance is unchanged; local repair and post-fix acceptance are NOT RUN.
+
+The supplied current-session VirtualBox host log subsequently confirmed an active
+Windows Hyper-V/NEM backend and severe virtual timer backlog. Sanitized findings,
+source line references and raw-log hashes are now in the same diagnostic index;
+raw host logs are not committed. The [Windows host experiment](vm-host-repair.md)
+provides the exact next change, rollback and post-restart acceptance checks.
+Execution on the physical host and post-repair ROS verification remain NOT RUN.
