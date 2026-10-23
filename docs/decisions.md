@@ -55,3 +55,14 @@ no `/clock`. Runtime details, internal reset services and limits are in [M2](m2.
 Do not enable unobserved obstacles in this baseline; that startup configuration
 is rejected. Independent source review/reproduction and later scenario/mission
 acceptance cannot be inferred from worker reviews or pure tests.
+
+## M3 decisions (2026-10-23)
+
+The user authorized the M3 plan and selected the recommended runtime defaults:
+planner retries/backoff, final-approach speed, ETA smoothing/wait validity, edge
+freshness and FIFO boarding cadence. [M3](m3.md) records numeric values, source
+requirements versus design choices, internal interfaces, synthetic dependencies,
+reset and explicit goal recovery. M3 implementation and evidence are scoped to a
+branch/PR from merged main after PR #6 (`d58e8f5`). No merge is authorized.
+Independent human review and teammate reproduction remain BLOCKED; later gates
+cannot inherit PASS from M3 prerequisites.

@@ -2,7 +2,7 @@
 
 ROS 2 Jazzy + Python simulation-first team project.
 
-**Status: M0 tooling and local ROS smoke checks PASS; independent review/reproduction remains BLOCKED.** M1 map, interface and package source is available; see [M1 acceptance](docs/m1.md). No simulator or mission behavior exists. Current target: Oracle VirtualBox Ubuntu 22.04 host with an Ubuntu 24.04/Jazzy container. See [M0 workflow](docs/m0.md) and [observed status](docs/m0-status.md). The WSL instructions remain an alternative setup.
+**Status: M2 and M3 implementation and automated acceptance PASS; T05–T06 PASS; independent human review/reproduction BLOCKED.** M4 is the next implementation milestone. See [M3 status and policies](docs/m3.md) and the [verification evidence index](evidence/m3-verification-attempts.json). Current target: Oracle VirtualBox Ubuntu 22.04 host with an Ubuntu 24.04/Jazzy container. See [M2 acceptance](docs/m2.md) and [setup](docs/setup.md). The WSL instructions remain an alternative setup.
 
 ## Start here
 

@@ -1,0 +1,27 @@
+name: M3 route and bus mission
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  m3:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check_docs.py
+      - run: docker build -t smh-m3 -f containers/Dockerfile .
+      - name: Clean Jazzy build, M2 regression and M3 missions
+        run: |
+          mkdir -p evidence/runs/m3-ci-metadata
+          docker image inspect smh-m3 > evidence/runs/m3-ci-metadata/image.json
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp -v "$PWD:/workspace" smh-m3 \
+            bash scripts/m3_container.sh /workspace/evidence/runs/m3-ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m3-results
+          path: evidence/runs/

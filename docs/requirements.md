@@ -23,7 +23,7 @@ Original PDFs are not published in this public repository. Keep authorized local
 | R06 | N | 20–30-minute all-member video, full code walkthrough/results/demos | Recording plan | Duration and participation check |
 | R07 | N | <=10 files; <=1 GB each; no external links; leader upload, others validate | Packaging + portal process | Size/link audit and validation record |
 
-This is the initial traceability register. Current implementation and observed checks are recorded in [M0 status](m0-status.md), [M1 status](m1.md), and [M2 status](m2.md). Scenario-level T01–T18 remain NOT RUN; milestone probes do not close those rows.
+This is the initial traceability register. Current implementation and observed checks are recorded in [M0 status](m0-status.md), [M1 status](m1.md), [M2 status](m2.md), and [M3 status](m3.md). T05 and T06 are PASS from hosted M3 real-node acceptance; all other scenario rows remain NOT RUN. M3 evidence does not close unrelated scenario rows.
 
 ## Mandatory source-review gate
 

@@ -1,27 +1,29 @@
 # T01–T18 verification plan
 
-Source: assignment §21 pp29–30 and relevant scenario sections. All tests currently NOT RUN. Proposed script: scripts/verify.sh (not implemented).
+Source: assignment §21 pp29–30 and relevant scenario sections. T05 and T06 are
+PASS from the hosted M3 real-node acceptance run. Every other scenario row is
+NOT RUN. M3 milestone probes do not close unrelated complete scenario rows.
 
-| ID | Area | Stimulus / repetitions | Acceptance |
-|---|---|---|---|
-| T01 | S1 counting | Known 0,3,5,4 sequence | Exact stable counts; timestamped plot |
-| T02 | S1 occlusion/stale | 0.3 s occlusion, repeated/frozen frames | No duplicate count; invalid within 1.2 s freeze |
-| T03 | S2 prediction | Unseen episode seeds | MAE/RMSE; MAE <= persistence; inference p95 <100 ms; no leakage |
-| T04 | S2 dispatch | Threshold noise and stale forecast | One outstanding goal; explicit fallback |
-| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock |
-| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance |
-| T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists |
-| T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected |
-| T09 | S5 congestion | Free flow, slow dense flow, obstruction | Correct labels; bounded scenario-defined delay; no stale-as-clear |
-| T10 | S5 stale | Freeze/restore vehicle observations | UNKNOWN within source-defined threshold; clean recovery |
-| T11 | S6 routing | 20 graph-state seeds | Oracle cost match within 1e-6 relative tolerance; no forbidden edges; p95 <250 ms |
-| T12 | S6 no route | Block two critical edges | Explicit NO_ROUTE; zero candidate motion |
-| T13 | S7 escort | 10 nominal missions | 10/10; final error <=0.20 m |
-| T14 | S7 lifecycle | Busy, no-ready, cancel, stale odometry | Rejection or bounded terminal result; no hang |
-| T15 | S8 integration | 10 rush-hour seeds; paired predictive/reactive | Zero collision and resource conflicts; paired metrics |
-| T16 | S9 stop latch | Assert, false input, unsafe/safe reset attempts | Zero command <=0.20 s after supervisor receipt; deliberate restart |
-| T17 | S9 watchdog | Kill controller, then supervisor | Supervisor and adapter independently stop motion |
-| T18 | S9 service loss | Planner absent and late reply | Timeout, bounded retry; no stale-path execution |
+| ID | Area | Stimulus / repetitions | Acceptance | Status |
+|---|---|---|---|---|
+| T01 | S1 counting | Known 0,3,5,4 sequence | Exact stable counts; timestamped plot | NOT RUN |
+| T02 | S1 occlusion/stale | 0.3 s occlusion, repeated/frozen frames | No duplicate count; invalid within 1.2 s freeze | NOT RUN |
+| T03 | S2 prediction | Unseen episode seeds | MAE/RMSE; MAE <= persistence; inference p95 <100 ms; no leakage | NOT RUN |
+| T04 | S2 dispatch | Threshold noise and stale forecast | One outstanding goal; explicit fallback | NOT RUN |
+| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | PASS |
+| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | PASS |
+| T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists | NOT RUN |
+| T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected | NOT RUN |
+| T09 | S5 congestion | Free flow, slow dense flow, obstruction | Correct labels; bounded scenario-defined delay; no stale-as-clear | NOT RUN |
+| T10 | S5 stale | Freeze/restore vehicle observations | UNKNOWN within source-defined threshold; clean recovery | NOT RUN |
+| T11 | S6 routing | 20 graph-state seeds | Oracle cost match within 1e-6 relative tolerance; no forbidden edges; p95 <250 ms | NOT RUN |
+| T12 | S6 no route | Block two critical edges | Explicit NO_ROUTE; zero candidate motion | NOT RUN |
+| T13 | S7 escort | 10 nominal missions | 10/10; final error <=0.20 m | NOT RUN |
+| T14 | S7 lifecycle | Busy, no-ready, cancel, stale odometry | Rejection or bounded terminal result; no hang | NOT RUN |
+| T15 | S8 integration | 10 rush-hour seeds; paired predictive/reactive | Zero collision and resource conflicts; paired metrics | NOT RUN |
+| T16 | S9 stop latch | Assert, false input, unsafe/safe reset attempts | Zero command <=0.20 s after supervisor receipt; deliberate restart | NOT RUN |
+| T17 | S9 watchdog | Kill controller, then supervisor | Supervisor and adapter independently stop motion | NOT RUN |
+| T18 | S9 service loss | Planner absent and late reply | Timeout, bounded retry; no stale-path execution | NOT RUN |
 
 ## Additional mandatory evidence
 
@@ -54,3 +56,13 @@ no mission controllers yet, so these probes do not close T16–T18 across missio
 phases, nor any other complete scenario row. Frozen source-stamp logic also has
 pure boundary tests; real-node repeated-stamp and missing-publication probes
 remain separately identified in the report.
+
+## M3 execution scope
+
+`scripts/verify_m3.py` exercises real route, bus action, simulator, safety,
+crossing and reset nodes with explicit synthetic queue/road inputs. The hosted run
+recorded in [M3 status](m3.md) passed ten nominal docking runs and all S3
+fault/door/ETA checks, closing T05–T06. Pure routing enumerator
+and queue tests support the implementation but do not close T11–T12, perception,
+mission-phase safety repetition or any other complete scenario row. M3 fault
+probes are additional prerequisites; T16–T18 remain NOT RUN.

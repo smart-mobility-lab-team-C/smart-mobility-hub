@@ -1,0 +1,175 @@
+{
+  "schema": "smart-mobility-hub/m3-local-index-v1",
+  "status": "FAIL",
+  "scope": "Clean local M3 verification; failed during initial scenario reset before a docking goal",
+  "provenance": {
+    "source_commit": "28e7c38de77d26e70aa5b23964a8d352eac6b725",
+    "worktree": "",
+    "run_id": "m3-20261022T162059Z",
+    "image_id": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b",
+    "uid": 1000,
+    "source_manifest_sha256": "26a4af23439dbfd85aed48999746972f13927f81af051c02fb06eca258bdbf91",
+    "transcript_sha256": "8683a441d1f87cb59bb042bd03299bec2180e5b3e8c55a172ce1bd48b57bc2e2",
+    "package_versions_sha256": "62061409314e1b4fd8bf9704885560c330d3bcaee157f3bdd3c218638e9ac8fe"
+  },
+  "clean_build": {
+    "packages": 8,
+    "interfaces_inspected": 23,
+    "quality": "PASS"
+  },
+  "colcon_tests": {
+    "tests": 39,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "m2_regression": {
+    "status": "PASS",
+    "cases": 18,
+    "report_sha256": "f2540ac19fce28d51dc8afef07df5121d87d9e72d4a1d1834844eabe016f1ca8"
+  },
+  "m3_acceptance": {
+    "schema": "smart-mobility-hub/m3-verification-v1",
+    "status": "FAIL",
+    "nominal_runs": 10,
+    "cases": [
+      {
+        "name": "nominal_docking_01",
+        "status": "FAIL",
+        "reason": "AssertionError('/safety/reset_state:queue_stale')",
+        "traceback": "Traceback (most recent call last):\n  File \"/tmp/smh-m3.EclksN/scripts/verify_m3.py\", line 261, in case\n    observed = operation()\n               ^^^^^^^^^^^\n  File \"/tmp/smh-m3.EclksN/scripts/verify_m3.py\", line 383, in <lambda>\n    if not case(f'nominal_docking_{index + 1:02}', lambda i=index: nominal(i)):\n                                                                   ^^^^^^^^^^\n  File \"/tmp/smh-m3.EclksN/scripts/verify_m3.py\", line 303, in nominal\n    run_id = probe.reset(300 + index)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/smh-m3.EclksN/scripts/verify_m3.py\", line 179, in reset\n    assert response.success, response.reason\n           ^^^^^^^^^^^^^^^^\nAssertionError: /safety/reset_state:queue_stale\n",
+        "elapsed_sec": 6.722625667000102
+      }
+    ],
+    "commands": {
+      "scenario_runner": [
+        "smart_hub_sim",
+        "scenario_runner",
+        "--ros-args",
+        "-p",
+        "m3_mode:=true"
+      ],
+      "safety_supervisor": [
+        "smart_hub_safety",
+        "safety_supervisor"
+      ],
+      "crossing_arbiter": [
+        "smart_hub_control",
+        "crossing_arbiter"
+      ],
+      "route_planner": [
+        "smart_hub_control",
+        "route_planner"
+      ],
+      "bus_manager": [
+        "smart_hub_control",
+        "bus_manager"
+      ],
+      "m3_synthetic_roads": [
+        "smart_hub_control",
+        "m3_synthetic_roads"
+      ],
+      "reset_coordinator": [
+        "smart_hub_bringup",
+        "reset_coordinator",
+        "--ros-args",
+        "-p",
+        "include_bus:=true"
+      ]
+    },
+    "clocks": "monotonic latency; wall-backed ROS source stamps",
+    "actual_commands": {
+      "scenario_runner": [
+        "/tmp/smh-m3.EclksN/install/smart_hub_sim/lib/smart_hub_sim/scenario_runner",
+        "--ros-args",
+        "-p",
+        "m3_mode:=true"
+      ],
+      "safety_supervisor": [
+        "/tmp/smh-m3.EclksN/install/smart_hub_safety/lib/smart_hub_safety/safety_supervisor"
+      ],
+      "crossing_arbiter": [
+        "/tmp/smh-m3.EclksN/install/smart_hub_control/lib/smart_hub_control/crossing_arbiter"
+      ],
+      "route_planner": [
+        "/tmp/smh-m3.EclksN/install/smart_hub_control/lib/smart_hub_control/route_planner"
+      ],
+      "bus_manager": [
+        "/tmp/smh-m3.EclksN/install/smart_hub_control/lib/smart_hub_control/bus_manager"
+      ],
+      "m3_synthetic_roads": [
+        "/tmp/smh-m3.EclksN/install/smart_hub_control/lib/smart_hub_control/m3_synthetic_roads"
+      ],
+      "reset_coordinator": [
+        "/tmp/smh-m3.EclksN/install/smart_hub_bringup/lib/smart_hub_bringup/reset_coordinator",
+        "--ros-args",
+        "-p",
+        "include_bus:=true"
+      ]
+    },
+    "scenario_acceptance": "T05/T06 eligible only with ten nominal runs and complete source-required fault evidence; other T rows NOT RUN",
+    "trace_sha256": "b88588e0991f193de735e4ab9cddc0eef8ad32061dfbcecd7bccd26440731480"
+  },
+  "development_runs": [
+    {
+      "run_id": "m3-debug1",
+      "status": "FAIL",
+      "report_sha256": "f43c584041566183be817899852ba35bdff78cf1a5b5ac0c8f1a1c4dc926d7ce"
+    },
+    {
+      "run_id": "m3-debug10",
+      "status": "FAIL",
+      "report_sha256": "d8dc5249a67a110bbe438477b9cd17dca7191d2876dc33e30c9c4acce114748a"
+    },
+    {
+      "run_id": "m3-debug11",
+      "status": "FAIL",
+      "report_sha256": "eb6db2cd44fc7676497a4996fcb743a6bd7fc77fdbe94138e887a518df2c9e1e"
+    },
+    {
+      "run_id": "m3-debug12",
+      "status": "FAIL",
+      "report_sha256": "61e981ec604af301fa325365d06dcee0d2c92022c0dcf0bd8de67be710f534d8"
+    },
+    {
+      "run_id": "m3-debug13",
+      "status": "FAIL",
+      "report_sha256": "2cb565374f26527410c5d2fb69d5566b7efe34e735750b3d69843406a568f5af"
+    },
+    {
+      "run_id": "m3-debug2",
+      "status": "FAIL",
+      "report_sha256": "03652070ec9172dfdec4eb71118023b143dbcbf7472eedf1b4911bfc053172fb"
+    },
+    {
+      "run_id": "m3-debug3",
+      "status": "FAIL",
+      "report_sha256": "aaa044811ce66bbd75c9a525db3bf58a83b072bd7455ec4e3066930bc4fd2471"
+    },
+    {
+      "run_id": "m3-debug4",
+      "status": "FAIL",
+      "report_sha256": "ef12f440b3fe8444c3edf324413e095fd8d59d7d94b69bb0b5e5fd23654536dc"
+    },
+    {
+      "run_id": "m3-debug5",
+      "status": "FAIL",
+      "report_sha256": "792afbf06961a2180aa5a0cf3253fb2d6520362008b5680776906a3894ced518"
+    },
+    {
+      "run_id": "m3-debug7",
+      "status": "FAIL",
+      "report_sha256": "4cc178921f92fed2e50749619af7151a4188b4740da49da633b54b28148c20e8"
+    },
+    {
+      "run_id": "m3-debug8",
+      "status": "FAIL",
+      "report_sha256": "6f151c9ac8ed8a268c62cfc4a0d1ba923dfdce5e7e319028f330d59e970331ee"
+    },
+    {
+      "run_id": "m3-debug9",
+      "status": "FAIL",
+      "report_sha256": "f2d00144a39a0b4bb2472e30ab299062dcde09672c154e6fc0eb94032f773bfb"
+    }
+  ]
+}
