@@ -233,3 +233,40 @@ from a host configuration that still launches the hypervisor. Further loaded
 ROS reproduction and M2/M3 acceptance are **NOT RUN** after this restart, held
 at the backend gate. No further Windows security feature changes are prescribed
 without those results. Runtime source, image and watchdogs are unchanged.
+
+## Windows settings and post-restart NEM reproduction
+
+The user supplied `hypervisorlaunchtype Off` from the current Windows boot entry
+and explicitly confirmed Start → Power → Restart on the physical host.
+HypervisorPresent is reported true. LastBootUpTime was blank without an error
+and remains unavailable; no timestamp is fabricated. The `(1)` host-log copy is
+byte-for-byte identical to the retained post-restart snapshot.
+
+Win32_DeviceGuard subsequently reported VBS enabled/running (2), with configured
+and running service arrays both `{0}`. The user-supplied local DeviceGuard query
+reports `EnableVirtualizationBasedSecurity=1`; the policy-key query returned
+not found. Other observed values and explicit host boot-timer options are retained
+in the [index](../evidence/vm-gap-reopened.json) without modification. No running
+Credential Guard or Memory Integrity service is inferred from this output.
+
+To test actual behavior after the confirmed restart despite the unchanged NEM
+backend, a separate diagnostic comparison was run:
+
+```bash
+python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output evidence/runs/gap-postrestart-nem-20261024
+```
+
+This is **not native-backend acceptance**. Fresh build: eight packages in 61 s.
+Baseline and image-bypassed attempts ended `MISSION_FAILED` / `STALE_POSE`;
+the instrumented attempt ended `ERROR` with a reset client deadline exceeded.
+The independent VM-host capture peaked at 6.369472156 s between samples.
+Capture completed with exit zero; no attempt is counted as mission PASS.
+Per-attempt statuses, errors, analyses and hashes are indexed; raw captures remain
+ignored under `evidence/runs/gap-postrestart-nem-20261024`.
+
+The [follow-up host experiment](vm-host-repair.md#follow-up-observed-local-vbs-enable-flag)
+is now one reversible change: the observed local VBS enable DWORD from 1 to 0,
+with rollback to 1. Host execution, subsequent native-backend verification and
+full M2/M3 acceptance are **NOT RUN**. This is a security configuration experiment,
+not an established cause/fix; no other Windows protections, timer settings or ROS
+watchdogs are changed by the agent.

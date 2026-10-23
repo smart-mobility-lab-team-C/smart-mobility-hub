@@ -219,3 +219,11 @@ native VT-x backend preflight **FAIL**. Post-restart quick checks PASS and a
 Windows boot-setting/restart verification is awaiting read-only host output;
 post-restart ROS missions and M2/M3 acceptance are NOT RUN. The same diagnostic
 index retains the new host-log snapshot hash and guest timing metadata.
+
+Windows follow-up now includes a stored `hypervisorlaunchtype Off`, user-confirmed
+physical-host Restart, VBS running with no listed security services, and a local
+VBS enable flag of 1. A bounded post-restart NEM diagnostic still failed: two
+`STALE_POSE` terminal outcomes and one reset client timeout, with a 6.369 s maximum
+independent host-sampler interval. The targeted local VBS-off test and its exact
+rollback are prepared in the host runbook, with execution/verification NOT RUN.
+This comparison does not establish that NEM or VBS caused the observation gaps.

@@ -1,5 +1,5 @@
 {
-  "status": "UNRESOLVED: post-restart native VT-x preflight FAIL; active NEM persists",
+  "status": "UNRESOLVED: gaps reproduced after restart; VBS running with local enable flag 1; targeted VBS-off test NOT RUN",
   "source_commit": "97e22568b68a6f7cdd0f6b2e638a546acc9cf434",
   "branch": "fix/vm-observation-gaps",
   "date_kst": "2026-10-24",
@@ -314,7 +314,7 @@
     ],
     "interpretation": "Guest-wide kernel/timer/scheduling disruption is reported. This earlier event is not temporally correlated to the new campaign and does not distinguish host pause, clock error or hypervisor fault."
   },
-  "next_boundary": "Read-only Windows bcdedit current entry, HypervisorPresent and LastBootUpTime requested to establish whether the launch setting and physical-host restart took effect.",
+  "next_boundary": "Human changes only observed local VBS enable DWORD to 0, verifies result, restarts physical Windows, supplies fresh host/backend status; rollback value 1 retained.",
   "fix_acceptance": [
     "Identify and record one environment change with before/after timing capture.",
     "Repeat the same nominal reproduction without >=0.5-second gaps in critical fast streams or independent samplers.",
@@ -325,7 +325,9 @@
     "https://www.virtualbox.org/manual/ch14.html",
     "https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/bcdedit--set",
     "https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v",
-    "https://learn.microsoft.com/en-us/windows/wsl/faq"
+    "https://learn.microsoft.com/en-us/windows/wsl/faq",
+    "https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity",
+    "https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-deviceguard"
   ],
   "sha256": {
     "evidence/runs/gap-reopen-20261024/00-baseline/run.json": "1ea666f1c2c35692811c80160f8217b2812d7aa48dbd7cd5d243106a2617f437",
@@ -565,6 +567,186 @@
       "cpu3.jsonl": "c658ae963049fe009eace00bc91d277db391e11bf300fbd70126f7abb6a45131",
       "environment.json": "7c61e6c82d84f65058162ad4ef879f2be3c3d682868b541014aadbd0ab7c664e",
       "host-VBox.log": "86f479159df7397f5390c1ea539762da3b0e96102bd4f9f32d91a21d02db20cf"
+    },
+    "windows_followup": {
+      "origin": "User report; complete Windows command transcript not supplied",
+      "hypervisor_present": true,
+      "last_boot_up_time": null,
+      "last_boot_up_time_note": "User reported no output and no error; value remains unavailable, not a zero/default timestamp.",
+      "bcdedit_current_entry": {
+        "source": "User pasted complete Windows Boot Loader output",
+        "identifier": "{current}",
+        "hypervisorlaunchtype": "Off",
+        "tscsyncpolicy": "Enhanced",
+        "useplatformclock": "No",
+        "disabledynamictick": "Yes"
+      },
+      "additional_log_filename": "smart-2026-10-24-02-46-33(1).log",
+      "additional_log_sha256": "86f479159df7397f5390c1ea539762da3b0e96102bd4f9f32d91a21d02db20cf",
+      "identical_to_prior_snapshot": true,
+      "interpretation": "Off is stored and user confirms physical-host restart, yet user reports HypervisorPresent True and the host log shows active NEM. Verify VBS services next; no causal mechanism selected yet.",
+      "windows_restart_confirmation": "User explicitly confirmed physical Windows Start -> Power -> Restart after setting Off; exact LastBootUpTime still unavailable.",
+      "additional_timer_options_note": "Recorded existing explicit host boot settings; their origin and causal role are unknown. No changes prescribed to these options.",
+      "vbs_status": {
+        "origin": "User pasted Win32_DeviceGuard query output",
+        "VirtualizationBasedSecurityStatus": 2,
+        "SecurityServicesConfigured": [
+          0
+        ],
+        "SecurityServicesRunning": [
+          0
+        ],
+        "interpretation": "VBS enabled/running; no configured/running security services listed. Do not attribute this to active Credential Guard or Memory Integrity."
+      },
+      "deviceguard_registry": {
+        "origin": "User pasted reg query output",
+        "local_path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard",
+        "values": {
+          "CachedDrtmAuthIndex": 0,
+          "RequireMicrosoftSignedBootChain": 1,
+          "WasEnabledBy": 1,
+          "EnableVirtualizationBasedSecurity": 1,
+          "HyperVVirtualizationBasedSecurityOptout": 0
+        },
+        "policy_path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard",
+        "policy_query": "User reported key/value not found",
+        "locked_value": "Not shown in user query; absence does not prove firmware lock is absent"
+      }
     }
+  },
+  "post_restart_nem_reproduction": {
+    "command": "python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output evidence/runs/gap-postrestart-nem-20261024",
+    "scope": "Post-restart NEM diagnostic; not native VT-x A/B or acceptance",
+    "capture_exit_code": 0,
+    "capture_exit_note": "Zero means diagnostic capture completed, not mission PASS",
+    "fresh_build": "PASS: 8 packages in 1min 1s",
+    "attempts": [
+      {
+        "name": "00-baseline",
+        "status": "MISSION_FAILED",
+        "terminal": {
+          "status": 6,
+          "result": {
+            "success": false,
+            "final_state": "SAFE_STOP",
+            "reason": "STALE_POSE"
+          }
+        },
+        "error": null,
+        "analysis_status": "GAP_OBSERVED",
+        "warnings": [],
+        "windows": [
+          {
+            "start": 1100.353004174,
+            "end": 1101.0959524,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 0.6405747270000575,
+              "container": 0.5810141819999899
+            }
+          },
+          {
+            "start": 1118.213179276,
+            "end": 1119.49214317,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 1.0060895869999058,
+              "container": 1.1351363159999437
+            }
+          }
+        ]
+      },
+      {
+        "name": "01-instrumented",
+        "status": "ERROR",
+        "terminal": null,
+        "error": "AssertionError('client deadline exceeded')",
+        "analysis_status": "GAP_OBSERVED",
+        "warnings": [],
+        "windows": [
+          {
+            "start": 1136.146478227,
+            "end": 1139.6328385,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 3.0457075309998345,
+              "container": 3.1420907169999737
+            }
+          }
+        ]
+      },
+      {
+        "name": "02-no-image",
+        "status": "MISSION_FAILED",
+        "terminal": {
+          "status": 6,
+          "result": {
+            "success": false,
+            "final_state": "SAFE_STOP",
+            "reason": "STALE_POSE"
+          }
+        },
+        "error": null,
+        "analysis_status": "GAP_OBSERVED",
+        "warnings": [],
+        "windows": [
+          {
+            "start": 1169.06271317,
+            "end": 1171.002262334,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 1.7787404349999179,
+              "container": 1.764762747000077
+            }
+          },
+          {
+            "start": 1173.898262498,
+            "end": 1180.328392915,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 6.369472156000029,
+              "container": 6.4252757810002095
+            }
+          }
+        ]
+      }
+    ],
+    "host_capture_max_interval_sec": 6.369472156000029,
+    "raw_directory": "evidence/runs/gap-postrestart-nem-20261024",
+    "sha256": {
+      "00-baseline/run.json": "a3be0e73aab5a882947c46336ea5128ba701f9a17b6a5fcf2590792b33f81da0",
+      "00-baseline/analysis.json": "e85877472353034bcb7d99e9873d45e636de9873884f91dfb89428341bdac2a4",
+      "01-instrumented/run.json": "cfabe17a07043539b66f4d06b17147a7c51598792829cf803ccf7c3f8fe7fad3",
+      "01-instrumented/analysis.json": "aae9febdb3a3f009ff862119412c239bd8f0783438d6386c5d21df4f2f3c248f",
+      "02-no-image/run.json": "6fd4566974b11d81f3e9aca5f5831b15e8b28d8ef242ce4de9c34cebac52c2a1",
+      "02-no-image/analysis.json": "14dd60fbbd8825974dc90f8c62d15da9cece822c7facd70cf718dccd0237f420",
+      "environment.json": "855e5fbcfd11ca5716e8387589bdd544c5672fc989fe84e27a301fa4f842fbc4",
+      "build.log": "41f26b8a708e318d88684033ff037176d6e1edd190570d80bf12e59d2dc5ec20",
+      "host.jsonl": "bfd7e4ebb63c06649f671f247e9244e595a71cc2de2144a9a0998f57c0392976",
+      "container.jsonl": "15f07149dfb622effe27d2e915d3ee9ee4a04e37a60e9a2e719af7a005f0e34d"
+    }
+  },
+  "next_repair_experiment": {
+    "status": "NOT RUN: requires human Windows registry change and physical-host restart",
+    "target": "Existing local EnableVirtualizationBasedSecurity REG_DWORD: 1 -> 0",
+    "command": "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f",
+    "rollback": "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 1 /f",
+    "impact": "VBS protections disabled for test until restored; no Credential Guard/Memory Integrity services currently reported running.",
+    "unchanged": [
+      "Other DeviceGuard values",
+      "Credential Guard settings",
+      "Memory Integrity settings",
+      "Secure Boot",
+      "BitLocker configuration",
+      "Host timer options",
+      "VM CPU/RAM",
+      "ROS/watchdogs"
+    ],
+    "verification": [
+      "Local registry value 0 after successful command",
+      "After full Windows restart: check HypervisorPresent and VBS state",
+      "Fresh VBox.log must establish native VT-x before native-backend acceptance",
+      "If NEM persists, stop escalating settings and retain status; no firmware-lock bypass prescribed"
+    ]
   }
 }
