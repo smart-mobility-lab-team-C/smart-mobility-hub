@@ -1,5 +1,5 @@
 {
-  "status": "UNRESOLVED: gaps reproduced after restart; VBS running with local enable flag 1; targeted VBS-off test NOT RUN",
+  "status": "UNRESOLVED: hypervisor Off and local VBS flag 0 reported; current log still NEM, runtime VBS=2, three post-change diagnostic missions failed",
   "source_commit": "97e22568b68a6f7cdd0f6b2e638a546acc9cf434",
   "branch": "fix/vm-observation-gaps",
   "date_kst": "2026-10-24",
@@ -314,7 +314,7 @@
     ],
     "interpretation": "Guest-wide kernel/timer/scheduling disruption is reported. This earlier event is not temporally correlated to the new campaign and does not distinguish host pause, clock error or hypervisor fault."
   },
-  "next_boundary": "Human changes only observed local VBS enable DWORD to 0, verifies result, restarts physical Windows, supplies fresh host/backend status; rollback value 1 retained.",
+  "next_boundary": "Human performs one supported boot-level VSM launch experiment and returns fresh host log/state; no additional registry, policy or firmware changes.",
   "fix_acceptance": [
     "Identify and record one environment change with before/after timing capture.",
     "Repeat the same nominal reproduction without >=0.5-second gaps in critical fast streams or independent samplers.",
@@ -727,7 +727,7 @@
     }
   },
   "next_repair_experiment": {
-    "status": "NOT RUN: requires human Windows registry change and physical-host restart",
+    "status": "FAIL at runtime verification: local value persisted at 0 but VBS remains running (2); gaps still reproduced",
     "target": "Existing local EnableVirtualizationBasedSecurity REG_DWORD: 1 -> 0",
     "command": "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f",
     "rollback": "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 1 /f",
@@ -747,6 +747,201 @@
       "After full Windows restart: check HypervisorPresent and VBS state",
       "Fresh VBox.log must establish native VT-x before native-backend acceptance",
       "If NEM persists, stop escalating settings and retain status; no firmware-lock bypass prescribed"
+    ]
+  },
+  "vbs_local_flag_zero_comparison": {
+    "source_commit": "a90f49865a4e4b82d8eeb330dc0b56f250aea2bf",
+    "configuration_action": "User reported successful local VBS enable DWORD 1 -> 0, queried 0x0, and restarted Windows.",
+    "post_restart_user_query": {
+      "origin": "User pasted registry and Win32_DeviceGuard outputs after restart",
+      "EnableVirtualizationBasedSecurity": 0,
+      "VirtualizationBasedSecurityStatus": 2,
+      "SecurityServicesConfigured": [
+        0
+      ],
+      "SecurityServicesRunning": [
+        0
+      ]
+    },
+    "guest_boot_id": "9546a25b-3dbe-4d05-a03e-3b038fbf6ecd",
+    "native_backend_preflight": "FAIL: current host log still uses NEM",
+    "host_log_source_filename": "smart-2026-10-24-03-13-06.log",
+    "host_log_snapshot": "evidence/runs/vbs-off-preflight-20261024/host-VBox.log",
+    "host_log_sha256": "e6a4b99c6780494f9bb7fdac13ea61126c64ee6f8a0c83da5522489db5ad47c9",
+    "host_log_findings": [
+      {
+        "line": 1,
+        "text": "00:00:04.035031 VirtualBox VM 7.2.22 r175245 win.amd64 (Oct 19 2026 20:31:00) release log"
+      },
+      {
+        "line": 2,
+        "text": "00:00:04.035033 Log opened 2026-10-23T18:12:38.494151600Z"
+      },
+      {
+        "line": 604,
+        "text": "00:00:04.191258 HM: HMR3Init: Attempting fall back to NEM: VT-x is not available"
+      },
+      {
+        "line": 619,
+        "text": "00:00:04.213252 NEM: WHvCapabilityCodeHypervisorPresent is TRUE, so this might work..."
+      },
+      {
+        "line": 917,
+        "text": "00:00:04.217035 NEM: NEMR3Init: Snail execution mode is active!"
+      }
+    ],
+    "host_preflight_raw_directory": "evidence/runs/vbs-off-preflight-20261024",
+    "diagnostic_command": "python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output evidence/runs/gap-vbs-off-20261024",
+    "diagnostic_capture_exit_code": 0,
+    "diagnostic_exit_note": "Zero means capture completed, not mission success",
+    "fresh_build": "PASS: 8 packages in 72 s",
+    "quick_checks": {
+      "command": "bash scripts/check_fast.sh",
+      "status": "PASS",
+      "tooling_policy_tests": 10,
+      "diagnostic_tests": 12
+    },
+    "attempts": [
+      {
+        "name": "00-baseline",
+        "status": "MISSION_FAILED",
+        "terminal": {
+          "status": 6,
+          "result": {
+            "success": false,
+            "final_state": "SAFE_STOP",
+            "reason": "SAFETY_STOP"
+          }
+        },
+        "error": null,
+        "analysis_status": "GAP_OBSERVED",
+        "warnings": [],
+        "windows": [
+          {
+            "start": 476.941605453,
+            "end": 481.299594597,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 4.269786118000013,
+              "container": 4.24699165100003
+            }
+          }
+        ]
+      },
+      {
+        "name": "01-instrumented",
+        "status": "MISSION_FAILED",
+        "terminal": {
+          "status": 6,
+          "result": {
+            "success": false,
+            "final_state": "SAFE_STOP",
+            "reason": "SAFETY_STOP"
+          }
+        },
+        "error": null,
+        "analysis_status": "GAP_OBSERVED",
+        "warnings": [],
+        "windows": [
+          {
+            "start": 518.28476487,
+            "end": 522.935291537,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 4.021901882000066,
+              "container": 4.120003711999971
+            }
+          }
+        ]
+      },
+      {
+        "name": "02-no-image",
+        "status": "MISSION_FAILED",
+        "terminal": {
+          "status": 6,
+          "result": {
+            "success": false,
+            "final_state": "SAFE_STOP",
+            "reason": "SAFETY_STOP"
+          }
+        },
+        "error": null,
+        "analysis_status": "GAP_OBSERVED",
+        "warnings": [],
+        "windows": [
+          {
+            "start": 553.651848697,
+            "end": 560.771446899,
+            "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+            "sampler_max_interval_sec": {
+              "host": 6.971586241999944,
+              "container": 7.012729207999996
+            }
+          }
+        ]
+      }
+    ],
+    "diagnostic_raw_directory": "evidence/runs/gap-vbs-off-20261024",
+    "sha256": {
+      "evidence/runs/gap-vbs-off-20261024/00-baseline/run.json": "e8af4bc710de8d36024107dc6eebee47fff33bda4a2df5335882d0623a4e8e3c",
+      "evidence/runs/gap-vbs-off-20261024/00-baseline/analysis.json": "1a45a680c80137df47839bdd9e60436f9992eecf65b50570ba654895d7a377a0",
+      "evidence/runs/gap-vbs-off-20261024/01-instrumented/run.json": "d1dd340f546b317ecb7840740b7a39073ee508625f957f1fb878929e559e8cd2",
+      "evidence/runs/gap-vbs-off-20261024/01-instrumented/analysis.json": "f31909985094efe680916e8a232b01ec56b5c92defc4cd20167d2b250ab48823",
+      "evidence/runs/gap-vbs-off-20261024/02-no-image/run.json": "ab5f70a212f21df6928673e29a1fc141b796455fb3e4644813479a87fd8f5722",
+      "evidence/runs/gap-vbs-off-20261024/02-no-image/analysis.json": "20ab8190b0c6b714b04cea262a16cbef3b05f8466c48e2a9b9b2e15016b21cab",
+      "evidence/runs/gap-vbs-off-20261024/environment.json": "c14a8a25f16251fb77998b72d818433e62101af009b9a15d70a8438dcd575fbd",
+      "evidence/runs/gap-vbs-off-20261024/build.log": "69322bc95e1b4fb63e0bf03447c225a87d28e5975f7a8d64a86d3e3594dd1b62",
+      "evidence/runs/gap-vbs-off-20261024/host.jsonl": "d211187b58772d86e126ee39541641bf398b43ec802c474ce913e9a8ccbdea93",
+      "evidence/runs/gap-vbs-off-20261024/container.jsonl": "d4ea084969522812deb6a8124909d38c722222115b24955ae6ad1f313a1ecf4a",
+      "evidence/runs/vbs-off-preflight-20261024/environment.json": "67ec3cb0a96f595aba3e6a964229a9a61001d6c0797f230e90fad908c42f07b3",
+      "evidence/runs/vbs-off-preflight-20261024/host-VBox.log": "e6a4b99c6780494f9bb7fdac13ea61126c64ee6f8a0c83da5522489db5ad47c9"
+    },
+    "full_m2_m3_acceptance": "NOT RUN: all three bounded reproduction attempts failed",
+    "interpretation": "The requested registry change persisted, but runtime VBS and NEM remain active and observation gaps reproduce. This experiment did not disable VBS or establish a repaired host.",
+    "host_capture_max_interval_sec": 6.971586241999944,
+    "user_supplied_boot_log_followup": {
+      "source": "User pasted complete bcdedit and Get-WinEvent outputs",
+      "current_boot_entry": {
+        "hypervisorlaunchtype": "Off",
+        "vsmlaunchtype": "absent in full enumeration",
+        "tscsyncpolicy": "Enhanced",
+        "useplatformclock": "No",
+        "disabledynamictick": "Yes"
+      },
+      "windows_os_start_event": {
+        "provider": "Microsoft-Windows-Kernel-General",
+        "id": 12,
+        "reported_local_time": "2026-10-24 03:11:24",
+        "message_system_time_utc": "2026-10-23T18:11:24.500000000Z"
+      },
+      "deviceguard_event_query": "No matching events; no cause or lock status inferred from absence",
+      "interpretation": "Independent Windows event corroborates actual OS restart. Stored Off and local VBS flag 0 did not stop running VBS or active NEM in this boot."
+    }
+  },
+  "next_vsm_launch_experiment": {
+    "status": "NOT RUN: human Windows command/restart required",
+    "target": "Add previously absent vsmlaunchtype Off to current boot entry",
+    "documented_purpose": "Control Virtual Secure Mode launch; not a documented guarantee that Hyper-V/NEM will stop",
+    "windows_commands": [
+      "bcdedit /set \"{current}\" vsmlaunchtype Off",
+      "bcdedit /enum \"{current}\""
+    ],
+    "rollback": "bcdedit /deletevalue \"{current}\" vsmlaunchtype, then restart Windows",
+    "known_prior_value": "Absent in complete user-supplied current-entry output",
+    "impact": "VSM/VBS-backed protections unavailable if test takes effect",
+    "unchanged": [
+      "Other boot/timer settings",
+      "Current registry VBS flag 0",
+      "Current hypervisorlaunchtype Off",
+      "Firmware/security-lock configuration",
+      "ROS source/watchdogs"
+    ],
+    "guardrail": "If the setting is denied, stop and retain the error; no Secure Boot disable, firmware-variable removal, permission bypass or blind feature removal prescribed",
+    "verification": [
+      "Successful command and explicit Off in current entry",
+      "Full physical Windows Restart",
+      "Fresh current-session VBox.log and runtime VBS/hypervisor state",
+      "If native VT-x active, repeat bounded diagnostic then unchanged full suite"
     ]
   }
 }

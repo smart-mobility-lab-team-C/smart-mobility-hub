@@ -227,3 +227,10 @@ VBS enable flag of 1. A bounded post-restart NEM diagnostic still failed: two
 independent host-sampler interval. The targeted local VBS-off test and its exact
 rollback are prepared in the host runbook, with execution/verification NOT RUN.
 This comparison does not establish that NEM or VBS caused the observation gaps.
+
+The local VBS flag-zero test persisted but did not stop runtime VBS: the next
+three diagnostic attempts all failed with protective stops and a 6.972 s maximum
+host-sampler interval. Windows event 12 confirms a real OS restart; the Device
+Guard query had no matching events. A distinct, reversible boot-level VSM launch
+test is prepared and NOT RUN. The same diagnostic index preserves observed
+results separately from proposed commands and missing causal explanations.

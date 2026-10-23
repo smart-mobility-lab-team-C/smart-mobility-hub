@@ -1,14 +1,11 @@
 # Windows host test for VM observation gaps
 
-Status: **FAIL at post-restart backend preflight**. The supplied new-session
-log still reports active NEM. The user has supplied `hypervisorlaunchtype Off` and confirmed a physical
-Windows Restart. Windows still reports HypervisorPresent true and VBS running
-with no configured/running security services listed. The next single-value
-VBS-off experiment below is NOT RUN. Successful
-repair is not established yet. The Linux guest cannot change or restart its physical
-Windows host. The human performs the host steps below, then the agent verifies
-results after reconnecting. Save work and shut down Ubuntu normally before
-restarting the physical computer.
+Status: **UNRESOLVED**. The local VBS flag is now 0 according to the user's
+post-reboot query, but Windows still reports VBS running and the fresh VM log
+uses NEM. All three post-change diagnostic attempts failed. A Windows System
+event independently confirms a real OS restart. The next boot-level VSM launch
+experiment below is NOT RUN; no repair or native-backend acceptance is claimed.
+The human performs Windows administrator steps outside this Linux guest.
 
 ## Evidence and target
 
@@ -128,6 +125,49 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v EnableVirtualizat
 Restart Windows for the restored VBS configuration to take effect. Restoring the
 Windows hypervisor launch setting is a separate rollback documented below; the
 host setting and VBS flag must each be tracked independently.
+
+## Follow-up: explicit VSM launch control
+
+The local-registry experiment failed runtime verification: the flag persisted
+at 0, yet Win32_DeviceGuard still reported VBS running (2). A Windows
+Kernel-General event 12 records an OS start at `2026-10-23T18:11:24.500000000Z`,
+corroborating the user's physical-host restart. The complete boot-entry output
+still contains `hypervisorlaunchtype Off` and has no explicit `vsmlaunchtype`.
+The read-only Device Guard log query returned no events; no firmware-lock or
+policy conclusion is drawn from that absence.
+
+Microsoft documents [`vsmlaunchtype Off|Auto`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/bcdedit--set)
+as a separate control for Virtual Secure Mode startup. It does not document this
+as a guarantee of disabling Hyper-V. The next single-variable experiment is an
+explicit VSM launch setting, followed by verification. This can disable VSM/VBS
+protections for the test boot configuration. Keep the previously noted recovery
+key and host-impact precautions in mind.
+
+After saving work and shutting down Ubuntu normally, in **Windows administrator
+PowerShell** run:
+
+```powershell
+bcdedit /set "{current}" vsmlaunchtype Off
+bcdedit /enum "{current}"
+```
+
+Require a successful set and an explicit `vsmlaunchtype Off` in the output.
+If denied by a policy or other error, retain the error and stop. This procedure
+does not remove firmware variables, disable Secure Boot, change permissions or
+uninstall Windows features. Leave other boot/timer options and registry values
+unchanged while testing this one control. Then **Restart Windows**, start Ubuntu,
+and provide the fresh current-session VBox.log for backend and runtime checks.
+
+The setting was absent in the verified prior output, so restore its prior absence
+in administrator PowerShell when rolling back:
+
+```powershell
+bcdedit /deletevalue "{current}" vsmlaunchtype
+```
+
+Restart Windows after rollback. Track this independently from the local VBS-flag
+and hypervisor-launch rollbacks already documented. Execution of this new VSM
+launch command and all subsequent native-backend acceptance remain **NOT RUN**.
 
 ## Agent checks after reconnecting
 

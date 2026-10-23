@@ -270,3 +270,34 @@ with rollback to 1. Host execution, subsequent native-backend verification and
 full M2/M3 acceptance are **NOT RUN**. This is a security configuration experiment,
 not an established cause/fix; no other Windows protections, timer settings or ROS
 watchdogs are changed by the agent.
+
+## Persisted flag-zero result and next boot-level comparison
+
+The user confirmed that the local VBS enable DWORD remained 0 after the latest
+Windows restart, while runtime VBS was still 2 and service arrays were `{0}`.
+The supplied fresh host log still uses NEM. The three-attempt post-change capture:
+
+```bash
+python3 scripts/run_gap_diagnostic.py --runs 3 --seconds 300 --output evidence/runs/gap-vbs-off-20261024
+```
+
+Fresh build completed eight packages in 72 s. All three attempts ended
+`MISSION_FAILED` / `SAFE_STOP` / `SAFETY_STOP`, with GAP_OBSERVED analyses. The
+independent host capture peaked at 6.971586242 s between samples. Exit zero
+records completed diagnostic collection only. Raw captures, preflight metadata,
+new host-log snapshot and hashes are indexed; full M2/M3 acceptance is NOT RUN.
+
+The user also supplied a Windows Kernel-General OS-start event at
+`2026-10-23T18:11:24.500000000Z`, corroborating a genuine Windows restart.
+Current boot-entry enumeration still shows `hypervisorlaunchtype Off` and no
+explicit `vsmlaunchtype`. Device Guard queries returned no events; this neither
+proves nor disproves a firmware lock. No further registry changes are justified
+by that absence alone.
+
+The [next documented experiment](vm-host-repair.md#follow-up-explicit-vsm-launch-control)
+is an explicit boot-level `vsmlaunchtype Off`, controlling Virtual Secure Mode
+startup, with rollback deleting the previously absent value. This is a supported
+control to test, not proof of what forced VBS to run and not a guaranteed native
+VT-x switch. The host command/restart, backend verification and post-experiment
+ROS tests are NOT RUN. No firmware bypass or unrelated security-feature removal
+is prescribed. Runtime source and watchdog thresholds remain unchanged.
