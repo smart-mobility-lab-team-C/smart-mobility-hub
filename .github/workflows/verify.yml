@@ -60,7 +60,7 @@ jobs:
           push: false
           cache-from: type=gha,scope=smh-jazzy
           cache-to: type=gha,scope=smh-jazzy,mode=max,ignore-error=true
-      - name: Fresh M0 through M3 acceptance
+      - name: Fresh M0 through M4 acceptance
         env:
           IMAGE_ID: ${{ steps.image.outputs.imageid }}
           IMAGE_DIGEST: ${{ steps.image.outputs.digest }}
@@ -74,7 +74,7 @@ jobs:
           status=0
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp -v "$PWD:/workspace" smh-verification:local \
-            bash scripts/m3_container.sh /workspace/evidence/runs/hosted-acceptance || status=$?
+            bash scripts/m4_container.sh /workspace/evidence/runs/hosted-acceptance || status=$?
           date -u --iso-8601=seconds > evidence/runs/ci-metadata/finished.txt
           exit "$status"
       - name: Retain acceptance evidence

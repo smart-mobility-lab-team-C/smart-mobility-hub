@@ -27,7 +27,8 @@
     "derived_nodes": "N, Cn, Cs, J, U: user-approved M1 plan; corroborated by handbook Appendix A Listing A.1 (printed p20)",
     "edges": "Assignment section 3.1, printed p4",
     "limits": "Assignment section 3.3, printed p4",
-    "bus_docked_speed": "Assignment sections 10.2 and 18.6, printed pp16,25"
+    "bus_docked_speed": "Assignment sections 10.2 and 18.6, printed pp16,25",
+    "m4_car_defaults": "User-approved M4 completion plan: car speed 0.35 m/s; minimum headway 0.80 m"
   },
   "nodes": {
     "A": [
@@ -310,13 +311,13 @@
     "arrival_hold_sec": 1.0,
     "crossing_clear_debounce_sec": 2.0,
     "sim_step_sec": 0.05,
-    "bus_docked_speed_below_mps": 0.02
+    "bus_docked_speed_below_mps": 0.02,
+    "car_speed_mps": 0.35,
+    "car_min_headway_m": 0.8
   },
   "unresolved_parameters": [
-    "car speed cap",
     "angular speed cap",
     "future timestamp tolerance",
-    "edge capacity and safe headway",
     "crossing lease duration",
     "robot measured stopped threshold"
   ]

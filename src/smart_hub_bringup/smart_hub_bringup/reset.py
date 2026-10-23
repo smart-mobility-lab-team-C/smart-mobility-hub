@@ -17,6 +17,8 @@ class ResetCoordinator(Node):
         """Create asynchronous clients without blocking executor callbacks."""
         super().__init__('reset_coordinator')
         self.declare_parameter('include_bus', False)
+        self.declare_parameter('include_m4', False)
+        self.include_m4 = bool(self.get_parameter('include_m4').value)
         self.include_bus = bool(self.get_parameter('include_bus').value)
         self.busy = False
         self._crossing = None
@@ -33,6 +35,10 @@ class ResetCoordinator(Node):
         if self.include_bus:
             endpoints = ('/bus/prepare_reset', *endpoints[:-1],
                          '/bus/finish_reset', endpoints[-1])
+        if self.include_m4:
+            insert_at = endpoints.index('/sim/reset_world')
+            endpoints = (*endpoints[:insert_at], '/parking/reset_state',
+                         '/traffic/reset_state', *endpoints[insert_at:])
         self._participants = [
             self.create_client(ResetScenario, endpoint, callback_group=self.group)
             for endpoint in endpoints]
@@ -114,7 +120,8 @@ class ResetCoordinator(Node):
                 if acknowledgement.run_id:
                     response.run_id = acknowledgement.run_id
             response.success = True
-            response.reason = ('ALL_M3_PARTICIPANTS_ACKNOWLEDGED' if self.include_bus else
+            response.reason = ('ALL_M4_PARTICIPANTS_ACKNOWLEDGED' if self.include_m4 else
+                               'ALL_M3_PARTICIPANTS_ACKNOWLEDGED' if self.include_bus else
                                'ALL_M2_PARTICIPANTS_ACKNOWLEDGED')
         except Exception as error:
             response.reason = str(error)

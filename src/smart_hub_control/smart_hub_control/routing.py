@@ -62,7 +62,7 @@ def shortest_path(config, observations, start, goal, agent, excluded=()):
     if not set(excluded) <= known:
         return [], 0.0, 'INVALID_EXCLUDED_EDGE'
     graph = {name: [] for name in config['nodes']}
-    speed_cap = {'bus': 0.4, 'robot': 0.25, 'car': 0.4}[agent]
+    speed_cap = {'bus': 0.4, 'robot': 0.25, 'car': 0.35}[agent]
     for edge in config['edges']:
         state = observations.get(edge['id'])
         if (
