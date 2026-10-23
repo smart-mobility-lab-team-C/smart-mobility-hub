@@ -156,3 +156,10 @@ or traffic monitoring. Internal bay/goal/run/arrival/reset endpoints, ownership,
 QoS, watchdogs and invalid-value conventions are documented in M3. Public reset
 remains `/scenario/reset`, owned by reset_coordinator; M3 adds explicit bus
 prepare/finish acknowledgements within the existing total 1 s deadline.
+
+## M4 work in progress
+
+Parking and traffic adapters are implemented on the M4 branch; integration and
+scenario acceptance remain open. See [M4 handoff](m4-handoff.md) for the internal
+entrance sensor contract, estimator policies, environment blocker and remaining
+work. M3 launches and fixture ownership are unchanged until M4 integration.

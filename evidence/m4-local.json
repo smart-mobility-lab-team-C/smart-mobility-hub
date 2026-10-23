@@ -1,0 +1,16 @@
+{
+  "status": "PARTIAL",
+  "revision": "commit containing this file",
+  "branch": "feat/m4-parking-traffic",
+  "configuration": "map_m1.yaml; 0.35 m/s; 0.80 m headway; deterministic unit fixtures",
+  "seed": null,
+  "model": null,
+  "checks": [
+    {"command": "PYTHONPATH=src/smart_hub_control /tmp/smart-hub-m4-venv/bin/pytest -q src/smart_hub_control/test/test_m4_core.py", "status": "PASS", "tests": 4, "reservation_pairs": 20, "free_flow_trials": 10, "duration_sec": 1.53},
+    {"command": "/tmp/smart-hub-m4-venv/bin/flake8 src/smart_hub_control/smart_hub_control/{parking,traffic,m4_nodes}.py src/smart_hub_control/test/test_m4_core.py --max-line-length=99", "status": "PASS"},
+    {"command": "bash scripts/check_fast.sh", "status": "PASS"}
+  ],
+  "T07_T10": "NOT RUN",
+  "ROS_build_integration": "BLOCKED: no host ros2; Docker socket permission denied",
+  "limitations": "See docs/m4-handoff.md. No measured ROS service or scenario timing, bags or barrier actuator acceptance."
+}
