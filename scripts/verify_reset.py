@@ -2,6 +2,7 @@
 """Diagnose M3 reset acknowledgements locally without claiming scenario acceptance."""
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -13,6 +14,7 @@ import traceback
 from ament_index_python.packages import get_package_prefix
 from diagnose_m3_gap import COMMANDS
 import rclpy
+from rclpy.utilities import get_rmw_implementation_identifier
 from verify_m3 import Probe
 
 
@@ -30,10 +32,27 @@ def main():
         'schema': 'smart-mobility-hub/reset-diagnostic-v1',
         'status': 'FAIL', 'acceptance_eligible': False,
         'scope': 'M3 reset only; no docking or M4 scenario acceptance',
-        'cases': [], 'commands': {},
+        'cases': [], 'commands': {}, 'entrypoint_sha256': {},
+        'cpu_affinity': sorted(os.sched_getaffinity(0)),
+    }
+    repo = Path(__file__).resolve().parents[1]
+    report['source_commit'] = subprocess.check_output(
+        ['git', '-C', str(repo), 'rev-parse', 'HEAD'], text=True).strip()
+    report['worktree'] = subprocess.check_output(
+        ['git', '-C', str(repo), 'status', '--porcelain'], text=True)
+    report['configuration_sha256'] = hashlib.sha256(
+        (repo / 'src/smart_hub_sim/config/map_m1.yaml').read_bytes()).hexdigest()
+    report['source_sha256'] = {
+        str(path.relative_to(repo)): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in (
+            repo / 'src/smart_hub_control/smart_hub_control/bus.py',
+            repo / 'src/smart_hub_bringup/smart_hub_bringup/reset.py',
+            Path(__file__).resolve(),
+        )
     }
     processes, logs = [], []
     rclpy.init()
+    report['rmw_implementation'] = get_rmw_implementation_identifier()
     probe = Probe(directory)
     try:
         for name, command in COMMANDS.items():
@@ -41,6 +60,7 @@ def main():
             installed = Path(get_package_prefix(package)) / 'lib' / package / executable
             invocation = [str(installed), *arguments]
             report['commands'][name] = invocation
+            report['entrypoint_sha256'][name] = hashlib.sha256(installed.read_bytes()).hexdigest()
             log = (directory / (name + '.log')).open('w')
             logs.append(log)
             processes.append(subprocess.Popen(

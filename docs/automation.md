@@ -43,8 +43,9 @@ From the repository root, use the installed Jazzy image for full M4 verification
 
 ```sh
 sg docker -c 'docker buildx build --load -t smh-m4 -f containers/Dockerfile .'
+sg docker -c 'docker buildx build --load -t smh-m4-local -f containers/Dockerfile.local .'
 sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
-  -v "$PWD:/workspace" smh-m4 \
+  -v "$PWD:/workspace" smh-m4-local \
   bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE-RUN-ID'
 ```
 
@@ -53,6 +54,15 @@ not inherited it. Run only one simulator/acceptance campaign at a time on this
 VM. Stop earlier project demonstration launches cleanly before a campaign;
 preserve their development shell and unrelated processes. Keep thresholds and
 watchdogs unchanged when diagnosing scheduler or observation gaps.
+
+The local profile selects `rmw_cyclonedds_cpp`. In a same-source, same-image
+comparison on this VM, Cyclone DDS passed five reset repetitions while Fast DDS
+failed the first reset with `RESET_DEADLINE`. This is a project configuration
+choice, not an assignment requirement or proof of a general Fast DDS defect.
+The base image and middleware remain available for comparison. All nodes within
+a run must use the recorded profile; public schemas, QoS and timing thresholds
+are unchanged. The package and selection are supported by the
+[official Jazzy Cyclone DDS documentation](https://docs.ros.org/en/jazzy/Installation/RMW-Implementations/DDS-Implementations/Working-with-Eclipse-CycloneDDS.html).
 
 The container runner creates a fresh workspace, builds all packages, checks
 interfaces/style, runs colcon tests, then M2/M3/M4 real-node checks. It retains

@@ -1,0 +1,6 @@
+# Local project profile; build containers/Dockerfile as smh-m4 first.
+# The assignment does not require a particular DDS implementation.
+FROM smh-m4:latest
+RUN apt-get update && apt-get install -y --no-install-recommends ros-jazzy-rmw-cyclonedds-cpp && rm -rf /var/lib/apt/lists/*
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+RUN dpkg-query -W > /opt/smh-package-versions.tsv

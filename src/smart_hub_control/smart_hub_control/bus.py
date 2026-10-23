@@ -658,12 +658,12 @@ class BusManager(Node):
             observation = (self.goal is not None, zero, door.data if door else None,
                            pose is not None)
             if observation != self.reset_observation:
-                self.get_logger().info(json.dumps({
+                print(json.dumps({
                     'event': 'bus_reset_observation',
                     'elapsed_sec': now - self.reset_started,
                     'goal_active': observation[0], 'zero_measured': zero,
                     'door_open': observation[2], 'pose_valid': observation[3],
-                }, sort_keys=True))
+                }, sort_keys=True), flush=True)
                 self.reset_observation = observation
             if zero and door and not door.data:
                 self.reset_waiter.set_result(True)
@@ -859,14 +859,15 @@ class BusManager(Node):
     async def prepare_reset(self, request, response):
         """Hold new goals and await terminal/zero/closed acknowledgement before world reset."""
         received_at = time.monotonic()
-        self.get_logger().info(json.dumps({
+        print(json.dumps({
             'event': 'bus_reset_received', 'monotonic': received_at,
-        }))
+        }), flush=True)
+        lock_started = time.monotonic()
         with self.lock:
-            self.get_logger().info(json.dumps({
+            print(json.dumps({
                 'event': 'bus_reset_lock_acquired',
-                'lock_wait_sec': time.monotonic() - received_at,
-            }))
+                'lock_wait_sec': time.monotonic() - lock_started,
+            }), flush=True)
             if request.scenario_id != 'm2_baseline' or self.reset_waiter:
                 response.reason = 'UNKNOWN_OR_BUSY'
                 return response
@@ -880,12 +881,12 @@ class BusManager(Node):
             self.reset_observation = None
             waiter = Future(executor=self.executor)
             self.reset_waiter = waiter
-            self.get_logger().info(json.dumps({'event': 'bus_reset_waiting_for_zero'}))
+            print(json.dumps({'event': 'bus_reset_waiting_for_zero'}), flush=True)
         response.success = await waiter
-        self.get_logger().info(json.dumps({
+        print(json.dumps({
             'event': 'bus_reset_complete', 'success': response.success,
             'elapsed_sec': time.monotonic() - received_at,
-        }))
+        }), flush=True)
         with self.lock:
             self.reset_waiter = None
             response.reason = 'BUS_ZERO_CLOSED' if response.success else 'BUS_RESET_UNCONFIRMED'

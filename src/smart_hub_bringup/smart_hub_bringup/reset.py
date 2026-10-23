@@ -81,13 +81,13 @@ class ResetCoordinator(Node):
         phase = 'start'
 
         def trace(event, **fields):
-            self.get_logger().info(json.dumps({
+            print(json.dumps({
                 'event': 'scenario_reset_' + event,
                 'phase': phase,
                 'elapsed_sec': time.monotonic() - started,
                 'seed': request.seed,
                 **fields,
-            }, sort_keys=True))
+            }, sort_keys=True), flush=True)
 
         def expire():
             if future is not None and not future.done() and time.monotonic() >= deadline:

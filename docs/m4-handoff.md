@@ -115,8 +115,9 @@ Run in the supported Docker environment as the caller's non-root UID/GID:
 
 ```sh
 sg docker -c 'docker buildx build --load -t smh-m4 -f containers/Dockerfile .'
+sg docker -c 'docker buildx build --load -t smh-m4-local -f containers/Dockerfile.local .'
 sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
-  -v "$PWD:/workspace" smh-m4 \
+  -v "$PWD:/workspace" smh-m4-local \
   bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE-RUN-ID'
 ```
 
@@ -157,6 +158,13 @@ then failed again at `/bus/prepare_reset` before any later reset participant was
 called. `scripts/verify_reset.py` provides a focused real-node local diagnostic;
 bus logs now distinguish callback receipt, lock acquisition and the observed
 zero/closed-door conditions. Its runs do not establish scenario acceptance.
+
+Candidate callback/TF/executor behavior changes did not produce a stable result
+and were reverted; only diagnostic logging remains. A controlled local
+same-source comparison then passed five resets under Cyclone DDS and failed the
+first reset under Fast DDS. `containers/Dockerfile.local` records the Cyclone
+profile as a project choice. A full fresh-workspace local M0–M4 run is still
+required before any additional scenario row can be marked PASS.
 
 The M3 prerequisite failed during its first nominal case because the scenario
 reset exceeded its one-second deadline. Its result is recorded as FAIL, not
