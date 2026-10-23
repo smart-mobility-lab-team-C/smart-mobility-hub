@@ -1,9 +1,18 @@
 # M4 parking and congestion handoff
 
-Branch: `feat/m4-parking-traffic`. Software integration is implemented; M4
-acceptance is **BLOCKED** pending a real Ubuntu 24.04/Jazzy run. T07–T10 remain
-**NOT RUN**. Local unit checks do not close scenario rows. M5–M7 have not started,
-following the repository's one-milestone-at-a-time instruction.
+Branch: `feat/m4-parking-traffic`. Software integration is implemented. A local
+Ubuntu 24.04/Jazzy Docker build completed on 2026-10-24. The M2 real-node
+regression passed all 18 cases; the chained M3 regression failed its first
+nominal case with `RESET_DEADLINE`, so M4 acceptance did not run. T07–T10 remain
+**NOT RUN**. The container image and ROS runtime are verified; details and
+reproduction records are in [local runtime evidence](../evidence/m4-jazzy-runtime.json).
+M5–M7 have not started, following the repository's one-milestone-at-a-time
+instruction.
+
+The local runtime exposed two merged regression issues and fixed them on
+`fix/m4-jazzy-runner`: import ordering rejected by ament lint, and car routing
+expectations still using the previous 0.40 m/s cap. Commits are `6ba2bd3` and
+`16e5918`. These fixes have not been merged.
 
 The first implementation slice is `58467c1`; the commit containing this updated
 handoff and `evidence/m4-local.json` identifies the continuation. No merge occurred.
@@ -127,10 +136,10 @@ integration and independent teammate reproduction still require validation.
 
 ## Current blocker
 
-`bash scripts/m4_container.sh /tmp/smh-m4-real-attempt` exits 1 before building:
-`/opt/ros/jazzy/setup.bash: No such file or directory`. Docker CLI inspection also
-returns socket permission denied. The host reports Ubuntu 22.04, not the required
-24.04 container runtime. No permissions, groups or privileged execution were
-changed. These conditions prevent ROS build, colcon/ament execution and measured
-T07–T10 evidence here. Real-video acceptance and independent teammate review
-remain separate human gates.
+The M3 prerequisite failed during its first nominal case because the scenario
+reset exceeded its one-second deadline. Its result is recorded as FAIL, not
+reclassified as an environment-only issue. The same VM had a separate M0
+development container running simulator processes during this run; this is
+relevant context, but the run does not establish that CPU contention caused the
+deadline miss. M4 T07–T10 remain NOT RUN until the M3 regression passes. Real-video
+acceptance and independent teammate review remain separate human gates.
