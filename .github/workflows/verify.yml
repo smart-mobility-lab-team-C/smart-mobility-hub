@@ -1,0 +1,109 @@
+name: Hosted verification
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft, edited]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      full_suite:
+        description: Run the full fresh Jazzy integration suite
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: verification-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  quick:
+    name: Quick checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: bash scripts/check_fast.sh
+  classify:
+    name: Change classification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      integration_required: ${{ steps.route.outputs.integration_required }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: route
+        run: python3 scripts/ci_policy.py classify
+  integration:
+    name: Jazzy integration
+    needs: [quick, classify]
+    if: needs.classify.outputs.integration_required == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@v4
+      - name: Build and load Jazzy image
+        id: image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: containers/Dockerfile
+          tags: smh-verification:local
+          load: true
+          push: false
+          cache-from: type=gha,scope=smh-jazzy
+          cache-to: type=gha,scope=smh-jazzy,mode=max,ignore-error=true
+      - name: Fresh M0 through M3 acceptance
+        env:
+          IMAGE_ID: ${{ steps.image.outputs.imageid }}
+          IMAGE_DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          mkdir -p evidence/runs/ci-metadata
+          git rev-parse HEAD > evidence/runs/ci-metadata/commit.txt
+          docker image inspect smh-verification:local > evidence/runs/ci-metadata/image.json
+          printf '%s\n' "$IMAGE_ID" "$IMAGE_DIGEST" > evidence/runs/ci-metadata/build-image.txt
+          printf '%s\n' "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > evidence/runs/ci-metadata/run-url.txt
+          date -u --iso-8601=seconds > evidence/runs/ci-metadata/started.txt
+          status=0
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp -v "$PWD:/workspace" smh-verification:local \
+            bash scripts/m3_container.sh /workspace/evidence/runs/hosted-acceptance || status=$?
+          date -u --iso-8601=seconds > evidence/runs/ci-metadata/finished.txt
+          exit "$status"
+      - name: Retain acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hosted-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence/runs/
+          if-no-files-found: warn
+  gate:
+    name: Verification gate
+    if: always()
+    needs: [quick, classify, integration]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Enforce required results
+        env:
+          QUICK: ${{ needs.quick.result }}
+          CLASSIFICATION: ${{ needs.classify.result }}
+          REQUIRED: ${{ needs.classify.outputs.integration_required }}
+          INTEGRATION: ${{ needs.integration.result }}
+        run: |
+          python3 scripts/ci_policy.py gate
+          if [ "$INTEGRATION" = skipped ]; then
+            echo 'ROS acceptance: NOT RUN (explicit policy skip)' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "ROS integration job: $INTEGRATION (see acceptance artifacts)" >> "$GITHUB_STEP_SUMMARY"
+          fi

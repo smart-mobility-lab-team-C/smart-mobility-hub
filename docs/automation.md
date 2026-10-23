@@ -31,3 +31,46 @@ Windows feature enablement/reboot, Linux account creation, administrator passwor
 
 First add documentation checks. Once code exists, add Ubuntu/Jazzy build and unit/launch tests; then seeded headless regressions and scheduled/manual full trials. A hosted Ubuntu job does not verify WSL display or local performance. No green badge until the corresponding workflow actually runs. Keep workflow token permissions minimal; do not expose credentials to untrusted PR code.
 
+
+## Canonical hosted verification
+
+[Hosted verification](../.github/workflows/verify.yml) is the automatic PR/main
+workflow. Its check names are **Quick checks**, **Change classification**,
+**Jazzy integration**, and **Verification gate**. The gate always evaluates job
+results; a failed quick/classification job or missing required integration fails
+it. Repository permissions and branch protection settings are unchanged; any
+existing required milestone check names must be reviewed by the repository owner
+before adopting the new gate. M0–M3 workflows are retained as manual diagnostics.
+
+Run `bash scripts/check_fast.sh` on the PC for shell syntax, Python compilation,
+M0 tooling tests, diagnostic-tool tests, CI policy tests, M1 source contracts and
+local documentation links. These checks do not establish ROS integration.
+
+Draft PRs run quick checks only. Marking ready triggers classification and, when
+required, integration. The classifier diffs the PR base to its head cumulatively
+(including deleted and renamed paths). Only known top-level prose, `docs/*.md`
+(including subdirectories), and `evidence/` are exempt; `docs/contracts/` always
+requires integration. Source, scripts, containers, workflows, tests, unknown paths
+and unavailable/empty change sets require it. Changes to a PR base retrigger routing.
+Documentation/evidence-only skips explicitly record **ROS acceptance NOT RUN**;
+a green policy gate for a skip is not executed acceptance. Superseded runs on the
+same PR are canceled. Manual runs default to quick checks; select `full_suite`
+for fresh integration. Main pushes classify their complete push range.
+
+The integration job builds one pinned-base Jazzy image with Buildx, loads it
+locally and never publishes it. The [Docker GitHub Actions cache](https://docs.docker.com/build/ci/github-actions/cache/)
+stores dependency image layers only (`scope=smh-jazzy`, `mode=max`). Export uses
+`ignore-error=true`, so cache export failure does not fail verification; build
+and test failures still fail. Build logs must be inspected to distinguish an
+actual cache export from a suppressed failure. The next normal integration run
+provides cache-reuse timing; do not schedule a mission suite just to benchmark.
+
+`scripts/m3_container.sh` uses a new temporary colcon workspace every run: M0
+real talker/listener smoke, M1 source/lint/hash/generated-interface checks, fresh
+build and colcon tests, 18 M2 regression cases, and all 24 M3 cases (ten nominal
+docks). It retains versions, source hashes, commit/worktree, logs, and explicit
+exit status. Build/install/log directories and test results are never restored as
+acceptance evidence. Artifact `hosted-verification-RUN_ID-ATTEMPT` also contains
+image identity and UTC start/finish times; Buildx logs/build record retain cache
+and image build timing. Evidence/status updates must cite the actual run and
+commit and preserve failures separately from NOT RUN/BLOCKED checks.

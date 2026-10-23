@@ -25,7 +25,6 @@ retain_results() {
 }
 trap retain_results EXIT
 python3 - "$repo" "$workspace" <<'PY'
-import hashlib
 from pathlib import Path
 import shutil
 import sys
@@ -54,9 +53,10 @@ for root in ('src', 'scripts', 'docs'):
             records.append(hashlib.sha256(path.read_bytes()).hexdigest() + '  ' + str(path))
 (Path(sys.argv[1]) / 'source-sha256.txt').write_text('\n'.join(records) + '\n')
 PY
+bash scripts/smoke.sh
 python3 scripts/check_m1.py
-ament_flake8 src scripts/verify_m2.py scripts/verify_m3.py
-ament_pep257 src scripts/verify_m2.py scripts/verify_m3.py
+ament_flake8 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py
+ament_pep257 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py
 colcon build --event-handlers console_direct+
 set +u
 source install/setup.bash
@@ -68,6 +68,7 @@ colcon test-result --verbose || test_status=$?
 if [ "$test_status" -ne 0 ]; then
   exit "$test_status"
 fi
+sha256sum src/smart_hub_sim/config/map_m1.yaml docs/contracts/m1-fields.json
 export ROS_DOMAIN_ID=72
 export ROS_LOCALHOST_ONLY=1
 python3 scripts/verify_m2.py --output "$results/m2-regression.json"
