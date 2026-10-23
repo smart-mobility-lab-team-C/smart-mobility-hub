@@ -146,6 +146,12 @@ integration and independent teammate reproduction still require validation.
 
 ## Current blocker
 
+The next local attempt stops the older project demonstration launch before
+starting one acceptance campaign. The reset coordinator now logs monotonic
+per-participant request/acknowledgement times and safety/crossing observation
+waits into the normal node logs. These diagnostic records do not change the
+one-second deadline, reset order, public interfaces or acceptance thresholds.
+
 The M3 prerequisite failed during its first nominal case because the scenario
 reset exceeded its one-second deadline. Its result is recorded as FAIL, not
 reclassified as an environment-only issue. The same VM had a separate M0

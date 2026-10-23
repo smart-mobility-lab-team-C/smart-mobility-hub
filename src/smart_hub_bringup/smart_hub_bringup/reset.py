@@ -1,4 +1,5 @@
 """Coordinate explicit M2 reset acknowledgements with one bounded deadline."""
+import json
 import time
 
 import rclpy
@@ -72,10 +73,21 @@ class ResetCoordinator(Node):
             response.reason = 'PARTICIPANT_UNAVAILABLE'
             return response
         self.busy = True
-        deadline = time.monotonic() + 1.0
+        started = time.monotonic()
+        deadline = started + 1.0
         timer = None
         future = None
         active_client = None
+        phase = 'start'
+
+        def trace(event, **fields):
+            self.get_logger().info(json.dumps({
+                'event': 'scenario_reset_' + event,
+                'phase': phase,
+                'elapsed_sec': time.monotonic() - started,
+                'seed': request.seed,
+                **fields,
+            }, sort_keys=True))
 
         def expire():
             if future is not None and not future.done() and time.monotonic() >= deadline:
@@ -84,18 +96,25 @@ class ResetCoordinator(Node):
                 future.set_exception(TimeoutError('RESET_DEADLINE'))
 
         timer = self.create_timer(0.02, expire)
+        trace('start', participants=[client.srv_name for client in self._participants])
         try:
             for index, client in enumerate(self._participants):
+                phase = client.srv_name
                 if time.monotonic() >= deadline:
                     raise TimeoutError('RESET_DEADLINE')
                 requested_at = time.monotonic()
                 active_client = client
+                trace('request')
                 future = client.call_async(request)
                 acknowledgement = await future
+                trace('acknowledgement', success=acknowledgement.success,
+                      reason=acknowledgement.reason,
+                      service_sec=time.monotonic() - requested_at)
                 if time.monotonic() >= deadline:
                     raise TimeoutError('RESET_DEADLINE')
                 if not acknowledgement.success:
                     response.reason = client.srv_name + ':' + acknowledgement.reason
+                    trace('rejected', reason=response.reason)
                     return response
                 if client.srv_name == '/safety/reset_state':
                     snapshot = self._safety
@@ -105,7 +124,10 @@ class ResetCoordinator(Node):
                         active_client = None
                         future = Future(executor=self.executor)
                         self._hold_waiter = future
+                        phase = '/hub/safety:reset_hold'
+                        trace('wait_for_observation')
                         await future
+                        trace('observation_received')
                         self._hold_waiter = None
                 if client.srv_name == '/crossing/reset_state':
                     snapshot = self._crossing
@@ -115,7 +137,10 @@ class ResetCoordinator(Node):
                         active_client = None
                         future = Future(executor=self.executor)
                         self._clear_waiter = future
+                        phase = '/crossing/state:clear'
+                        trace('wait_for_observation')
                         await future
+                        trace('observation_received')
                         self._clear_waiter = None
                 if acknowledgement.run_id:
                     response.run_id = acknowledgement.run_id
@@ -123,8 +148,10 @@ class ResetCoordinator(Node):
             response.reason = ('ALL_M4_PARTICIPANTS_ACKNOWLEDGED' if self.include_m4 else
                                'ALL_M3_PARTICIPANTS_ACKNOWLEDGED' if self.include_bus else
                                'ALL_M2_PARTICIPANTS_ACKNOWLEDGED')
+            trace('complete', reason=response.reason)
         except Exception as error:
             response.reason = str(error)
+            trace('failed', reason=response.reason)
         finally:
             self._hold_waiter = None
             self._clear_waiter = None
