@@ -122,3 +122,14 @@ observation gaps, with the underlying cause unconfirmed. Raw logs/traces remain
 ignored; hashes are retained in the index. Earlier development failures remain
 FAIL and cannot be combined into acceptance for a different source revision.
 Independent human review/reproduction remain BLOCKED.
+
+
+## M3 observation-gap isolation — 2026-10-23
+
+The separate [gap diagnostic](m3-gap-diagnostic.md) reproduced stalls in an
+independent sampler outside Docker, including a 19.102-second interval with image
+output bypassed. Three controlled real-node pauses passed localization checks;
+all mission failures and earlier interrupted captures remain explicit in the
+[diagnostic index](../evidence/m3-gap-diagnostic.json). Exact VM/hypervisor cause
+remains unconfirmed. This investigation changes no milestone acceptance or
+independent human review/reproduction status.

@@ -68,3 +68,62 @@ instrumented callback durations before interpreting timing changes. Raw records
 remain ignored under `evidence/runs`; environment/source/artifact hashes and a
 small result index should be committed after verification. Unsuccessful and
 interrupted runs must remain distinguishable from completed diagnostic runs.
+
+## Observed results — 2026-10-23
+
+The long gap is observable **outside Docker and ROS**. Independent VM-host
+sampling paused with container and ROS sampling. This isolates a broader timing
+or scheduling interruption; it does not distinguish physical-host scheduling,
+hypervisor behavior or a guest-clock problem. Physical-host/hypervisor timing is
+the next measurement boundary. No watchdog or runtime motion policy was changed.
+
+The completed ten-attempt campaign at `727fc10` produced one successful mission
+without a detected gap and nine explicit protective stops. Analysis at `bf84522`
+found nine host-gap windows and five correlated near-threshold host delays.
+Image generation/publication bypass did not remove the gaps.
+
+| Variant | Attempts | Protective stops | Largest host interval in a detected window |
+|---|---:|---:|---:|
+| Observer-only baseline | 1 | 1 | 0.489 s; correlated delay |
+| Callback instrumentation | 5 | 4 | 15.490 s |
+| Instrumentation with image output bypassed | 4 | 4 | 19.102 s |
+
+No measured callback span exceeded 0.5 seconds; image generation/publication
+peaked at 21.4 ms. In instrumented attempt 01, host/container sampling gaps were
+13.676/13.651 seconds. These observations do not support blaming a long image
+callback for that stall. The longest image-bypassed host gap was 19.102 seconds.
+
+Baseline probe-odometry p95 interval was 55.8 ms, compared with 56.3 ms in
+instrumented attempt 01 and 64.6 ms in the successful instrumented attempt 07.
+Host scheduling varied and missions had different outcomes, so these measurements
+do not establish a causal instrumentation-overhead estimate.
+
+Three controlled real-node checks at `bf84522` passed the recorded localization
+criteria: an injected pause of at least 0.8 seconds, a gap in the target process,
+independent host/container intervals at most 0.25 seconds, and an unaffected
+peer observer/probe/supervisor. These are localization results, not mission PASS.
+
+| Paused process | Measured pause | Localization |
+|---|---:|---|
+| Independent observer | 0.802 s | Observer gaps; probe continued |
+| Probe/operator heartbeat | 0.801 s | Probe gaps; independent observer continued |
+| Simulator | 0.801 s | Simulator heartbeat and sensor gaps; supervisor continued |
+
+All three controlled missions ended in recorded protective stops. The observer
+case's stop followed a separate later host gap. The probe case recorded
+`SAFETY_INPUT_UNKNOWN:estop_stale`. The simulator case retained its safety outcome
+and a separate later host gap; neither is silently counted as mission success.
+
+The twelve tooling tests passed on both the VM host and the Jazzy container;
+ament_flake8 and ament_pep257 passed for all four Python diagnostic files. Fresh
+builds completed for the natural campaign and every controlled case. Existing
+M3 acceptance, independent review/reproduction and other scenario statuses are
+unchanged.
+
+[Diagnostic evidence index](../evidence/m3-gap-diagnostic.json) records commands,
+source and analyzer commits, environment, terminal outcomes, timing metrics,
+localization criteria and artifact hashes. Raw attempts remain under
+`evidence/runs/gap-*`; corrected analysis and five-second context windows are in
+`evidence/runs/gap-reanalysis-20261023`. Original analysis is retained, including
+the initial 2 Hz false detections and interrupted preflight. The index identifies
+the corrected analyzer version rather than rewriting those captures.

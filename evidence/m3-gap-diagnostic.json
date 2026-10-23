@@ -1,0 +1,2216 @@
+{
+  "schema": "smart-mobility-hub/m3-gap-diagnostic-v1",
+  "isolation_status": "HOST_SAMPLING_GAP_OBSERVED",
+  "root_cause_status": "UNCONFIRMED",
+  "acceptance_eligible": false,
+  "analysis_revision": "bf845221cc4d8cc98a84ea05571f6b23e1424467",
+  "analysis_source_sha256": "6f9204fe22f889a50b3fe3787c7e4fb9ec5568571aa5ab1abe746777cd11b21a",
+  "threshold_sec": 0.5,
+  "interpretation": "Independent sampling outside Docker stalls with ROS/container sampling. This localizes reproduced long gaps beyond individual ROS callbacks; physical-host/hypervisor scheduling and clock behavior are not distinguished.",
+  "parameter_capture_note": "Natural captures retain startup parameter snapshots and exact parameter_update records in trace.jsonl (initial_passengers becomes 0 before seed-300 reset). Controlled captures snapshot applied parameters.",
+  "retained_failures": [
+    "Initial preflight goal rejection after a 6.6-second shared gap; campaign interrupted to correct 2 Hz arrival false detections and reuse the readiness wait.",
+    "Initial real-sampler test assumed an uninterrupted host; a concurrent VM-host gap invalidated that assumption (12.580 s test duration). The test now asserts the classification supported by measured host timing rather than assuming clean scheduling."
+  ],
+  "runs": [
+    {
+      "directory": "evidence/runs/gap-natural-20261023",
+      "source_commit": "68ff7f6f2d9bcc2a624f6a2c9662d468efcdd8a7",
+      "image_id": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b",
+      "capture_status": "INTERRUPTED",
+      "returncode": null,
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-gap-38963",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout:/workspace:ro",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout/evidence/runs/gap-natural-20261023:/gap-results",
+        "smh-m3:latest",
+        "bash",
+        "scripts/gap_container.sh",
+        "/gap-results",
+        "10",
+        "1200.0"
+      ],
+      "environment_sha256": "93c462b4131ef307ba2dd742048e3cea6b9320f66d24e0b897b26cfba8cbde33",
+      "artifact_manifest_sha256": "00b2f5bb78386fba74de81eda529f9922f5f355e9ad3ab93bbbb1204966fbb90",
+      "attempts": [
+        {
+          "name": "00-baseline",
+          "status": "ERROR",
+          "seed": 300,
+          "instrumented": false,
+          "image_bypassed": false,
+          "injected_pause": null,
+          "error": "AssertionError('goal unexpectedly rejected')",
+          "terminal": null,
+          "active_start": 5859.715791065,
+          "active_end": 5870.293663702,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023/00-baseline/analysis.json",
+          "analysis_sha256": "de6f78f186231ace259bf9ca24fb211aa1be4fbf8da85db8e86d26e631a1c633",
+          "trace_sha256": "927aefe61a09085412912668da8d8f073b53aa66c791c78a6cab2a218c73e691",
+          "run_metadata_sha256": "bbf08830a5515ecf6d6d0bbcbac9921d68559e759e07535aec0d21a31ca94d0f",
+          "protective_stop_count": 0,
+          "callback_metrics": {},
+          "cadence": {
+            "probe/2320/executor_heartbeat/": {
+              "count": 39,
+              "p95_sec": 0.10214742700009083,
+              "max_sec": 6.662368837000031
+            },
+            "scenario_runner/2337/executor_heartbeat/": {
+              "count": 39,
+              "p95_sec": 0.10311613699923328,
+              "max_sec": 0.10481522800000675
+            },
+            "probe/0/odom/": {
+              "count": 80,
+              "p95_sec": 0.05443036600081541,
+              "max_sec": 6.608594324000478
+            },
+            "safety_supervisor/2338/executor_heartbeat/": {
+              "count": 39,
+              "p95_sec": 0.10394586999973399,
+              "max_sec": 0.10764455699973041
+            },
+            "observer/2344/odom/": {
+              "count": 80,
+              "p95_sec": 0.05446987300001638,
+              "max_sec": 6.608766415999526
+            },
+            "observer/2344/executor_heartbeat/": {
+              "count": 41,
+              "p95_sec": 0.10138046799966105,
+              "max_sec": 6.598433426999691
+            }
+          },
+          "windows": [
+            {
+              "start": 5863.53058351,
+              "end": 5870.293395222,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 6.683003044000543,
+                "container": 6.6310609329993895
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 6.6310609329993895,
+                "host": 6.683003044000543,
+                "observer": 6.673419899000692,
+                "probe": 6.758483921000334,
+                "safety_supervisor": 6.6285919510000895,
+                "scenario_runner": 6.619208021000304
+              },
+              "max_source_clock_jump_sec": 6.757097005844116,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023/00-baseline/gap-000.jsonl",
+              "context_sha256": "cd85c8d0847c5423f99dbeb068e61760af8f54c31667be5acabcd62dc6153a88"
+            }
+          ]
+        },
+        {
+          "name": "01-instrumented",
+          "status": "INTERRUPTED",
+          "reason": "No finalized run metadata; not classified."
+        }
+      ]
+    },
+    {
+      "directory": "evidence/runs/gap-natural-20261023-v2",
+      "source_commit": "727fc106fe9076ccb65e7d05582b970f4e22dc6f",
+      "image_id": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b",
+      "capture_status": "COMPLETED",
+      "returncode": 0,
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-gap-42522",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout:/workspace:ro",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout/evidence/runs/gap-natural-20261023-v2:/gap-results",
+        "smh-m3:latest",
+        "bash",
+        "scripts/gap_container.sh",
+        "/gap-results",
+        "10",
+        "1200.0"
+      ],
+      "environment_sha256": "8deafb3a1de14ba9335db9ca8a1981006d5073e9658da47a487812d9324d7c70",
+      "artifact_manifest_sha256": "977c5c0023c8d6c1bec843c76a51662c06a1dc3dbd767c71b77f081235e4929d",
+      "attempts": [
+        {
+          "name": "00-baseline",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": false,
+          "image_bypassed": false,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 5970.974369871,
+          "active_end": 6000.76239596,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/00-baseline/analysis.json",
+          "analysis_sha256": "20f3927538c7f245f2ede402271bb3caaf0a42943c3b1cb5651f7c56e6418083",
+          "trace_sha256": "7d3db9a5f8b2f9211973c7b903c7d744b8cd09d0740c88e5079547bde43d99b5",
+          "run_metadata_sha256": "a9ac03f09f86805c5f5e4b5e2581e47ab46e0a1309f9575b1d50cfb0e8139d13",
+          "protective_stop_count": 1,
+          "callback_metrics": {},
+          "cadence": {
+            "probe/2320/executor_heartbeat/": {
+              "count": 293,
+              "p95_sec": 0.1031499780001468,
+              "max_sec": 0.5402596639996773
+            },
+            "safety_supervisor/2338/executor_heartbeat/": {
+              "count": 293,
+              "p95_sec": 0.10393084600036673,
+              "max_sec": 0.5674925789999179
+            },
+            "probe/0/odom/": {
+              "count": 586,
+              "p95_sec": 0.05577503099993919,
+              "max_sec": 0.5254074479998962
+            },
+            "observer/2344/odom/": {
+              "count": 586,
+              "p95_sec": 0.0547139390000666,
+              "max_sec": 0.5213507070002379
+            },
+            "observer/2344/executor_heartbeat/": {
+              "count": 293,
+              "p95_sec": 0.10448808000001009,
+              "max_sec": 0.5371795450000718
+            },
+            "scenario_runner/2337/executor_heartbeat/": {
+              "count": 292,
+              "p95_sec": 0.10416148700005579,
+              "max_sec": 0.5757812309993824
+            }
+          },
+          "windows": [
+            {
+              "start": 5995.027578685,
+              "end": 5995.666013973,
+              "classification": "correlated_host_sampling_delay; timing layer unresolved",
+              "sampler_max_interval_sec": {
+                "host": 0.4886837589992865,
+                "container": 0.5415574460002972
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 0.5415574460002972,
+                "observer": 0.5791963599995142,
+                "probe": 0.6323745250001593,
+                "safety_supervisor": 0.5674925789999179,
+                "scenario_runner": 0.5757812309993824
+              },
+              "max_source_clock_jump_sec": 0.6268646717071533,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/00-baseline/gap-000.jsonl",
+              "context_sha256": "8fc648dd14a776ad6da61ffe7403f55b6558e0429fb3ed4e45691163d467bc68"
+            }
+          ]
+        },
+        {
+          "name": "01-instrumented",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6008.360516997,
+          "active_end": 6045.889262363,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/01-instrumented/analysis.json",
+          "analysis_sha256": "41db8a28194e75f947c96ea137d9a7eb6022ec204377a2f2def430c0811ad0f1",
+          "trace_sha256": "8ff28c911964f80e71eb8939c09f8b320fd307183cc891e7104544b2adc850fd",
+          "run_metadata_sha256": "4c48b0172d7b67031266e9a9946becba44f04ea4e660d7f5b93a3a4233379b53",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "_record": {
+              "count": 2031,
+              "max_sec": 0.0012522870001703268,
+              "p95_sec": 6.663000021944754e-06
+            },
+            "_estop_cb": {
+              "count": 241,
+              "max_sec": 0.000277279999863822,
+              "p95_sec": 7.683199964958476e-05
+            },
+            "safety.tick": {
+              "count": 478,
+              "max_sec": 0.01132605099974171,
+              "p95_sec": 0.003913007999472029
+            },
+            "_candidate_cb": {
+              "count": 356,
+              "max_sec": 0.00030233800043788506,
+              "p95_sec": 9.324000529886689e-06
+            },
+            "probe.record": {
+              "count": 2095,
+              "max_sec": 0.008554201000151807,
+              "p95_sec": 0.0003421700002945727
+            },
+            "_publish_odom_and_tf": {
+              "count": 477,
+              "max_sec": 0.021342230000300333,
+              "p95_sec": 0.003994638000222039
+            },
+            "sim.step": {
+              "count": 477,
+              "max_sec": 0.02566375100013829,
+              "p95_sec": 0.006772250000722124
+            },
+            "_publish_vehicles": {
+              "count": 238,
+              "max_sec": 0.0060272800001257565,
+              "p95_sec": 0.002852829999937967
+            },
+            "_publish_image": {
+              "count": 238,
+              "max_sec": 0.011331792999953905,
+              "p95_sec": 0.001462274999539659
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00019669499943120172,
+              "p95_sec": 0.00019669499943120172
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00066585100012162,
+              "p95_sec": 0.00066585100012162
+            }
+          },
+          "cadence": {
+            "safety_supervisor/2470/executor_heartbeat/": {
+              "count": 240,
+              "p95_sec": 0.10487608800031012,
+              "max_sec": 13.655837095000606
+            },
+            "probe/2454/executor_heartbeat/": {
+              "count": 240,
+              "p95_sec": 0.10374356900047133,
+              "max_sec": 13.638836842000273
+            },
+            "observer/2476/executor_heartbeat/": {
+              "count": 240,
+              "p95_sec": 0.10240534900003695,
+              "max_sec": 13.65371374499955
+            },
+            "scenario_runner/2469/executor_heartbeat/": {
+              "count": 240,
+              "p95_sec": 0.10317412200038234,
+              "max_sec": 13.683178909999697
+            },
+            "observer/2476/odom/": {
+              "count": 476,
+              "p95_sec": 0.05525083300017286,
+              "max_sec": 13.648136989000704
+            },
+            "probe/0/odom/": {
+              "count": 476,
+              "p95_sec": 0.056345168000007106,
+              "max_sec": 13.655252433999522
+            }
+          },
+          "windows": [
+            {
+              "start": 6027.02217768,
+              "end": 6040.795795252,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 13.675880551999398,
+                "container": 13.650612995000301
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 13.650612995000301,
+                "host": 13.675880551999398,
+                "observer": 13.709660851999615,
+                "probe": 13.753227186000004,
+                "safety_supervisor": 13.679194287999962,
+                "scenario_runner": 13.717205599999943
+              },
+              "max_source_clock_jump_sec": 13.750011205673218,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/01-instrumented/gap-000.jsonl",
+              "context_sha256": "e8560982738405a8e6aeb8760b4f98828b7999cb5cb3be9fca0ec58e8cbeb24d"
+            }
+          ]
+        },
+        {
+          "name": "02-no-image",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": true,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6063.48594161,
+          "active_end": 6085.911774843,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/02-no-image/analysis.json",
+          "analysis_sha256": "74801ebeadd9c1e565f3eea6496e0104b9fd504b25681d2edfd8e865660b3d58",
+          "trace_sha256": "6050ad00385e3afb3bc0093cce4e34561f5c5bbe72cd22fa10064e2fe714d13d",
+          "run_metadata_sha256": "3a42be75666cdc2932be1486ec2c64c38d54db9712802f3f1912deea0d52408e",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "_record": {
+              "count": 1833,
+              "max_sec": 0.004549285999928543,
+              "p95_sec": 6.0979991758358665e-06
+            },
+            "_estop_cb": {
+              "count": 217,
+              "max_sec": 0.0008545950004190672,
+              "p95_sec": 0.00012130300001444994
+            },
+            "_publish_odom_and_tf": {
+              "count": 431,
+              "max_sec": 0.008692568999322248,
+              "p95_sec": 0.003597612999328703
+            },
+            "_candidate_cb": {
+              "count": 359,
+              "max_sec": 0.0001980440001716488,
+              "p95_sec": 9.30700025492115e-06
+            },
+            "_publish_vehicles": {
+              "count": 215,
+              "max_sec": 0.007578491999993275,
+              "p95_sec": 0.002899888000683859
+            },
+            "_publish_image": {
+              "count": 215,
+              "max_sec": 1.3540002328227274e-06,
+              "p95_sec": 1.1460006135166623e-06
+            },
+            "sim.step": {
+              "count": 431,
+              "max_sec": 0.014068855000004987,
+              "p95_sec": 0.0058735769998747855
+            },
+            "probe.record": {
+              "count": 1891,
+              "max_sec": 0.005151076999936777,
+              "p95_sec": 0.00027237900030741
+            },
+            "safety.tick": {
+              "count": 430,
+              "max_sec": 0.015479822000088461,
+              "p95_sec": 0.0039049089991749497
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00010823200045706471,
+              "p95_sec": 0.00010823200045706471
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00012412199976097327,
+              "p95_sec": 0.00012412199976097327
+            }
+          },
+          "cadence": {
+            "safety_supervisor/2602/executor_heartbeat/": {
+              "count": 215,
+              "p95_sec": 0.10568938800042815,
+              "max_sec": 0.931414186999973
+            },
+            "observer/2608/executor_heartbeat/": {
+              "count": 216,
+              "p95_sec": 0.10269414400045207,
+              "max_sec": 0.921784260000095
+            },
+            "probe/2586/executor_heartbeat/": {
+              "count": 216,
+              "p95_sec": 0.10328793099961331,
+              "max_sec": 0.9957900569997946
+            },
+            "scenario_runner/2601/executor_heartbeat/": {
+              "count": 215,
+              "p95_sec": 0.10529354899972532,
+              "max_sec": 0.9177967140003602
+            },
+            "observer/2608/odom/": {
+              "count": 430,
+              "p95_sec": 0.055114929000410484,
+              "max_sec": 0.9190577580002355
+            },
+            "probe/0/odom/": {
+              "count": 430,
+              "p95_sec": 0.05482163699980447,
+              "max_sec": 0.9215037010008018
+            }
+          },
+          "windows": [
+            {
+              "start": 6079.812107287,
+              "end": 6080.907868811,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 0.9567028439996648,
+                "container": 0.9311747380006636
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 0.9311747380006636,
+                "host": 0.9567028439996648,
+                "observer": 0.9746986370000741,
+                "probe": 1.0521080050002638,
+                "safety_supervisor": 0.9857008489998407,
+                "scenario_runner": 0.9646509340000193
+              },
+              "max_source_clock_jump_sec": 1.0502092838287354,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/02-no-image/gap-000.jsonl",
+              "context_sha256": "9701e6ff277bb5113b63825d4b1cb020d1ad960b6dd3b080658bf2f7475e2dd4"
+            }
+          ]
+        },
+        {
+          "name": "03-instrumented",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6094.010705947,
+          "active_end": 6121.250906708,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/03-instrumented/analysis.json",
+          "analysis_sha256": "437529300043f1f4c3dd3944f1fd8138b96d7b6692a1ac06f6ba21a949ac4936",
+          "trace_sha256": "36aab9c5de871fd07e45e692d497de6edc304188552dcf410bdcbb47f928799a",
+          "run_metadata_sha256": "0bcab5e15c65b1afacf7aaec3bd0c4438190ef31fc3daa982c521a5a08cea9e5",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "_candidate_cb": {
+              "count": 246,
+              "max_sec": 0.0002581509997980902,
+              "p95_sec": 9.178000254905783e-06
+            },
+            "safety.tick": {
+              "count": 326,
+              "max_sec": 0.016281024999443616,
+              "p95_sec": 0.004204839000522043
+            },
+            "_record": {
+              "count": 1386,
+              "max_sec": 0.0019250510003985255,
+              "p95_sec": 7.159999768191483e-06
+            },
+            "_publish_odom_and_tf": {
+              "count": 325,
+              "max_sec": 0.01063306299965916,
+              "p95_sec": 0.0037538369997491827
+            },
+            "_publish_vehicles": {
+              "count": 163,
+              "max_sec": 0.007297893999748339,
+              "p95_sec": 0.003814091000094777
+            },
+            "_publish_image": {
+              "count": 163,
+              "max_sec": 0.004978908000339288,
+              "p95_sec": 0.0011557309999261633
+            },
+            "sim.step": {
+              "count": 325,
+              "max_sec": 0.016996631000438356,
+              "p95_sec": 0.008547899999939546
+            },
+            "probe.record": {
+              "count": 1432,
+              "max_sec": 0.005184725000617618,
+              "p95_sec": 0.00036796399945160374
+            },
+            "_estop_cb": {
+              "count": 164,
+              "max_sec": 0.00208120100069209,
+              "p95_sec": 4.420299956109375e-05
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00011192500005563488,
+              "p95_sec": 0.00011192500005563488
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00011596700005611638,
+              "p95_sec": 0.00011596700005611638
+            }
+          },
+          "cadence": {
+            "safety_supervisor/2734/executor_heartbeat/": {
+              "count": 163,
+              "p95_sec": 0.10496186999989732,
+              "max_sec": 11.063214621000043
+            },
+            "probe/2718/executor_heartbeat/": {
+              "count": 163,
+              "p95_sec": 0.10285909200047172,
+              "max_sec": 11.049539088000529
+            },
+            "observer/2740/executor_heartbeat/": {
+              "count": 162,
+              "p95_sec": 0.10321840199958388,
+              "max_sec": 11.075958401000207
+            },
+            "observer/2740/odom/": {
+              "count": 324,
+              "p95_sec": 0.05574677900040115,
+              "max_sec": 11.024982648000332
+            },
+            "probe/0/odom/": {
+              "count": 323,
+              "p95_sec": 0.05698399600078119,
+              "max_sec": 11.030713043000105
+            },
+            "scenario_runner/2733/executor_heartbeat/": {
+              "count": 162,
+              "p95_sec": 0.10451401299997087,
+              "max_sec": 11.11232445799942
+            }
+          },
+          "windows": [
+            {
+              "start": 6105.091764392,
+              "end": 6116.24945345,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 11.042172557000413,
+                "container": 11.02719629100011
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 11.02719629100011,
+                "host": 11.042172557000413,
+                "observer": 11.091231233999679,
+                "probe": 11.150795531999393,
+                "safety_supervisor": 11.063214621000043,
+                "scenario_runner": 11.11232445799942
+              },
+              "max_source_clock_jump_sec": 11.1496262550354,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/03-instrumented/gap-000.jsonl",
+              "context_sha256": "f95c7dd9da3392ce3dd5c0818bd3169f40ba7f10ceec5cfed19c237e14f947d6"
+            }
+          ]
+        },
+        {
+          "name": "04-no-image",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": true,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6130.00848971,
+          "active_end": 6170.21608317,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/04-no-image/analysis.json",
+          "analysis_sha256": "396e6d5e86661a3fb5c65bd8908734e1eb63ac190a6e87a0a9ac3e35a3eb1eff",
+          "trace_sha256": "4b7baed3b12e32ae38d1f8bea3bff85c3683547625a8adea9bf7770e83d57f47",
+          "run_metadata_sha256": "0fe1d9a913e2ee35f31660bc11b23f2e4425207c5c7235d53cf6000d3196e3fa",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "_publish_odom_and_tf": {
+              "count": 716,
+              "max_sec": 0.007657789000404591,
+              "p95_sec": 0.003862027999275597
+            },
+            "_record": {
+              "count": 3045,
+              "max_sec": 0.0028601249996427214,
+              "p95_sec": 6.706000021949876e-06
+            },
+            "sim.step": {
+              "count": 716,
+              "max_sec": 0.015283611999620916,
+              "p95_sec": 0.006474894000348286
+            },
+            "probe.record": {
+              "count": 3129,
+              "max_sec": 0.004265622999810148,
+              "p95_sec": 0.00030575399978260975
+            },
+            "safety.tick": {
+              "count": 714,
+              "max_sec": 0.019709119999788527,
+              "p95_sec": 0.004108471000108693
+            },
+            "_candidate_cb": {
+              "count": 574,
+              "max_sec": 0.00018903600084740901,
+              "p95_sec": 9.665000106906518e-06
+            },
+            "_estop_cb": {
+              "count": 358,
+              "max_sec": 0.003207945999747608,
+              "p95_sec": 8.436099960817955e-05
+            },
+            "_publish_vehicles": {
+              "count": 358,
+              "max_sec": 0.008070023000072979,
+              "p95_sec": 0.0028587189999598195
+            },
+            "_publish_image": {
+              "count": 358,
+              "max_sec": 7.097500019881409e-05,
+              "p95_sec": 1.2180007615825161e-06
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00012966899976163404,
+              "p95_sec": 0.00012966899976163404
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00011782199999288423,
+              "p95_sec": 0.00011782199999288423
+            }
+          },
+          "cadence": {
+            "scenario_runner/2865/executor_heartbeat/": {
+              "count": 360,
+              "p95_sec": 0.1026117780002096,
+              "max_sec": 4.185612673999458
+            },
+            "observer/2872/odom/": {
+              "count": 715,
+              "p95_sec": 0.054998470999635174,
+              "max_sec": 4.177341483999953
+            },
+            "safety_supervisor/2866/executor_heartbeat/": {
+              "count": 357,
+              "p95_sec": 0.10435759000029066,
+              "max_sec": 4.260149472000194
+            },
+            "observer/2872/executor_heartbeat/": {
+              "count": 359,
+              "p95_sec": 0.10303278199990018,
+              "max_sec": 4.199003644000186
+            },
+            "probe/2850/executor_heartbeat/": {
+              "count": 359,
+              "p95_sec": 0.10342864100039151,
+              "max_sec": 4.1957101159996455
+            },
+            "probe/0/odom/": {
+              "count": 715,
+              "p95_sec": 0.05570688900024834,
+              "max_sec": 4.176130517999809
+            }
+          },
+          "windows": [
+            {
+              "start": 6156.318901277,
+              "end": 6156.822700942,
+              "classification": "correlated_host_sampling_delay; timing layer unresolved",
+              "sampler_max_interval_sec": {
+                "host": 0.34123379700031364,
+                "container": 0.32884385800025484
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "probe": 0.5037996649998604
+              },
+              "max_source_clock_jump_sec": 0.48369598388671875,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/04-no-image/gap-000.jsonl",
+              "context_sha256": "13846e954365ee09e343687e11a8d4ff743aaf68ef4dd711214c98b67620d5fd"
+            },
+            {
+              "start": 6160.92732173,
+              "end": 6165.268330111,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 4.1567513560003135,
+                "container": 4.257649840999875
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 4.257649840999875,
+                "host": 4.1567513560003135,
+                "observer": 4.268843511999876,
+                "probe": 4.301117117999638,
+                "safety_supervisor": 4.260149472000194,
+                "scenario_runner": 4.2179575410000325
+              },
+              "max_source_clock_jump_sec": 4.301198482513428,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/04-no-image/gap-001.jsonl",
+              "context_sha256": "4c6e54ad96d6fcac17bb78abd25aa34956dc72debf78c5162f9b73eaf8f1cb76"
+            }
+          ]
+        },
+        {
+          "name": "05-instrumented",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6181.053925722,
+          "active_end": 6216.86093806,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/05-instrumented/analysis.json",
+          "analysis_sha256": "48b4a531ac80d27b87b09148a479d8893f08fef7dfe93467126c6fa19a4c612e",
+          "trace_sha256": "44c6d4864ce3f9f5b066e2077eeacf1c23c10a08853c96045191ac7eed228abb",
+          "run_metadata_sha256": "17e89e52c6841858b8e8a9a4e9d80cc99678dbbf8bd30b6fd93cb58cb0fc63bf",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "safety.tick": {
+              "count": 617,
+              "max_sec": 0.055512145999273343,
+              "p95_sec": 0.012855003000368015
+            },
+            "_record": {
+              "count": 2619,
+              "max_sec": 0.008195686000362912,
+              "p95_sec": 1.0417999874334782e-05
+            },
+            "_estop_cb": {
+              "count": 309,
+              "max_sec": 0.006612399999539775,
+              "p95_sec": 0.00023705999956291635
+            },
+            "_candidate_cb": {
+              "count": 500,
+              "max_sec": 0.00023153099937189836,
+              "p95_sec": 1.5320000784413423e-05
+            },
+            "probe.record": {
+              "count": 2697,
+              "max_sec": 0.02964040599999862,
+              "p95_sec": 0.0008277569995698286
+            },
+            "_publish_odom_and_tf": {
+              "count": 615,
+              "max_sec": 0.048694264000005205,
+              "p95_sec": 0.013519711999833817
+            },
+            "_publish_vehicles": {
+              "count": 307,
+              "max_sec": 0.02844198000002507,
+              "p95_sec": 0.01040008099971601
+            },
+            "_publish_image": {
+              "count": 307,
+              "max_sec": 0.021369697999944037,
+              "p95_sec": 0.005347428000277432
+            },
+            "sim.step": {
+              "count": 615,
+              "max_sec": 0.06183368500023789,
+              "p95_sec": 0.026502833000449755
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00012482700003602076,
+              "p95_sec": 0.00012482700003602076
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.0002861279999706312,
+              "p95_sec": 0.0002861279999706312
+            }
+          },
+          "cadence": {
+            "probe/2982/executor_heartbeat/": {
+              "count": 309,
+              "p95_sec": 0.11107943099978002,
+              "max_sec": 5.0794378279997545
+            },
+            "observer/3004/odom/": {
+              "count": 615,
+              "p95_sec": 0.06633180900007574,
+              "max_sec": 5.033967979000408
+            },
+            "probe/0/odom/": {
+              "count": 615,
+              "p95_sec": 0.06893525600025896,
+              "max_sec": 5.020871778000583
+            },
+            "observer/3004/executor_heartbeat/": {
+              "count": 308,
+              "p95_sec": 0.10941967500002647,
+              "max_sec": 5.084865640999851
+            },
+            "scenario_runner/2997/executor_heartbeat/": {
+              "count": 306,
+              "p95_sec": 0.11810009300006641,
+              "max_sec": 5.109258294000028
+            },
+            "safety_supervisor/2998/executor_heartbeat/": {
+              "count": 309,
+              "p95_sec": 0.11321181199946295,
+              "max_sec": 5.026329710000027
+            }
+          },
+          "windows": [
+            {
+              "start": 6206.62283477,
+              "end": 6211.887625618,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 5.005962440000076,
+                "container": 5.067801428000166
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 5.067801428000166,
+                "host": 5.005962440000076,
+                "observer": 5.084865640999851,
+                "probe": 5.151091878999978,
+                "safety_supervisor": 5.097191750000093,
+                "scenario_runner": 5.109258294000028
+              },
+              "max_source_clock_jump_sec": 5.15271782875061,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/05-instrumented/gap-000.jsonl",
+              "context_sha256": "4a57df820d5e6ebdc9c9d98d7cd10e88562827cb7e741dd16e427addf40af774"
+            }
+          ]
+        },
+        {
+          "name": "06-no-image",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": true,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6227.554693657,
+          "active_end": 6301.29038353,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/06-no-image/analysis.json",
+          "analysis_sha256": "84abbf6e090af312c24d2a5040d42ede92918b6d865ee44869dd6bc3e6e7616c",
+          "trace_sha256": "06b363a8970f335c0e383124dfebfadd609c35a114b6efbbee5ff5979357ad14",
+          "run_metadata_sha256": "e19b41287ddfd98d6ab019858b86c453104f68e0aa614d60b18db0d1f7d79553",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "safety.tick": {
+              "count": 884,
+              "max_sec": 0.07288882100056071,
+              "p95_sec": 0.0123850299996775
+            },
+            "_record": {
+              "count": 3778,
+              "max_sec": 0.00990799099963624,
+              "p95_sec": 1.0717999430198688e-05
+            },
+            "_publish_odom_and_tf": {
+              "count": 882,
+              "max_sec": 0.08873469799982558,
+              "p95_sec": 0.013500777999979618
+            },
+            "_publish_vehicles": {
+              "count": 441,
+              "max_sec": 0.032049761999587645,
+              "p95_sec": 0.012199956999211281
+            },
+            "_publish_image": {
+              "count": 441,
+              "max_sec": 5.152999619895127e-06,
+              "p95_sec": 1.908999365696218e-06
+            },
+            "sim.step": {
+              "count": 882,
+              "max_sec": 0.09066649099986535,
+              "p95_sec": 0.022618942000008246
+            },
+            "_candidate_cb": {
+              "count": 718,
+              "max_sec": 0.00648381100018014,
+              "p95_sec": 1.43449997267453e-05
+            },
+            "probe.record": {
+              "count": 3902,
+              "max_sec": 0.02155750999918382,
+              "p95_sec": 0.0011690460005411296
+            },
+            "_estop_cb": {
+              "count": 442,
+              "max_sec": 0.005181285000617208,
+              "p95_sec": 6.639999992330559e-05
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.005882555000425782,
+              "p95_sec": 0.005882555000425782
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00039362099960271735,
+              "p95_sec": 0.00039362099960271735
+            }
+          },
+          "cadence": {
+            "probe/3114/executor_heartbeat/": {
+              "count": 441,
+              "p95_sec": 0.11181744599980448,
+              "max_sec": 8.69283017700036
+            },
+            "safety_supervisor/3130/executor_heartbeat/": {
+              "count": 442,
+              "p95_sec": 0.11322892699990916,
+              "max_sec": 8.723319524000544
+            },
+            "observer/3137/odom/": {
+              "count": 881,
+              "p95_sec": 0.06616466000014043,
+              "max_sec": 8.638723289999689
+            },
+            "observer/3137/executor_heartbeat/": {
+              "count": 441,
+              "p95_sec": 0.11010615499981213,
+              "max_sec": 8.702829405000557
+            },
+            "scenario_runner/3129/executor_heartbeat/": {
+              "count": 443,
+              "p95_sec": 0.12211476700031199,
+              "max_sec": 8.629751893000503
+            },
+            "probe/0/odom/": {
+              "count": 881,
+              "p95_sec": 0.07093813400024374,
+              "max_sec": 19.111773978999736
+            }
+          },
+          "windows": [
+            {
+              "start": 6231.172910693,
+              "end": 6233.27676173,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 1.9335060369994608,
+                "container": 1.9092729560006774
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 1.9092729560006774,
+                "host": 1.9335060369994608,
+                "observer": 2.012937203000547,
+                "probe": 2.099701451999863,
+                "safety_supervisor": 1.9370948590003536,
+                "scenario_runner": 1.9827043819996106
+              },
+              "max_source_clock_jump_sec": 2.0979199409484863,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/06-no-image/gap-000.jsonl",
+              "context_sha256": "85f9490b810fdb92f8891c9de9a42dd74919e0aa922dcefb92f95b3c91d25716"
+            },
+            {
+              "start": 6272.54279938,
+              "end": 6281.375454566,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 8.620095426999796,
+                "container": 8.68326898000032
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 8.68326898000032,
+                "host": 8.620095426999796,
+                "observer": 8.731623439000032,
+                "probe": 8.747692604000804,
+                "safety_supervisor": 8.723319524000544,
+                "scenario_runner": 8.722649633999936
+              },
+              "max_source_clock_jump_sec": 8.750843048095703,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/06-no-image/gap-001.jsonl",
+              "context_sha256": "a10945171db6bc3c058a86fc31b9b5085f4c2aede3dd58a451d675b828a639f4"
+            },
+            {
+              "start": 6282.173806028,
+              "end": 6301.289827298,
+              "classification": "correlated_host_sampling_delay; timing layer unresolved",
+              "sampler_max_interval_sec": {
+                "host": 19.101500698000564,
+                "container": 19.128867207999974
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "observer": 19.109091540999543,
+                "probe": 19.111773978999736
+              },
+              "max_source_clock_jump_sec": 0.04928231239318848,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/06-no-image/gap-002.jsonl",
+              "context_sha256": "26710034001bfee8367c8bad25d43d91ab852669fb320723093beef8c0cd8510"
+            }
+          ]
+        },
+        {
+          "name": "07-instrumented",
+          "status": "MISSION_SUCCEEDED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 4,
+            "result": {
+              "success": true,
+              "final_state": "COMPLETE",
+              "reason": "DOCKED_BOARDED_DOOR_CLOSED"
+            }
+          },
+          "active_start": 6311.732065426,
+          "active_end": 6384.754015004,
+          "analysis_status": "NOT_REPRODUCED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/07-instrumented/analysis.json",
+          "analysis_sha256": "47fb2b598580ca06df1db77762814bd82afe8a1f670514b149a47cef30029395",
+          "trace_sha256": "491edc72f5ee65fbd0f87f830ccdc00ee530cae88268b06493608b4ac3c1d9e7",
+          "run_metadata_sha256": "c73ccfa2ab27971a630d50f6a98b4ae26fdcbf79ba6e62fdaf431c5c6bbde3bb",
+          "protective_stop_count": 0,
+          "callback_metrics": {
+            "_record": {
+              "count": 6222,
+              "max_sec": 0.015133224000237533,
+              "p95_sec": 1.0149999980058055e-05
+            },
+            "_publish_odom_and_tf": {
+              "count": 1459,
+              "max_sec": 0.09262928099997225,
+              "p95_sec": 0.010110136000548664
+            },
+            "sim.step": {
+              "count": 1459,
+              "max_sec": 0.11911091000001761,
+              "p95_sec": 0.020970708999811905
+            },
+            "safety.tick": {
+              "count": 1459,
+              "max_sec": 0.03770308300045144,
+              "p95_sec": 0.01210988200000429
+            },
+            "_candidate_cb": {
+              "count": 1162,
+              "max_sec": 0.004827140000088548,
+              "p95_sec": 1.4590000319003593e-05
+            },
+            "probe.record": {
+              "count": 6408,
+              "max_sec": 0.021596560000034515,
+              "p95_sec": 0.0009296649996031192
+            },
+            "_publish_vehicles": {
+              "count": 729,
+              "max_sec": 0.02253048900001886,
+              "p95_sec": 0.008725276000404847
+            },
+            "_publish_image": {
+              "count": 729,
+              "max_sec": 0.01826319199972204,
+              "p95_sec": 0.006065386999580369
+            },
+            "_estop_cb": {
+              "count": 730,
+              "max_sec": 0.009558390000165673,
+              "p95_sec": 0.00013523899997380795
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.007618010999976832,
+              "p95_sec": 0.007618010999976832
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.004602434999469551,
+              "p95_sec": 0.004602434999469551
+            }
+          },
+          "cadence": {
+            "probe/3246/executor_heartbeat/": {
+              "count": 729,
+              "p95_sec": 0.1064924450001854,
+              "max_sec": 0.1496186479998869
+            },
+            "probe/0/odom/": {
+              "count": 1458,
+              "p95_sec": 0.06459224799982621,
+              "max_sec": 0.18444319699938205
+            },
+            "safety_supervisor/3262/executor_heartbeat/": {
+              "count": 729,
+              "p95_sec": 0.10998219899920514,
+              "max_sec": 0.16125501400074427
+            },
+            "scenario_runner/3261/executor_heartbeat/": {
+              "count": 728,
+              "p95_sec": 0.11327626299953408,
+              "max_sec": 0.22750422900026024
+            },
+            "observer/3268/odom/": {
+              "count": 1458,
+              "p95_sec": 0.06277279500045552,
+              "max_sec": 0.14841437300037796
+            },
+            "observer/3268/executor_heartbeat/": {
+              "count": 729,
+              "p95_sec": 0.10703954000018712,
+              "max_sec": 0.18211297299967555
+            }
+          },
+          "windows": []
+        },
+        {
+          "name": "08-instrumented",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6401.507716979,
+          "active_end": 6498.22651631,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/08-instrumented/analysis.json",
+          "analysis_sha256": "67bdf123361648c95dee2bb50c0b87d94863979c67e7a14814add44b1a073b47",
+          "trace_sha256": "cbae7db8b9fdce210a568cfb44bc9736b81f61beb9077639ac0b10e2a1c6e59d",
+          "run_metadata_sha256": "3cd21cb5c300904c96b4ae3e28caa3c9dc8fc551354d0cd562b62e665559fa19",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "sim.step": {
+              "count": 1326,
+              "max_sec": 0.05846902399935061,
+              "p95_sec": 0.020577300000695686
+            },
+            "safety.tick": {
+              "count": 1323,
+              "max_sec": 0.09003705899976922,
+              "p95_sec": 0.011285075999694527
+            },
+            "_record": {
+              "count": 5654,
+              "max_sec": 0.012210218999825884,
+              "p95_sec": 1.0071999895444605e-05
+            },
+            "_estop_cb": {
+              "count": 664,
+              "max_sec": 0.004726194999420841,
+              "p95_sec": 5.5839000197011046e-05
+            },
+            "probe.record": {
+              "count": 5839,
+              "max_sec": 0.018907300000137184,
+              "p95_sec": 0.0008851129996401141
+            },
+            "_publish_odom_and_tf": {
+              "count": 1325,
+              "max_sec": 0.05821029999970051,
+              "p95_sec": 0.011037527000553382
+            },
+            "_candidate_cb": {
+              "count": 1143,
+              "max_sec": 0.0007675030001337291,
+              "p95_sec": 1.425299979018746e-05
+            },
+            "_publish_vehicles": {
+              "count": 662,
+              "max_sec": 0.023490914999456436,
+              "p95_sec": 0.008312926000144216
+            },
+            "_publish_image": {
+              "count": 662,
+              "max_sec": 0.016939985000135493,
+              "p95_sec": 0.006387597999491845
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.0004105360003450187,
+              "p95_sec": 0.0004105360003450187
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00044737799998983974,
+              "p95_sec": 0.00044737799998983974
+            }
+          },
+          "cadence": {
+            "safety_supervisor/3394/executor_heartbeat/": {
+              "count": 662,
+              "p95_sec": 0.1116497419998268,
+              "max_sec": 15.537883746999796
+            },
+            "observer/3400/executor_heartbeat/": {
+              "count": 664,
+              "p95_sec": 0.10636453100050858,
+              "max_sec": 15.469710729000326
+            },
+            "scenario_runner/3393/executor_heartbeat/": {
+              "count": 663,
+              "p95_sec": 0.10718773400003556,
+              "max_sec": 15.464442186999804
+            },
+            "observer/3400/odom/": {
+              "count": 1324,
+              "p95_sec": 0.06335085999944567,
+              "max_sec": 15.466240062999532
+            },
+            "probe/3378/executor_heartbeat/": {
+              "count": 663,
+              "p95_sec": 0.10737141400022665,
+              "max_sec": 15.517182290000164
+            },
+            "probe/0/odom/": {
+              "count": 1326,
+              "p95_sec": 0.06545271000049979,
+              "max_sec": 15.467903689000195
+            }
+          },
+          "windows": [
+            {
+              "start": 6466.150809647,
+              "end": 6481.807763327,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 15.489597943999797,
+                "container": 15.478148551999766
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 15.478148551999766,
+                "host": 15.489597943999797,
+                "observer": 15.588470881999456,
+                "probe": 15.609180065000146,
+                "safety_supervisor": 15.537883746999796,
+                "scenario_runner": 15.568043086000216
+              },
+              "max_source_clock_jump_sec": 15.563211917877197,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/08-instrumented/gap-000.jsonl",
+              "context_sha256": "38daa9ed85389687ab15a8e2c1eb4f0e0a3f179f552e21f54150f5f24a03cce3"
+            },
+            {
+              "start": 6483.202198213,
+              "end": 6498.222162432,
+              "classification": "correlated_host_sampling_delay; timing layer unresolved",
+              "sampler_max_interval_sec": {
+                "host": 15.019675940000525,
+                "container": 15.011923125000067
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "observer": 15.017778368000108,
+                "probe": 14.986387775000367,
+                "safety_supervisor": 14.951797158999398,
+                "scenario_runner": 14.956213442000262
+              },
+              "max_source_clock_jump_sec": 14.942269802093506,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/08-instrumented/gap-001.jsonl",
+              "context_sha256": "6e14c3694e36524c52f1050730e90d1eb97190fe3810d749277db72dd811d690"
+            }
+          ]
+        },
+        {
+          "name": "09-no-image",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": true,
+          "injected_pause": null,
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6508.251335962,
+          "active_end": 6541.837947057,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/09-no-image/analysis.json",
+          "analysis_sha256": "45ab844ca48387c11d9a4b4f4f61bdbeea30038be6b34143efb2a77c22e35b40",
+          "trace_sha256": "e403383afb12c11c1f199a6a6a9e53cef08edb6b99cecd8e2ea78e3edc45df91",
+          "run_metadata_sha256": "173495c66311d0ca02714a581fba6822290f32d0b1326809c26c16be24506810",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "safety.tick": {
+              "count": 347,
+              "max_sec": 0.012961126999471162,
+              "p95_sec": 0.007970444999955362
+            },
+            "probe.record": {
+              "count": 1517,
+              "max_sec": 0.011127278999992996,
+              "p95_sec": 0.0005106560001877369
+            },
+            "_record": {
+              "count": 1464,
+              "max_sec": 0.000509698000314529,
+              "p95_sec": 7.86300006438978e-06
+            },
+            "_estop_cb": {
+              "count": 173,
+              "max_sec": 0.0036162070000500535,
+              "p95_sec": 9.041299927048385e-05
+            },
+            "_publish_odom_and_tf": {
+              "count": 345,
+              "max_sec": 0.013874741999643447,
+              "p95_sec": 0.007143720999920333
+            },
+            "sim.step": {
+              "count": 345,
+              "max_sec": 0.020142051999755495,
+              "p95_sec": 0.011480787000436976
+            },
+            "_candidate_cb": {
+              "count": 324,
+              "max_sec": 0.0007182069994087215,
+              "p95_sec": 1.1172999620612245e-05
+            },
+            "_publish_vehicles": {
+              "count": 172,
+              "max_sec": 0.010716490000049816,
+              "p95_sec": 0.004732746999252413
+            },
+            "_publish_image": {
+              "count": 172,
+              "max_sec": 5.9687999964808114e-05,
+              "p95_sec": 1.6789999790489674e-06
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00022013000034348806,
+              "p95_sec": 0.00022013000034348806
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00020724600017274497,
+              "p95_sec": 0.00020724600017274497
+            }
+          },
+          "cadence": {
+            "probe/3510/executor_heartbeat/": {
+              "count": 173,
+              "p95_sec": 0.10757358499995462,
+              "max_sec": 8.333671593999497
+            },
+            "observer/3532/executor_heartbeat/": {
+              "count": 172,
+              "p95_sec": 0.10388512200006517,
+              "max_sec": 8.352954700000737
+            },
+            "observer/3532/odom/": {
+              "count": 344,
+              "p95_sec": 0.0577146100004029,
+              "max_sec": 8.322304735000216
+            },
+            "probe/0/odom/": {
+              "count": 344,
+              "p95_sec": 0.05995686200003547,
+              "max_sec": 8.308307059000072
+            },
+            "safety_supervisor/3526/executor_heartbeat/": {
+              "count": 174,
+              "p95_sec": 0.1083640259994354,
+              "max_sec": 8.310723095999492
+            },
+            "scenario_runner/3525/executor_heartbeat/": {
+              "count": 172,
+              "p95_sec": 0.11038841000026878,
+              "max_sec": 8.36756402500032
+            }
+          },
+          "windows": [
+            {
+              "start": 6522.181575806,
+              "end": 6530.659840555,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 8.335874012999739,
+                "container": 8.369949083000392
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 8.369949083000392,
+                "host": 8.335874012999739,
+                "observer": 8.371169243000622,
+                "probe": 8.45833262799988,
+                "safety_supervisor": 8.329693933000271,
+                "scenario_runner": 8.36756402500032
+              },
+              "max_source_clock_jump_sec": 8.46068263053894,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/09-no-image/gap-000.jsonl",
+              "context_sha256": "ca54d78762184f09b2c732994d546d08ecd29debbee70fdb860bee2834b1648b"
+            },
+            {
+              "start": 6533.791571241,
+              "end": 6541.837706432,
+              "classification": "correlated_host_sampling_delay; timing layer unresolved",
+              "sampler_max_interval_sec": {
+                "host": 8.033527482999489,
+                "container": 8.138171614000385
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "safety_supervisor": 8.024672614999872,
+                "scenario_runner": 8.046135190999848
+              },
+              "max_source_clock_jump_sec": 0,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-natural-20261023-v2/09-no-image/gap-001.jsonl",
+              "context_sha256": "ae03138dd74958c3929dd9dc378208f5949dd8c54dc1358328e139c783a68988"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "directory": "evidence/runs/gap-control-observer-20261023",
+      "source_commit": "bf845221cc4d8cc98a84ea05571f6b23e1424467",
+      "image_id": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b",
+      "capture_status": "COMPLETED",
+      "returncode": 0,
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-gap-50707",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout:/workspace:ro",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout/evidence/runs/gap-control-observer-20261023:/gap-results",
+        "smh-m3:latest",
+        "bash",
+        "scripts/gap_container.sh",
+        "/gap-results",
+        "1",
+        "1200",
+        "observer"
+      ],
+      "environment_sha256": "0d503d96e6226539ed8d7d3e8d76d9207a9cccb086f01506a0c1792dbd42aa53",
+      "artifact_manifest_sha256": "7302b6619302cfbb56b558581d6e17532012b0f39dddb0facf7933d43ab33310",
+      "attempts": [
+        {
+          "name": "00-instrumented",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": "observer",
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_STOP"
+            }
+          },
+          "active_start": 6635.372427703,
+          "active_end": 6667.207615091,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-control-observer-20261023/00-instrumented/analysis.json",
+          "analysis_sha256": "d2424989709cf9bfb7eaf65953f5ad6ef6efd8f92c9fae8ef2ddcae87bca3a78",
+          "trace_sha256": "ffb722b6d2c7eaaff08f40855a083826d860941cf3e6f490ec81bd8b083c3eed",
+          "run_metadata_sha256": "ca31618b2cc1047f6eefd9df3016bfe39b0eb6fe4214cf1c96586807d2a7defc",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "probe.record": {
+              "count": 1878,
+              "max_sec": 0.011049423999793362,
+              "p95_sec": 0.0016535679997105035
+            },
+            "safety.tick": {
+              "count": 427,
+              "max_sec": 0.04135631600001943,
+              "p95_sec": 0.010986242999933893
+            },
+            "_publish_odom_and_tf": {
+              "count": 429,
+              "max_sec": 0.07088962200032256,
+              "p95_sec": 0.01044330899912893
+            },
+            "sim.step": {
+              "count": 429,
+              "max_sec": 0.07415060699986498,
+              "p95_sec": 0.019267061999926227
+            },
+            "_record": {
+              "count": 1822,
+              "max_sec": 0.011679131999699166,
+              "p95_sec": 1.927900029841112e-05
+            },
+            "_estop_cb": {
+              "count": 213,
+              "max_sec": 0.006086895999942499,
+              "p95_sec": 0.00029702499978156993
+            },
+            "_publish_vehicles": {
+              "count": 214,
+              "max_sec": 0.019760916999985056,
+              "p95_sec": 0.006642908999310748
+            },
+            "_publish_image": {
+              "count": 214,
+              "max_sec": 0.00777412200022809,
+              "p95_sec": 0.004006461999779276
+            },
+            "_candidate_cb": {
+              "count": 372,
+              "max_sec": 0.007954634999805421,
+              "p95_sec": 3.025800015166169e-05
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.0003161230006298865,
+              "p95_sec": 0.0003161230006298865
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00020545099960145308,
+              "p95_sec": 0.00020545099960145308
+            }
+          },
+          "cadence": {
+            "observer/2344/executor_heartbeat/": {
+              "count": 206,
+              "p95_sec": 0.10525808000056713,
+              "max_sec": 9.793075324999336
+            },
+            "probe/2320/executor_heartbeat/": {
+              "count": 213,
+              "p95_sec": 0.10926633300005051,
+              "max_sec": 9.85035008199975
+            },
+            "safety_supervisor/2338/executor_heartbeat/": {
+              "count": 214,
+              "p95_sec": 0.11266937300024438,
+              "max_sec": 9.864754940000239
+            },
+            "scenario_runner/2337/executor_heartbeat/": {
+              "count": 214,
+              "p95_sec": 0.11073709500033146,
+              "max_sec": 9.826824460999887
+            },
+            "observer/2344/odom/": {
+              "count": 422,
+              "p95_sec": 0.06132087599962688,
+              "max_sec": 9.823839720000251
+            },
+            "probe/0/odom/": {
+              "count": 428,
+              "p95_sec": 0.06568927399985114,
+              "max_sec": 9.823510106999493
+            }
+          },
+          "windows": [
+            {
+              "start": 6649.672781096,
+              "end": 6650.556876509,
+              "classification": "observer_local_gap; system samplers continued",
+              "sampler_max_interval_sec": {
+                "host": 0.10303702900000644,
+                "container": 0.11089190400070947
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "observer": 0.883140345999891
+              },
+              "max_source_clock_jump_sec": 0.7969286441802979,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-control-observer-20261023/00-instrumented/gap-000.jsonl",
+              "context_sha256": "e53854c8d2fc3d5330959002d1ae4d7dc48eb8bff7e7b2e45b751f354a953f38"
+            },
+            {
+              "start": 6652.17250932,
+              "end": 6662.159746362,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 9.855946743999993,
+                "container": 9.810344452999743
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 9.810344452999743,
+                "host": 9.855946743999993,
+                "observer": 9.864631272999759,
+                "probe": 9.972168368999519,
+                "safety_supervisor": 9.864754940000239,
+                "scenario_runner": 9.826824460999887
+              },
+              "max_source_clock_jump_sec": 9.948395490646362,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-control-observer-20261023/00-instrumented/gap-001.jsonl",
+              "context_sha256": "c89c721a1287b45bc0d649a00f5e17457ed6b19db6c2910c2b94166ac7a0a747"
+            },
+            {
+              "start": 6662.269886639,
+              "end": 6663.243712398,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 0.8964721980000832,
+                "container": 0.8191024439993271
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 0.8191024439993271,
+                "host": 0.8964721980000832,
+                "observer": 0.9091291199993066,
+                "probe": 0.9735706490000666,
+                "safety_supervisor": 0.9078857089998564,
+                "scenario_runner": 0.892550680999193
+              },
+              "max_source_clock_jump_sec": 0.9597342014312744,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-control-observer-20261023/00-instrumented/gap-002.jsonl",
+              "context_sha256": "5cc68fc0b076107b797d2ff48d9b73805ed2ad0217b9c3c26473d74d57f66e35"
+            }
+          ],
+          "injection_records": [
+            {
+              "t": 6649.752469693,
+              "layer": "injection",
+              "stage": "SIGSTOP",
+              "target_pid": 2344
+            },
+            {
+              "t": 6650.554146451,
+              "layer": "injection",
+              "stage": "SIGCONT",
+              "target_pid": 2344
+            }
+          ],
+          "injection_duration_sec": 0.8016767579993029,
+          "injection_sha256": "469bf0bc786ba9dc847bedba4e6999d16a67d13486134462de2559ed872d536a",
+          "injection_window_classifications": [
+            "observer_local_gap; system samplers continued"
+          ],
+          "localization_status": "PASS",
+          "localization_criterion": "Recorded >=0.8 s injected pause, matching target-layer gap, independent system sampling <=0.25 s; uninjected peer observer/probe/supervisor not gapped. This is a localization check, not mission acceptance."
+        }
+      ]
+    },
+    {
+      "directory": "evidence/runs/gap-control-probe-20261023",
+      "source_commit": "bf845221cc4d8cc98a84ea05571f6b23e1424467",
+      "image_id": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b",
+      "capture_status": "COMPLETED",
+      "returncode": 0,
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-gap-54248",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout:/workspace:ro",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout/evidence/runs/gap-control-probe-20261023:/gap-results",
+        "smh-m3:latest",
+        "bash",
+        "scripts/gap_container.sh",
+        "/gap-results",
+        "1",
+        "1200",
+        "probe"
+      ],
+      "environment_sha256": "8d39beac61e57181265cf40d9290852ae4f098579b85f92aff1ad122087849e6",
+      "artifact_manifest_sha256": "10c60aff8245c51610fa6215fb5791d8f727c8000a7fd995d66798506a15ad67",
+      "attempts": [
+        {
+          "name": "00-instrumented",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": "probe",
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "SAFETY_INPUT_UNKNOWN:estop_stale"
+            }
+          },
+          "active_start": 6775.523490843,
+          "active_end": 6796.333790497,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-control-probe-20261023/00-instrumented/analysis.json",
+          "analysis_sha256": "e00c8f965019a3be7f5931000185d49d8a9d309e3557431c664d12b31a3f9541",
+          "trace_sha256": "016e847828dc438351f4832032b5d108f319dc8b3ab0174c398d7f1d2a038ba4",
+          "run_metadata_sha256": "fb0391470114a3ed4f1bcc8544f1032cba3bf379203259953a179881516d8a1a",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "safety.tick": {
+              "count": 417,
+              "max_sec": 0.02422150199981843,
+              "p95_sec": 0.005572486000346544
+            },
+            "_publish_odom_and_tf": {
+              "count": 416,
+              "max_sec": 0.03046258199992735,
+              "p95_sec": 0.00817236300008517
+            },
+            "_publish_vehicles": {
+              "count": 208,
+              "max_sec": 0.01929174100041564,
+              "p95_sec": 0.004921246999401774
+            },
+            "_publish_image": {
+              "count": 208,
+              "max_sec": 0.007710314999712864,
+              "p95_sec": 0.003864852000333485
+            },
+            "sim.step": {
+              "count": 416,
+              "max_sec": 0.04265400799977215,
+              "p95_sec": 0.01671078999970632
+            },
+            "_record": {
+              "count": 1761,
+              "max_sec": 0.01889653200032626,
+              "p95_sec": 1.324299955740571e-05
+            },
+            "probe.record": {
+              "count": 1778,
+              "max_sec": 0.010444303000440414,
+              "p95_sec": 0.0006626750000577886
+            },
+            "_estop_cb": {
+              "count": 201,
+              "max_sec": 0.005757938999522594,
+              "p95_sec": 0.00022295999951893464
+            },
+            "_candidate_cb": {
+              "count": 379,
+              "max_sec": 0.006767445000150474,
+              "p95_sec": 1.6492999748152215e-05
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00022786699992138892,
+              "p95_sec": 0.00022786699992138892
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.001074006999260746,
+              "p95_sec": 0.001074006999260746
+            }
+          },
+          "cadence": {
+            "probe/2320/executor_heartbeat/": {
+              "count": 200,
+              "p95_sec": 0.1045540359991719,
+              "max_sec": 0.829417494000154
+            },
+            "safety_supervisor/2338/executor_heartbeat/": {
+              "count": 208,
+              "p95_sec": 0.10690636799972708,
+              "max_sec": 0.12739538799996808
+            },
+            "probe/0/odom/": {
+              "count": 409,
+              "p95_sec": 0.06029052000030788,
+              "max_sec": 0.8264118510005574
+            },
+            "observer/2344/odom/": {
+              "count": 415,
+              "p95_sec": 0.05953555499945651,
+              "max_sec": 0.08171425000000454
+            },
+            "observer/2344/executor_heartbeat/": {
+              "count": 207,
+              "p95_sec": 0.10326136500043503,
+              "max_sec": 0.11025800500010519
+            },
+            "scenario_runner/2337/executor_heartbeat/": {
+              "count": 207,
+              "p95_sec": 0.10352208499989501,
+              "max_sec": 0.1446434709996538
+            }
+          },
+          "windows": [
+            {
+              "start": 6790.341384673,
+              "end": 6791.334962793,
+              "classification": "probe_local_gap; independent observer continued",
+              "sampler_max_interval_sec": {
+                "host": 0.11562912299996242,
+                "container": 0.11509267599922168
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "probe": 0.984001060999617
+              },
+              "max_source_clock_jump_sec": 0.8230936527252197,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-control-probe-20261023/00-instrumented/gap-000.jsonl",
+              "context_sha256": "fdb434c8330bb577662df1685d5d520dcdf82e4b9cdfc90f76e3738d4a6b7326"
+            }
+          ],
+          "injection_records": [
+            {
+              "t": 6790.515307477,
+              "layer": "injection",
+              "stage": "SIGSTOP",
+              "target_pid": 2320
+            },
+            {
+              "t": 6791.315999806,
+              "layer": "injection",
+              "stage": "SIGCONT",
+              "target_pid": 2320
+            }
+          ],
+          "injection_duration_sec": 0.8006923290004124,
+          "injection_sha256": "a9b60c6bc3bd709e9c4c5a0823b0b1253db1a2bb7c10c67060d37e6e1128639b",
+          "injection_window_classifications": [
+            "probe_local_gap; independent observer continued"
+          ],
+          "localization_status": "PASS",
+          "localization_criterion": "Recorded >=0.8 s injected pause, matching target-layer gap, independent system sampling <=0.25 s; uninjected peer observer/probe/supervisor not gapped. This is a localization check, not mission acceptance."
+        }
+      ]
+    },
+    {
+      "directory": "evidence/runs/gap-control-simulator-20261023",
+      "source_commit": "bf845221cc4d8cc98a84ea05571f6b23e1424467",
+      "image_id": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b",
+      "capture_status": "COMPLETED",
+      "returncode": 0,
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-gap-57381",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout:/workspace:ro",
+        "-v",
+        "/home/arlen/projects/smart-mobility-hub-checkout/evidence/runs/gap-control-simulator-20261023:/gap-results",
+        "smh-m3:latest",
+        "bash",
+        "scripts/gap_container.sh",
+        "/gap-results",
+        "1",
+        "1200",
+        "scenario_runner"
+      ],
+      "environment_sha256": "152c319be2d5ad4469bdf90a9774a22250dd3ec7bd05b4e646871e82bd06cd43",
+      "artifact_manifest_sha256": "a3b2c71e44b8249c160ebc676d22944b5c7ad124dd8d61a8096e1876a78789af",
+      "attempts": [
+        {
+          "name": "00-instrumented",
+          "status": "MISSION_FAILED",
+          "seed": 300,
+          "instrumented": true,
+          "image_bypassed": false,
+          "injected_pause": "scenario_runner",
+          "error": null,
+          "terminal": {
+            "status": 6,
+            "result": {
+              "success": false,
+              "final_state": "SAFE_STOP",
+              "reason": "STALE_DOOR"
+            }
+          },
+          "active_start": 6854.091623597,
+          "active_end": 6876.458948421,
+          "analysis_status": "GAP_OBSERVED",
+          "analysis_path": "evidence/runs/gap-reanalysis-20261023/gap-control-simulator-20261023/00-instrumented/analysis.json",
+          "analysis_sha256": "e4de720420f77715ef889d3bfbc7ce87ea9fe873e80817c4cf64d9769e01b155",
+          "trace_sha256": "fc994e2bf5a8e8fc63c65d33fc0baa526ebf6bdfe92b0e1d44c597a2d2c7898f",
+          "run_metadata_sha256": "4fcf7cad424c308cbb561894b745982e4ae3a04b120acd5fe2a58d0e0daa2240",
+          "protective_stop_count": 1,
+          "callback_metrics": {
+            "probe.record": {
+              "count": 1487,
+              "max_sec": 0.008646110999507073,
+              "p95_sec": 0.00046858800033078296
+            },
+            "safety.tick": {
+              "count": 348,
+              "max_sec": 0.02618332600013673,
+              "p95_sec": 0.004897713999525877
+            },
+            "_candidate_cb": {
+              "count": 286,
+              "max_sec": 0.004800867000085418,
+              "p95_sec": 1.3217999367043376e-05
+            },
+            "_record": {
+              "count": 1426,
+              "max_sec": 0.00558260399975552,
+              "p95_sec": 9.706000128062442e-06
+            },
+            "_publish_odom_and_tf": {
+              "count": 332,
+              "max_sec": 0.012480131999836885,
+              "p95_sec": 0.003926805999981298
+            },
+            "sim.step": {
+              "count": 332,
+              "max_sec": 0.029829271999915363,
+              "p95_sec": 0.008223725999414455
+            },
+            "_estop_cb": {
+              "count": 174,
+              "max_sec": 0.0020141730001341784,
+              "p95_sec": 0.0001028990000122576
+            },
+            "_publish_vehicles": {
+              "count": 165,
+              "max_sec": 0.009845724999649974,
+              "p95_sec": 0.0024604909995105118
+            },
+            "_publish_image": {
+              "count": 165,
+              "max_sec": 0.004193560999738111,
+              "p95_sec": 0.0026003319999290397
+            },
+            "_reset_cb": {
+              "count": 1,
+              "max_sec": 0.000494297999466653,
+              "p95_sec": 0.000494297999466653
+            },
+            "_finish_reset_cb": {
+              "count": 1,
+              "max_sec": 0.00011156699929415481,
+              "p95_sec": 0.00011156699929415481
+            }
+          },
+          "cadence": {
+            "probe/2320/executor_heartbeat/": {
+              "count": 173,
+              "p95_sec": 0.10398441000052117,
+              "max_sec": 0.12773720099994534
+            },
+            "safety_supervisor/2338/executor_heartbeat/": {
+              "count": 174,
+              "p95_sec": 0.10515143799966609,
+              "max_sec": 5.028314146999946
+            },
+            "observer/2344/odom/": {
+              "count": 331,
+              "p95_sec": 0.05559178899966355,
+              "max_sec": 0.8188279460000558
+            },
+            "scenario_runner/2337/executor_heartbeat/": {
+              "count": 165,
+              "p95_sec": 0.10355554200032202,
+              "max_sec": 0.845951715999945
+            },
+            "observer/2344/executor_heartbeat/": {
+              "count": 174,
+              "p95_sec": 0.10372112700042635,
+              "max_sec": 4.993980732999262
+            },
+            "probe/0/odom/": {
+              "count": 331,
+              "p95_sec": 0.05670889800057921,
+              "max_sec": 0.8258117169998513
+            }
+          },
+          "windows": [
+            {
+              "start": 6867.63877732,
+              "end": 6868.6140859,
+              "classification": "ROS_delivery_or_publisher_gap; system samplers continued",
+              "sampler_max_interval_sec": {
+                "host": 0.10440487100004248,
+                "container": 0.10629681699992943
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "observer": 0.8685148969998409,
+                "probe": 0.9753085799993642,
+                "scenario_runner": 0.8700147710005695
+              },
+              "max_source_clock_jump_sec": 0.9655144214630127,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-control-simulator-20261023/00-instrumented/gap-000.jsonl",
+              "context_sha256": "9dbb62742bf8fe4b11ad83a2bf53f56b8df208c97a3636bfabb898dec319e95d"
+            },
+            {
+              "start": 6871.348819782,
+              "end": 6876.434280141,
+              "classification": "host_sampling_gap; VM/host scheduling cause unresolved",
+              "sampler_max_interval_sec": {
+                "host": 5.064773670999784,
+                "container": 5.037023607999799
+              },
+              "max_periodic_gap_sec_by_layer": {
+                "container": 5.037023607999799,
+                "host": 5.064773670999784,
+                "observer": 5.060618796999734,
+                "probe": 4.984032035000382,
+                "safety_supervisor": 5.084005055000489,
+                "scenario_runner": 5.047261787000025
+              },
+              "max_source_clock_jump_sec": 5.053500413894653,
+              "context": "evidence/runs/gap-reanalysis-20261023/gap-control-simulator-20261023/00-instrumented/gap-001.jsonl",
+              "context_sha256": "b017b4e4c4a977d2152bb806075d233f36a0fac25f546d84438a4f2ee881abc2"
+            }
+          ],
+          "injection_records": [
+            {
+              "t": 6867.799858226,
+              "layer": "injection",
+              "stage": "SIGSTOP",
+              "target_pid": 2337
+            },
+            {
+              "t": 6868.601142482,
+              "layer": "injection",
+              "stage": "SIGCONT",
+              "target_pid": 2337
+            }
+          ],
+          "injection_duration_sec": 0.8012842560001445,
+          "injection_sha256": "9340691d2979bf6df575c29b30c45af5f60177a0fa44d38b51c58343f5c2e4ef",
+          "injection_window_classifications": [
+            "ROS_delivery_or_publisher_gap; system samplers continued"
+          ],
+          "localization_status": "PASS",
+          "localization_criterion": "Recorded >=0.8 s injected pause, matching target-layer gap, independent system sampling <=0.25 s; uninjected peer observer/probe/supervisor not gapped. This is a localization check, not mission acceptance."
+        }
+      ]
+    }
+  ],
+  "tool_checks": {
+    "unit_tests": {
+      "status": "PASS",
+      "count": 12,
+      "command": "python3 scripts/test_gap_tools.py",
+      "log_sha256": "1f07267dccc66571ac855c2e940dbe9f90a4ed3157e91004d1827b00c21a0c38",
+      "jazzy_container_log_sha256": "797c47b10ae57bbd9b2679c9e53a211833418799417610affc6645ae006f6e0f",
+      "host_environment_sha256": "5a5c5a0b78a1efc0dd52893866d34ed5c08578289cbd7ece239e8bc35c48dc15"
+    },
+    "lint": {
+      "status": "PASS",
+      "checks": [
+        "ament_flake8",
+        "ament_pep257"
+      ],
+      "files": [
+        "scripts/gap_tools.py",
+        "scripts/diagnose_m3_gap.py",
+        "scripts/run_gap_diagnostic.py",
+        "scripts/test_gap_tools.py"
+      ],
+      "log_sha256": "e0c5018ad6c23404ea138aa7e90faab59d524cf870f4ead9aa22c2217ea87549"
+    },
+    "integrity": {
+      "status": "PASS",
+      "artifact_hashes_checked": 455,
+      "committed_source_hashes_checked": 515,
+      "non_source_cache_entries_outside_git": 75,
+      "cache_note": "Captured manifests also hashed existing ignored .pytest_cache files. These are not source files at the recorded commits and are excluded only from the source-to-commit comparison. Original audit is retained.",
+      "failures": [],
+      "log_sha256": "46d553d5c3e7f7e82db75b4f4072c6589acbc3fb169466e2e006b1c035aee673",
+      "initial_cache_audit_sha256": "6a38b6c5e54287150050b36435264ceb51d16772f10b60f99c16849c14fcf423"
+    },
+    "closure": {
+      "status": "PASS",
+      "commands": [
+        [
+          "python3",
+          "scripts/check_docs.py"
+        ],
+        [
+          "bash",
+          "-n",
+          "scripts/gap_container.sh"
+        ],
+        [
+          "git",
+          "diff",
+          "--cached",
+          "--check"
+        ]
+      ],
+      "log_sha256": "a9157162372434f5ce5b86b45efaa9732784314ab1f7942062fb0b9a37305a60"
+    }
+  },
+  "summary": {
+    "natural_attempts": 10,
+    "natural_mission_successes": 1,
+    "natural_protective_stops": 9,
+    "max_host_sample_gap_sec": 19.101500698000564,
+    "natural_gap_windows": 14,
+    "controlled_localization_passes": 3,
+    "max_image_callback_sec": 0.021369697999944037,
+    "overhead_limitation": "Baseline and instrumented cadence measured under uncontrolled host scheduling; no causal overhead estimate claimed."
+  },
+  "runtime_environment": {
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros_distribution": "jazzy",
+    "python": "3.12.3",
+    "rclpy": "7.1.12-1noble.20260912.162354",
+    "ros_base": "0.11.0-1noble.20261006.035407",
+    "host_boundary": "Ubuntu 22.04 guest in Oracle VirtualBox; external sampler is outside Docker, inside this VM. Physical-host timing is not observed."
+  }
+}
