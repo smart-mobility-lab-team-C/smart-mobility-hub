@@ -81,8 +81,11 @@ not rerun. This closure changes only M2 status, the milestone plan and this inde
 
 ## M3 verification in progress
 
-The [M3 handoff](m3-handoff.md) records the active hosted rerun, the earlier
-pre-M3 regression failure, and the steps to resume reviewing evidence.
+The [M3 handoff](m3-handoff.md) and the compact
+[M3 attempt index](../evidence/m3-verification-attempts.json) record the hosted
+failure, the local readiness-probe run, source revisions, environment, results
+and hashes. The downloaded hosted trace remains under the ignored
+`evidence/runs/m3-hosted-39815691216-attempt2/` directory.
 
 [PR #7](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/7)
 contains the scoped M3 implementation. The [local index](../evidence/m3-local.json)
@@ -90,10 +93,16 @@ and [command/result record](../evidence/m3-local.txt) preserve the failed clean 
 `m3-20261022T162059Z` at source `28e7c38de77d26e70aa5b23964a8d352eac6b725`.
 Build, quality, 23 interface inspections, 39 colcon tests and all 18 M2 real-node
 regression cases passed. M3 then failed in the initial reset with `queue_stale`,
-before a nominal goal. Full local M3/T05/T06 acceptance is not established.
+before a nominal goal. A later local clean run with the readiness-probe edit
+passed build, quality, 23 interface inspections, 40 colcon tests and all 18 M2
+real-node regression cases, then failed its first M3 reset with
+`PARTICIPANT_UNAVAILABLE`. The hosted attempt passed ten nominal docking runs
+and failed the boarding-interruption case before the readiness wait was added.
+Neither result closes M3 or T05–T06; current acceptance remains NOT RUN.
 
 The source uses the existing watchdog bounds; traces show multi-second host timing
 gaps, with the underlying cause unconfirmed. Raw logs/traces remain ignored; hashes
 are retained in the index. Earlier development failures remain FAIL and cannot be
-combined into acceptance for a different source revision. Hosted checks are pending.
-Independent human review/reproduction remain BLOCKED.
+combined into acceptance for a different source revision. The readiness-probe
+source still needs a successful complete real-node rerun. Independent human
+review/reproduction remain BLOCKED.

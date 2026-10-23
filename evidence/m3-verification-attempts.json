@@ -1,0 +1,95 @@
+{
+  "schema": "smart-mobility-hub/m3-verification-attempts-v1",
+  "updated": "2026-10-23",
+  "acceptance_status": "NOT RUN",
+  "t05_t06_status": "NOT RUN",
+  "attempts": [
+    {
+      "id": "hosted-39815691216-attempt2",
+      "url": "https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39815691216",
+      "source_commit": "8a3bf7817961d5c19fe270c3ee35342c33e315f9",
+      "environment": {
+        "os": "Ubuntu 24.04.5 LTS",
+        "ros": "Jazzy",
+        "python": "3.12.3",
+        "container_image": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b"
+      },
+      "status": "FAIL",
+      "build_and_quality": "PASS",
+      "interfaces_inspected": 23,
+      "colcon_tests": {
+        "count": 40,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "m2_real_process_cases": {
+        "count": 18,
+        "status": "PASS"
+      },
+      "m3": {
+        "nominal_docking_cases": "10/10 PASS",
+        "failed_case": "arrival_during_boarding_and_interruption",
+        "reason": "The next DockBus goal was rejected immediately before the probe waited for measured door closure and supervisor clearance."
+      },
+      "trace": {
+        "path": "evidence/runs/m3-hosted-39815691216-attempt2/m3-ci/m3/trace.jsonl",
+        "sha256": "6f5652e44b2af2fdad6b04ed66a5df6e3da4cfd3aef260986a61e2e4015acdee",
+        "acceptance_sha256": "928e4d36fb0c142c0a8cb234ce2b0b44151d0d3f58ad570796e317698ec5898b",
+        "sequence": [
+          {
+            "monotonic_sec": 928.882,
+            "observation": "door closed"
+          },
+          {
+            "monotonic_sec": 928.902,
+            "observation": "previous DockBus goal completed"
+          },
+          {
+            "monotonic_sec": 928.928,
+            "observation": "supervisor motion_permitted=true, stop_latched=false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "local-m3-readiness-20261023-rerun1",
+      "source_commit": "7e51a0ff4fc72b95a9a18af59cec0eb05962a4b6",
+      "worktree": "dirty: scripts/verify_m3.py contained the readiness-wait change",
+      "environment": {
+        "os": "Ubuntu 24.04.5 LTS",
+        "ros": "Jazzy",
+        "python": "3.12.3",
+        "container_image": "sha256:d199e8d8684798ab84dd3909ef114a656b00339920e652786b4f7e097d683a8b"
+      },
+      "status": "FAIL",
+      "build_and_quality": "PASS",
+      "interfaces_inspected": 23,
+      "colcon_tests": {
+        "count": 40,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "m2_real_process_cases": {
+        "count": 18,
+        "status": "PASS"
+      },
+      "m3": {
+        "failed_case": "nominal_docking_01",
+        "reason": "Initial /scenario/reset returned PARTICIPANT_UNAVAILABLE before any DockBus goal."
+      },
+      "artifacts": {
+        "acceptance": "evidence/runs/m3-readiness-20261023-rerun1/m3/acceptance.json",
+        "acceptance_sha256": "887d0e58d68650593b5cc78f6833e00a7f214889604c174e1f8b434fd92472ed",
+        "trace": "evidence/runs/m3-readiness-20261023-rerun1/m3/trace.jsonl",
+        "trace_sha256": "10966acef4b9f3e573a9ac136d6745ff2467b6cd4a4e1e842de58e7eed6434d5",
+        "m2_regression_sha256": "5861d70c55a28fde2227c9b2ee574e7308a4fccc048b2b39e4f27f50a006e96f",
+        "transcript_sha256": "7babd6aeaf24853b5a32d1eb251dfe61fa892dc29120a704755839956edcb66d",
+        "readiness_probe_source_sha256": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2"
+      }
+    }
+  ],
+  "human_review_and_reproduction": "BLOCKED: one contributor; requires a different human reviewer/member.",
+  "other_scenario_rows": "NOT RUN"
+}

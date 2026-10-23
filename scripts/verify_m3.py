@@ -118,6 +118,69 @@ class Probe(Node):
         """Keep the heartbeat and subscriptions alive during deliberate observation."""
         self.wait(lambda: False, seconds)
 
+    def boarding_goal_readiness(self):
+        """Wait briefly for fresh physical and supervisor clearance before a new goal."""
+        def snapshot():
+            now = time.monotonic()
+            observed = {}
+            for name in ('door', 'truth', 'safety'):
+                history = self.history[name]
+                if history:
+                    received, message = history[-1]
+                    observed[name] = {
+                        'age_sec': round(now - received, 3),
+                        'message': message_to_ordereddict(message),
+                    }
+                else:
+                    observed[name] = None
+            bus = self.bus()
+            door = self.samples.get('door')
+            safety = self.samples.get('safety')
+            ages = {
+                name: now - history[-1][0] if history else math.inf
+                for name, history in self.history.items()
+                if name in ('door', 'truth', 'safety')
+            }
+            ready = (
+                all(age <= 0.5 for age in ages.values())
+                and door is not None
+                and not door.data
+                and bus is not None
+                and bus.valid
+                and abs(bus.speed_mps) < 0.02
+                and safety is not None
+                and safety.motion_permitted
+                and not safety.stop_latched
+            )
+            return ready, {
+                'door_closed': door is not None and not door.data,
+                'bus_stopped': bus is not None and bus.valid and abs(bus.speed_mps) < 0.02,
+                'supervisor_clear': safety is not None
+                and safety.motion_permitted
+                and not safety.stop_latched,
+                'observations': observed,
+            }
+
+        deadline = time.monotonic() + 2.0
+        ready, observed = snapshot()
+        while not ready and time.monotonic() < deadline:
+            rclpy.spin_once(self, timeout_sec=0.02)
+            ready, observed = snapshot()
+        self.output.write(
+            json.dumps(
+                {
+                    't': time.monotonic(),
+                    'topic': 'boarding_goal_readiness',
+                    'ready': ready,
+                    'deadline_sec': 2.0,
+                    'observed': observed,
+                }
+            )
+            + '\n'
+        )
+        assert ready, f'boarding goal readiness timed out after 2.0 s: {observed}'
+        return observed
+
     def params(self, node, **values):
         """Set only fixture fault parameters via their real ROS parameter service."""
         response = self.future(
@@ -385,6 +448,7 @@ def verify(probe, processes, nominal_runs):
 
     def arrival_during_boarding():
         # The preceding nominal goal leaves the bus stopped at B; no teleport is used.
+        readiness = probe.boarding_goal_readiness()
         started = time.monotonic()
         handle, result = probe.send(20)
         assert probe.wait(lambda: probe.samples['door'].data, 5)
@@ -412,6 +476,7 @@ def verify(probe, processes, nominal_runs):
             'boarding': records[0],
             'cancel_zero_sec': latency,
             'door_closed_after_interruption': True,
+            'pre_goal_readiness': readiness,
         }
 
     if nominal_runs:

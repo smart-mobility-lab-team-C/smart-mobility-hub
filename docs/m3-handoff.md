@@ -7,7 +7,8 @@ details are in [M3 status](m3.md).
 ## Current work
 
 - Branch: `feat/m3-bus-mission`, based on merged M2 closure `d58e8f5`.
-- Implementation head: `8a3bf7817961d5c19fe270c3ee35342c33e315f9`.
+- Checkout head at this handoff update: `7e51a0ff4fc72b95a9a18af59cec0eb05962a4b6`,
+  with a local edit to `scripts/verify_m3.py` adding the bounded readiness wait.
 - [Draft PR #7](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/7)
   is open. It contains route planning, bus docking, passenger boarding, reset
   coordination, fault probes and the CI harness.
@@ -17,15 +18,21 @@ details are in [M3 status](m3.md).
   timestamps use fixed-step simulation time while door dwell uses monotonic wall
   time. Preserve this clarification.
 
-## Verification state at handoff
+## Verification state
 
 **Automated M3 acceptance is unresolved. Do not mark T05/T06 PASS yet.**
 
-- Latest PR checks: tooling, ROS container, M1 and M2 workflows are PASS.
+- Latest PR checks before the verification edit: tooling, ROS container, M1 and
+  M2 workflows are PASS.
 - M3 run [39815691216, attempt 2](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/actions/runs/39815691216)
-  was still `in_progress` when checked at 2026-10-23 01:55 KST. Its combined
-  clean Jazzy build, M2 regression and M3 mission step was running. It had not
-  uploaded an artifact, so no result from this attempt is established yet.
+  completed FAIL. The clean build, quality checks, 23 interface inspections,
+  40 colcon tests, 18 M2 real-node cases and ten nominal docking runs passed.
+  `arrival_during_boarding_and_interruption` failed because the next goal was
+  rejected before the probe observed the separate supervisor-clearance update.
+  Its trace shows the measured door closing at monotonic 928.882 s and the
+  supervisor publishing `motion_permitted=true`, `stop_latched=false` at 928.928 s.
+  Artifact and trace hashes are recorded in
+  [the M3 verification index](../evidence/m3-verification-attempts.json).
 - Attempt 1 of that same run failed before M3 missions: the unchanged M2
   `reset_missing_participant` regression did not observe restored participants
   in time, and a subsequent adapter supervisor-loss trial consequently ran
@@ -50,25 +57,32 @@ details are in [M3 status](m3.md).
   there is one contributor. Full T01–T18 acceptance remains NOT RUN apart from
   any specific milestone probes explicitly recorded as complete.
 
+- Local clean run `m3-readiness-20261023-rerun1` passed build, quality,
+  23 interface inspections, 40 colcon tests and all 18 M2 real-node regression
+  cases, then failed its first M3 reset with `PARTICIPANT_UNAVAILABLE`, before
+  any docking goal. It ran against base commit `7e51a0f` with the local readiness
+  probe edit. The result, trace and transcript hashes are indexed in
+  [the M3 verification index](../evidence/m3-verification-attempts.json).
+- The probe now waits up to 2 s for fresh door, bus-truth and supervisor samples
+  before the boarding-interruption goal. It records the last observed state and
+  age on timeout. The runtime remains unchanged, so an immediate goal in an
+  inhibited supervisor state is still rejected.
+
 The host VM showed multi-second heartbeat gaps. Their cause is unconfirmed and
 watchdog limits were not weakened. Debug runs are not acceptance evidence; raw
 traces stay under ignored `evidence/runs/` directories.
 
 ## Resume steps
 
-1. Check run 39815691216 attempt 2 and its job steps. If it completed, download
-   the attempt's `m3-results` artifact and inspect its commit, source hashes,
-   M2 regression report, M3 case summary, parameters and trace hashes. Do not
-   use the attempt-1 artifact as a substitute.
-2. If attempt 2 failed or remains stuck, preserve the exact result and diagnose
-   the first failing case. Distinguish another M2 reset readiness failure from
-   any actual M3 mission failure before editing code.
-3. Only after current-head hosted evidence completes successfully, add a
-   separate hosted evidence record. Preserve the existing local failure and
-   hosted attempt-1 failure. Then update M3, plan, test matrix, requirements,
-   README and evidence index consistently. Keep the human gate BLOCKED and all
-   unexecuted scenario rows NOT RUN.
-4. Run `python3 scripts/check_docs.py` and `git diff --check`, review the
-   evidence links and status claims, commit the scoped update, and push it to
-   PR #7. Do not merge without an explicit instruction.
+1. Run the complete clean Jazzy pipeline again on the readiness-probe source.
+   Keep each attempt in a unique directory and inspect the first failure if it
+   stops before all 24 M3 cases complete.
+2. Only after all 24 cases pass, add a successful evidence record with source
+   commit, environment, parameters, metrics and artifact hashes. Preserve every
+   earlier failure. Then update M3, plan, test matrix, requirements, README and
+   evidence index consistently; keep the human gate BLOCKED and unexecuted
+   scenario rows NOT RUN.
+3. Run `python3 scripts/check_docs.py` and `git diff --check`, review status
+   claims and artifact links, commit the scoped update, and push it to PR #7.
+   Mark PR #7 ready for review after successful verification; do not merge.
 
