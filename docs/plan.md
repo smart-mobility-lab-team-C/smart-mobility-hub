@@ -1,6 +1,7 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). The latest local M3 run passed 24/24 checks, including 10/10 nominal docking runs and T05–T06, after 53 package tests passed. Its completion changes are on `fix/m3-local-completion`, not merged or pushed. Earlier local M3 failures remain historical (see [local evidence index](../evidence/m3-local-completion.json)). M4 implementation remains on `main`; local M4 T07–T10 are the next acceptance gate and remain NOT RUN. Independent source review and teammate reproduction remain BLOCKED. M5–M8 and all T01–T18 rows other than T05–T06 remain NOT RUN. Proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). The latest local M3 run passed 24/24 checks, including 10/10 nominal docking runs and T05–T06, after 53 package tests passed. Its completion changes from `fix/m3-local-completion` are merged into local
+`main` and have not been pushed. Earlier local M3 failures remain historical (see [local evidence index](../evidence/m3-local-completion.json)). M4 implementation remains on `main`; local M4 T07–T10 are the next acceptance gate and remain NOT RUN. Independent source review and teammate reproduction remain BLOCKED. M5–M8 and all T01–T18 rows other than T05–T06 remain NOT RUN. Proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|
@@ -23,8 +24,8 @@ Historical hosted and failed local evidence retain their original environment
 and outcomes. The earlier observation-gap investigation remains useful context;
 see the [diagnostic record](m3-gap-diagnostic.md#investigation-reopened--2026-10-24).
 The latest local M3 acceptance passed; M4 software and acceptance tooling are on
-`main`, while the M3 completion changes remain unmerged on
-`fix/m3-local-completion`. M4 T07–T10 remain NOT RUN pending the next full local
+local `main`, along with the M3 completion changes merged from
+`fix/m3-local-completion`. They have not been pushed. M4 T07–T10 remain NOT RUN pending the next full local
 M4 run. See the [M4 handoff](m4-handoff.md).
 
 ## Work cycle

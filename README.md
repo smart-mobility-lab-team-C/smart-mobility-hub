@@ -9,8 +9,8 @@ hosted runs require an explicit request. See [verification policy](docs/automati
 **Current local status:** M2 passed 18/18 cases, and the latest local M3 run
 passed 24/24 cases, including 10/10 nominal docking runs and T05–T06. The run
 passed 53 package tests. M4 T07–T10 remain NOT RUN and are the next acceptance
-gate. The M3 completion changes are on `fix/m3-local-completion`; that branch is
-not merged or pushed. Earlier local M3 failures remain historical records. See
+gate. The M3 completion changes from `fix/m3-local-completion` are merged into
+local `main` and have not been pushed. Earlier local M3 failures remain historical records. See
 the [local M3 evidence index](evidence/m3-local-completion.json), [M4 handoff](docs/m4-handoff.md),
 and [setup](docs/setup.md).
 Independent human review/reproduction remains BLOCKED.

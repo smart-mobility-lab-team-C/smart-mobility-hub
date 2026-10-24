@@ -115,7 +115,7 @@ fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
 launches and default `m3_container.sh` behavior are preserved. The latest local
 M3 run (`f6a97fd`) passed M2 18/18, all 53 package tests, and M3 24/24 including
-T05–T06. M4 acceptance remains NOT RUN and is the next gate. The M3 completion
-changes are on `fix/m3-local-completion`, not merged or pushed. See the
+T05–T06. M4 acceptance remains NOT RUN and is the next gate. The M3 completion changes from `fix/m3-local-completion` are merged into
+local `main` and have not been pushed. See the
 [local M3 evidence index](../evidence/m3-local-completion.json), [M4 handoff](m4-handoff.md),
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).

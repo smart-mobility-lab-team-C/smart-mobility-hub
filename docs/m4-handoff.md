@@ -3,8 +3,8 @@
 M4 implementation and earlier local verification tooling are on `main`.
 The latest fresh Ubuntu 24.04/Jazzy M3 run at
 `f6a97fd` passed M2 18/18, all 53 package tests, and all 24 M3 cases including
-T05–T06. Its completion changes are on `fix/m3-local-completion`, not merged or
-pushed. M4 was not run; T07–T10 remain **NOT RUN** and are the next acceptance
+T05–T06. Its completion changes from `fix/m3-local-completion` are merged into
+local `main` and have not been pushed. M4 was not run; T07–T10 remain **NOT RUN** and are the next acceptance
 gate. Earlier M3 failures remain historical records. See the
 [local M3 evidence index](../evidence/m3-local-completion.json). M5–M7 have not
 started under the one-milestone-at-a-time rule.
@@ -161,8 +161,8 @@ same-source middleware comparison passed five resets with Cyclone DDS and failed
 the first with Fast DDS. This supports the local project profile, not a general
 middleware-defect claim or a scenario PASS. Earlier callback-group and other
 executor experiments did not resolve the issue. A later dedicated observation
-executor change on `fix/m3-local-completion` passed full M3 locally; it remains
-unmerged and unpushed pending review.
+executor change on `fix/m3-local-completion` passed full M3 locally and has since
+been merged into local `main`; it has not been pushed.
 
 Raw runs and the feed-gap context remain under
 `evidence/runs/m4-local-20261024-cyclone-full/`; their tracked result index

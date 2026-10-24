@@ -302,5 +302,6 @@ image/configuration/source identities, commands, seeds, metrics, sample counts
 and artifact hashes. Raw output is retained under ignored
 `evidence/runs/m3-local-20261024-dedicated-observations/` and its sibling `-host/`.
 The [M3 handoff](m3.md#current-local-verification--2026-10-24) states measured
-limits and remaining human gates. These changes are on
-`fix/m3-local-completion`; no merge/push or hosted run was performed.
+limits and remaining human gates. At the time this result was recorded, the
+changes were on `fix/m3-local-completion`; they have since been merged into
+local `main` and have not been pushed. No hosted run was performed.
