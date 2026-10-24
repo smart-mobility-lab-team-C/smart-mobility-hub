@@ -42,6 +42,7 @@ def worker(args):
         from rclpy.node import Node
         from rclpy.qos import DurabilityPolicy, QoSProfile
         from smart_hub_interfaces.msg import CrossingState, SafetyState, VehicleStateArray
+        from std_msgs.msg import Bool
         from rosidl_runtime_py.convert import message_to_ordereddict
         recorder = Recorder(args.output, 'observer')
         rclpy.init()
@@ -63,6 +64,7 @@ def worker(args):
             ('candidate', TwistStamped, '/bus/cmd_vel_candidate', 1),
             ('safety', SafetyState, '/hub/safety', transient),
             ('crossing', CrossingState, '/crossing/state', transient),
+            ('estop', Bool, '/hub/estop', transient),
         ):
             node.create_subscription(kind, topic, lambda msg, k=name: receive(k, msg), qos)
         node.create_timer(0.1, lambda: recorder.emit('executor_heartbeat'))

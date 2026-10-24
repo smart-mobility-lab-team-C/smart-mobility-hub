@@ -1,7 +1,7 @@
 {
   "schema": "smart-mobility-hub/m4-local-completion-evidence-v1",
   "created_utc": "2026-10-24",
-  "scope": "Full local M4 acceptance attempt; this attempt passed build, package tests and M2, then failed two M3 cases. M4 was not run. Earlier completion-baseline failure remains preserved.",
+  "scope": "Recorded local M4 attempts; the completion-baseline run failed before M3, while this focused preflight passed limited M4 probes only. It is not full M2/M3/M4 regression acceptance.",
   "environment_common": {
     "host": "Ubuntu 22.04 VM (KVM)",
     "container": "Ubuntu 24.04.5 LTS",
@@ -333,6 +333,176 @@
         "evidence/runs/m4-local-20261024-active-probe-host/run.json",
         "evidence/runs/m4-local-20261024-active-probe-host/host.jsonl",
         "evidence/runs/m4-local-20261024-active-probe-host/artifact-sha256.txt"
+      ]
+    },
+    {
+      "id": "focused-retry1",
+      "kind": "focused_M4_preflight",
+      "branch": "fix/m4-local-completion",
+      "source_commit": "5976e155e7914e205d5bb5ea13d164859a608528",
+      "source_worktree": "",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5 LTS",
+        "python": "3.12.3"
+      },
+      "host": {
+        "platform_file": "evidence/runs/m4-local-20261024-focused-retry1-host/platform.txt",
+        "host_samples": "evidence/runs/m4-local-20261024-focused-retry1-host/host.jsonl"
+      },
+      "commands": {
+        "runner_script": "evidence/runs/m4-local-20261024-focused-retry1/focused-run.sh",
+        "actual_acceptance_commands": [
+          "ament_flake8 /workspace/src/smart_hub_control/smart_hub_control/bus.py /workspace/scripts/verify_m3.py /workspace/scripts/verify_m2.py /workspace/scripts/verify_m4.py",
+          "ament_pep257 /workspace/src/smart_hub_control/smart_hub_control/bus.py /workspace/scripts/verify_m3.py /workspace/scripts/verify_m2.py /workspace/scripts/verify_m4.py",
+          "colcon --log-base log build --base-paths src --build-base build --install-base install --event-handlers console_direct+",
+          "ROS_DOMAIN_ID=76 ROS_LOCALHOST_ONLY=1 python3 /workspace/scripts/verify_reset.py --runs 20 --output /workspace/evidence/runs/m4-local-20261024-focused-retry1/reset/report.json",
+          "ROS_DOMAIN_ID=74 ROS_LOCALHOST_ONLY=1 python3 /workspace/scripts/verify_m4.py --output /workspace/evidence/runs/m4-local-20261024-focused-retry1/m4/acceptance.json",
+          "python3 /workspace/scripts/plot_m4.py /workspace/evidence/runs/m4-local-20261024-focused-retry1/m4/trace.jsonl /workspace/evidence/runs/m4-local-20261024-focused-retry1/m4/measurements.png"
+        ],
+        "harness_command": "bash /workspace/evidence/runs/m4-local-20261024-focused-retry1/focused-run.sh"
+      },
+      "prior_harness_error": {
+        "attempt": 1,
+        "status": "HARNESS_COMMAND_ERROR",
+        "exit_code": 2,
+        "reason": "colcon rejected `colcon build ... --log-base log`: unrecognized arguments; lint and pep257 had passed; build, reset and M4 probes had not run. Corrected by placing `--log-base` before the build verb.",
+        "transcript": "evidence/runs/m4-local-20261024-focused-retry1/harness-attempt-001.log"
+      },
+      "result_scope": "LIMITED_PREFLIGHT_PASS_NOT_FULL_REGRESSION",
+      "acceptance_eligible": false,
+      "milestone_closed": false,
+      "model": null,
+      "status": "PASS_LIMITED",
+      "configuration": {
+        "m4_launch": "m4.launch.py defaults",
+        "map": "map_m1.yaml",
+        "configuration_sha256": "99d6c28b0e920e9d1569dd3e72e992af6a759c5d9a848fd6e611e1ac4da33251",
+        "m4_scenario_seed": 17,
+        "rmw_implementation": "rmw_cyclonedds_cpp",
+        "reset_domain": 76,
+        "m4_domain": 74,
+        "localhost_only": true
+      },
+      "measurements": {
+        "lint": "ament_flake8 and ament_pep257 PASS for bus.py, verify_m3.py, verify_m2.py, verify_m4.py",
+        "colcon_build": "PASS; 8 packages finished",
+        "reset_probe": "PASS 20/20; seeds 300\u2013319; diagnostic-only and not M2/M3 full acceptance",
+        "m4_cases": {
+          "PASS": 9,
+          "FAIL": 0,
+          "names": [
+            "reset_acknowledgments",
+            "T07_service_pairs",
+            "canonical_S4_timeline",
+            "T08_expiry_and_barrier",
+            "parking_frozen_source",
+            "canonical_S5_timeline",
+            "T09_traffic_labels",
+            "T10_frozen_source",
+            "T10_missing_feed"
+          ]
+        },
+        "T07": {
+          "concurrent_request_pairs": 20,
+          "p95_service_latency_sec": 0.1334442899969872,
+          "double_allocations": 0
+        },
+        "parking_unknown_sec": 1.0350266629975522,
+        "canonical_S5_delays_sec": {
+          "congestion_delay_sec": 0.44660980699700303,
+          "unknown_delay_sec": 0.4782137980000698,
+          "obstruction_delay_sec": 0.44522226299886825
+        },
+        "classification": {
+          "stable_label_checkpoints": 15,
+          "per_class": {
+            "NORMAL": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "CONGESTED": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "BLOCKED": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "UNKNOWN": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "distinct_free_flow_trials": 10,
+          "free_flow_seeds": "not distinct simulator seeds; trial IDs/track identities varied while launch seed remained 17"
+        },
+        "unknown_delays_sec": {
+          "T10_frozen_source": 0.6735962660022778,
+          "T10_missing_feed": 0.7341328609982156
+        },
+        "bag": {
+          "message_count": 6329,
+          "metadata": "evidence/runs/m4-local-20261024-focused-retry1/m4/bag/metadata.yaml"
+        },
+        "plot": "measurements.png generated from M4 trace",
+        "full_regression": "NOT RUN in this limited preflight; M2/M3/M4 full-run status is not asserted here"
+      },
+      "source_sha256": {
+        "scripts/m4_container.sh": "d6bad7e4ee0f911ff7ed509ddd7d76380d5bd85b77112150a1a59f811f4e579f",
+        "scripts/verify_m4.py": "b937b6a834fcaade8332261d9bf83a9fa5e8d8a5485433435f263f87dd2dcf1f",
+        "scripts/verify_reset.py": "826a869079fc97869f9ecca1fdc791c144232eaff89297ba90409b96a4fd8493",
+        "scripts/plot_m4.py": "cf9db02f78e7232286b07aade55db273db48125d9390ad9558b06e2f06d9cc7e",
+        "src/smart_hub_control/smart_hub_control/m4_nodes.py": "d2e534678d5de370bb4454a90400d11a8072f66d34e68ed1b3314ff17ddab9cc",
+        "src/smart_hub_control/smart_hub_control/parking.py": "ddb17c00bff3f600efcbedead28156b965c3d5885a2c94e29e15e5d00db702a0",
+        "src/smart_hub_control/smart_hub_control/traffic.py": "ed6e5c6d9bfd894b0af6ac44e3ee33c873641b230b83003e0be23fd95caba3af",
+        "src/smart_hub_sim/config/map_m1.yaml": "99d6c28b0e920e9d1569dd3e72e992af6a759c5d9a848fd6e611e1ac4da33251"
+      },
+      "artifact_sha256": {
+        "evidence/runs/m4-local-20261024-focused-retry1/focused-run.sh": "873081909f82f4b6920cd18498b9ddfed379c2edf41ed9b7f9dda019b5f9dff1",
+        "evidence/runs/m4-local-20261024-focused-retry1/commit.txt": "d05185a5b19b72a9dfa5151eb1bc43333bd061d38ad303c692c850472792cefc",
+        "evidence/runs/m4-local-20261024-focused-retry1/exit-code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "evidence/runs/m4-local-20261024-focused-retry1/source-sha256.txt": "a15a80d129cd37cf4fa9ce0cf79c104c2d1450c8bd03373bffb2e50f50f179ba",
+        "evidence/runs/m4-local-20261024-focused-retry1/package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+        "evidence/runs/m4-local-20261024-focused-retry1/transcript.log": "e7da469f5db7147d289393132bc7a4414e27429f29ae57f5ae28b101df74c1f3",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/acceptance.json": "a44c1710ccaac78d432bb05c3248dfbc6bbb7e65dfc2e983326f63eded37d772",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/trace.jsonl": "b03cc18280937b2140c9a6a2eabeb8df57fa596bf9da7849b9332c871497d5ad",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/measurements.png": "36257498181880e083991f80a47e1fc157a813b433739bef2f87dc6f288a239d",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/bag/metadata.yaml": "5a79f3083f81ef2079b38cae96ded779ff4f825f091637e0c10f62c7ee92bab4",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/bag/bag_0.mcap": "b96e9ea15a5e2bbf0b8ecd51ac5e724ce67d148432f2583df04cb075519cebc4",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/scenario_runner-parameters.yaml": "8f8cfc95d8f6836c82fe17815dccc6da823ff14864f87ad3c4594c068ac5c40a",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/parking_manager-parameters.yaml": "1a350834ec363ca8c727f9495a980fe03040013ab64068b3f80b838c23842ad8",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/traffic_monitor-parameters.yaml": "ebb2d72fd4e3954e711ca05fb2e103d2fe5a2cbbad2a289af15fbba39a1b0236",
+        "evidence/runs/m4-local-20261024-focused-retry1/reset/report.json": "2efd658f4cab77df2bdac7676fb7839a66ff27ed494172b17d5f63ad236ae2f0",
+        "evidence/runs/m4-local-20261024-focused-retry1/reset/trace.jsonl": "fd492a8127c6515653e2b569b3d1efb4485adf8562a6feb5b9a45cf76c8f3061",
+        "evidence/runs/m4-local-20261024-focused-retry1-host/run.json": "51699da6c8890e559ca09a87b8a33330a190a1d012156605e5c521992cf2d3ad",
+        "evidence/runs/m4-local-20261024-focused-retry1-host/host.jsonl": "f2b643f321ea9cb1b8ea65dca1fc2e6b666bb1f86c2ffe24690a51e1ca27ca89"
+      },
+      "source_manifest": "evidence/runs/m4-local-20261024-focused-retry1/source-sha256.txt",
+      "artifact_manifest": "evidence/runs/m4-local-20261024-focused-retry1-host/artifact-sha256.json",
+      "outputs": [
+        "evidence/runs/m4-local-20261024-focused-retry1/focused-run.sh",
+        "evidence/runs/m4-local-20261024-focused-retry1/commit.txt",
+        "evidence/runs/m4-local-20261024-focused-retry1/exit-code.txt",
+        "evidence/runs/m4-local-20261024-focused-retry1/source-sha256.txt",
+        "evidence/runs/m4-local-20261024-focused-retry1/package-versions.tsv",
+        "evidence/runs/m4-local-20261024-focused-retry1/transcript.log",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/acceptance.json",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/trace.jsonl",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/measurements.png",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/bag/metadata.yaml",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/bag/bag_0.mcap",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/scenario_runner-parameters.yaml",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/parking_manager-parameters.yaml",
+        "evidence/runs/m4-local-20261024-focused-retry1/m4/traffic_monitor-parameters.yaml",
+        "evidence/runs/m4-local-20261024-focused-retry1/reset/report.json",
+        "evidence/runs/m4-local-20261024-focused-retry1/reset/trace.jsonl",
+        "evidence/runs/m4-local-20261024-focused-retry1-host/run.json",
+        "evidence/runs/m4-local-20261024-focused-retry1-host/host.jsonl",
+        "evidence/runs/m4-local-20261024-focused-retry1-host/platform.txt",
+        "evidence/runs/m4-local-20261024-focused-retry1-host/artifact-sha256.json"
       ]
     }
   ]

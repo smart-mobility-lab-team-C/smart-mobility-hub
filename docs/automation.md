@@ -105,6 +105,12 @@ heartbeat now runs in a joined publisher thread within the probe process,
 independent of evaluator callback dispatch. It publishes only the probe's chosen
 stop value; process suspension still suspends it, and real stop assertions and
 watchdogs are unchanged. Launches still provide no operator heartbeat.
+The later full run at `5976e15` still failed its tenth docking mission with
+`estop_stale`, so the publisher-thread change alone did not establish a complete
+repair. The focused M4 checks passed, but full regression remains open. The M3
+probe now retains operator publication start/return timestamps in a separate
+JSONL file; the independent diagnostic observer also receives the stop topic.
+These records distinguish publisher scheduling from observer/supervisor receipt.
 
 For the observed `/bus/prepare_reset` timeout, source a locally built Jazzy
 workspace and run `python3 scripts/verify_reset.py --output

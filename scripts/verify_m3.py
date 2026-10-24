@@ -80,6 +80,7 @@ class Probe(Node):
             for name in ('scenario_runner', 'm3_synthetic_roads', 'bus_manager')
         }
         self.feedback = deque(maxlen=30000)
+        self.heartbeat_output = (directory / 'operator-heartbeat.jsonl').open('w', buffering=1)
         self.heartbeat_stop = Event()
         self.heartbeat_thread = Thread(
             target=self.operator_heartbeat, name='m3-operator-heartbeat')
@@ -89,7 +90,11 @@ class Probe(Node):
         """Keep the explicit operator input independent of evaluator callback dispatch."""
         while not self.heartbeat_stop.is_set() and self.context.ok():
             try:
-                self.heartbeat.publish(Bool(data=self.estop))
+                started = time.monotonic()
+                value = self.estop
+                self.heartbeat.publish(Bool(data=value))
+                self.heartbeat_output.write(json.dumps({
+                    'started': started, 'returned': time.monotonic(), 'stop': value}) + '\n')
             except Exception:
                 if not self.context.ok():
                     return
@@ -102,6 +107,7 @@ class Probe(Node):
         self.heartbeat_thread.join(timeout=2)
         if self.heartbeat_thread.is_alive():
             raise RuntimeError('operator heartbeat publisher did not stop')
+        self.heartbeat_output.close()
         return super().destroy_node()
 
     def renew_robot(self):
