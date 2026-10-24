@@ -1,11 +1,11 @@
 # T01–T18 verification plan
 
 Source: assignment §21 pp29–30 and relevant scenario sections. Status below
-reflects the current local verification target. Historical hosted T05–T06 PASS
-results remain separately recorded. The latest local run (`d660a94`) passed two
-nominal docking missions; the third ended in `SAFETY_STOP` after a 0.888-second
-safety-observation gap, so local T05 is FAIL and T06 was not reached. See the
-[local attempt](../evidence/m4-local-cyclone-attempt.json).
+reflects the current local verification target. The latest local run
+(`f6a97fd`) passed all 24 M3 cases, including 10/10 nominal docking runs and
+T05–T06. M4 T07–T10 remain NOT RUN. Earlier local failures, including the
+`d660a94` observation-gap failure, remain historical evidence. See the
+[local M3 evidence index](../evidence/m3-local-completion.json).
 
 | ID | Area | Stimulus / repetitions | Acceptance | Status |
 |---|---|---|---|---|
@@ -13,8 +13,8 @@ safety-observation gap, so local T05 is FAIL and T06 was not reached. See the
 | T02 | S1 occlusion/stale | 0.3 s occlusion, repeated/frozen frames | No duplicate count; invalid within 1.2 s freeze | NOT RUN |
 | T03 | S2 prediction | Unseen episode seeds | MAE/RMSE; MAE <= persistence; inference p95 <100 ms; no leakage | NOT RUN |
 | T04 | S2 dispatch | Threshold noise and stale forecast | One outstanding goal; explicit fallback | NOT RUN |
-| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | FAIL |
-| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | NOT RUN |
+| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | PASS |
+| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | PASS |
 | T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists | NOT RUN |
 | T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected | NOT RUN |
 | T09 | S5 congestion | Free flow, slow dense flow, obstruction | Correct labels; bounded scenario-defined delay; no stale-as-clear | NOT RUN |
@@ -63,9 +63,10 @@ remain separately identified in the report.
 ## M3 execution scope
 
 `scripts/verify_m3.py` exercises real route, bus action, simulator, safety,
-crossing and reset nodes with explicit synthetic queue/road inputs. The hosted run
-recorded in [M3 status](m3.md) passed ten nominal docking runs and all S3
-fault/door/ETA checks, closing T05–T06. Pure routing enumerator
-and queue tests support the implementation but do not close T11–T12, perception,
-mission-phase safety repetition or any other complete scenario row. M3 fault
-probes are additional prerequisites; T16–T18 remain NOT RUN.
+crossing and reset nodes with explicit synthetic queue/road inputs. The latest
+local run (`f6a97fd`) passed all 24 cases, including ten nominal docking runs and
+S3 fault/door/ETA checks, closing local T05–T06. Earlier hosted results remain
+recorded with their original provenance. Pure routing enumerator and queue tests
+do not close T11–T12, perception, mission-phase safety repetition or any other
+complete scenario row. M3 fault probes are additional prerequisites; T16–T18
+remain NOT RUN.

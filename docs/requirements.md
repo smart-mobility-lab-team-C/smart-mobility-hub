@@ -23,7 +23,7 @@ Original PDFs are not published in this public repository. Keep authorized local
 | R06 | N | 20–30-minute all-member video, full code walkthrough/results/demos | Recording plan | Duration and participation check |
 | R07 | N | <=10 files; <=1 GB each; no external links; leader upload, others validate | Packaging + portal process | Size/link audit and validation record |
 
-This is the initial traceability register. Current implementation and observed checks are recorded in [M0 status](m0-status.md), [M1 status](m1.md), [M2 status](m2.md), [M3 status](m3.md), and [M4 handoff](m4-handoff.md). Historical hosted T05–T06 PASS results retain their original environment. The current local campaign has T05 FAIL and T06 NOT RUN; all other scenario rows remain NOT RUN. See the local attempt linked by the M4 handoff. Historical M3 evidence does not close unrelated scenario rows or substitute for current local verification.
+This is the initial traceability register. Current implementation and observed checks are recorded in [M0 status](m0-status.md), [M1 status](m1.md), [M2 status](m2.md), [M3 status](m3.md), and [M4 handoff](m4-handoff.md). The latest local M3 run passed 24/24 cases, including T05–T06; full run details and older failed attempts are indexed in [local M3 evidence](../evidence/m3-local-completion.json). The M3 completion changes are on `fix/m3-local-completion`, not merged or pushed. M4 T07–T10 remain NOT RUN and are the next acceptance gate. Other scenario rows remain NOT RUN; M3 evidence does not close them or substitute for their own verification.
 
 ## Mandatory source-review gate
 

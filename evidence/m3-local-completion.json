@@ -1,7 +1,7 @@
 {
   "schema": "smart-mobility-hub/m3-local-completion-evidence-v1",
   "created_utc": "2026-10-24",
-  "scope": "Completed local M2/M3 acceptance attempt and M3 diagnostic campaigns. Acceptance failures remain failures; diagnostic container exit 0 means data collection completed, not mission acceptance.",
+  "scope": "Latest local M2/M3 automated acceptance PASS on f6a97fd; T05 and T06 PASS. Independent source review and teammate reproduction remain BLOCKED. Earlier failures and diagnostic attempts remain in the run history and do not get replaced by this result.",
   "environment_common": {
     "host": "Ubuntu 22.04 VM",
     "container": "Ubuntu 24.04.5 LTS",
@@ -585,6 +585,844 @@
         "m3/bus_manager.log": "cb0ed564f05bb11d311e559fa26b86e8374bf7687799bbea659d26baa21062f5",
         "m3/reset_coordinator.log": "1b9f9e0226c96397a09f13fca4180e957fffb31e17090d04d9933fb9d0d63cfd"
       }
+    },
+    {
+      "id": "dedicated-observations",
+      "kind": "acceptance_attempt",
+      "source_commit": "f6a97fd7bf98a19662055eb462c21c0ae1085f5f",
+      "source_worktree": "clean at run start; UID:GID 1000:1000",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5 LTS",
+        "python": "3.12.3"
+      },
+      "host_environment": {
+        "os": "Ubuntu 22.04 VM",
+        "virtualization": "KVM full virtualization",
+        "cpu_count": 18,
+        "memory": "10 GiB",
+        "platform_capture": "evidence/runs/m3-local-20261024-dedicated-observations-host/platform.txt"
+      },
+      "command": "sg docker -c \"docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m3_container.sh /workspace/evidence/runs/m3-local-20261024-dedicated-observations\"",
+      "start_utc": "2026-10-24T12:53:37Z",
+      "end_utc": "2026-10-24T13:13:23Z",
+      "exit_code": 0,
+      "seed_config": {
+        "M2": "default verifier configuration",
+        "M3_base_seed": 300,
+        "attempted_seeds": [
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          309
+        ],
+        "initial_passengers": [
+          0,
+          2,
+          4,
+          6,
+          0,
+          2,
+          4,
+          6,
+          0,
+          2
+        ],
+        "parameter_capture": "enabled; seven node parameter JSON files retained"
+      },
+      "model": "none; deterministic simulator and ROS nodes",
+      "acceptance_eligible": true,
+      "automated_milestone_status": "PASS",
+      "T05": "PASS",
+      "T06": "PASS",
+      "independent_source_review_and_teammate_reproduction": "BLOCKED",
+      "milestone_closed": false,
+      "status": "PASS",
+      "measurements": {
+        "build": "8 packages; 53 colcon tests; 0 errors, failures, or skips",
+        "M2": "18/18 PASS",
+        "M3": "24/24 PASS; 10/10 nominal docking runs PASS",
+        "nominal_seeds": [
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          309
+        ],
+        "initial_passengers": [
+          0,
+          2,
+          4,
+          6,
+          0,
+          2,
+          4,
+          6,
+          0,
+          2
+        ],
+        "boarding_counts": [
+          0,
+          2,
+          4,
+          4,
+          0,
+          2,
+          4,
+          4,
+          0,
+          2
+        ],
+        "nominal_position_error_m": [
+          0.040000001252468394,
+          0.03500000164372369,
+          0.03999999840799977,
+          0.04499999889538492,
+          0.0399999985317914,
+          0.02999999869614932,
+          0.03999999861561155,
+          0.02999999911308309,
+          0.04499999846444468,
+          0.02999999877701592
+        ],
+        "nominal_position_error_max_m": 0.04499999889538492,
+        "nominal_position_error_mean_m": 0.037499999239767275,
+        "nominal_yaw_error_max_rad": 7.755580873980911e-10,
+        "nominal_eta_error_at_5m_sec": [
+          0.37126587499369634,
+          0.033518044532684144,
+          0.3657207415890298,
+          0.3890174265325186,
+          0.4288434676564066,
+          0.39939911559486063,
+          0.21138099559175316,
+          0.7312286035885336,
+          0.31869553364958847,
+          0.49431699552951613
+        ],
+        "nominal_eta_error_at_5m_max_sec": 0.7312286035885336,
+        "nominal_eta_error_at_5m_mean_sec": 0.37433867992585873,
+        "nominal_minimum_agent_separation_m": 1.999999993140289,
+        "nominal_door_open_sec_range": [
+          8.099342461006017,
+          8.307685004001542
+        ],
+        "nominal_door_open_sec_mean": 8.194220818901522,
+        "cancellation_command_zero_latency_sec": {
+          "arrival_during_boarding_and_interruption": 0.13825999399705324,
+          "cancel_during_approach": 0.19138406400452368,
+          "blocked_bay_wait": 0.10492010899906745
+        },
+        "physical_stop_measurement": "Separate assertion: zero physical speed was observed within 0.3 s after terminal cancellation response. Exact physical stop latency is not recorded.",
+        "trace_sample_counts_by_topic": {
+          "odom": 17587,
+          "truth": 8819,
+          "door": 8782,
+          "queue": 4403,
+          "command": 17364,
+          "safety": 8789,
+          "crossing": 9168,
+          "event": 614,
+          "arrival": 1760,
+          "parameter_update": 64,
+          "goal": 23,
+          "feedback": 1489,
+          "result": 23,
+          "boarding_goal_readiness": 1
+        },
+        "trace_sha256": "542206e5c8c15a4690e859822cf1c3b9fe56826b13eccae3a49f93fcfb1b8a95",
+        "trace_record_count": 78886,
+        "host_sampler": {
+          "sample_count": 10289,
+          "max_interval_sec": 0.21955490200343775,
+          "max_interval_monotonic_sec": [
+            39359.8175749,
+            39360.037129802
+          ],
+          "wall_minus_monotonic_offset_range_sec": [
+            1792807340.30983,
+            1792807340.3505223
+          ],
+          "max_observed_offset_step_sec": 0.04069185256958008,
+          "offset_step_note": "Sequential clock reads can include sampler scheduling delay; this value alone does not establish a wall-clock step."
+        },
+        "limitations": "Local automated acceptance on one KVM Ubuntu 22.04 host. Prior failed runs are retained. No general fix or causal explanation across environments is established.",
+        "command_zero_latency_definition": "Monotonic interval from sending cancellation request to first zero command received after the cancellation acceptance response; conservative relative to the acceptance-to-zero requirement."
+      },
+      "source_sha256": {
+        "scripts/m3_container.sh": "6b52d19a49369c6489ac67424c1772826954ca7ceed66a8b1dc71af92445c224",
+        "scripts/verify_m3.py": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2",
+        "src/smart_hub_control/smart_hub_control/bus.py": "4308ed56826464fb1c7949bae7d69b1d1d873c33928e84241aef1192013a3a74"
+      },
+      "source_manifest": "evidence/runs/m3-local-20261024-dedicated-observations/source-sha256.txt",
+      "artifact_sha256": {
+        "evidence/runs/m3-local-20261024-dedicated-observations/m2-regression.json": "b4d7921ca3680e11fc302d49ad0d4bdb70c3a7f67f200d51f7fcdb19097f8dcd",
+        "evidence/runs/m3-local-20261024-dedicated-observations/m3/acceptance.json": "0c06c026d68d52608b52b046a9c310f7faef51043e4ff4c6c504f3a865242bf8",
+        "evidence/runs/m3-local-20261024-dedicated-observations/m3/trace.jsonl": "542206e5c8c15a4690e859822cf1c3b9fe56826b13eccae3a49f93fcfb1b8a95",
+        "evidence/runs/m3-local-20261024-dedicated-observations/metrics-summary.json": "2a0c02d94bd1ef22df608a510ec0ceced8ba666b0714c99097cb7d290b76d94b",
+        "evidence/runs/m3-local-20261024-dedicated-observations/transcript.log": "7c8457c1ba50d19471a21850b354ce3abfb743b3447d1ded64d5d80be0e0d4cb"
+      },
+      "artifact_manifest": "evidence/runs/m3-local-20261024-dedicated-observations-host/artifact-sha256.txt",
+      "outputs": [
+        "evidence/runs/m3-local-20261024-dedicated-observations/metrics-summary.json",
+        "evidence/runs/m3-local-20261024-dedicated-observations/m2-regression.json",
+        "evidence/runs/m3-local-20261024-dedicated-observations/m3/acceptance.json",
+        "evidence/runs/m3-local-20261024-dedicated-observations/m3/trace.jsonl",
+        "evidence/runs/m3-local-20261024-dedicated-observations/transcript.log",
+        "evidence/runs/m3-local-20261024-dedicated-observations/source-sha256.txt",
+        "evidence/runs/m3-local-20261024-dedicated-observations-host/run.json",
+        "evidence/runs/m3-local-20261024-dedicated-observations-host/host.jsonl",
+        "evidence/runs/m3-local-20261024-dedicated-observations-host/platform.txt",
+        "evidence/runs/m3-local-20261024-dedicated-observations-host/artifact-sha256.txt"
+      ],
+      "configuration_sha256": "99d6c28b0e920e9d1569dd3e72e992af6a759c5d9a848fd6e611e1ac4da33251",
+      "configuration": "map_m1.yaml defaults; rmw_cyclonedds_cpp from containers/Dockerfile.local; unchanged watchdogs, QoS and reset coordinator deadline",
+      "cases": [
+        {
+          "name": "nominal_docking_01",
+          "status": "PASS",
+          "observations": {
+            "run_id": "843b86df-645d-4b29-a9f7-4d5bb97f7c0b",
+            "seed": 300,
+            "position_error_m": 0.040000001252468394,
+            "yaw_error_rad": 5.067460178505889e-10,
+            "eta_error_at_5m_sec": 0.37126587499369634,
+            "eta_invalid_duration_sampled_sec": 28.5,
+            "boarding": [],
+            "goal_id": "148caf31864c4d79b5beb0f101c65eb3",
+            "minimum_agent_separation_m": 2.0000999994008435,
+            "measured_door_open_sec": 8.195720609001,
+            "initial_passengers": 0
+          },
+          "elapsed_sec": 63.90103932200145,
+          "seeds": [
+            300
+          ]
+        },
+        {
+          "name": "nominal_docking_02",
+          "status": "PASS",
+          "observations": {
+            "run_id": "88376c42-a18a-4edd-b64f-be5e556beaab",
+            "seed": 301,
+            "position_error_m": 0.03500000164372369,
+            "yaw_error_rad": 6.873477633714025e-10,
+            "eta_error_at_5m_sec": 0.033518044532684144,
+            "eta_invalid_duration_sampled_sec": 35.5,
+            "boarding": [
+              {
+                "boarding_sec": 62.900000000000006,
+                "entry_sec": 0.0,
+                "goal_id": "f67f7a02bc974d909b1930335bb6f9b8",
+                "passenger_id": "301-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 64.9,
+                "entry_sec": 0.0,
+                "goal_id": "f67f7a02bc974d909b1930335bb6f9b8",
+                "passenger_id": "301-p0001",
+                "slot": 2
+              }
+            ],
+            "goal_id": "f67f7a02bc974d909b1930335bb6f9b8",
+            "minimum_agent_separation_m": 1.999999993140289,
+            "measured_door_open_sec": 8.193377570001758,
+            "initial_passengers": 2
+          },
+          "elapsed_sec": 72.1065881819959,
+          "seeds": [
+            301
+          ]
+        },
+        {
+          "name": "nominal_docking_03",
+          "status": "PASS",
+          "observations": {
+            "run_id": "d7439bd9-144e-42b2-a4ae-e7d24e364c32",
+            "seed": 302,
+            "position_error_m": 0.03999999840799977,
+            "yaw_error_rad": 6.356773797105771e-10,
+            "eta_error_at_5m_sec": 0.3657207415890298,
+            "eta_invalid_duration_sampled_sec": 30.5,
+            "boarding": [
+              {
+                "boarding_sec": 57.45,
+                "entry_sec": 0.0,
+                "goal_id": "203646850d5c4900be93a31efdc4276a",
+                "passenger_id": "302-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 59.45,
+                "entry_sec": 0.0,
+                "goal_id": "203646850d5c4900be93a31efdc4276a",
+                "passenger_id": "302-p0001",
+                "slot": 2
+              },
+              {
+                "boarding_sec": 61.45,
+                "entry_sec": 0.0,
+                "goal_id": "203646850d5c4900be93a31efdc4276a",
+                "passenger_id": "302-p0002",
+                "slot": 3
+              },
+              {
+                "boarding_sec": 63.45,
+                "entry_sec": 0.0,
+                "goal_id": "203646850d5c4900be93a31efdc4276a",
+                "passenger_id": "302-p0003",
+                "slot": 4
+              }
+            ],
+            "goal_id": "203646850d5c4900be93a31efdc4276a",
+            "minimum_agent_separation_m": 2.0001000024928404,
+            "measured_door_open_sec": 8.196716629005095,
+            "initial_passengers": 4
+          },
+          "elapsed_sec": 66.56798504100152,
+          "seeds": [
+            302
+          ]
+        },
+        {
+          "name": "nominal_docking_04",
+          "status": "PASS",
+          "observations": {
+            "run_id": "b436b2a4-9727-4fa5-b77c-de17d1e264b6",
+            "seed": 303,
+            "position_error_m": 0.04499999889538492,
+            "yaw_error_rad": 6.818459729018151e-10,
+            "eta_error_at_5m_sec": 0.3890174265325186,
+            "eta_invalid_duration_sampled_sec": 39.0,
+            "boarding": [
+              {
+                "boarding_sec": 65.95,
+                "entry_sec": 0.0,
+                "goal_id": "37b2bde5d2f642fd8c88889ecf7e3e1b",
+                "passenger_id": "303-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 67.95,
+                "entry_sec": 0.0,
+                "goal_id": "37b2bde5d2f642fd8c88889ecf7e3e1b",
+                "passenger_id": "303-p0001",
+                "slot": 2
+              },
+              {
+                "boarding_sec": 69.95,
+                "entry_sec": 0.0,
+                "goal_id": "37b2bde5d2f642fd8c88889ecf7e3e1b",
+                "passenger_id": "303-p0002",
+                "slot": 3
+              },
+              {
+                "boarding_sec": 71.95,
+                "entry_sec": 0.0,
+                "goal_id": "37b2bde5d2f642fd8c88889ecf7e3e1b",
+                "passenger_id": "303-p0003",
+                "slot": 4
+              }
+            ],
+            "goal_id": "37b2bde5d2f642fd8c88889ecf7e3e1b",
+            "minimum_agent_separation_m": 2.0000999918484683,
+            "measured_door_open_sec": 8.099342461006017,
+            "initial_passengers": 6
+          },
+          "elapsed_sec": 75.1301610080045,
+          "seeds": [
+            303
+          ]
+        },
+        {
+          "name": "nominal_docking_05",
+          "status": "PASS",
+          "observations": {
+            "run_id": "851f8924-5b60-463e-8596-09b350806cc6",
+            "seed": 304,
+            "position_error_m": 0.0399999985317914,
+            "yaw_error_rad": 5.700690023081478e-10,
+            "eta_error_at_5m_sec": 0.4288434676564066,
+            "eta_invalid_duration_sampled_sec": 30.0,
+            "boarding": [],
+            "goal_id": "3ab2027e171048fc86b275cf71904889",
+            "minimum_agent_separation_m": 2.0000000042431805,
+            "measured_door_open_sec": 8.186811824998586,
+            "initial_passengers": 0
+          },
+          "elapsed_sec": 65.88291860900063,
+          "seeds": [
+            304
+          ]
+        },
+        {
+          "name": "nominal_docking_06",
+          "status": "PASS",
+          "observations": {
+            "run_id": "9ccd04ab-ddb2-4237-9b41-03e4f1f51a6a",
+            "seed": 305,
+            "position_error_m": 0.02999999869614932,
+            "yaw_error_rad": 6.036442139808815e-10,
+            "eta_error_at_5m_sec": 0.39939911559486063,
+            "eta_invalid_duration_sampled_sec": 30.5,
+            "boarding": [
+              {
+                "boarding_sec": 57.400000000000006,
+                "entry_sec": 0.0,
+                "goal_id": "5d5c826fa0964b9fb4d751c6aaf2288f",
+                "passenger_id": "305-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 59.400000000000006,
+                "entry_sec": 0.0,
+                "goal_id": "5d5c826fa0964b9fb4d751c6aaf2288f",
+                "passenger_id": "305-p0001",
+                "slot": 2
+              }
+            ],
+            "goal_id": "5d5c826fa0964b9fb4d751c6aaf2288f",
+            "minimum_agent_separation_m": 2.0001000029801004,
+            "measured_door_open_sec": 8.20598332100053,
+            "initial_passengers": 2
+          },
+          "elapsed_sec": 66.56960988400533,
+          "seeds": [
+            305
+          ]
+        },
+        {
+          "name": "nominal_docking_07",
+          "status": "PASS",
+          "observations": {
+            "run_id": "438a42b0-fc10-41fa-86ce-0a008a72572f",
+            "seed": 306,
+            "position_error_m": 0.03999999861561155,
+            "yaw_error_rad": 3.826856569700223e-10,
+            "eta_error_at_5m_sec": 0.21138099559175316,
+            "eta_invalid_duration_sampled_sec": 28.0,
+            "boarding": [
+              {
+                "boarding_sec": 54.85,
+                "entry_sec": 0.0,
+                "goal_id": "53a07dc03a614ab1bab30c2e06205a7b",
+                "passenger_id": "306-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 56.85,
+                "entry_sec": 0.0,
+                "goal_id": "53a07dc03a614ab1bab30c2e06205a7b",
+                "passenger_id": "306-p0001",
+                "slot": 2
+              },
+              {
+                "boarding_sec": 58.85,
+                "entry_sec": 0.0,
+                "goal_id": "53a07dc03a614ab1bab30c2e06205a7b",
+                "passenger_id": "306-p0002",
+                "slot": 3
+              },
+              {
+                "boarding_sec": 60.85,
+                "entry_sec": 0.0,
+                "goal_id": "53a07dc03a614ab1bab30c2e06205a7b",
+                "passenger_id": "306-p0003",
+                "slot": 4
+              }
+            ],
+            "goal_id": "53a07dc03a614ab1bab30c2e06205a7b",
+            "minimum_agent_separation_m": 2.0000000049550697,
+            "measured_door_open_sec": 8.20148795300338,
+            "initial_passengers": 4
+          },
+          "elapsed_sec": 64.0626057469999,
+          "seeds": [
+            306
+          ]
+        },
+        {
+          "name": "nominal_docking_08",
+          "status": "PASS",
+          "observations": {
+            "run_id": "eb637951-bb1e-49a6-8fa0-465cc0b1ce88",
+            "seed": 307,
+            "position_error_m": 0.02999999911308309,
+            "yaw_error_rad": 7.044293833025982e-10,
+            "eta_error_at_5m_sec": 0.7312286035885336,
+            "eta_invalid_duration_sampled_sec": 31.5,
+            "boarding": [
+              {
+                "boarding_sec": 58.7,
+                "entry_sec": 0.0,
+                "goal_id": "46869eed30ae4c21b936abcf5db64d0c",
+                "passenger_id": "307-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 60.7,
+                "entry_sec": 0.0,
+                "goal_id": "46869eed30ae4c21b936abcf5db64d0c",
+                "passenger_id": "307-p0001",
+                "slot": 2
+              },
+              {
+                "boarding_sec": 62.7,
+                "entry_sec": 0.0,
+                "goal_id": "46869eed30ae4c21b936abcf5db64d0c",
+                "passenger_id": "307-p0002",
+                "slot": 3
+              },
+              {
+                "boarding_sec": 64.7,
+                "entry_sec": 0.0,
+                "goal_id": "46869eed30ae4c21b936abcf5db64d0c",
+                "passenger_id": "307-p0003",
+                "slot": 4
+              }
+            ],
+            "goal_id": "46869eed30ae4c21b936abcf5db64d0c",
+            "minimum_agent_separation_m": 2.000100004444778,
+            "measured_door_open_sec": 8.161882583997794,
+            "initial_passengers": 6
+          },
+          "elapsed_sec": 67.92676304399356,
+          "seeds": [
+            307
+          ]
+        },
+        {
+          "name": "nominal_docking_09",
+          "status": "PASS",
+          "observations": {
+            "run_id": "89413730-5abd-488e-99d1-d3da92ba6aa3",
+            "seed": 308,
+            "position_error_m": 0.04499999846444468,
+            "yaw_error_rad": 6.910351879518568e-10,
+            "eta_error_at_5m_sec": 0.31869553364958847,
+            "eta_invalid_duration_sampled_sec": 30.5,
+            "boarding": [],
+            "goal_id": "8ac36ab12e724f7cb5172e7d027100f2",
+            "minimum_agent_separation_m": 1.9999999972079392,
+            "measured_door_open_sec": 8.307685004001542,
+            "initial_passengers": 0
+          },
+          "elapsed_sec": 66.6846554290023,
+          "seeds": [
+            308
+          ]
+        },
+        {
+          "name": "nominal_docking_10",
+          "status": "PASS",
+          "observations": {
+            "run_id": "ed92107b-76b8-4447-b932-00ec611f7322",
+            "seed": 309,
+            "position_error_m": 0.02999999877701592,
+            "yaw_error_rad": 7.755580873980911e-10,
+            "eta_error_at_5m_sec": 0.49431699552951613,
+            "eta_invalid_duration_sampled_sec": 31.5,
+            "boarding": [
+              {
+                "boarding_sec": 58.45,
+                "entry_sec": 0.0,
+                "goal_id": "8acde1926a8440f58caffef0471ecb35",
+                "passenger_id": "309-p0000",
+                "slot": 1
+              },
+              {
+                "boarding_sec": 60.45,
+                "entry_sec": 0.0,
+                "goal_id": "8acde1926a8440f58caffef0471ecb35",
+                "passenger_id": "309-p0001",
+                "slot": 2
+              }
+            ],
+            "goal_id": "8acde1926a8440f58caffef0471ecb35",
+            "minimum_agent_separation_m": 2.0000000056204694,
+            "measured_door_open_sec": 8.193200232999516,
+            "initial_passengers": 2
+          },
+          "elapsed_sec": 67.56527956200443,
+          "seeds": [
+            309
+          ]
+        },
+        {
+          "name": "arrival_during_boarding_and_interruption",
+          "status": "PASS",
+          "observations": {
+            "arrival_id": "309-p0002",
+            "boarding": {
+              "boarding_sec": 70.4,
+              "entry_sec": 68.75,
+              "goal_id": "8eda6ddb0c4e43bc8d233e89fda414db",
+              "passenger_id": "309-p0002",
+              "slot": 2
+            },
+            "cancel_zero_sec": 0.13825999399705324,
+            "door_closed_after_interruption": true,
+            "pre_goal_readiness": {
+              "door_closed": true,
+              "bus_stopped": true,
+              "supervisor_clear": true,
+              "observations": {
+                "door": {
+                  "age_sec": 0.132,
+                  "message": {
+                    "data": false
+                  }
+                },
+                "truth": {
+                  "age_sec": 0.132,
+                  "message": {
+                    "header": {
+                      "stamp": {
+                        "sec": 1792847323,
+                        "nanosec": 73925070
+                      },
+                      "frame_id": "map"
+                    },
+                    "vehicles": [
+                      {
+                        "vehicle_id": "bus",
+                        "kind": "bus",
+                        "pose": {
+                          "x": 7.970000001222984,
+                          "y": 3.999999998234051,
+                          "theta": 7.755580873980911e-10
+                        },
+                        "speed_mps": 0.0,
+                        "edge_id": "B-Cn",
+                        "valid": true
+                      },
+                      {
+                        "vehicle_id": "robot",
+                        "kind": "robot",
+                        "pose": {
+                          "x": 3.0,
+                          "y": 6.0,
+                          "theta": 0.0
+                        },
+                        "speed_mps": 0.0,
+                        "edge_id": "R-W",
+                        "valid": true
+                      }
+                    ]
+                  }
+                },
+                "safety": {
+                  "age_sec": 0.093,
+                  "message": {
+                    "header": {
+                      "stamp": {
+                        "sec": 1792847323,
+                        "nanosec": 103748152
+                      },
+                      "frame_id": "map"
+                    },
+                    "stop_latched": false,
+                    "motion_permitted": true,
+                    "reason": "clear"
+                  }
+                }
+              }
+            }
+          },
+          "elapsed_sec": 6.062764331996732,
+          "seeds": [
+            309
+          ]
+        },
+        {
+          "name": "cancel_during_approach",
+          "status": "PASS",
+          "observations": {
+            "command_zero_latency_sec": 0.19138406400452368
+          },
+          "elapsed_sec": 14.657530339994992,
+          "seeds": [
+            400
+          ]
+        },
+        {
+          "name": "action_timeout",
+          "status": "PASS",
+          "observations": {
+            "reason": "TIMEOUT"
+          },
+          "elapsed_sec": 6.33979963100137,
+          "seeds": [
+            401
+          ]
+        },
+        {
+          "name": "blocked_bay_wait",
+          "status": "PASS",
+          "observations": {
+            "wait_observed": true,
+            "invalid_eta": true,
+            "cancel_zero_sec": 0.10492010899906745
+          },
+          "elapsed_sec": 7.311353318997135,
+          "seeds": [
+            402
+          ]
+        },
+        {
+          "name": "planner_timeout_retries_and_late_reply",
+          "status": "PASS",
+          "observations": {
+            "attempts": 3,
+            "reason": "PLANNER_UNAVAILABLE",
+            "late_reply_motion": false
+          },
+          "elapsed_sec": 10.004559405999316,
+          "seeds": [
+            403
+          ]
+        },
+        {
+          "name": "no_route",
+          "status": "PASS",
+          "observations": {
+            "reason": "NO_ROUTE",
+            "unreachable_goal_rejected": true
+          },
+          "elapsed_sec": 5.876771210998413,
+          "seeds": [
+            404
+          ]
+        },
+        {
+          "name": "frozen_edge_source_stamp",
+          "status": "PASS",
+          "observations": {
+            "reason": "NO_ROUTE"
+          },
+          "elapsed_sec": 6.8857511969981715,
+          "seeds": [
+            405
+          ]
+        },
+        {
+          "name": "stale_bus_pose",
+          "status": "PASS",
+          "observations": {
+            "reason": "STALE_POSE:STOP_UNCONFIRMED"
+          },
+          "elapsed_sec": 17.251310309002292,
+          "seeds": [
+            406
+          ]
+        },
+        {
+          "name": "estop_aborts_and_latches",
+          "status": "PASS",
+          "observations": {
+            "reason": "SAFETY_STOP",
+            "false_does_not_clear": true
+          },
+          "elapsed_sec": 14.253739077998034,
+          "seeds": [
+            407
+          ]
+        },
+        {
+          "name": "pedestrian_before_crossing_entry",
+          "status": "PASS",
+          "observations": {
+            "reason": "SAFETY_STOP",
+            "entry_inhibited": true
+          },
+          "elapsed_sec": 14.473582129998249,
+          "seeds": [
+            410
+          ]
+        },
+        {
+          "name": "active_route_missing_feed",
+          "status": "PASS",
+          "observations": {
+            "reason": "ROUTE_INVALID_OR_STALE"
+          },
+          "elapsed_sec": 15.278067970000848,
+          "seeds": [
+            411
+          ]
+        },
+        {
+          "name": "busy_goal_rejection",
+          "status": "PASS",
+          "observations": {
+            "second_goal_rejected": true
+          },
+          "elapsed_sec": 5.931621867996,
+          "seeds": [
+            412
+          ]
+        },
+        {
+          "name": "crossing_denial_renewal_loss_and_explicit_recovery",
+          "status": "PASS",
+          "observations": {
+            "denials": [
+              "ACQUIRE:OWNER_EXISTS",
+              "ACQUIRE:OWNER_EXISTS",
+              "ACQUIRE:OWNER_EXISTS",
+              "ACQUIRE:OWNER_EXISTS",
+              "ACQUIRE:OWNER_EXISTS",
+              "ACQUIRE:OWNER_EXISTS",
+              "ACQUIRE:OWNER_EXISTS"
+            ],
+            "renewal_loss_stopped": true,
+            "occupied_owner_retained": true,
+            "explicit_new_goal_recovered": true
+          },
+          "elapsed_sec": 70.38330955599668,
+          "seeds": [
+            413
+          ]
+        },
+        {
+          "name": "active_mission_reset",
+          "status": "PASS",
+          "observations": {
+            "reason": "ALL_M3_PARTICIPANTS_ACKNOWLEDGED",
+            "action_reason": "SCENARIO_RESET",
+            "run_id": "eb6928fd-90ec-4819-8aeb-5292b86222c5"
+          },
+          "elapsed_sec": 6.111627200996736,
+          "seeds": [
+            408,
+            409
+          ]
+        }
+      ],
+      "case_identity_semantics": "Each case inherits this record source commit, image and configuration. Seeds come from the recorded verifier source; boarding interruption continues seed309 without reset. Active reset changes seed408 to409."
     }
-  ]
+  ],
+  "current_status": {
+    "automated_M3_acceptance": "PASS",
+    "T05": "PASS",
+    "T06": "PASS",
+    "independent_source_review_and_teammate_reproduction": "BLOCKED",
+    "overall_milestone_closed": false,
+    "latest_acceptance_run": "dedicated-observations",
+    "note": "Earlier failed local attempts remain preserved above and are not overwritten."
+  }
 }

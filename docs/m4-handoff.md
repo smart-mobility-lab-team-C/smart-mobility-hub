@@ -1,12 +1,12 @@
 # M4 parking and congestion handoff
 
-Implementation is on `main`; local verification changes are on
-`fix/local-m4-verification`. The latest fresh Ubuntu 24.04/Jazzy local run at
-`d660a94` passed the build, all 53 package tests, and 18 M2 cases. Two M3 docking
-missions passed; the third ended in `SAFETY_STOP` after a gap in safety-state
-observations. M4 was not reached, so T07–T10 remain **NOT RUN**. See the
-[local attempt](../evidence/m4-local-cyclone-attempt.json) and
-[diagnostic comparison](../evidence/m4-local-diagnostics.json). M5–M7 have not
+M4 implementation and earlier local verification tooling are on `main`.
+The latest fresh Ubuntu 24.04/Jazzy M3 run at
+`f6a97fd` passed M2 18/18, all 53 package tests, and all 24 M3 cases including
+T05–T06. Its completion changes are on `fix/m3-local-completion`, not merged or
+pushed. M4 was not run; T07–T10 remain **NOT RUN** and are the next acceptance
+gate. Earlier M3 failures remain historical records. See the
+[local M3 evidence index](../evidence/m3-local-completion.json). M5–M7 have not
 started under the one-milestone-at-a-time rule.
 
 The local runtime exposed two regression issues and fixed them on
@@ -145,25 +145,28 @@ these are implemented probes, not results. The runner also implements the canoni
 t=20/45/60 faults with recovery. Actual source-sequence timing, moving
 integration and independent teammate reproduction still require validation.
 
-## Current local blocker
+## Historical local blocker
 
-The full local Cyclone campaign at `d660a94` passed two docking missions, then
-nominal mission 3 (seed 302) aborted with `SAFE_STOP/SAFETY_STOP`. The trace has a
-0.888-second gap in safety observations and a 0.762-second gap in final-command
-observations near the abort, while odometry continued. Independent host sampling
-had a largest interval of 0.185 seconds over the run. This does not distinguish
-a supervisor callback delay from DDS delivery delay; no supervisor callback
-profile was collected during this acceptance attempt. Thresholds remain unchanged.
+The earlier full local Cyclone campaign at `d660a94` passed two docking missions,
+then nominal mission 3 (seed 302) aborted with `SAFE_STOP/SAFETY_STOP`. The trace
+has a 0.888-second gap in safety observations and a 0.762-second gap in
+final-command observations near the abort, while odometry continued. Independent
+host sampling had a largest interval of 0.185 seconds over the run. The blocker
+was cleared for M3/T05–T06 by the later full local M3 PASS at `f6a97fd`; M4 has
+not yet been executed. Thresholds remain unchanged.
 
 Earlier Fast DDS runs failed the one-second reset deadline. Reset diagnostics
 identified `/bus/prepare_reset` and intermittent callback delivery delays. The
 same-source middleware comparison passed five resets with Cyclone DDS and failed
 the first with Fast DDS. This supports the local project profile, not a general
-middleware-defect claim or a scenario PASS. Candidate callback/TF/executor changes
-were not stable and were reverted; retained runtime changes only add diagnostics.
+middleware-defect claim or a scenario PASS. Earlier callback-group and other
+executor experiments did not resolve the issue. A later dedicated observation
+executor change on `fix/m3-local-completion` passed full M3 locally; it remains
+unmerged and unpushed pending review.
 
 Raw runs and the feed-gap context remain under
-`evidence/runs/m4-local-20261024-cyclone-full/`; the tracked result index records
-commit, image, configuration, seeds, outcomes and artifact hashes. M4 T07–T10
-remain NOT RUN until the M3 prerequisite and M4 checks pass locally. Real-video
-acceptance and independent teammate review remain separate human gates.
+`evidence/runs/m4-local-20261024-cyclone-full/`; their tracked result index
+preserves commit, image, configuration, seeds, outcomes and artifact hashes.
+M3's local prerequisite now passes, but M4 T07–T10 remain NOT RUN until the M4
+suite is executed. Real-video acceptance and independent teammate review remain
+separate human gates.

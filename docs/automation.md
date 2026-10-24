@@ -59,9 +59,10 @@ The local profile selects `rmw_cyclonedds_cpp`. In a same-source, same-image
 comparison on this VM, Cyclone DDS passed five reset repetitions while Fast DDS
 failed the first reset with `RESET_DEADLINE`. This is a project configuration
 choice, not an assignment requirement or proof of a general Fast DDS defect.
-The full local campaign still failed a later safety-observation check; this
-profile is not acceptance PASS. The base image and middleware remain available
-for comparison. All nodes within
+An earlier full local campaign failed a safety-observation check; that historical
+failure was followed by a full M3 local PASS on the same recorded Cyclone image
+profile. This does not establish an M4 PASS. The base image and middleware remain
+available for comparison. All nodes within
 a run must use the recorded profile; public schemas, QoS and timing thresholds
 are unchanged. The package and selection are supported by the
 [official Jazzy Cyclone DDS documentation](https://docs.ros.org/en/jazzy/Installation/RMW-Implementations/DDS-Implementations/Working-with-Eclipse-CycloneDDS.html).
@@ -112,8 +113,9 @@ package-image layers only, never test results or build workspaces.
 The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
-launches and default `m3_container.sh` behavior are preserved. The latest local Jazzy
-build and M2 checks passed; two M3 docking missions passed, then mission 3 stopped
-on a gap in safety observations. M4 acceptance was not reached. See the
-[local full-run result](../evidence/m4-local-cyclone-attempt.json). See the [M4 handoff](m4-handoff.md)
+launches and default `m3_container.sh` behavior are preserved. The latest local
+M3 run (`f6a97fd`) passed M2 18/18, all 53 package tests, and M3 24/24 including
+T05–T06. M4 acceptance remains NOT RUN and is the next gate. The M3 completion
+changes are on `fix/m3-local-completion`, not merged or pushed. See the
+[local M3 evidence index](../evidence/m3-local-completion.json), [M4 handoff](m4-handoff.md),
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).

@@ -157,6 +157,15 @@ QoS, watchdogs and invalid-value conventions are documented in M3. Public reset
 remains `/scenario/reset`, owned by reset_coordinator; M3 adds explicit bus
 prepare/finish acknowledgements within the existing total 1 s deadline.
 
+The bus process uses internal `bus_observations` solely to receive the existing
+bus input topics and TF on a dedicated single-thread executor. The mission node
+retains its two-thread executor, all public publishers/actions/services and final
+safety authority remains in the supervisor. Shared state is locked; the helper
+shares existing bus reset acknowledgements and adds no public endpoint or custom
+behavioral parameter. Bus finish-reset may wait up to 0.25 s for fresh measured
+zero and an unlatched supervisor reset hold, within the unchanged total reset
+deadline; timeout retains the hold. See [local M3 acceptance](m3.md#current-local-verification--2026-10-24).
+
 ## M4 implementation (acceptance open)
 
 M4 preserves all public schemas and M2/M3 launch behavior. Its separate launch

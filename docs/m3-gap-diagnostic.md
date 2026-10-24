@@ -336,3 +336,15 @@ heartbeats. The runtime emits `SAFETY_INPUT_REJECTED` with the last safety
 sample's source/receipt ages and latch/reason before taking the existing stop
 path. These additions do not change validity rules or motion authority.
 Diagnostic variants remain ineligible for scenario acceptance.
+
+## Local acceptance after dedicated observation reception
+
+Separating bus callback groups alone did not resolve the bus-local stale input;
+those full-suite failures remain recorded. A dedicated input/TF executor in the
+bus process, plus bounded reset-finish observation acknowledgement, then passed
+the full fresh local suite at `f6a97fd`: 18 M2 cases, 24 M3 cases and ten nominal
+docks. See [local completion evidence](../evidence/m3-local-completion.json) and
+[M3 handoff](m3.md#current-local-verification--2026-10-24). No watchdog, public
+QoS or freshness threshold changed. This acceptance result applies to the
+recorded environment and does not establish a common cause for all historical
+VirtualBox, host-clock or middleware gaps.

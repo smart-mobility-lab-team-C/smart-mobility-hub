@@ -278,5 +278,29 @@ The [fresh local attempt](../evidence/m4-local-cyclone-attempt.json) at `d660a94
 passed eight package builds, 53 package tests and all 18 M2 cases. It passed two
 M3 nominal missions, then failed mission 3 with `SAFETY_STOP`. A 0.888-second gap
 in safety observations is retained alongside host timing and a trace window.
-Local T05 is FAIL; T06 and M4 T07–T10 were not reached. Historical hosted results
-remain separate and do not replace this local result.
+That attempt left local T05 FAIL; T06 and M4 T07–T10 were not reached. Historical
+hosted results remain separate and do not replace that local result.
+
+## Local M3 completion — 2026-10-24
+
+Fresh local acceptance at `f6a97fd7bf98a19662055eb462c21c0ae1085f5f` passed all
+24 M3 cases and ten nominal docking missions for seeds 300–309. All eight
+package builds, style/interface checks, 53 package tests and 18 M2 regression
+cases passed. Local **T05/T06: PASS**. Independent teammate review and
+clean-checkout reproduction remain BLOCKED. M4 T07–T10 remain NOT RUN.
+
+The bus now receives observations/TF through a dedicated executor in the same
+process, retaining the two-thread mission executor and shared-state lock. Reset
+finish waits briefly for fresh zero/hold observations, and M2 parameter capture
+uses native asynchronous services while continuing probe heartbeats. Public
+schemas, QoS, frames, watchdogs and the one-second reset deadline are unchanged.
+
+The [local index](../evidence/m3-local-completion.json) records this run and all
+failed attempts/diagnostics that led to it. Earlier failures remain FAIL, and
+successful diagnostic collection is not scenario acceptance. It includes the
+image/configuration/source identities, commands, seeds, metrics, sample counts
+and artifact hashes. Raw output is retained under ignored
+`evidence/runs/m3-local-20261024-dedicated-observations/` and its sibling `-host/`.
+The [M3 handoff](m3.md#current-local-verification--2026-10-24) states measured
+limits and remaining human gates. These changes are on
+`fix/m3-local-completion`; no merge/push or hosted run was performed.
