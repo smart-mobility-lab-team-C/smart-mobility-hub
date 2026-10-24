@@ -11,7 +11,7 @@ from nav_msgs.msg import Odometry
 from rcl_interfaces.msg import ParameterDescriptor
 import rclpy
 from rclpy.action import ActionServer, CancelResponse, GoalResponse
-from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile
@@ -131,6 +131,7 @@ class BusManager(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.group = ReentrantCallbackGroup()
+        self.observation_group = MutuallyExclusiveCallbackGroup()
         transient = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
         for key, message, topic, qos in (
             ('odom', Odometry, '/bus/odom', 10),
@@ -142,15 +143,20 @@ class BusManager(Node):
             ('final', Twist, '/bus/cmd_vel', 1),
             ('bay', Bool, '/sim/bay_clear', 1),
         ):
-            self.create_subscription(message, topic, lambda msg, k=key: self.record(k, msg), qos)
+            self.create_subscription(
+                message, topic, lambda msg, k=key: self.record(k, msg), qos,
+                callback_group=self.observation_group)
         self.commands = self.create_publisher(TwistStamped, '/bus/cmd_vel_candidate', 1)
         self.doors = self.create_publisher(Bool, '/bus/door_request', 1)
         self.arrival = self.create_publisher(BusArrival, '/hub/bus_arrival', 10)
         self.events = self.create_publisher(HubEvent, '/hub/events', 100)
         self.goal_ids = self.create_publisher(String, '/sim/bus_goal_id', 1)
-        self.create_subscription(String, '/sim/run_id', self.on_run, transient)
-        self.route_client = self.create_client(ComputeRoute, '/route/compute')
-        self.cross_client = self.create_client(RequestCrossing, '/crossing/request')
+        self.create_subscription(String, '/sim/run_id', self.on_run, transient,
+                                 callback_group=self.observation_group)
+        self.route_client = self.create_client(
+            ComputeRoute, '/route/compute', callback_group=self.observation_group)
+        self.cross_client = self.create_client(
+            RequestCrossing, '/crossing/request', callback_group=self.observation_group)
         self.server = ActionServer(
             self,
             DockBus,
