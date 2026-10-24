@@ -419,3 +419,38 @@ Build reuse avoids repeated setup cost but cannot repair timing defects. It must
 be rejected after interface or installed-resource changes; clean acceptance
 remains mandatory before claiming combined success.
 
+### Single py-spy attempt — 2026-10-25
+
+At the user's request, py-spy 0.4.2 was downloaded to the ignored cache with its
+PyPI wheel SHA256 verified. A harmless Python 3.12 child compatibility capture
+passed at 50 Hz with idle threads, 44 samples and zero errors. Parent-child
+memory access works with the existing UID 1000, zero effective capabilities and
+Docker seccomp enabled. No security settings, system packages, ROS configuration
+or production sources changed. No environment or workspace rebuild was needed.
+
+Exactly one targeted attempt then launched the unchanged bus worker under py-spy
+with `--rate 50 --idle --threads --format chrometrace`, retaining a timestamped
+profile. The existing 240-second outer bound and all safety/startup deadlines
+were preserved. The run ended in 42.917 s, failing the existing 20-second startup
+readiness check before any mission goal. Collection exit zero means artifacts
+were retained, not acceptance PASS. Neither `STALE_DOOR` nor `crossing_stale`
+occurred. No bus executor heartbeat was recorded, so there is no runtime
+executor-heartbeat gap to correlate with a mission failure.
+
+The profile contains 353 samples, zero reported read errors and a 13.38-second
+sampling backlog warning. MainThread samples show imports and ROS entity
+initialization; the only other sampled Python thread is the diagnostic recorder,
+mostly at `threading.wait`. Observation/mission worker execution was not reached.
+This is **INCONCLUSIVE**, not evidence of a specific runtime bottleneck or a
+resolved failure. The backlog prevents reliable timing attribution; sampled
+stacks cannot establish lock-wait duration, GIL starvation or transport delay.
+Profiler overhead and host contention remain unseparated.
+
+[Evidence index](../evidence/bus-pyspy-20261025.json) points to the raw profile,
+launcher/provenance, heartbeat records and analysis under ignored
+`evidence/runs/bus-pyspy-20261025/`. No second diagnostic or fix was attempted.
+The smallest proposed next step, requiring a new authorization, is to prepare
+parent-preserving attachment after bus readiness and verify a sustainable sample
+rate before interpreting a future profile. This would avoid profiling imports
+and ROS initialization without extending any startup or safety deadline.
+
