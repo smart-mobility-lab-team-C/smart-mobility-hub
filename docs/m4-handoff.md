@@ -1,5 +1,12 @@
 # M4 parking and congestion handoff
 
+The fresh M4-only run at `7557938` passed ownership, expiry and barrier checks
+but failed parking-freeze invalidation within 1.2 s. The simulator captured its
+first frozen frame on the next 5 Hz sensor tick, creating a new acquisition after
+the fault request. It now repeats the last published parking acquisition as soon
+as freeze is set; no sensor timeout is relaxed. A regression test covers freezing
+between ticks and resuming acquisition. This change is under verification.
+
 M4 verification is active on `fix/m4-local-completion`. A focused preflight at
 `5976e15` passed 20/20 reset probes and all 9/9 M4 cases (T07–T10). This is
 limited evidence, not full-regression acceptance. The latest full attempt at the

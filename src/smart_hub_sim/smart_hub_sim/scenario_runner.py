@@ -82,7 +82,7 @@ class ScenarioRunner(Node):
         self.declare_parameter('passage_occupied', False)
         self.declare_parameter('publish_entrance', True)
         self.declare_parameter('publish_barrier_status', True)
-        self._frozen_parking = None
+        self._last_parking = None
         self._frozen_vehicles = None
         self._parking_state = None
         self._parking_received = 0.0
@@ -455,6 +455,10 @@ class ScenarioRunner(Node):
         """Publish synthetic slot observations using the observation-only RNG."""
         if self.m4_mode and not self.get_parameter('publish_parking').value:
             return
+        if (self.m4_mode and self.get_parameter('freeze_parking').value
+                and self._last_parking is not None):
+            self._parking_pub.publish(self._last_parking)
+            return
         message = SlotObservationArray()
         message.header.stamp = stamp
         message.header.frame_id = 'map'
@@ -469,12 +473,7 @@ class ScenarioRunner(Node):
             observation.valid = not (self.m4_mode and
                                      slot_id in self.get_parameter('invalid_slots').value)
             message.slots.append(observation)
-        if self.m4_mode and self.get_parameter('freeze_parking').value:
-            if self._frozen_parking is None:
-                self._frozen_parking = message
-            message = self._frozen_parking
-        else:
-            self._frozen_parking = None
+        self._last_parking = message
         self._parking_pub.publish(message)
 
     def _publish_image(self, stamp) -> None:
@@ -696,7 +695,7 @@ class ScenarioRunner(Node):
             self.goal_id = ''
             self._parking_state = None
             self._parking_received = 0.0
-            self._frozen_parking = self._frozen_vehicles = None
+            self._last_parking = self._frozen_vehicles = None
             self._commands = {
                 'bus': ((0.0, 0.0), now),
                 'robot': ((0.0, 0.0), now),
