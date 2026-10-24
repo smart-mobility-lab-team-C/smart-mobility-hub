@@ -166,7 +166,7 @@ behavioral parameter. Bus finish-reset may wait up to 0.25 s for fresh measured
 zero and an unlatched supervisor reset hold, within the unchanged total reset
 deadline; timeout retains the hold. See [local M3 acceptance](m3.md#current-local-verification--2026-10-24).
 
-## M4 implementation (acceptance open)
+## M4 implementation and functional acceptance
 
 M4 preserves all public schemas and M2/M3 launch behavior. Its separate launch
 uses traffic_monitor as the sole active road-state publisher and simulator-owned
@@ -193,3 +193,10 @@ Traffic transition events carry JSON label/speed/density; UNKNOWN retains
 other records make density invalid. Parking reservation/release events use the
 service request ID as correlation ID. Full endpoint ownership, reset behavior,
 freshness policies and acceptance blockers are in the [M4 handoff](m4-handoff.md).
+
+Assignment-scoped T07–T10 passed the independent fresh M4 run at `b7d1df7`.
+The simulator's existing `freeze_parking` fault now repeats the last published
+acquisition immediately, without taking one extra frame on its next tick.
+Public message/QoS/timing contracts and stale thresholds are unchanged.
+Combined M3 regression and moving integration remain open, separately recorded
+in the [M4 evidence index](../evidence/m4-local-completion.json).

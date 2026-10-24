@@ -1,7 +1,7 @@
 {
   "schema": "smart-mobility-hub/m4-local-completion-evidence-v1",
   "created_utc": "2026-10-24",
-  "scope": "Recorded local M4 attempts include focused probes, M4-only scope acceptance and combined regressions. M4-only results explicitly leave M2/M3 NOT RUN and do not establish full regression acceptance.",
+  "scope": "The latest independent M4-only run at b7d1df7 passed all nine M4 cases with a fresh build and 54 package tests; M2/M3 were NOT RUN in that scope. Combined regression remains open at M3, while assignment-scoped M4 T07-T10 functional acceptance is complete pending independent review.",
   "environment_common": {
     "host": "Ubuntu 22.04 VM (KVM)",
     "container": "Ubuntu 24.04.5 LTS",
@@ -1601,6 +1601,651 @@
         "m4_report_status": "FAIL",
         "trace_sha256": "3071bb9b3a0904daa4aa04ad82500d8d7fac543cb4cd9311f30e541b5f775304"
       }
+    },
+    {
+      "id": "m4-only-freeze-fix-20261025",
+      "kind": "M4_only_acceptance",
+      "branch": "fix/m4-local-completion",
+      "source_commit": "b7d1df7d36b457ad7c8d416e3c9f9d9a63d51ca7",
+      "source_worktree": "clean at run start",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5 LTS",
+        "python": "3.12.3"
+      },
+      "command": [
+        "sg",
+        "docker",
+        "-c",
+        "docker run --rm --name smh-m4-freeze-fix --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m4_container.sh /workspace/evidence/runs/m4-local-20261025-freeze-fix/acceptance --m4-only"
+      ],
+      "docker_command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-m4-freeze-fix",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/vboxuser/smart-mobility-hub:/workspace",
+        "smh-m4-local:latest",
+        "bash",
+        "scripts/m4_container.sh",
+        "/workspace/evidence/runs/m4-local-20261025-freeze-fix/acceptance",
+        "--m4-only"
+      ],
+      "start_utc": "2026-10-24T17:58:15.279421+00:00",
+      "end_utc": "2026-10-24T18:04:08.334537+00:00",
+      "exit_code": 0,
+      "host_environment": {
+        "platform_file": "evidence/runs/m4-local-20261025-freeze-fix/platform.txt",
+        "cpu_count": 18,
+        "virtualization": "KVM full"
+      },
+      "model": null,
+      "acceptance_eligible": true,
+      "milestone_closed": false,
+      "scope": "M4 T07-T10 independent fresh-build acceptance only; M2 and M3 explicitly NOT RUN. This closes the local M4 functional acceptance scope only; combined integration regression remains separately tracked.",
+      "status": "PASS",
+      "configuration": {
+        "map": "map_m1.yaml",
+        "configuration_sha256": "99d6c28b0e920e9d1569dd3e72e992af6a759c5d9a848fd6e611e1ac4da33251",
+        "launch": "m4.launch.py defaults",
+        "seed": 17,
+        "model": null,
+        "clocks": "monotonic latency; wall-backed ROS source timestamps"
+      },
+      "measurements": {
+        "build": "PASS; 8 packages built",
+        "colcon_tests": "PASS; 54 tests, 0 errors, 0 failures, 0 skipped",
+        "M2": "NOT RUN",
+        "M3": "NOT RUN",
+        "M4": "PASS; all 9 M4 acceptance cases passed.",
+        "acceptance_cases": [
+          {
+            "name": "reset_acknowledgments",
+            "status": "PASS"
+          },
+          {
+            "name": "T07_service_pairs",
+            "status": "PASS",
+            "pairs": 20,
+            "p95_sec": 0.09421360999840545,
+            "double_allocations": 0,
+            "latencies_sec": [
+              0.060504204004246276,
+              0.10690176400385099,
+              0.05695201900380198,
+              0.10581583300518105,
+              0.08205705099680927,
+              0.09421360999840545,
+              0.036690815999463666,
+              0.06800518200179795,
+              0.07080172900168691,
+              0.07108045399945695,
+              0.040734665002673864,
+              0.04099122100160457,
+              0.037081422000483144,
+              0.03971191199525492,
+              0.01896593700075755,
+              0.019301752996398136,
+              0.06621801699657226,
+              0.08617667500220705,
+              0.01618258300004527,
+              0.051819857995724306,
+              0.06187349899846595,
+              0.06594382000184851,
+              0.04575960399961332,
+              0.05102211499615805,
+              0.02819723100401461,
+              0.0522516480050399,
+              0.05120830399391707,
+              0.05678272299701348,
+              0.03580008899734821,
+              0.042830733000300825,
+              0.0457543890006491,
+              0.0507587859974592,
+              0.04994298100064043,
+              0.05028635099733947,
+              0.024817852005071472,
+              0.029984962005983107,
+              0.03301636400283314,
+              0.06383001599897398,
+              0.031113948003621772,
+              0.053307481000956614
+            ]
+          },
+          {
+            "name": "canonical_S4_timeline",
+            "status": "PASS",
+            "sample_count": 2,
+            "scheduled_request_times_sec": [
+              5,
+              6
+            ],
+            "occupancy_sec": 8,
+            "sensor_loss_sec": 10,
+            "expiry_check_sec": 40,
+            "occupied_slot": "P2",
+            "elapsed_sec": 40.0204284240026
+          },
+          {
+            "name": "T08_expiry_and_barrier",
+            "status": "PASS",
+            "occupied_after_expiry": true,
+            "stale_unavailable": true,
+            "wrong_entrance_denied": true,
+            "occupied_passage_held": true
+          },
+          {
+            "name": "parking_frozen_source",
+            "status": "PASS",
+            "unknown_sec": 1.0136077479983214
+          },
+          {
+            "name": "canonical_S5_timeline",
+            "status": "PASS",
+            "sample_count": 4,
+            "elapsed_sec": 64.32808495499921,
+            "individual_source_loss": "aggregator explicitly marks frozen source invalid",
+            "congestion_delay_sec": 0.3046660779946251,
+            "unknown_delay_sec": 0.29880610299733235,
+            "obstruction_delay_sec": 0.3543025199978729
+          },
+          {
+            "name": "T09_traffic_labels",
+            "status": "PASS",
+            "congestion_delay_sec": 0.4918946909965598,
+            "obstruction_delay_sec": 0.5424129590028315,
+            "classification_scope": "stable probe checkpoints; transitions reported separately",
+            "edge_sample_count": 258,
+            "valid_data_fraction": 0.8565891472868217,
+            "free_flow_trials": [
+              {
+                "trial_id": 0,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 1,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 2,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 3,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 4,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 5,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 6,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 7,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 8,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              },
+              {
+                "trial_id": 9,
+                "duration_sec": 6.0,
+                "false_congestion": 0
+              }
+            ],
+            "invalid_samples_rejected": true,
+            "valid_empty_normal": true,
+            "invalid_individual_source_does_not_poison_healthy_edge": true,
+            "stable_classification_checkpoints": 15,
+            "classification_samples": [
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              },
+              {
+                "expected": "CONGESTED",
+                "observed": "CONGESTED",
+                "valid": true
+              },
+              {
+                "expected": "BLOCKED",
+                "observed": "BLOCKED",
+                "valid": true
+              },
+              {
+                "expected": "UNKNOWN",
+                "observed": "UNKNOWN",
+                "valid": false
+              },
+              {
+                "expected": "UNKNOWN",
+                "observed": "UNKNOWN",
+                "valid": false
+              },
+              {
+                "expected": "NORMAL",
+                "observed": "NORMAL",
+                "valid": true
+              }
+            ],
+            "per_class_precision_recall": {
+              "NORMAL": {
+                "precision": 1.0,
+                "recall": 1.0
+              },
+              "CONGESTED": {
+                "precision": 1.0,
+                "recall": 1.0
+              },
+              "BLOCKED": {
+                "precision": 1.0,
+                "recall": 1.0
+              },
+              "UNKNOWN": {
+                "precision": 1.0,
+                "recall": 1.0
+              }
+            }
+          },
+          {
+            "name": "T10_frozen_source",
+            "status": "PASS",
+            "unknown_sec": 0.6916573710041121
+          },
+          {
+            "name": "T10_missing_feed",
+            "status": "PASS",
+            "unknown_sec": 0.7191219360029208
+          }
+        ],
+        "thresholds": {
+          "T07_service_pairs": "20 concurrent request pairs; p95 <0.250 s; zero double allocations",
+          "parking_frozen_source": "all slots UNKNOWN within 1.2 s",
+          "T09_traffic_labels": "stable checkpoints match expected labels; precision and recall reported per class",
+          "T10_frozen_source_and_missing_feed": "UNKNOWN within verifier 1.2 s deadline"
+        },
+        "T07": {
+          "pairs": 20,
+          "p95_sec": 0.09421360999840545,
+          "double_allocations": 0
+        },
+        "parking_frozen_source_unknown_sec": 1.0136077479983214,
+        "canonical_S5_delays_sec": {
+          "congestion": 0.3046660779946251,
+          "unknown": 0.29880610299733235,
+          "obstruction": 0.3543025199978729
+        },
+        "T09": {
+          "stable_checkpoints": 15,
+          "per_class_precision_recall": {
+            "NORMAL": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "CONGESTED": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "BLOCKED": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "UNKNOWN": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "edge_sample_count": 258,
+          "valid_data_fraction": 0.8565891472868217,
+          "free_flow_trial_count": 10,
+          "false_congestion_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "T10_unknown_sec": {
+          "T10_frozen_source": 0.6916573710041121,
+          "T10_missing_feed": 0.7191219360029208
+        },
+        "bag_message_count": 6286,
+        "plot": "acceptance/m4/measurements.png",
+        "blockage_acquisition_to_publication": {
+          "clock": "wall-backed ROS acquisition/computation stamps",
+          "measurement": "first obstacle input acquisition to first blocked edge publication, an upper bound on observe-to-publication delay",
+          "transitions": [
+            {
+              "input_source_ros_sec": 1792865018.1005118,
+              "blocked_publication_ros_sec": 1792865018.300265,
+              "elapsed_sec": 0.1997532844543457
+            },
+            {
+              "input_source_ros_sec": 1792865022.9412901,
+              "blocked_publication_ros_sec": 1792865023.3102322,
+              "elapsed_sec": 0.3689420223236084
+            }
+          ]
+        },
+        "blockage_metric_note": "Probe delay includes waiting for its next raw input publication and delivery. Bag acquisition-to-publication intervals separately upper-bound monitor observe-to-output latency."
+      },
+      "source_sha256": {
+        "scripts/m4_container.sh": "b098110372a1c069ea0e46fa1cec5216cac77140d9b68c644f4090238dd45936",
+        "scripts/m3_container.sh": "c785a4e9850c5487caea45322c6fae1122e87528e5db0fd0e776a1cc2111ff1b",
+        "scripts/verify_m4.py": "b937b6a834fcaade8332261d9bf83a9fa5e8d8a5485433435f263f87dd2dcf1f",
+        "scripts/plot_m4.py": "cf9db02f78e7232286b07aade55db273db48125d9390ad9558b06e2f06d9cc7e",
+        "src/smart_hub_control/smart_hub_control/m4_nodes.py": "d2e534678d5de370bb4454a90400d11a8072f66d34e68ed1b3314ff17ddab9cc",
+        "src/smart_hub_control/smart_hub_control/parking.py": "ddb17c00bff3f600efcbedead28156b965c3d5885a2c94e29e15e5d00db702a0",
+        "src/smart_hub_control/smart_hub_control/traffic.py": "ed6e5c6d9bfd894b0af6ac44e3ee33c873641b230b83003e0be23fd95caba3af",
+        "src/smart_hub_sim/smart_hub_sim/scenario_runner.py": "99181f23242fa1422d16cf81a05c40b27d649d1015780cd6dd953b2d2b16da43",
+        "src/smart_hub_sim/test/test_m4_frozen_parking.py": "2501d74f810068911628e3b92a2aa79207a44a9ca2a53dd83f2f8170356a2f98",
+        "src/smart_hub_sim/package.xml": "e39b86c22b64911817e6aab3a305e329d5fc8be37f4bf5c51e5e9bbad2c1ac8f",
+        "src/smart_hub_sim/config/map_m1.yaml": "99d6c28b0e920e9d1569dd3e72e992af6a759c5d9a848fd6e611e1ac4da33251"
+      },
+      "source_manifest": "evidence/runs/m4-local-20261025-freeze-fix/acceptance/source-sha256.txt",
+      "artifact_sha256": {
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/COLCON_IGNORE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/events.log": "bb35a6378155a477a6205cfc1c8194f18a9e3564e42e154f7c30e76a5b9d8fd4",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/logger_all.log": "1434d4687499ed8c696a477c5deb90ae1e09107ad36d8f0ffd7b33702b03b2b7",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/command.log": "306adb5816db18631c9bfa6c41e921d29bb195a9809ea4f4c790fd1df519c2a2",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/stdout.log": "e6df93bf6a82f8b30d58ca38eb7bff024afb699ce188fd8ff4dbe14bfcad13ec",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/stdout_stderr.log": "e6df93bf6a82f8b30d58ca38eb7bff024afb699ce188fd8ff4dbe14bfcad13ec",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/streams.log": "f011168ce110a32e1b7c8eb0a5f125293604c5be081790c4876ccae69dd99e71",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/command.log": "6359c53c51bbefae5120992e5a28f659d5c4d5f754824cc5d08c695484e77fb8",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/stdout.log": "373b4bb37e355adf0157d17ab2ede977fe410e2e8c13843e176c4c4a51da781a",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/stdout_stderr.log": "373b4bb37e355adf0157d17ab2ede977fe410e2e8c13843e176c4c4a51da781a",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/streams.log": "3048317ecfd404dbeccd88c586857e6d9287e576bea44f24ac9ebe4f7a4fd4ea",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/command.log": "6fa66ea6359d6586bd0eb47ff465b380681d4eec57b28b15c34f541c0623fcb3",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/stdout.log": "96d9cc85b724c00b065fb4af213d32896f438bbed5cd722f7f53cfc273c02231",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/stdout_stderr.log": "96d9cc85b724c00b065fb4af213d32896f438bbed5cd722f7f53cfc273c02231",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/streams.log": "2b2482a48a07330e4412b66b940faed74831d6fddce63adf7a514a628aa62e6b",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/command.log": "a341c04ebcd5b57963ae4ccc35d11d8bcd8b59ac97ccae225149471925192b9c",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/stdout.log": "4f5430f95613e855501462d791c88b0267074ddc56d846d2951dd1145a3373db",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/stdout_stderr.log": "4f5430f95613e855501462d791c88b0267074ddc56d846d2951dd1145a3373db",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/streams.log": "1f2a095bf2f7984b515396421ea09de0f5f00e33314d97079a5361a40c19b2f1",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/command.log": "3eb9f87f5eb1c5914661267521c95a7e493230c713037e1d6028c1e92803bf6b",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/stdout.log": "5f34af2c91409930d2343478a456a3e705318c5994778556109d674c45630053",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/stdout_stderr.log": "5f34af2c91409930d2343478a456a3e705318c5994778556109d674c45630053",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/streams.log": "7b87b6b26bf9c43eda010ed7c359dd0763b1a8fcab33f25efec136aa9d806573",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/command.log": "4ba1926bf588cdde5c321c1ea165dc437bd2573634bbe6a082237ddea8bd9364",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/stdout.log": "99554461116e466e6fd29cb419172f8eab561056816a4f5e9cd2d44b8ada81c9",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/stdout_stderr.log": "99554461116e466e6fd29cb419172f8eab561056816a4f5e9cd2d44b8ada81c9",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/streams.log": "6a61c6cb46d66306f4b71abbe6ecb5cf732dfcdf8bfff5465ce6708f804769c4",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/command.log": "04349f6ffcce92e1d408c6dcc0b83a054cd39e0bf11fd7b6927c0f0d0686cd06",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/stdout.log": "35a249bbfdab6fb4763c2cd7ec7f724cf498ac55a43275949590a65e8efda70c",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/stdout_stderr.log": "35a249bbfdab6fb4763c2cd7ec7f724cf498ac55a43275949590a65e8efda70c",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/streams.log": "b5cfeec9b2108a3dd392cc628f72c053ae883754172dfd53d14a9261eba862bc",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/command.log": "9a74d3c3d28667c4dd17463a8b39f8f99f456ad70ffa7fe1a3a2d43b74c53653",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/stdout.log": "d3d7c83b7c03e7ab3a9911109ff9cd542c02255a54a83a6927d6558e0bf8ac24",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/stdout_stderr.log": "d3d7c83b7c03e7ab3a9911109ff9cd542c02255a54a83a6927d6558e0bf8ac24",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/streams.log": "17548097fffdbfcaf4a18107ea0c574355186eb2f0ec0a1567831b1a27191f35",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test-result_2026-10-24_18-00-26/logger_all.log": "c4bd5e88e40dcd54c4e5acd2f00edacd7954b63012fc74c2370904a8b2be7b03",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/events.log": "b87c8409e6f96455c2bbe5cfddd0491c6b253dec2581566ae012613ba1512118",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/logger_all.log": "ff3e2a2e6f956d1159cbfdd441d6fc6d8d89b906aee81740d080c7af79bce566",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/command.log": "30541675af23a1453e5af5958f1ffd62945ef0024741234c6a309776fcb811e1",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/stdout.log": "72266619ce7976e0857ff2bd0a273b0fb4110bd4bc5d74e7404cb85746262fa0",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/stdout_stderr.log": "72266619ce7976e0857ff2bd0a273b0fb4110bd4bc5d74e7404cb85746262fa0",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/streams.log": "a639b5fc331f6d5ba0b1bec7d344987d5f7e5dd01092164b6536ab1d95a77682",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/command.log": "7db4cd0fedb275c5d690103c3d96346305dd405c6ba011e06098f633eadf623a",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/stderr.log": "e15c7becd7a16111204c92b224c31b90ba3c634e1979e3496d68bc086dac918a",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/stdout.log": "c882940591085564fc5f82a164b4b7613349a5ec006eec3b6c80dcab2f97f6d9",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/stdout_stderr.log": "a07f44d96f220e9da81140a4b0e295e18a4d8763ef62290d35910fb01d9d035e",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/streams.log": "0684c25fbbcd26752cdb21ced0d800331059b9a344761304e6bb12b8744c6159",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/command.log": "d672daf7973e9b98816dfd081f5fd68abc4541dbb1b88d15917df92ee79beac3",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/stdout.log": "b87016bc70713e7c7406ca5d4ea262f23923b62ba0f6dc68f2a300ccabf660ce",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/stdout_stderr.log": "b87016bc70713e7c7406ca5d4ea262f23923b62ba0f6dc68f2a300ccabf660ce",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/streams.log": "65eba11e0c34da58050116ca6e5a0e5e1adeca18328c2cef9a741d7857171b3e",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/command.log": "cb029915bf7d3272d954b42e7b645e27080e01d3fd1227acb42e495e8c2d77e1",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/stdout.log": "9e58d4e9d016aed27aecac1537bba0785187b6e3f4495ffe1edcafedead5dcfd",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/stdout_stderr.log": "9e58d4e9d016aed27aecac1537bba0785187b6e3f4495ffe1edcafedead5dcfd",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/streams.log": "60f15f336bd61171c13c35b8f7ce60dbee94a4edafd048b15be749e1c1516fb3",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/command.log": "d24bfc210e46772c7f003b88112bd720bf1adb64a5213364477ed82348e0d3d9",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/stdout.log": "4abf3a904f4ab8253f250edd1480e07e4b3f15f6f0f38a97d1e52c98b79797e1",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/stdout_stderr.log": "4abf3a904f4ab8253f250edd1480e07e4b3f15f6f0f38a97d1e52c98b79797e1",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/streams.log": "b0ed6a5eb9a830c99afae9a0decf8bf9ea66c7b1e40bd2583094915553219af8",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/command.log": "9b93ca7eaadfaae3adb3eaa5e60992bebbdd1e1e8a7c9b732863da4310cd2c49",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/stderr.log": "ac7756a9bff50bcf959814f0ea002b9ee741097a542c492baa2feef0fe9d1c89",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/stdout.log": "e13061abe5a8e9b6e87e259905a93d1ddada81886c93746106f38cd9ae13d2d5",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/stdout_stderr.log": "ef447a8a19b0f3ee263ada086d215a3340c9511118c7de5c311fac7a4cac7fe6",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/streams.log": "21983063006f9026b1133e66852bb20bc79d1b5f7bb53dcb237b24ed948071f0",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/command.log": "2ea8a91d515ed004ab7f1ed281844d2102da55274279a378d25f63652299e1ea",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/stdout.log": "eb1c63786019c3eb535b835146db50676b0adfd5f071bfc3698d8c16d2200d73",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/stdout_stderr.log": "eb1c63786019c3eb535b835146db50676b0adfd5f071bfc3698d8c16d2200d73",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/streams.log": "07c557cd1b9add6859d5b935602a6b95cce8a140c7e0f29d8154ef0da3e8643c",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/commit.txt": "4f25f1270637ffa90b9090c151a7c225b74f848d2d65406aa9ede346bb352e85",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/exit-code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/acceptance.json": "1bd304cf19bf146a865b81dc2cdff4810689bd3ea26e6cfdb574be6bd7aec8dd",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/bag/bag_0.mcap": "7a38a6b1ccf928e46bc72bebd939083bf025b46272831820555ead23dca2ae48",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/bag/metadata.yaml": "9276fee209c7ef287d8c535f1a732631001cfc024af393d400a49808dc82a9eb",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/bag.log": "8b5efa465a87893a95016ce1611743952ac2a723951bc9666ab4e28cc137316d",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/launch.log": "ecd29b636b6ac48b6dd3af576bfefdffc787d1a7805dc421a1bf29a278683a24",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/measurements.png": "24b0bfe34777ea242b2138114bc33615c7a8e2b6e7dfcb52817b56886377ec3f",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/parking_manager-parameters.yaml": "1a350834ec363ca8c727f9495a980fe03040013ab64068b3f80b838c23842ad8",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/scenario_runner-parameters.yaml": "8f8cfc95d8f6836c82fe17815dccc6da823ff14864f87ad3c4594c068ac5c40a",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/trace.jsonl": "d943fbbcb3587ab60ba32cc0fed6b705c6ba35bcbd290ce45eafc2c9665cd1a9",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/traffic_monitor-parameters.yaml": "ebb2d72fd4e3954e711ca05fb2e103d2fe5a2cbbad2a289af15fbba39a1b0236",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/scope.json": "1432498330cdb35a3be091051dc4e9887f144b20dc652afc3724cfa069991915",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/source-sha256.txt": "878a1c10371eb233a2fecab5f2e4dcff81c6746249e63120dba124026943ad62",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/transcript.log": "f5cb18efcb429f3750015d97a2920cef3c686414261de287f1ac97e84bf23a9d",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/worktree.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence/runs/m4-local-20261025-freeze-fix/docker-transcript.log": "f5cb18efcb429f3750015d97a2920cef3c686414261de287f1ac97e84bf23a9d",
+        "evidence/runs/m4-local-20261025-freeze-fix/host.jsonl": "01c34e8a0cd0c264c8d1dbca839b445a3214ea48506e51203e038a154ecbc1b5",
+        "evidence/runs/m4-local-20261025-freeze-fix/platform.txt": "e68dff63d147f2dfba9802b17b91f9f4f7a614a932801b54a708c61362877c83",
+        "evidence/runs/m4-local-20261025-freeze-fix/run.json": "ecb0e9f44c40023a32091efcaef32bea5f425b92203b732979246d01b0e617b3",
+        "evidence/runs/m4-local-20261025-freeze-fix/runner.py": "847b3d39cea9e5027ba3e7fee45b0602ec8881c901a0b82c3cadad59ec8f6e7e",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/blockage-timing.json": "5ea27c09e5ace0e14d05d66bdf2dfd94ee4ba60c36c63360bc7c74d729eb5dea",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/inspect-bag.py": "000167bb21a8d44f9ef362293ebdaad77025611501e91d325fd4012677de6090",
+        "evidence/runs/m4-local-20261025-freeze-fix/artifact-sha256.json": "aa674fe829b0eb4fd76386ffd985c4b44aa86e41da5d96a207ee392d858531d5"
+      },
+      "artifact_manifest": "evidence/runs/m4-local-20261025-freeze-fix/artifact-sha256.json",
+      "outputs": [
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/COLCON_IGNORE",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/events.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/logger_all.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_bringup/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_control/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_interfaces/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_perception/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_prediction/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_safety/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_sim/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/build_2026-10-24_17-58-33/smart_hub_tests/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test-result_2026-10-24_18-00-26/logger_all.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/events.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/logger_all.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_bringup/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_control/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_perception/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_prediction/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_safety/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_sim/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/command.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/stdout.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/stdout_stderr.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/colcon-log/test_2026-10-24_18-00-09/smart_hub_tests/streams.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/commit.txt",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/exit-code.txt",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/acceptance.json",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/bag/bag_0.mcap",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/bag/metadata.yaml",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/bag.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/launch.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/measurements.png",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/parking_manager-parameters.yaml",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/scenario_runner-parameters.yaml",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/trace.jsonl",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/traffic_monitor-parameters.yaml",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/package-versions.tsv",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/scope.json",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/source-sha256.txt",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/transcript.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/worktree.txt",
+        "evidence/runs/m4-local-20261025-freeze-fix/docker-transcript.log",
+        "evidence/runs/m4-local-20261025-freeze-fix/host.jsonl",
+        "evidence/runs/m4-local-20261025-freeze-fix/platform.txt",
+        "evidence/runs/m4-local-20261025-freeze-fix/run.json",
+        "evidence/runs/m4-local-20261025-freeze-fix/runner.py",
+        "evidence/runs/m4-local-20261025-freeze-fix/artifact-sha256.json",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/blockage-timing.json",
+        "evidence/runs/m4-local-20261025-freeze-fix/acceptance/m4/inspect-bag.py"
+      ],
+      "combined_regression_context": {
+        "latest_combined_attempt": "full-cadence-20261025",
+        "source_commit": "5e9757b8bca9b46673b46fd0803daacfddd6627c",
+        "M3": "FAIL; first nominal docking case SAFE_STOP/SAFETY_INPUT_UNKNOWN:crossing_stale after 16.3485 s",
+        "M4": "NOT RUN in combined attempt; independent M4 scope acceptance passes here",
+        "M3_requirement": "Combined regression/integration remains open; this M4-only PASS does not waive M3 acceptance."
+      },
+      "functional_acceptance_complete": true,
+      "automated_milestone_status": "PASS",
+      "independent_review_and_reproduction": "BLOCKED"
     }
   ]
 }

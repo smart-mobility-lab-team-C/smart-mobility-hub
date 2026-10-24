@@ -6,19 +6,18 @@ Verification runs locally in the Ubuntu 24.04/Jazzy Docker environment by defaul
 GitHub Actions is an optional project tool, not a recorded assignment requirement;
 hosted runs require an explicit request. See [verification policy](docs/automation.md#local-verification-default).
 
-**Current acceptance status:** An earlier full M3 run (`f6a97fd`) passed 24/24
-cases, including T05–T06; it remains historical evidence. The latest full
-regression (`5976e15`) passed build, 53 package tests, and M2 18/18. Its M3
-artifact records 9/10 nominal docking passes followed by seed 309 ending in
-`SAFE_STOP/SAFETY_INPUT_UNKNOWN:estop_stale`. The outer runner exited 143
-without finalization; the cause is unknown, so the full regression is incomplete
-and the artifact failure is not a clean full-run result. T06 and M4 were not
-reached. A separate focused preflight passed 20/20 reset probes and 9/9 M4 cases
-(T07–T10), but does not close the full regression; the overall gate remains
-open. See the [M4 evidence index](evidence/m4-local-completion.json),
-[M3 handoff](docs/m3.md), and [setup](docs/setup.md).
-The M3 completion changes from `fix/m3-local-completion` are merged into local
-`main` and have not been pushed. Independent human review/reproduction remains BLOCKED.
+**Current acceptance status:** The fresh M4-only run at `b7d1df7` passed all
+9/9 M4 cases, 54 package tests, and a fresh eight-package build. Its scoped
+runner explicitly left M2/M3 NOT RUN. Assignment-scoped M4 functional
+acceptance T07–T10 is complete, pending independent review. The latest combined
+regression (`5e9757b`) passed M2 18/18 but failed at its first nominal M3 case
+with `SAFE_STOP/SAFETY_INPUT_UNKNOWN:crossing_stale`; T05 is FAIL in that
+attempt and T06 was NOT RUN. An earlier full M3 run (`f6a97fd`) passed 24/24,
+including T05–T06, and remains historical evidence. Combined regression is
+still open at M3; this does not leave M4 assignment acceptance open. Current M4
+changes are on `fix/m4-local-completion`, not merged or pushed. See the [M4
+evidence index](evidence/m4-local-completion.json), [M3 handoff](docs/m3.md),
+and [setup](docs/setup.md). Independent review remains BLOCKED.
 
 ## Start here
 

@@ -1,42 +1,23 @@
 # M4 parking and congestion handoff
 
-The fresh M4-only run at `7557938` passed ownership, expiry and barrier checks
-but failed parking-freeze invalidation within 1.2 s. The simulator captured its
-first frozen frame on the next 5 Hz sensor tick, creating a new acquisition after
-the fault request. It now repeats the last published parking acquisition as soon
-as freeze is set; no sensor timeout is relaxed. A regression test covers freezing
-between ticks and resuming acquisition. This change is under verification.
+M4 software and assignment-scoped automated acceptance: **PASS**. T07–T10:
+**PASS**. Fresh source `b7d1df7d36b457ad7c8d416e3c9f9d9a63d51ca7` passed all
+eight package builds, style/interface checks, 54 package tests and all nine
+real-node M4 probes. Independent teammate review/reproduction remains BLOCKED.
+Changes are on `fix/m4-local-completion`, unmerged and unpushed.
 
-M4 verification is active on `fix/m4-local-completion`. A focused preflight at
-`5976e15` passed 20/20 reset probes and all 9/9 M4 cases (T07–T10). This is
-limited evidence, not full-regression acceptance. The latest full attempt at the
-same source passed build, 53 package tests and M2 18/18; its M3 artifact records
-9/10 nominal docks passing and seed 309 failing with
-`SAFE_STOP/SAFETY_INPUT_UNKNOWN:estop_stale`. The outer runner exited 143 without
-finalization and the cause is unknown, so the attempt is incomplete. T06 and
-full-run M4 were not reached; the full M4 gate remains open. See the [M4 attempt
-index](../evidence/m4-local-completion.json). Earlier full M3 completion remains
-historical evidence with its original outcome.
+Assignment §§11–12 assess parking and congestion independently; §12.3 permits
+S5 without commanding motion. The combined regression runner is an additional
+project check. Its latest clean run at `5e9757b` passed M2 but failed M3's first
+mission on `crossing_stale`; that failure remains unresolved. This M4 result does
+not establish reliable bus missions or moving integration. Historical M3 PASS
+and all failed/interrupted M4 attempts remain in the [evidence index](../evidence/m4-local-completion.json).
 
-M4 implementation and earlier local verification tooling are on `main`.
-An earlier fresh Ubuntu 24.04/Jazzy M3 run at `f6a97fd` passed M2 18/18, all 53
-package tests, and all 24 M3 cases including T05–T06. Its completion changes
-from `fix/m3-local-completion` are merged into local `main` and have not been
-pushed. The latest full M4 attempt did not reach M4; focused T07–T10 preflight
-results passed, but full acceptance remains incomplete. Earlier M3 failures
-remain historical records. See the
-[local M3 evidence index](../evidence/m3-local-completion.json). M5–M7 have not
-started under the one-milestone-at-a-time rule.
-
-The local runtime exposed two regression issues and fixed them on
-`fix/m4-jazzy-runner`: import ordering rejected by ament lint, and car routing
-expectations still using the previous 0.40 m/s cap. Commits are `6ba2bd3` and
-`16e5918`. Their file changes are included in the published `main` tree.
-
-The implementation is pushed to `main` in commit
-[`faf8769`](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/commit/faf87696472fe85bf001794fe990025f1d77ef75).
-The tested source commit is `16e5918`; the local runtime report was added to the
-published tree after that run.
+The M4-only run exposed and fixed a real freeze fault: the simulator previously
+acquired one extra parking frame on the next 5 Hz tick after freeze was requested.
+It now repeats the last published acquisition immediately. A regression test
+covers freezing between ticks and resuming acquisition; the one-second freshness
+policy and 1.2-second acceptance bound remain unchanged.
 
 ## Implemented behavior
 
@@ -121,72 +102,45 @@ silently enables bus/robot motion.
 
 ## Verification and reproduction
 
-Local Ubuntu 24.04/Jazzy Docker runs are the default under the user's 2026-10-24
-instruction. GitHub Actions is optional project tooling, not a recorded professor
-requirement. See the [verification policy](automation.md#local-verification-default).
-
-Actual local outcomes and commands: [local evidence](../evidence/m4-local.json).
-The expanded suite includes ownership races, expiration, nearest allocation,
-capacity geometry, invalid individual sources, frozen clocks, sensing recovery,
-barrier lease/occupancy tests and existing simulator/safety prerequisites.
-
-Run in the supported Docker environment as the caller's non-root UID/GID:
+Use the local Cyclone/Jazzy image described in [automation](automation.md#local-verification-default).
+From the repository root, this creates a fresh workspace and runs every M4 probe:
 
 ```sh
-sg docker -c 'docker buildx build --load -t smh-m4 -f containers/Dockerfile .'
-sg docker -c 'docker buildx build --load -t smh-m4-local -f containers/Dockerfile.local .'
 sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
   -v "$PWD:/workspace" smh-m4-local \
-  bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE-RUN-ID'
+  bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE --m4-only'
 ```
 
-This host's current login does not include its configured `docker` supplementary
-group. `sg docker -c` supplies that group for each Docker command; a newly started
-login session may inherit it directly.
+The destination must not exist. Omitting `--m4-only` preserves the combined
+M2/M3/M4 regression command; its failure is retained separately. Explicit scope
+is recorded in `scope.json`, with M2/M3 NOT RUN in an M4-only invocation. No
+GitHub Actions execution is required or was launched for this work.
 
-The M4 runner reuses the fresh M3 build, interface/style/colcon checks and M2/M3
-real-node regressions, then runs `verify_m4.py` in ROS domain 74. It retains
-source hashes, commit/worktree identity, versions, parameter dumps, node logs,
-raw JSONL messages, bag input/output, individual outcomes, paired service latency
-samples and traffic classification measurements. Ten six-second free-flow
-plateaus use distinct track identities; classification precision/recall uses
-explicit stable checkpoints, with transition delays reported separately.
-`plot_m4.py` renders measured traffic/parking/barrier traces into a standalone PNG.
-The hosted verification workflow now invokes this M4 path; it has not been run
-for this continuation.
+| Measurement | Observed | Criterion / scope |
+|---|---:|---|
+| Concurrent reservation pairs | 20; zero double allocations | 20 pairs, unique slots/tokens |
+| Service response p95 | 94.214 ms (40 samples) | <250 ms |
+| Frozen parking to UNKNOWN | 1.014 s | ≤1.2 s |
+| Congestion detection | 0.305 / 0.492 s | ≤2 s |
+| Obstacle input acquisition to blocked publication | 0.200 / 0.369 s | Within one 2 Hz publication |
+| Probe-change to received blockage | 0.354 / 0.542 s | Includes input timer and delivery |
+| Frozen / missing vehicle feed to UNKNOWN | 0.692 / 0.719 s | ≤1.2 s |
+| Free-flow repetitions | 10 × 6 s; zero false congestion | Distinct tracks, same simulator seed 17 |
+| Classification precision / recall | 1.0 / 1.0 per class | 15 stable scripted checkpoints |
+| Valid edge fraction | 0.8566 over 258 frames | Includes deliberately invalid intervals |
 
-Acceptance probes include 20 actual async service pairs, duplicate/conflicting
-keys, all-full/wrong-token release, observed occupancy/stale expiry, deliberately
-recovered barrier opening, unknown entrance rejection, occupied-passage hold,
-frozen parking, congestion/obstruction, invalid geometry/IDs, valid empty traffic,
-invalid individual sources, frozen stamps, feed loss and recovery. Until executed,
-these are implemented probes, not results. The runner also implements the canonical S4 t=5/6/8/10/40 sequence and S5
-t=20/45/60 faults with recovery. Actual source-sequence timing, moving
-integration and independent teammate reproduction still require validation.
+All expiry/occupancy/UNKNOWN, matching ownership, request deduplication, wrong
+release, barrier entrance/occupied-passage, geometry/ID validation, valid-empty
+traffic, individual-invalid-source and recovery assertions passed. The canonical
+S4 t=5/6/8/10/40 sequence and S5 t=20/45/60 plus recovery ran against real nodes.
+The two blockage acquisition/publication bounds are independently computed from
+the recorded bag, separate from end-to-end probe timing.
 
-## Historical local blocker
-
-The earlier full local Cyclone campaign at `d660a94` passed two docking missions,
-then nominal mission 3 (seed 302) aborted with `SAFE_STOP/SAFETY_STOP`. The trace
-has a 0.888-second gap in safety observations and a 0.762-second gap in
-final-command observations near the abort, while odometry continued. Independent
-host sampling had a largest interval of 0.185 seconds over the run. The blocker
-was cleared for M3/T05–T06 by the later full local M3 PASS at `f6a97fd`; M4 has
-not yet been executed. Thresholds remain unchanged.
-
-Earlier Fast DDS runs failed the one-second reset deadline. Reset diagnostics
-identified `/bus/prepare_reset` and intermittent callback delivery delays. The
-same-source middleware comparison passed five resets with Cyclone DDS and failed
-the first with Fast DDS. This supports the local project profile, not a general
-middleware-defect claim or a scenario PASS. Earlier callback-group and other
-executor experiments did not resolve the issue. A later dedicated observation
-executor change on `fix/m3-local-completion` passed full M3 locally and has since
-been merged into local `main`; it has not been pushed.
-
-Raw runs and the feed-gap context remain under
-`evidence/runs/m4-local-20261024-cyclone-full/`; their tracked result index
-preserves commit, image, configuration, seeds, outcomes and artifact hashes.
-An earlier M3 local prerequisite passed, while the latest full attempt was
-interrupted after an M3 artifact failure. M4 T07–T10 have focused PASS results,
-but the full M4 suite remains uncompleted. Real-video acceptance and independent
-teammate review remain separate human gates.
+Raw run: `evidence/runs/m4-local-20261025-freeze-fix/`. It retains source and
+configuration hashes, clean commit/worktree identity, resolved versions, three
+live parameter dumps, raw JSONL, a 6,286-message / seven-topic MCAP bag, the
+measurement PNG, and blockage timing analysis. The [tracked index](../evidence/m4-local-completion.json)
+contains exact commands, all nine outcomes, sample counts and artifact hashes.
+No trained model or real-video result is claimed. M5–M7, RViz integration,
+mission-phase safety repetitions and independent human review remain separate
+work; M3 timing recovery must be resolved before claiming combined integration.

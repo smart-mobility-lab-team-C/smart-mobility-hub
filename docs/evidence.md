@@ -62,8 +62,8 @@ The GitHub contributors endpoint currently lists one contributor, `qrtman`;
 a different human reviewer/member is required. The historical local records retain
 their capture-time NOT RUN status. Neither agent review nor CI closes this gate.
 At M2 closure, full T01–T18 scenario acceptance was **NOT RUN** and M3 was the
-next milestone. Current T05/T06 results are recorded below; all other scenario
-rows remain NOT RUN.
+next milestone. Subsequent M3 and M4 results are recorded below; unexecuted
+scenario rows retain NOT RUN.
 
 Closure verification commands (2026-10-23):
 
@@ -287,7 +287,7 @@ Fresh local acceptance at `f6a97fd7bf98a19662055eb462c21c0ae1085f5f` passed all
 24 M3 cases and ten nominal docking missions for seeds 300–309. All eight
 package builds, style/interface checks, 53 package tests and 18 M2 regression
 cases passed. Local **T05/T06: PASS**. Independent teammate review and
-clean-checkout reproduction remain BLOCKED. M4 T07–T10 remain NOT RUN.
+clean-checkout reproduction remain BLOCKED. At that point M4 T07–T10 were NOT RUN.
 
 The bus now receives observations/TF through a dedicated executor in the same
 process, retaining the two-thread mission executor and shared-state lock. Reset
@@ -305,3 +305,36 @@ The [M3 handoff](m3.md#current-local-verification--2026-10-24) states measured
 limits and remaining human gates. At the time this result was recorded, the
 changes were on `fix/m3-local-completion`; they have since been merged into
 local `main` and have not been pushed. No hosted run was performed.
+
+## M4 independent local acceptance — 2026-10-25
+
+Assignment-scoped S4/S5 and **T07–T10: PASS** at clean source
+`b7d1df7d36b457ad7c8d416e3c9f9d9a63d51ca7`. The explicit M4-only runner passed
+all eight package builds, interface/style checks, 54 package tests and all nine
+real-node M4 cases. Its scope file records M2/M3 NOT RUN. This is independent
+M4 functional acceptance under assignment §§11–12, not a green combined suite.
+The combined `5e9757b` attempt passed M2 but failed M3 on `crossing_stale`;
+that regression remains unresolved. The interrupted attempt and all other
+failures retain their original status in the [M4 index](../evidence/m4-local-completion.json).
+
+The final run followed a genuine M4 correction: freezing parking now repeats
+the last published acquisition immediately rather than taking one extra frame
+on the next 5 Hz tick. The new regression test and real-node stale deadline both
+passed without changing freshness thresholds. Twenty request pairs produced
+zero double allocations and 94.214 ms p95 response time. Frozen parking reached
+UNKNOWN in 1.014 s; frozen/missing traffic feeds did so in 0.692/0.719 s.
+There were zero false congestion events over ten six-second free-flow trials
+with distinct track IDs and simulator seed 17. Per-class precision/recall was
+1.0 over 15 stable checkpoints; transition times are separately recorded.
+
+Raw output under `evidence/runs/m4-local-20261025-freeze-fix/` contains source
+and configuration hashes, resolved versions, three live parameter dumps, JSONL,
+a seven-topic MCAP bag with 6,286 messages, a standalone measurement plot, and
+blockage timing calculated from the input and output acquisition/computation
+stamps. Those source-to-publication delays were 0.200/0.369 s, within one
+2 Hz publication. End-to-end probe-change receipt delays were 0.354/0.542 s and
+include the source timer and delivery; they are retained as distinct metrics.
+
+[M4 handoff](m4-handoff.md) records reproduction and remaining work. Independent
+teammate review/reproduction is BLOCKED. M4 changes are committed on
+`fix/m4-local-completion`; they are not merged or pushed. No hosted run was used.

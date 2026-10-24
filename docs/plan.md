@@ -1,7 +1,6 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). An earlier full local M3 run passed 24/24 checks. The latest full regression at `5976e15` passed build, 53 package tests and M2 18/18, then its M3 artifact recorded a failure at nominal seed 309 after 9/10 passes; the outer runner was interrupted with unknown cause, so overall results are incomplete. T06 and full-run M4 were not reached. A separate focused preflight passed 20/20 reset probes and 9/9 M4 cases (T07–T10), but full M4 acceptance remains open. The M3 completion changes from `fix/m3-local-completion` are merged into local
-`main` and have not been pushed. See [M4 evidence](../evidence/m4-local-completion.json) and [earlier M3 evidence](../evidence/m3-local-completion.json). Independent source review and teammate reproduction remain BLOCKED. Other T01–T18 checks beyond these focused probes remain NOT RUN. Proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). An earlier full local M3 run passed 24/24. The latest combined regression (`5e9757b`) passed M2 but failed its first nominal M3 case with `crossing_stale`; T05 is FAIL in that run and T06/M4 were not reached. The fresh independent M4-only run at `b7d1df7` passed all nine M4 cases, 54 package tests and a fresh eight-package build; M2/M3 were NOT RUN in that invocation. Assignment-scoped M4 functional acceptance is complete pending independent review. The combined regression remains open at M3. M3 changes are merged into local `main` but not pushed; current M4 changes are on `fix/m4-local-completion`, not merged or pushed. See [M4 evidence](../evidence/m4-local-completion.json) and [M3 evidence](../evidence/m3-local-completion.json). Other T01–T18 checks beyond those explicitly recorded remain NOT RUN. Proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|
@@ -23,12 +22,12 @@ professor requirement. See the [verification policy](automation.md#local-verific
 Historical hosted and failed local evidence retain their original environment
 and outcomes. The earlier observation-gap investigation remains useful context;
 see the [diagnostic record](m3-gap-diagnostic.md#investigation-reopened--2026-10-24).
-The earlier full local M3 acceptance passed. The latest full attempt was
-interrupted after an M3 artifact failure, so T06 and full M4 were not reached.
-Focused M4 T07–T10 probes passed, but the full gate remains open. M4 software
-and acceptance tooling are on local `main`, along with the M3 completion
-changes merged from `fix/m3-local-completion`; they have not been pushed. See the
-[M4 handoff](m4-handoff.md).
+The earlier full local M3 acceptance passed. The latest combined attempt failed
+at M3 T05, so T06 and combined M4 were not reached. The independent M4-only
+acceptance passed T07–T10 and completes assignment-scoped M4 functional checks;
+independent review is still pending, and combined regression remains open at
+M3. Current M4 changes are on `fix/m4-local-completion`, not merged or pushed.
+See the [M4 handoff](m4-handoff.md).
 
 ## Work cycle
 
