@@ -111,6 +111,13 @@ repair. The focused M4 checks passed, but full regression remains open. The M3
 probe now retains operator publication start/return timestamps in a separate
 JSONL file; the independent diagnostic observer also receives the stop topic.
 These records distinguish publisher scheduling from observer/supervisor receipt.
+The first recorded baseline mission succeeded without stale stop input. Its
+publisher intervals reached 0.365 s and publish calls reached 0.170 s; it did not
+provide supervisor callback spans because the campaign analyzer stopped before
+instrumented attempts. The test heartbeat now uses an absolute monotonic 10 Hz
+schedule, skipping missed slots without a catch-up burst. This avoids adding a
+publish call's duration to every nominal 100 ms interval. Full verification is
+still required; this timing correction does not change the receiver watchdog.
 
 For the observed `/bus/prepare_reset` timeout, source a locally built Jazzy
 workspace and run `python3 scripts/verify_reset.py --output

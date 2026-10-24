@@ -6,17 +6,19 @@ Verification runs locally in the Ubuntu 24.04/Jazzy Docker environment by defaul
 GitHub Actions is an optional project tool, not a recorded assignment requirement;
 hosted runs require an explicit request. See [verification policy](docs/automation.md#local-verification-default).
 
-**M3 completion record:** M2 passed 18/18 cases, and the `f6a97fd` M3 run
-passed 24/24 cases, including 10/10 nominal docking runs and T05–T06. The run
-passed 53 package tests. M4 T07–T10 remain NOT RUN and are the next acceptance
-gate. The M3 completion changes from `fix/m3-local-completion` are merged into
-local `main` and have not been pushed. Earlier local M3 failures remain historical records. See
-the [local M3 evidence index](evidence/m3-local-completion.json), [M4 handoff](docs/m4-handoff.md),
-and [setup](docs/setup.md).
-Independent human review/reproduction remains BLOCKED.
-M4 verification is underway; a later prerequisite run passed M2 and 22/24 M3
-cases but failed before reaching M4. Follow-up changes are under verification;
-see [current M4 attempts](evidence/m4-local-completion.json).
+**Current acceptance status:** An earlier full M3 run (`f6a97fd`) passed 24/24
+cases, including T05–T06; it remains historical evidence. The latest full
+regression (`5976e15`) passed build, 53 package tests, and M2 18/18. Its M3
+artifact records 9/10 nominal docking passes followed by seed 309 ending in
+`SAFE_STOP/SAFETY_INPUT_UNKNOWN:estop_stale`. The outer runner exited 143
+without finalization; the cause is unknown, so the full regression is incomplete
+and the artifact failure is not a clean full-run result. T06 and M4 were not
+reached. A separate focused preflight passed 20/20 reset probes and 9/9 M4 cases
+(T07–T10), but does not close the full regression; the overall gate remains
+open. See the [M4 evidence index](evidence/m4-local-completion.json),
+[M3 handoff](docs/m3.md), and [setup](docs/setup.md).
+The M3 completion changes from `fix/m3-local-completion` are merged into local
+`main` and have not been pushed. Independent human review/reproduction remains BLOCKED.
 
 ## Start here
 

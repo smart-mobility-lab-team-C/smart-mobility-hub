@@ -88,6 +88,7 @@ class Probe(Node):
 
     def operator_heartbeat(self):
         """Keep the explicit operator input independent of evaluator callback dispatch."""
+        next_publish = time.monotonic()
         while not self.heartbeat_stop.is_set() and self.context.ok():
             try:
                 started = time.monotonic()
@@ -99,7 +100,11 @@ class Probe(Node):
                 if not self.context.ok():
                     return
                 raise
-            self.heartbeat_stop.wait(0.1)
+            next_publish += 0.1
+            now = time.monotonic()
+            if next_publish <= now:
+                next_publish += (math.floor((now - next_publish) / 0.1) + 1) * 0.1
+            self.heartbeat_stop.wait(max(0.0, next_publish - now))
 
     def destroy_node(self):
         """Join the operator publisher before destroying its ROS entities."""

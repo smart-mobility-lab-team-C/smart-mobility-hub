@@ -1,19 +1,23 @@
 # M4 parking and congestion handoff
 
-M4 verification is active on `fix/m4-local-completion`. The latest full attempt
-at `d09f882` passed build/package checks and M2, then passed 22/24 M3 cases
-(ten nominal docks) but failed reset and crossing-denial cases before M4.
-Focused reset/M4 probes will verify the follow-up changes before a full rerun.
-See [current M4 attempts](../evidence/m4-local-completion.json). T07–T10 remain
-NOT RUN until the M4 probes execute. The earlier M3 completion below is retained
-with its original source and outcome.
+M4 verification is active on `fix/m4-local-completion`. A focused preflight at
+`5976e15` passed 20/20 reset probes and all 9/9 M4 cases (T07–T10). This is
+limited evidence, not full-regression acceptance. The latest full attempt at the
+same source passed build, 53 package tests and M2 18/18; its M3 artifact records
+9/10 nominal docks passing and seed 309 failing with
+`SAFE_STOP/SAFETY_INPUT_UNKNOWN:estop_stale`. The outer runner exited 143 without
+finalization and the cause is unknown, so the attempt is incomplete. T06 and
+full-run M4 were not reached; the full M4 gate remains open. See the [M4 attempt
+index](../evidence/m4-local-completion.json). Earlier full M3 completion remains
+historical evidence with its original outcome.
 
 M4 implementation and earlier local verification tooling are on `main`.
-The latest fresh Ubuntu 24.04/Jazzy M3 run at
-`f6a97fd` passed M2 18/18, all 53 package tests, and all 24 M3 cases including
-T05–T06. Its completion changes from `fix/m3-local-completion` are merged into
-local `main` and have not been pushed. M4 was not run; T07–T10 remain **NOT RUN** and are the next acceptance
-gate. Earlier M3 failures remain historical records. See the
+An earlier fresh Ubuntu 24.04/Jazzy M3 run at `f6a97fd` passed M2 18/18, all 53
+package tests, and all 24 M3 cases including T05–T06. Its completion changes
+from `fix/m3-local-completion` are merged into local `main` and have not been
+pushed. The latest full M4 attempt did not reach M4; focused T07–T10 preflight
+results passed, but full acceptance remains incomplete. Earlier M3 failures
+remain historical records. See the
 [local M3 evidence index](../evidence/m3-local-completion.json). M5–M7 have not
 started under the one-milestone-at-a-time rule.
 
@@ -175,6 +179,7 @@ been merged into local `main`; it has not been pushed.
 Raw runs and the feed-gap context remain under
 `evidence/runs/m4-local-20261024-cyclone-full/`; their tracked result index
 preserves commit, image, configuration, seeds, outcomes and artifact hashes.
-M3's local prerequisite now passes, but M4 T07–T10 remain NOT RUN until the M4
-suite is executed. Real-video acceptance and independent teammate review remain
-separate human gates.
+An earlier M3 local prerequisite passed, while the latest full attempt was
+interrupted after an M3 artifact failure. M4 T07–T10 have focused PASS results,
+but the full M4 suite remains uncompleted. Real-video acceptance and independent
+teammate review remain separate human gates.
