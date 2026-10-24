@@ -1,0 +1,125 @@
+{
+  "schema": "smart-mobility-hub/crossing-timing-v1",
+  "status": "NOT_REPRODUCED",
+  "root_cause": "UNRESOLVED; no production correction justified",
+  "historical_failure": {
+    "source_commit": "5e9757b8bca9b46673b46fd0803daacfddd6627c",
+    "reason": "SAFETY_INPUT_UNKNOWN:crossing_stale",
+    "crossing_observer_gap_sec": 0.5779,
+    "gap_precision": "rounded from retained trace",
+    "evidence": "evidence/runs/m4-local-20261025-full-cadence/acceptance/m3/trace.jsonl",
+    "limitation": "No crossing publisher or supervisor receipt boundaries were retained."
+  },
+  "diagnostic": {
+    "source_commit": "c7c8777aa46c622e07163f457ee127f6fe61db16",
+    "worktree": "",
+    "start_utc": "2026-10-24T22:28:09.279045+00:00",
+    "end_utc": "2026-10-24T22:29:17.760112+00:00",
+    "wall_duration_sec": 68.48103963400354,
+    "command": [
+      "sg",
+      "docker",
+      "-c",
+      "docker run --rm --name smh-crossing-boundaries --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace -w /workspace smh-m4-local:latest bash scripts/crossing_timing_container.sh /workspace/evidence/runs/crossing-boundaries-20261025"
+    ],
+    "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "seed": 300,
+    "model": null,
+    "missions_attempted": 1,
+    "collector_exit_code": 0,
+    "acceptance_eligible": false,
+    "builds": 0,
+    "scope": "Single M3 diagnostic only; M2, full M3, M4 and combined suite NOT RUN",
+    "analysis": {
+      "mission_status": "MISSION_FAILED",
+      "mission_terminal": {
+        "status": 6,
+        "result": {
+          "success": false,
+          "final_state": "SAFE_STOP",
+          "reason": "STALE_DOOR"
+        }
+      },
+      "counts": {
+        "publish": 474,
+        "receive": 429,
+        "freshness_checks": 867
+      },
+      "crossing_stale_decisions": 0,
+      "crossing_stale_states": 0,
+      "seconds": {
+        "maximum_publish_start_interval": 0.1559528420038987,
+        "maximum_publish_call_duration": 0.10227826099435333,
+        "maximum_supervisor_receive_interval": 0.29710093600442633,
+        "maximum_middleware_source_to_receive": 0.130380995,
+        "maximum_middleware_receive_to_callback": 0.08260273933410645,
+        "maximum_executor_ready_to_take": 0.026839005993679166,
+        "maximum_take_to_callback": 0.0826143750018673,
+        "maximum_crossing_tick_duration": 0.13083449499390554,
+        "maximum_supervisor_tick_duration": 0.13358665000123437,
+        "maximum_checked_source_age": 0.23291707038879395,
+        "maximum_checked_receipt_age": 0.21867247798945755
+      },
+      "limitations": [
+        "One instrumented run, no uninstrumented overhead comparison.",
+        "Wall-based middleware latency assumes the same host clock.",
+        "A different terminal reason does not diagnose the historic crossing failure."
+      ]
+    },
+    "reused_build": {
+      "scope": "one M3 diagnostic; no acceptance; no build",
+      "modules": {
+        "smart_hub_sim.scenario_runner": {
+          "path": "/workspace/src/smart_hub_sim/smart_hub_sim/scenario_runner.py",
+          "sha256": "99181f23242fa1422d16cf81a05c40b27d649d1015780cd6dd953b2d2b16da43"
+        },
+        "smart_hub_safety.supervisor": {
+          "path": "/workspace/src/smart_hub_safety/smart_hub_safety/supervisor.py",
+          "sha256": "49acf25dced3d66ddf0e65c3856f8ed347af68edc8e022c1e7c50c90fa6462bf"
+        },
+        "smart_hub_control.crossing": {
+          "path": "/workspace/src/smart_hub_control/smart_hub_control/crossing.py",
+          "sha256": "62d89ef7f5b94cffef3b1c617c557ad6e6f97fdad9309cfd9e1e032df4fd5255"
+        },
+        "smart_hub_control.bus": {
+          "path": "/workspace/src/smart_hub_control/smart_hub_control/bus.py",
+          "sha256": "1e0021168f6a939d5f5f4548406c82e10fdbc7551a8ebbceb75684016b835743"
+        },
+        "smart_hub_control.routing": {
+          "path": "/workspace/src/smart_hub_control/smart_hub_control/routing.py",
+          "sha256": "84e6d038d9ff2ba2793a51018586d08e138aadcd92484cb13b9f72c11837cf50"
+        },
+        "smart_hub_bringup.reset": {
+          "path": "/workspace/src/smart_hub_bringup/smart_hub_bringup/reset.py",
+          "sha256": "0ef4a01dbe2f45ed975ee7680cc8ff5ad2af93e5eeb304fdd7982bda3e8f03ed"
+        }
+      }
+    }
+  },
+  "conclusion": {
+    "confirmed": "The targeted run had no crossing stale decision and aborted with STALE_DOOR. Both crossing arbiter and supervisor lack application shared locks; bus locking is downstream of supervisor freshness rejection.",
+    "hypotheses": "Historical publisher scheduling, middleware delivery and subscriber dispatch remain unassigned. Healthy samples cannot identify the old failure.",
+    "missing_evidence": "A reproduction of the historical violation with simultaneous publish, middleware receipt, executor take and subscriber callback timestamps.",
+    "production_runtime_changes": false,
+    "integration_ready": false,
+    "stop_condition": "One targeted mission consumed. No retries or unrelated runtime fixes."
+  },
+  "artifacts": {
+    "root": "evidence/runs/crossing-boundaries-20261025",
+    "analysis": "evidence/runs/crossing-boundaries-20261025/analysis.json",
+    "offline_analyzer": "evidence/runs/crossing-boundaries-20261025/analyze.py",
+    "manifest": "evidence/runs/crossing-boundaries-20261025/artifact-sha256.json",
+    "manifest_sha256": "934291ea28d416fcdcb0c72e5637d0caeb10b8af2c7e1a6e752f5f5adeb08368",
+    "file_count": 38
+  },
+  "verification": {
+    "python_style": "PASS: ament_flake8 and ament_pep257 for both diagnostic Python files after final code change; raw style-checks.log retained",
+    "shell_syntax": "PASS",
+    "targeted_mission": "FAIL: STALE_DOOR; crossing_stale NOT_REPRODUCED",
+    "full_integration": "NOT RUN",
+    "python_syntax": "PASS",
+    "campaign_rejection": "PASS: --crossing-timing without --attempt rejected before ROS startup",
+    "documentation_links": "PASS",
+    "diff_whitespace": "PASS"
+  }
+}

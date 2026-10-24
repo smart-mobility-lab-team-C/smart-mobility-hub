@@ -39,6 +39,14 @@ their attributed source change.
 
 Run `bash scripts/check_fast.sh` on the local PC for syntax, tooling tests, M1
 source contracts and documentation links. This does not establish ROS acceptance.
+For Python-only diagnosis, reuse the verified generated-interface install and
+overlay current sources rather than rebuilding every package. The
+[bounded crossing diagnostic and test tiers](m3-gap-diagnostic.md#bounded-crossing-boundary-diagnostic--2026-10-25)
+describe identity checks, recorded results and limits. This development shortcut
+does not replace final clean-build acceptance. The single crossing diagnostic
+did not reproduce `crossing_stale`; it failed separately with `STALE_DOOR`, so
+integration readiness remains blocked and no runtime correction is claimed.
+
 From the repository root, use the installed Jazzy image for full M4 verification:
 
 ```sh

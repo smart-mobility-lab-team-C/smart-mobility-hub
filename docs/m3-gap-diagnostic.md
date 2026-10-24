@@ -348,7 +348,8 @@ docks. See [local completion evidence](../evidence/m3-local-completion.json) and
 QoS or freshness threshold changed. This acceptance result applies to the
 recorded environment and does not establish a common cause for all historical
 VirtualBox, host-clock or middleware gaps.
-# Bounded crossing boundary diagnostic — 2026-10-25
+
+## Bounded crossing boundary diagnostic — 2026-10-25
 
 The user requested one targeted diagnosis of the retained `5e9757b`
 `crossing_stale` failure before any correction or full regression. The existing
@@ -372,4 +373,49 @@ acceptance. The host wrapper must provide `host.jsonl` alongside `container.json
 Unavailable middleware metadata remains unknown. A successful mission without
 reproduction cannot establish a root cause or reliability. Final clean-build
 acceptance continues to use `m4_container.sh` without `--m4-only`.
+
+### Result and stop condition
+
+One run at clean `c7c8777` completed in 68.481 s without a build. The collector
+exited zero, but the mission **FAILED** with `STALE_DOOR`; this is not acceptance
+PASS. The original `crossing_stale` was **NOT REPRODUCED**. Across 474 crossing
+publications, 429 supervisor receives and 867 crossing freshness checks, there
+were zero crossing-stale decisions. Maxima were: publication start interval
+155.953 ms, publish call 102.278 ms, supervisor receive interval 297.101 ms,
+middleware source-to-receive 130.381 ms, middleware receive-to-callback 82.603 ms,
+executor-ready-to-take 26.839 ms, take-to-callback 82.614 ms, and checked source
+age 232.917 ms. These maxima are separate observations, not additive latency
+components of one message. Middleware times assume the shared host clock; the
+instrumentation has no paired overhead measurement.
+
+The historical failure remains unexplained. Its trace does not contain these
+boundaries, and this run did not capture that failure. Neither crossing nor
+supervisor has an application shared lock; the bus lock is downstream of the
+supervisor's stale decision. Publisher scheduling, transport and supervisor
+dispatch remain unassigned for the historical event. No runtime correction is
+justified, and no second mission or full suite was run. The incidental door
+failure is retained without starting another investigation. Combined integration
+readiness remains **BLOCKED** on explaining the original failure and resolving
+the observed mission failure, not on changing any safety threshold.
+
+[Indexed evidence](../evidence/crossing-timing-20261025.json) retains provenance,
+measurements, raw locations and limitations. Raw data and the offline analyzer
+are under ignored `evidence/runs/crossing-boundaries-20261025/`.
+
+### Development test tiers
+
+- Fast pure checks: invoke the relevant existing core test directly; Python-only
+  changes do not require regenerating interfaces or rebuilding the image.
+- Targeted components: reuse a known Jazzy install with verified unchanged
+  interface definitions/map; overlay current Python sources and record imports
+  and hashes. The crossing runner demonstrates this without modifying the cache.
+- M3 timing: the opt-in single-mission boundary diagnostic is diagnostic evidence,
+  not a completed timing regression or reliability test. No passing timing
+  regression is claimed until the failing mechanism is identified and covered.
+- Final M2+M3+M4: retain the existing fresh-workspace `m4_container.sh` combined
+  acceptance. Run only after the diagnosis and targeted correction are complete.
+
+Build reuse avoids repeated setup cost but cannot repair timing defects. It must
+be rejected after interface or installed-resource changes; clean acceptance
+remains mandatory before claiming combined success.
 
