@@ -304,7 +304,7 @@ and artifact hashes. Raw output is retained under ignored
 The [M3 handoff](m3.md#current-local-verification--2026-10-24) states measured
 limits and remaining human gates. At the time this result was recorded, the
 changes were on `fix/m3-local-completion`; they have since been merged into
-local `main` and have not been pushed. No hosted run was performed.
+local `main` and published to `origin/main`. No hosted run was performed.
 
 ## M4 independent local acceptance — 2026-10-25
 
@@ -337,4 +337,4 @@ include the source timer and delivery; they are retained as distinct metrics.
 
 [M4 handoff](m4-handoff.md) records reproduction and remaining work. Independent
 teammate review/reproduction is BLOCKED. M4 changes are merged into local `main`
-from `fix/m4-local-completion`; they have not been pushed. No hosted run was used.
+from `fix/m4-local-completion` and published to `origin/main`. No hosted run was used.

@@ -171,8 +171,8 @@ in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
 launches and default `m3_container.sh` behavior are preserved. The completed local
 M3 run (`f6a97fd`) passed M2 18/18, all 53 package tests, and M3 24/24 including
 T05–T06. The later independent M4 run at `b7d1df7` passed all 54 package tests
-and nine M4 cases, establishing assignment-scoped T07–T10 PASS. The M3 completion changes from `fix/m3-local-completion` are merged into
-local `main` and have not been pushed. See the
+and nine M4 cases, establishing assignment-scoped T07–T10 PASS. The M3 completion changes from `fix/m3-local-completion` are merged into local
+`main` and published to `origin/main`. See the
 [local M3 evidence index](../evidence/m3-local-completion.json), [M4 handoff](m4-handoff.md),
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).
 Later prerequisite failures and M4 completion evidence are retained in

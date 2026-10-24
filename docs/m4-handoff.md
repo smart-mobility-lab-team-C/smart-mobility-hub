@@ -4,8 +4,8 @@ M4 software and assignment-scoped automated acceptance: **PASS**. T07–T10:
 **PASS**. Fresh source `b7d1df7d36b457ad7c8d416e3c9f9d9a63d51ca7` passed all
 eight package builds, style/interface checks, 54 package tests and all nine
 real-node M4 probes. Independent teammate review/reproduction remains BLOCKED.
-Changes are merged into local `main` from `fix/m4-local-completion` and have
-not been pushed.
+Changes are merged into local `main` from `fix/m4-local-completion` and
+published to `origin/main`.
 
 Assignment §§11–12 assess parking and congestion independently; §12.3 permits
 S5 without commanding motion. The combined regression runner is an additional
