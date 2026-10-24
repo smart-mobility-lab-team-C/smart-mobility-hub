@@ -486,3 +486,38 @@ one. Callback entry is not DDS receipt; no transport/dispatch split is claimed.
 Acquire-call wall duration includes descheduling. Corroborating owner intervals
 can establish contention overlap, not that all elapsed time was lock waiting.
 
+Result at clean `e918121`: **F — no relevant failure captured; root cause remains
+unresolved**. The one mission completed `DOCKED_BOARDED_DOOR_CLOSED`, with no
+bus/supervisor stale triggers. Goal execution took 65.150 s; the complete wrapper
+took 93.076 s with zero builds. No retry, full acceptance or production fix ran.
+
+Measured maxima: door callback-entry interval 307.580 ms; entry-to-cache update
+53.826 ms; logged cached-door age 268.075 ms over 1,057 checks (500 ms limit);
+control callback-entry interval 416.097 ms; callback wall span 150.835 ms;
+inner control body 64.715 ms; existing 2 Hz state-timer interval 966.582 ms.
+The state-timer metric is not comparable directly with the old added 10 Hz
+heartbeat. Lock acquire-call span reached 79.879 ms and recorded ownership
+span 130.300 ms. One 73.620 ms acquisition call overlapped a corroborated
+other-owner interval by 18.785 ms: contention exists, but the entire acquisition
+span is not established lock-wait time or the cause of a stale failure.
+
+Door/crossing publish-call entry intervals reached 303.926/290.181 ms; supervisor
+crossing callback interval reached 273.071 ms. These show publication/callback
+jitter, not a captured 500 ms freshness failure. No per-message door delivery
+matching or transport/dispatch separation is possible here. Callback and lock
+wall spans include descheduling and instrumentation overhead, not just CPU work.
+
+The observation-thread ring overwrote 18,447 older records, retaining its last
+33.9 s; other rings had no overwrites. There was no thread/trigger overflow, and
+every ring retained the final ten seconds. Observation-thread maxima apply only
+to its retained portion; control-thread freshness records cover the mission.
+[Indexed evidence](../evidence/freshness-events-20261025.json) links all raw
+records, offline analysis and provenance. This is not repeatable M3 acceptance.
+
+Custom diagnostics stop here. Practical stabilization should use the historical
+full M2+M3 pass `f6a97fd` as a comparison control, keep necessary M4 corrections
+scoped, and use the existing regression tools with a pinned Jazzy runtime.
+That historical pass is not a guarantee of reliability. The documented upstream
+Jazzy scheduling correction is an isolated runtime-change candidate to evaluate,
+not a proven fix; no framework change is applied or further experiment scheduled.
+
