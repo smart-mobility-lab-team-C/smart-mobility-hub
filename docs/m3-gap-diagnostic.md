@@ -348,3 +348,28 @@ docks. See [local completion evidence](../evidence/m3-local-completion.json) and
 QoS or freshness threshold changed. This acceptance result applies to the
 recorded environment and does not establish a common cause for all historical
 VirtualBox, host-clock or middleware gaps.
+# Bounded crossing boundary diagnostic — 2026-10-25
+
+The user requested one targeted diagnosis of the retained `5e9757b`
+`crossing_stale` failure before any correction or full regression. The existing
+trace lacks publisher/subscriber boundaries. `scripts/crossing_timing.py` adds
+opt-in diagnostic instrumentation only: crossing publication entry/return,
+executor ready/take, supervisor receipt with available middleware timestamps,
+callback duration and crossing freshness ages. Production entry points do not
+load it. No freshness, heartbeat, lease, reset or watchdog limits change.
+
+Inside the existing Jazzy image, run from `/workspace`:
+
+```bash
+bash scripts/crossing_timing_container.sh /workspace/evidence/runs/UNIQUE_RUN
+```
+
+This runs exactly one seed-300 mission, with a 240-second outer bound, using
+`.cache/m4-completion-v1/install` for generated interfaces and current source
+Python modules. It checks interface definitions and installed map identity and
+records module paths/hashes before starting. It performs no build and is not
+acceptance. The host wrapper must provide `host.jsonl` alongside `container.jsonl`.
+Unavailable middleware metadata remains unknown. A successful mission without
+reproduction cannot establish a root cause or reliability. Final clean-build
+acceptance continues to use `m4_container.sh` without `--m4-only`.
+

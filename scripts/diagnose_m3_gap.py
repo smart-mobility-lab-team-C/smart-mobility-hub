@@ -87,11 +87,15 @@ def worker(args):
                                '_clear_cb', '_reset_cb', '_finish_reset_cb')),
         'bus_manager': ('smart_hub_control.bus', 'BusManager',
                         ('tick', 'record', 'state', 'publish_state', 'accept')),
+        'crossing_arbiter': ('smart_hub_control.crossing', 'CrossingArbiter', ('tick',)),
     }
     module_name, class_name, methods = modules[args.worker]
     module = importlib.import_module(module_name)
     kind = getattr(module, class_name)
     recorder = Recorder(args.output, args.worker)
+    if args.crossing_timing and args.worker in ('crossing_arbiter', 'safety_supervisor'):
+        from crossing_timing import install
+        install(kind, args.worker, recorder)
     if args.no_image and args.worker == 'scenario_runner':
         kind._publish_image = lambda *_: None
     if args.instrument:
@@ -164,6 +168,7 @@ def attempt(args):
     identities = {'probe': os.getpid()}
     metadata = {
         'seed': 300, 'initial_passengers': 0, 'instrumented': args.instrument,
+        'crossing_timing': args.crossing_timing,
         'image_bypassed': args.no_image, 'status': 'ERROR', 'commands': {},
         'acceptance_eligible': False,
         'injected_pause': args.pause_node,
@@ -186,11 +191,14 @@ def attempt(args):
 
     try:
         for name, (package, executable, *extra) in COMMANDS.items():
-            if name in ('scenario_runner', 'safety_supervisor', 'bus_manager'):
+            if (name in ('scenario_runner', 'safety_supervisor', 'bus_manager')
+                    or args.crossing_timing and name == 'crossing_arbiter'):
                 command = [sys.executable, __file__, '--worker', name,
                            '--output', str(directory / (name + '-timing.jsonl'))]
                 if args.instrument:
                     command.append('--instrument')
+                if args.crossing_timing:
+                    command.append('--crossing-timing')
                 if args.no_image:
                     command.append('--no-image')
             else:
@@ -316,9 +324,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', required=True)
     parser.add_argument('--worker', choices=('observer', 'scenario_runner', 'safety_supervisor',
-                                             'bus_manager'))
+                                             'bus_manager', 'crossing_arbiter'))
     parser.add_argument('--attempt', action='store_true')
     parser.add_argument('--instrument', action='store_true')
+    parser.add_argument('--crossing-timing', action='store_true')
     parser.add_argument('--no-image', action='store_true')
     parser.add_argument('--runs', type=int, default=10)
     parser.add_argument('--seconds', type=float, default=1200)
@@ -326,6 +335,8 @@ def main():
     args = parser.parse_args()
     if not 1 <= args.runs <= 10 or not 0 < args.seconds <= 1200:
         parser.error('runs must be 1..10 and seconds must be >0 and <=1200')
+    if args.crossing_timing and not (args.attempt or args.worker):
+        parser.error('--crossing-timing requires --attempt; no automatic campaign')
     if args.worker:
         worker(args)
     elif args.attempt:
