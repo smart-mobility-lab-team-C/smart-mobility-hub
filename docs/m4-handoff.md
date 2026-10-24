@@ -1,5 +1,13 @@
 # M4 parking and congestion handoff
 
+M4 verification is active on `fix/m4-local-completion`. The latest full attempt
+at `d09f882` passed build/package checks and M2, then passed 22/24 M3 cases
+(ten nominal docks) but failed reset and crossing-denial cases before M4.
+Focused reset/M4 probes will verify the follow-up changes before a full rerun.
+See [current M4 attempts](../evidence/m4-local-completion.json). T07–T10 remain
+NOT RUN until the M4 probes execute. The earlier M3 completion below is retained
+with its original source and outcome.
+
 M4 implementation and earlier local verification tooling are on `main`.
 The latest fresh Ubuntu 24.04/Jazzy M3 run at
 `f6a97fd` passed M2 18/18, all 53 package tests, and all 24 M3 cases including

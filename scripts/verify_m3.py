@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+from threading import Event, Thread
 import time
 import traceback
 
@@ -51,7 +52,6 @@ class Probe(Node):
         self.heartbeat = self.create_publisher(
             Bool, '/hub/estop', QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
         )
-        self.create_timer(0.1, lambda: self.heartbeat.publish(Bool(data=self.estop)))
         transient = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
         for name, kind, topic, qos in (
             ('truth', VehicleStateArray, '/sim/evaluator/ground_truth', 10),
@@ -80,6 +80,29 @@ class Probe(Node):
             for name in ('scenario_runner', 'm3_synthetic_roads', 'bus_manager')
         }
         self.feedback = deque(maxlen=30000)
+        self.heartbeat_stop = Event()
+        self.heartbeat_thread = Thread(
+            target=self.operator_heartbeat, name='m3-operator-heartbeat')
+        self.heartbeat_thread.start()
+
+    def operator_heartbeat(self):
+        """Keep the explicit operator input independent of evaluator callback dispatch."""
+        while not self.heartbeat_stop.is_set() and self.context.ok():
+            try:
+                self.heartbeat.publish(Bool(data=self.estop))
+            except Exception:
+                if not self.context.ok():
+                    return
+                raise
+            self.heartbeat_stop.wait(0.1)
+
+    def destroy_node(self):
+        """Join the operator publisher before destroying its ROS entities."""
+        self.heartbeat_stop.set()
+        self.heartbeat_thread.join(timeout=2)
+        if self.heartbeat_thread.is_alive():
+            raise RuntimeError('operator heartbeat publisher did not stop')
+        return super().destroy_node()
 
     def renew_robot(self):
         """Maintain the test competitor's lease without competing motion publishers."""

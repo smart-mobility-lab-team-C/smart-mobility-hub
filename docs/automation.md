@@ -97,6 +97,15 @@ failed the old combined timing check at 0.678 s; it remains FAIL, with M3/M4
 NOT RUN in that attempt. Its missing per-trial trace cannot establish when the
 physical stop occurred. Runtime watchdogs and their thresholds are unchanged.
 
+During the later `m4-local-20261024-active-probe` attempt, M2 passed but M3 had
+two failed fault cases: a total reset deadline and an unexpected `estop_stale`
+stop during crossing-denial testing. The evaluator probe had roughly 0.7 s
+callback gaps while independent host sampling continued. M3's explicit operator
+heartbeat now runs in a joined publisher thread within the probe process,
+independent of evaluator callback dispatch. It publishes only the probe's chosen
+stop value; process suspension still suspends it, and real stop assertions and
+watchdogs are unchanged. Launches still provide no operator heartbeat.
+
 For the observed `/bus/prepare_reset` timeout, source a locally built Jazzy
 workspace and run `python3 scripts/verify_reset.py --output
 evidence/runs/reset-UNIQUE/report.json`. The default five repetitions use seeds
@@ -126,9 +135,11 @@ package-image layers only, never test results or build workspaces.
 The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
-launches and default `m3_container.sh` behavior are preserved. The latest local
+launches and default `m3_container.sh` behavior are preserved. The completed local
 M3 run (`f6a97fd`) passed M2 18/18, all 53 package tests, and M3 24/24 including
 T05–T06. M4 acceptance remains NOT RUN and is the next gate. The M3 completion changes from `fix/m3-local-completion` are merged into
 local `main` and have not been pushed. See the
 [local M3 evidence index](../evidence/m3-local-completion.json), [M4 handoff](m4-handoff.md),
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).
+Later prerequisite failures and ongoing follow-up verification are retained in
+the [M4 attempt index](../evidence/m4-local-completion.json).

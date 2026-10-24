@@ -6,7 +6,7 @@ Verification runs locally in the Ubuntu 24.04/Jazzy Docker environment by defaul
 GitHub Actions is an optional project tool, not a recorded assignment requirement;
 hosted runs require an explicit request. See [verification policy](docs/automation.md#local-verification-default).
 
-**Current local status:** M2 passed 18/18 cases, and the latest local M3 run
+**M3 completion record:** M2 passed 18/18 cases, and the `f6a97fd` M3 run
 passed 24/24 cases, including 10/10 nominal docking runs and T05–T06. The run
 passed 53 package tests. M4 T07–T10 remain NOT RUN and are the next acceptance
 gate. The M3 completion changes from `fix/m3-local-completion` are merged into
@@ -14,6 +14,9 @@ local `main` and have not been pushed. Earlier local M3 failures remain historic
 the [local M3 evidence index](evidence/m3-local-completion.json), [M4 handoff](docs/m4-handoff.md),
 and [setup](docs/setup.md).
 Independent human review/reproduction remains BLOCKED.
+M4 verification is underway; a later prerequisite run passed M2 and 22/24 M3
+cases but failed before reaching M4. Follow-up changes are under verification;
+see [current M4 attempts](evidence/m4-local-completion.json).
 
 ## Start here
 

@@ -1,7 +1,7 @@
 {
   "schema": "smart-mobility-hub/m4-local-completion-evidence-v1",
   "created_utc": "2026-10-24",
-  "scope": "Fresh full local M4 acceptance attempt. The build and M2 prerequisite ran; M2 failed in adapter_stops_after_supervisor_loss, so M3 and M4 were not run. No future outcome is asserted.",
+  "scope": "Full local M4 acceptance attempt; this attempt passed build, package tests and M2, then failed two M3 cases. M4 was not run. Earlier completion-baseline failure remains preserved.",
   "environment_common": {
     "host": "Ubuntu 22.04 VM (KVM)",
     "container": "Ubuntu 24.04.5 LTS",
@@ -116,6 +116,223 @@
         "evidence/runs/m4-local-20261024-completion-baseline-host/host.jsonl",
         "evidence/runs/m4-local-20261024-completion-baseline-host/platform.txt",
         "evidence/runs/m4-local-20261024-completion-baseline-host/artifact-sha256.txt"
+      ]
+    },
+    {
+      "id": "active-probe",
+      "kind": "M4_full_acceptance_attempt",
+      "branch": "fix/m4-local-completion",
+      "source_commit": "d09f882a365a50a2a33c5b9d271df2d1437a83ce",
+      "source_worktree": "clean at run start",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5 LTS",
+        "python": "3.12.3"
+      },
+      "command": "sg docker -c \"docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m4_container.sh /workspace/evidence/runs/m4-local-20261024-active-probe\"",
+      "start_utc": "2026-10-24T13:57:54Z",
+      "end_utc": "2026-10-24T14:16:38Z",
+      "exit_code": 1,
+      "seed_metadata": {
+        "M2": "scenario and prerequisite seeds are in m2-regression.json",
+        "M3_base_seed": 300,
+        "nominal_seeds": [
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          309
+        ],
+        "initial_passengers_by_nominal_case": [
+          0,
+          2,
+          4,
+          6,
+          0,
+          2,
+          4,
+          6,
+          0,
+          2
+        ],
+        "M4": "NOT RUN"
+      },
+      "model": null,
+      "acceptance_eligible": true,
+      "status": "FAIL_AT_M3",
+      "milestone_closed": false,
+      "measurements": {
+        "build": "PASS; 8 packages",
+        "colcon_tests": "PASS; 53 tests; zero errors/failures/skips",
+        "M2": "PASS 18/18",
+        "M3": "FAIL 22/24; all 10 nominal cases PASS; two fault cases FAIL",
+        "M4": "NOT RUN; prerequisite campaign stopped at M3",
+        "nominal_aggregates": {
+          "position_error_m_max": 0.04499999887677942,
+          "yaw_error_rad_max": 8.034631484639004e-10,
+          "eta_error_at_5m_sec_max": 0.5918235640565399,
+          "minimum_agent_separation_m_min": 1.99999999415009,
+          "measured_door_open_sec_min": 8.076324527006363,
+          "measured_door_open_sec_max": 8.319877989000815
+        },
+        "cancellation_metrics": {
+          "arrival_during_boarding_and_interruption": {
+            "arrival_id": "309-p0002",
+            "boarding": {
+              "boarding_sec": 73.60000000000001,
+              "entry_sec": 71.95,
+              "goal_id": "1ad059f8cf2846e0ba79d65f039f261e",
+              "passenger_id": "309-p0002",
+              "slot": 2
+            },
+            "cancel_zero_sec": 0.14602803400339326,
+            "door_closed_after_interruption": true,
+            "pre_goal_readiness": {
+              "door_closed": true,
+              "bus_stopped": true,
+              "supervisor_clear": true,
+              "observations": {
+                "door": {
+                  "age_sec": 0.114,
+                  "message": {
+                    "data": false
+                  }
+                },
+                "truth": {
+                  "age_sec": 0.114,
+                  "message": {
+                    "header": {
+                      "stamp": {
+                        "sec": 1792851166,
+                        "nanosec": 21266631
+                      },
+                      "frame_id": "map"
+                    },
+                    "vehicles": [
+                      {
+                        "vehicle_id": "bus",
+                        "kind": "bus",
+                        "pose": {
+                          "x": 7.960000001872908,
+                          "y": 4.000000002587122,
+                          "theta": -6.578276637919705e-10
+                        },
+                        "speed_mps": 0.0,
+                        "edge_id": "B-Cn",
+                        "valid": true
+                      },
+                      {
+                        "vehicle_id": "robot",
+                        "kind": "robot",
+                        "pose": {
+                          "x": 3.0,
+                          "y": 6.0,
+                          "theta": 0.0
+                        },
+                        "speed_mps": 0.0,
+                        "edge_id": "R-W",
+                        "valid": true
+                      }
+                    ]
+                  }
+                },
+                "safety": {
+                  "age_sec": 0.082,
+                  "message": {
+                    "header": {
+                      "stamp": {
+                        "sec": 1792851166,
+                        "nanosec": 68502765
+                      },
+                      "frame_id": "map"
+                    },
+                    "stop_latched": false,
+                    "motion_permitted": true,
+                    "reason": "clear"
+                  }
+                }
+              }
+            }
+          },
+          "cancel_during_approach": {
+            "command_zero_latency_sec": 0.14715500400052406
+          },
+          "blocked_bay_wait": {
+            "wait_observed": true,
+            "invalid_eta": true,
+            "cancel_zero_sec": 0.11531925600138493
+          }
+        },
+        "failures": [
+          {
+            "name": "active_route_missing_feed",
+            "reason": "AssertionError('RESET_DEADLINE')",
+            "elapsed_sec": 3.5722013259946834,
+            "traceback": "Traceback (most recent call last):\n  File \"/tmp/smh-m3.pYS5Nv/scripts/verify_m3.py\", line 324, in case\n    observed = operation()\n               ^^^^^^^^^^^\n  File \"/tmp/smh-m3.pYS5Nv/scripts/verify_m3.py\", line 615, in stale_active_route\n    probe.reset(411)\n  File \"/tmp/smh-m3.pYS5Nv/scripts/verify_m3.py\", line 242, in reset\n    assert response.success, response.reason\n           ^^^^^^^^^^^^^^^^\nAssertionError: RESET_DEADLINE\n"
+          },
+          {
+            "name": "crossing_denial_renewal_loss_and_explicit_recovery",
+            "reason": "AssertionError()",
+            "elapsed_sec": 54.03828631199576,
+            "traceback": "Traceback (most recent call last):\n  File \"/tmp/smh-m3.pYS5Nv/scripts/verify_m3.py\", line 324, in case\n    observed = operation()\n               ^^^^^^^^^^^\n  File \"/tmp/smh-m3.pYS5Nv/scripts/verify_m3.py\", line 654, in crossing_denial_and_renewal_loss\n    assert probe.wait(lambda: probe.samples['arrival'].state == 'WAIT', 20)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+          }
+        ],
+        "raw_observations": {
+          "supervisor_safety_reason": "estop_stale appears once in M3 trace, at monotonic 43972.297197058 s; stop_latched=false; motion_permitted=false.",
+          "probe_truth_receipt_gap_sec": 0.639555083,
+          "probe_truth_receipts_bracketing_gap_monotonic_sec": [
+            43971.654119687,
+            43972.29367477
+          ],
+          "host_sampler_samples": 9653,
+          "host_sampler_max_interval_sec": 0.22112639300030423,
+          "interpretation": "Records show the evaluator probe callback gap and a separately sampled host timeline; they do not establish a causal scheduler diagnosis."
+        },
+        "M2_result": "18/18 PASS; full case detail in m2-regression.json"
+      },
+      "source_sha256": {
+        "scripts/m4_container.sh": "d6bad7e4ee0f911ff7ed509ddd7d76380d5bd85b77112150a1a59f811f4e579f",
+        "scripts/verify_m2.py": "aaa16420a865d9dd49d922d33d6f90fdb9d84015354f1fd24243d3bf5ba9d7b4",
+        "scripts/verify_m3.py": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2",
+        "scripts/verify_m4.py": "b937b6a834fcaade8332261d9bf83a9fa5e8d8a5485433435f263f87dd2dcf1f",
+        "src/smart_hub_control/smart_hub_control/bus.py": "4308ed56826464fb1c7949bae7d69b1d1d873c33928e84241aef1192013a3a74",
+        "src/smart_hub_sim/smart_hub_sim/scenario_runner.py": "fb01d87b5bd8b2d4401775ba4b289451c8c45a8c688f057d0921b977a675ffb4"
+      },
+      "artifact_sha256": {
+        "metrics-summary.json": "6774c2da520168fb3d2c97e0c59501f9bb6f976b437bea0b8e3149b49b840bf4",
+        "m2-regression.json": "6160bb2a7535dca2eb340592bb41dec7e7dd29edf2ee79830212187a320b3769",
+        "m3/acceptance.json": "11001b45248a0408786fd22011506889046e2daad5b07baded77934062aaf23b",
+        "m3/trace.jsonl": "1f19667bd5000b105571dfdb0ec9a8d89039bb7bad30d44b0b710e02b8ba9a72",
+        "m3/reset_coordinator.log": "109e3fdbc5b8f8dab6a9fd60b0c208abe7bcf1cc146b08a02c45eda03ee65f15",
+        "m3/safety_supervisor.log": "e37b8d1798966ff9a1a826356c4ba7dd3f5d98d3a3127656bfb0539a972e75bf",
+        "m3/bus_manager.log": "26e77e8901abef7b2d492e66a59a56cc238f69171bb97ad792dea64aaf86c30c",
+        "transcript.log": "7da1ceea0c8ff592687891645fa2e3552afc4c8d1c4d93afe935635a48549ccf",
+        "source-sha256.txt": "3eeab63ae6b74abaacfb736aeb5d920a8b1c170b5caa0d537c085071cf2ab55e",
+        "package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259"
+      },
+      "source_manifest": "evidence/runs/m4-local-20261024-active-probe/source-sha256.txt",
+      "artifact_manifest": "evidence/runs/m4-local-20261024-active-probe-host/artifact-sha256.txt",
+      "outputs": [
+        "evidence/runs/m4-local-20261024-active-probe/metrics-summary.json",
+        "evidence/runs/m4-local-20261024-active-probe/m2-regression.json",
+        "evidence/runs/m4-local-20261024-active-probe/m3/acceptance.json",
+        "evidence/runs/m4-local-20261024-active-probe/m3/trace.jsonl",
+        "evidence/runs/m4-local-20261024-active-probe/m3/reset_coordinator.log",
+        "evidence/runs/m4-local-20261024-active-probe/m3/safety_supervisor.log",
+        "evidence/runs/m4-local-20261024-active-probe/m3/bus_manager.log",
+        "evidence/runs/m4-local-20261024-active-probe/transcript.log",
+        "evidence/runs/m4-local-20261024-active-probe/source-sha256.txt",
+        "evidence/runs/m4-local-20261024-active-probe/package-versions.tsv",
+        "evidence/runs/m4-local-20261024-active-probe-host/run.json",
+        "evidence/runs/m4-local-20261024-active-probe-host/host.jsonl",
+        "evidence/runs/m4-local-20261024-active-probe-host/artifact-sha256.txt"
       ]
     }
   ]

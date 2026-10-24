@@ -681,9 +681,7 @@ class BusManager(Node):
         if self.reset_finish_waiter and not self.reset_finish_waiter.done():
             safety = self.state('safety', 0.5)
             zero = self.zero_measured()
-            ready = bool(self.reset_hold and self.goal is None and zero
-                         and safety and not safety.stop_latched
-                         and safety.reason == 'reset_in_progress')
+            ready = self.reset_finish_ready()
             if ready or now >= self.reset_finish_deadline:
                 print(json.dumps({
                     'event': 'bus_finish_reset_observation', 'ready': ready,
@@ -912,6 +910,10 @@ class BusManager(Node):
             self.door(False)
             if self.goal:
                 self.begin_stop('SCENARIO_RESET')
+            if self.reset_zero_closed():
+                response.success = True
+                response.reason = 'BUS_ZERO_CLOSED'
+                return response
             self.reset_started = time.monotonic()
             self.reset_deadline = self.reset_started + 0.8
             self.reset_observation = None
@@ -935,6 +937,11 @@ class BusManager(Node):
                     or self.reset_waiter is not None or self.reset_finish_waiter is not None):
                 response.reason = 'BUS_RESET_UNSAFE_OR_BUSY'
                 return response
+            if self.reset_finish_ready():
+                self.release_reset_hold()
+                response.success = True
+                response.reason = 'BUS_RESET'
+                return response
             waiter = Future(executor=self.executor)
             self.reset_finish_waiter = waiter
             self.reset_finish_deadline = time.monotonic() + 0.25
@@ -943,16 +950,31 @@ class BusManager(Node):
             self.reset_finish_waiter = None
             response.reason = 'BUS_RESET' if response.success else 'BUS_RESET_UNSAFE'
             if response.success:
-                self.reset_hold = False
-                self.token = ''
-                if self.pending_crossing:
-                    self.cross_client.remove_pending_request(self.pending_crossing[0])
-                    self.pending_crossing = None
-                self.route = self.targets = []
-                self.smoothed_speed = self.last_speed_at = None
-                self.eta = -1.0
-                self.set_phase('IDLE')
+                self.release_reset_hold()
         return response
+
+    def reset_zero_closed(self):
+        """Require a terminal mission plus fresh measured zero and closed door."""
+        door = self.state('door', 0.5)
+        return bool(self.goal is None and self.zero_measured() and door and not door.data)
+
+    def reset_finish_ready(self):
+        """Use identical freshness/interlock checks for immediate and delayed reset ack."""
+        safety = self.state('safety', 0.5)
+        return bool(self.reset_hold and self.reset_zero_closed() and safety
+                    and not safety.stop_latched and safety.reason == 'reset_in_progress')
+
+    def release_reset_hold(self):
+        """Clear administrative mission caches only under the caller's state lock."""
+        self.reset_hold = False
+        self.token = ''
+        if self.pending_crossing:
+            self.cross_client.remove_pending_request(self.pending_crossing[0])
+            self.pending_crossing = None
+        self.route = self.targets = []
+        self.smoothed_speed = self.last_speed_at = None
+        self.eta = -1.0
+        self.set_phase('IDLE')
 
 
 def main(args=None):
