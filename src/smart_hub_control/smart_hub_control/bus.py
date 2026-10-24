@@ -103,6 +103,8 @@ class BusManager(Node):
         self.reserved = False
         self.reset_hold = False
         self.reset_waiter = None
+        self.reset_finish_waiter = None
+        self.reset_finish_deadline = 0.0
         self.reset_deadline = 0.0
         self.reset_started = 0.0
         self.reset_observation = None
@@ -170,7 +172,8 @@ class BusManager(Node):
         self.create_service(
             ResetScenario, '/bus/prepare_reset', self.prepare_reset, callback_group=self.group
         )
-        self.create_service(ResetScenario, '/bus/finish_reset', self.finish_reset)
+        self.create_service(
+            ResetScenario, '/bus/finish_reset', self.finish_reset, callback_group=self.group)
         self.create_timer(0.05, self.tick)
         self.create_timer(0.5, self.publish_state)
 
@@ -675,6 +678,21 @@ class BusManager(Node):
                 self.reset_waiter.set_result(True)
             elif now >= self.reset_deadline:
                 self.reset_waiter.set_result(False)
+        if self.reset_finish_waiter and not self.reset_finish_waiter.done():
+            safety = self.state('safety', 0.5)
+            zero = self.zero_measured()
+            ready = bool(self.reset_hold and self.goal is None and zero
+                         and safety and not safety.stop_latched
+                         and safety.reason == 'reset_in_progress')
+            if ready or now >= self.reset_finish_deadline:
+                print(json.dumps({
+                    'event': 'bus_finish_reset_observation', 'ready': ready,
+                    'reset_hold': self.reset_hold, 'goal_active': self.goal is not None,
+                    'zero_measured': zero,
+                    'safety_reason': safety.reason if safety else None,
+                    'stop_latched': safety.stop_latched if safety else None,
+                }, sort_keys=True), flush=True)
+                self.reset_finish_waiter.set_result(ready)
         if not self.goal:
             return
         safety = self.state('safety', 0.5)
@@ -885,7 +903,8 @@ class BusManager(Node):
                 'event': 'bus_reset_lock_acquired',
                 'lock_wait_sec': time.monotonic() - lock_started,
             }), flush=True)
-            if request.scenario_id != 'm2_baseline' or self.reset_waiter:
+            if (request.scenario_id != 'm2_baseline' or self.reset_waiter
+                    or self.reset_finish_waiter):
                 response.reason = 'UNKNOWN_OR_BUSY'
                 return response
             self.reset_hold = True
@@ -909,29 +928,30 @@ class BusManager(Node):
             response.reason = 'BUS_ZERO_CLOSED' if response.success else 'BUS_RESET_UNCONFIRMED'
         return response
 
-    @synchronized
-    def finish_reset(self, request, response):
-        """Release administrative hold only while the independent safety reset hold exists."""
-        safety = self.state('safety', 0.5)
-        response.success = bool(
-            request.scenario_id == 'm2_baseline'
-            and self.reset_hold
-            and self.goal is None
-            and self.zero_measured()
-            and safety
-            and safety.reason == 'reset_in_progress'
-        )
-        response.reason = 'BUS_RESET' if response.success else 'BUS_RESET_UNSAFE'
-        if response.success:
-            self.reset_hold = False
-            self.token = ''
-            if self.pending_crossing:
-                self.cross_client.remove_pending_request(self.pending_crossing[0])
-                self.pending_crossing = None
-            self.route = self.targets = []
-            self.smoothed_speed = self.last_speed_at = None
-            self.eta = -1.0
-            self.set_phase('IDLE')
+    async def finish_reset(self, request, response):
+        """Await fresh zero/hold observations briefly before releasing administrative hold."""
+        with self.lock:
+            if (request.scenario_id != 'm2_baseline' or not self.reset_hold
+                    or self.reset_waiter is not None or self.reset_finish_waiter is not None):
+                response.reason = 'BUS_RESET_UNSAFE_OR_BUSY'
+                return response
+            waiter = Future(executor=self.executor)
+            self.reset_finish_waiter = waiter
+            self.reset_finish_deadline = time.monotonic() + 0.25
+        response.success = await waiter
+        with self.lock:
+            self.reset_finish_waiter = None
+            response.reason = 'BUS_RESET' if response.success else 'BUS_RESET_UNSAFE'
+            if response.success:
+                self.reset_hold = False
+                self.token = ''
+                if self.pending_crossing:
+                    self.cross_client.remove_pending_request(self.pending_crossing[0])
+                    self.pending_crossing = None
+                self.route = self.targets = []
+                self.smoothed_speed = self.last_speed_at = None
+                self.eta = -1.0
+                self.set_phase('IDLE')
         return response
 
 
