@@ -529,6 +529,62 @@
         "m3/bus_manager.log": "6bc95fec6f7a2e90a13cc0ccd00174828d6538293981efcbffa2c78870fb7a9f",
         "m3/reset_coordinator.log": "5193c10a7c5a9d5af16afac70344260bb384f030c8e3b25a7e574065aa3e85df"
       }
+    },
+    {
+      "id": "bounded-reset",
+      "kind": "acceptance_attempt",
+      "source_commit": "01b351f021cbbe55601051a1ed54556c27694dae",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5"
+      },
+      "command": "sg docker -c \"docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m3_container.sh /workspace/evidence/runs/m3-local-20261024-bounded-reset\"",
+      "seed_config": {
+        "M3_base_seed": 300,
+        "attempted_seeds": [
+          300
+        ],
+        "initial_passengers": [
+          0
+        ],
+        "parameter_capture": "enabled; per-node JSON dumps retained"
+      },
+      "model": "none; deterministic simulator and ROS nodes",
+      "acceptance_eligible": true,
+      "milestone_closed": false,
+      "status": "FAIL",
+      "measurements": {
+        "M2": "18/18 PASS",
+        "M3": "nominal_docking_01 failed; 23 later cases NOT RUN",
+        "failure": "SAFETY_STOP",
+        "failure_elapsed_sec": 15.228103990004456,
+        "trace_sha256": null
+      },
+      "outputs": [
+        "evidence/runs/m3-local-20261024-bounded-reset/metrics-summary.json",
+        "evidence/runs/m3-local-20261024-bounded-reset/m2-regression.json",
+        "evidence/runs/m3-local-20261024-bounded-reset/m3/acceptance.json",
+        "evidence/runs/m3-local-20261024-bounded-reset/m3/failure-context.jsonl",
+        "evidence/runs/m3-local-20261024-bounded-reset/m3/trace.jsonl",
+        "evidence/runs/m3-local-20261024-bounded-reset/m3/bus_manager.log",
+        "evidence/runs/m3-local-20261024-bounded-reset/m3/reset_coordinator.log",
+        "evidence/runs/m3-local-20261024-bounded-reset-host/run.json"
+      ],
+      "source_sha256": {
+        "scripts/verify_m3.py": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2",
+        "src/smart_hub_control/smart_hub_control/bus.py": "714a8e5e46c2e9b634ec6f815d763c9b357f7a13c31077bdfd3aa1cd381b6c04"
+      },
+      "artifact_sha256": {
+        "metrics-summary.json": "301c47ea85dafd98a2542dffa5bb308d3e65c3f6ae67ee8b64d1c73c72b19ae1",
+        "m2-regression.json": "6a6d76b3ec00fd8115d9a87109029ff14e5d848ef1e4e35145dff1bb92ea1812",
+        "m3/acceptance.json": "35cf150a8ebffff82815d2fcd46b607eaf3f6d13ec59cd529cf57f4e2f689ec1",
+        "m3/failure-context.jsonl": "0b8c20e840e384e839992d1b041fa8e588acc41fe3f0ac78c22a69cd63fa1fbe",
+        "m3/trace.jsonl": "83c1c4b396e4618d91a2cd0fb49809dad0aa65deefac6ed22dc56a4ecbdeb46f",
+        "m3/bus_manager.log": "cb0ed564f05bb11d311e559fa26b86e8374bf7687799bbea659d26baa21062f5",
+        "m3/reset_coordinator.log": "1b9f9e0226c96397a09f13fca4180e957fffb31e17090d04d9933fb9d0d63cfd"
+      }
     }
   ]
 }

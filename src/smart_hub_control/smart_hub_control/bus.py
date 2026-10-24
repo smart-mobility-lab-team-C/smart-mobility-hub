@@ -3,7 +3,7 @@
 from functools import wraps
 import json
 import math
-from threading import RLock
+from threading import RLock, Thread
 import time
 
 from geometry_msgs.msg import Twist, TwistStamped
@@ -11,8 +11,8 @@ from nav_msgs.msg import Odometry
 from rcl_interfaces.msg import ParameterDescriptor
 import rclpy
 from rclpy.action import ActionServer, CancelResponse, GoalResponse
-from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
-from rclpy.executors import MultiThreadedExecutor
+from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile
 from rclpy.task import Future
@@ -130,10 +130,12 @@ class BusManager(Node):
         self.last_speed_at = None
         self.distance = -1.0
         self.eta = -1.0
+        self.observations = Node(
+            'bus_observations', context=self.context,
+            start_parameter_services=False, enable_rosout=False)
         self.tf_buffer = Buffer()
-        self.tf_listener = TransformListener(self.tf_buffer, self)
+        self.tf_listener = TransformListener(self.tf_buffer, self.observations)
         self.group = ReentrantCallbackGroup()
-        self.observation_group = MutuallyExclusiveCallbackGroup()
         transient = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
         for key, message, topic, qos in (
             ('odom', Odometry, '/bus/odom', 10),
@@ -145,20 +147,18 @@ class BusManager(Node):
             ('final', Twist, '/bus/cmd_vel', 1),
             ('bay', Bool, '/sim/bay_clear', 1),
         ):
-            self.create_subscription(
-                message, topic, lambda msg, k=key: self.record(k, msg), qos,
-                callback_group=self.observation_group)
+            self.observations.create_subscription(
+                message, topic, lambda msg, k=key: self.record(k, msg), qos)
         self.commands = self.create_publisher(TwistStamped, '/bus/cmd_vel_candidate', 1)
         self.doors = self.create_publisher(Bool, '/bus/door_request', 1)
         self.arrival = self.create_publisher(BusArrival, '/hub/bus_arrival', 10)
         self.events = self.create_publisher(HubEvent, '/hub/events', 100)
         self.goal_ids = self.create_publisher(String, '/sim/bus_goal_id', 1)
-        self.create_subscription(String, '/sim/run_id', self.on_run, transient,
-                                 callback_group=self.observation_group)
+        self.observations.create_subscription(String, '/sim/run_id', self.on_run, transient)
         self.route_client = self.create_client(
-            ComputeRoute, '/route/compute', callback_group=self.observation_group)
+            ComputeRoute, '/route/compute', callback_group=self.group)
         self.cross_client = self.create_client(
-            RequestCrossing, '/crossing/request', callback_group=self.observation_group)
+            RequestCrossing, '/crossing/request', callback_group=self.group)
         self.server = ActionServer(
             self,
             DockBus,
@@ -961,15 +961,29 @@ def main(args=None):
     node = BusManager()
     executor = MultiThreadedExecutor(num_threads=2)
     executor.add_node(node)
+    observations = SingleThreadedExecutor(context=node.context)
+    observations.add_node(node.observations)
+
+    def receive_observations():
+        try:
+            observations.spin()
+        except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
+            pass
+
+    receiver = Thread(target=receive_observations, name='bus-observations')
+    receiver.start()
     try:
         executor.spin()
     except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
     finally:
         executor.shutdown()
+        observations.shutdown()
+        receiver.join(timeout=2.0)
         if rclpy.ok():
             node.command()
             node.door(False)
         node.destroy_node()
+        node.observations.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()
