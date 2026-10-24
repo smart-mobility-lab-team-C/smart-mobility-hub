@@ -679,6 +679,17 @@ class BusManager(Node):
         elif now >= self.deadline:
             self.begin_stop('TIMEOUT')
         elif safety is None or safety.stop_latched:
+            sample = self.samples.get('safety')
+            observed = sample[0] if sample else None
+            stamp = (observed.header.stamp.sec + observed.header.stamp.nanosec * 1e-9
+                     if observed else None)
+            self.event('SAFETY_INPUT_REJECTED', json.dumps({
+                'receipt_age_sec': now - sample[1] if sample else None,
+                'source_age_sec': (self.get_clock().now().nanoseconds * 1e-9 - stamp
+                                   if stamp is not None else None),
+                'stop_latched': observed.stop_latched if observed else None,
+                'last_reason': observed.reason if observed else None,
+            }, sort_keys=True))
             self.begin_stop('SAFETY_STOP')
         elif pose is None or vehicles is None:
             self.begin_stop('STALE_POSE')

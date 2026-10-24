@@ -83,6 +83,8 @@ def worker(args):
         'safety_supervisor': ('smart_hub_safety.supervisor', 'SafetySupervisor',
                               ('_tick', '_record', '_candidate_cb', '_estop_cb',
                                '_clear_cb', '_reset_cb', '_finish_reset_cb')),
+        'bus_manager': ('smart_hub_control.bus', 'BusManager',
+                        ('tick', 'record', 'state', 'publish_state', 'accept')),
     }
     module_name, class_name, methods = modules[args.worker]
     module = importlib.import_module(module_name)
@@ -92,8 +94,24 @@ def worker(args):
         kind._publish_image = lambda *_: None
     if args.instrument:
         for name in methods:
-            stage = {'_step': 'sim.step', '_tick': 'safety.tick'}.get(name, name)
+            stage = {'_step': 'sim.step', '_tick': 'safety.tick',
+                     'tick': 'bus.tick'}.get(name, name)
             setattr(kind, name, timed(recorder, stage, getattr(kind, name)))
+    if args.worker == 'bus_manager' and args.instrument:
+        original_record = kind.record
+
+        def record_input(self, key, message):
+            receipt = time.monotonic()
+            header = getattr(message, 'header', None)
+            stamp = getattr(header, 'stamp', None) if header is not None else None
+            source_wall = ((stamp.sec + stamp.nanosec * 1e-9) if stamp is not None else None)
+            try:
+                return original_record(self, key, message)
+            finally:
+                recorder.emit('bus_input', key=key, source_wall=source_wall,
+                              receipt_monotonic=receipt)
+
+        kind.record = record_input
     original_init = kind.__init__
 
     def initialize(self, *positional, **keywords):
@@ -166,7 +184,7 @@ def attempt(args):
 
     try:
         for name, (package, executable, *extra) in COMMANDS.items():
-            if name in ('scenario_runner', 'safety_supervisor'):
+            if name in ('scenario_runner', 'safety_supervisor', 'bus_manager'):
                 command = [sys.executable, __file__, '--worker', name,
                            '--output', str(directory / (name + '-timing.jsonl'))]
                 if args.instrument:
@@ -295,7 +313,8 @@ def main():
     """Dispatch a campaign, a mission, or an independent worker subprocess."""
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', required=True)
-    parser.add_argument('--worker', choices=('observer', 'scenario_runner', 'safety_supervisor'))
+    parser.add_argument('--worker', choices=('observer', 'scenario_runner', 'safety_supervisor',
+                                             'bus_manager'))
     parser.add_argument('--attempt', action='store_true')
     parser.add_argument('--instrument', action='store_true')
     parser.add_argument('--no-image', action='store_true')

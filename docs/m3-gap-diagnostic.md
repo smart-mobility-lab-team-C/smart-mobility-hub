@@ -319,3 +319,20 @@ Capture exit 0 means collection completed, not acceptance PASS. Full M0–M3 sui
 NOT RUN. One successful no-image attempt does not establish repair or image
 publication as the cause. Raw artifacts remain local; hashes and terminal results
 are indexed in `evidence/vm-gap-reopened.json`. No runtime/watchdog changes.
+
+## Bus-local observation diagnostics — 2026-10-24
+
+The local run `m3-local-20261024-native-parameters` passed M2 and three nominal
+docks, then the fourth mission stopped with `SAFETY_STOP`. Near that stop the
+probe continued receiving fresh, unlatched safety messages (largest nearby
+receipt gap 0.189 s). This differs from the earlier external safety-observation
+gap and does not establish a supervisor publication failure.
+
+Instrumented diagnostic attempts now also wrap the bus's synchronous tick,
+input, freshness, state-publication and goal-acceptance callbacks. Bus input
+records preserve the input key, acquisition stamp when present, and monotonic
+callback receipt time. Baseline attempts retain only the bus process/executor
+heartbeats. The runtime emits `SAFETY_INPUT_REJECTED` with the last safety
+sample's source/receipt ages and latch/reason before taking the existing stop
+path. These additions do not change validity rules or motion authority.
+Diagnostic variants remain ineligible for scenario acceptance.
