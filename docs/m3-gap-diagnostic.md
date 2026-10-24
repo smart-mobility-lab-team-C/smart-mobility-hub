@@ -454,3 +454,35 @@ parent-preserving attachment after bus readiness and verify a sustainable sample
 rate before interpreting a future profile. This would avoid profiling imports
 and ROS initialization without extending any startup or safety deadline.
 
+### Final bounded event experiment — 2026-10-25
+
+The user authorized one final custom experiment and abandoned py-spy for this
+pass. `freshness_events.py`, selected only by `diagnose_m3_gap.py --attempt
+--event-timing`, wraps existing bus callbacks/RLock and door/crossing publication.
+Per-thread deques have a fixed 16,384-record limit and a 16-thread limit;
+overwrites and trigger/thread overflow are reported. Failure markers do not
+freeze the buffers, so delayed callback returns survive. The retained preceding
+window is checked after the run; no claim is made if it was overwritten.
+
+There are no added recorder threads or timers, no runtime event serialization
+or file writes, and no periodic OS sampler. Existing operator heartbeat and
+mission behavior are retained; probe observation logging is memory-only.
+Worker buffers flush only after node/executor shutdown. Executor activity uses
+the existing 20 Hz control callback and 2 Hz state timer as heartbeat proxies;
+it is not the previous diagnostic's additional 10 Hz heartbeat. No public
+message, QoS, safety limit, production source or executor architecture changes.
+
+From `/workspace` in the existing Jazzy image, reuse the verified cached install:
+
+```bash
+bash scripts/crossing_timing_container.sh /workspace/evidence/runs/UNIQUE_RUN \
+  /workspace/.cache/m4-completion-v1 --event-timing
+```
+
+The runner verifies interface definitions, map and current Python import paths;
+one seed-300 mission has a 240-second outer bound, without retries or full
+acceptance. Bool door messages cannot be matched publisher-to-receiver one to
+one. Callback entry is not DDS receipt; no transport/dispatch split is claimed.
+Acquire-call wall duration includes descheduling. Corroborating owner intervals
+can establish contention overlap, not that all elapsed time was lock waiting.
+

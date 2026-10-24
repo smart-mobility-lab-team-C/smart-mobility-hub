@@ -5,6 +5,11 @@ source /opt/ros/jazzy/setup.bash
 repo=$(pwd)
 results=${1:?absolute fresh evidence directory required}
 cached_workspace=${2:-$repo/.cache/m4-completion-v1}
+mode=${3:---crossing-timing}
+case "$mode" in
+  --crossing-timing|--event-timing) ;;
+  *) echo 'Expected --crossing-timing or --event-timing' >&2; exit 2 ;;
+esac
 test ! -e "$results/mission"
 mkdir -p "$results"
 source "$cached_workspace/install/setup.bash"
@@ -45,17 +50,22 @@ git rev-parse HEAD > "$results/commit.txt"
 git status --porcelain > "$results/worktree.txt"
 git diff > "$results/worktree.patch"
 export ROS_DOMAIN_ID=74 ROS_LOCALHOST_ONLY=1
-python3 scripts/gap_tools.py sample --layer container --output "$results/container.jsonl" \
-  --registry "$results/pids.jsonl" &
-sampler=$!
+sampler=''
+if [ "$mode" != --event-timing ]; then
+  python3 scripts/gap_tools.py sample --layer container --output "$results/container.jsonl" \
+    --registry "$results/pids.jsonl" &
+  sampler=$!
+fi
 cleanup() {
   status=$?
   trap - EXIT
-  kill -TERM "$sampler" 2>/dev/null || true
-  wait "$sampler" || true
+  if [ -n "$sampler" ]; then
+    kill -TERM "$sampler" 2>/dev/null || true
+    wait "$sampler" || true
+  fi
   printf '%s\n' "$status" > "$results/container-exit-code.txt"
   exit "$status"
 }
 trap cleanup EXIT
 timeout --signal=INT --kill-after=20s 240s python3 scripts/diagnose_m3_gap.py \
-  --attempt --crossing-timing --output "$results/mission"
+  --attempt "$mode" --output "$results/mission"

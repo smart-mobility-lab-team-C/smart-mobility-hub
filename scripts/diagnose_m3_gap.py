@@ -35,6 +35,9 @@ def register(directory, name, pid):
 
 def worker(args):
     """Instrument imported classes only in this diagnostic subprocess."""
+    if args.event_timing:
+        from freshness_events import worker as event_worker
+        return event_worker(args)
     import rclpy
     if args.worker == 'observer':
         from geometry_msgs.msg import Twist, TwistStamped
@@ -156,12 +159,18 @@ def attempt(args):
 
     directory = Path(args.output).resolve()
     directory.mkdir()
-    for name in ('host.jsonl', 'container.jsonl'):
+    for name in (() if args.event_timing else ('host.jsonl', 'container.jsonl')):
         (directory / name).symlink_to('../' + name)
-    recorder = Recorder(directory / 'probe-timing.jsonl', 'probe')
+    if args.event_timing:
+        from freshness_events import prepare_probe, Ring
+        recorder = Ring(directory / 'probe-timing.jsonl', 'probe')
+        prepare_probe(recorder)
+    else:
+        recorder = Recorder(directory / 'probe-timing.jsonl', 'probe')
     rclpy.init()
     probe = Probe(directory)
-    probe.create_timer(0.1, lambda: recorder.emit('executor_heartbeat'))
+    if not args.event_timing:
+        probe.create_timer(0.1, lambda: recorder.emit('executor_heartbeat'))
     if args.instrument:
         probe.record = timed(recorder, 'probe.record', probe.record)
     processes, logs = [], []
@@ -169,6 +178,7 @@ def attempt(args):
     metadata = {
         'seed': 300, 'initial_passengers': 0, 'instrumented': args.instrument,
         'crossing_timing': args.crossing_timing,
+        'event_timing': args.event_timing,
         'image_bypassed': args.no_image, 'status': 'ERROR', 'commands': {},
         'acceptance_eligible': False,
         'injected_pause': args.pause_node,
@@ -192,28 +202,33 @@ def attempt(args):
     try:
         for name, (package, executable, *extra) in COMMANDS.items():
             if (name in ('scenario_runner', 'safety_supervisor', 'bus_manager')
-                    or args.crossing_timing and name == 'crossing_arbiter'):
+                    or (args.crossing_timing or args.event_timing) and name == 'crossing_arbiter'):
                 command = [sys.executable, __file__, '--worker', name,
                            '--output', str(directory / (name + '-timing.jsonl'))]
                 if args.instrument:
                     command.append('--instrument')
                 if args.crossing_timing:
                     command.append('--crossing-timing')
+                if args.event_timing:
+                    command.append('--event-timing')
                 if args.no_image:
                     command.append('--no-image')
             else:
                 command = [str(Path(get_package_prefix(package)) / 'lib' / package / executable),
                            *extra]
             spawn(name, command)
-        spawn('observer', [sys.executable, __file__, '--worker', 'observer',
-                           '--output', str(directory / 'observer.jsonl')])
+        if not args.event_timing:
+            spawn('observer', [sys.executable, __file__, '--worker', 'observer',
+                               '--output', str(directory / 'observer.jsonl')])
         assert probe.wait(lambda: probe.action.server_is_ready() and len(probe.samples) >= 8, 20)
         probe.pause(2.5)
         metadata['active_start'] = time.monotonic()
         metadata['active_interval_established'] = True
         probe.params('scenario_runner', initial_passengers=0)
-        for node in ('scenario_runner', 'safety_supervisor', 'hub_coordinator',
-                     'reset_coordinator', 'route_planner', 'bus_manager', 'm3_synthetic_roads'):
+        nodes = (() if args.event_timing else (
+            'scenario_runner', 'safety_supervisor', 'hub_coordinator',
+            'reset_coordinator', 'route_planner', 'bus_manager', 'm3_synthetic_roads'))
+        for node in nodes:
             client = AsyncParameterClient(probe, node)
             assert probe.wait(client.services_are_ready, 5), node
             names = probe.future(client.list_parameters(prefixes=[], depth=0)).result.names
@@ -235,7 +250,8 @@ def attempt(args):
         metadata['status'] = ('MISSION_SUCCEEDED' if terminal.status == GoalStatus.STATUS_SUCCEEDED
                               else 'MISSION_FAILED')
         # Preserve post-stop state and five seconds of context without restarting motion.
-        probe.pause(5)
+        if not args.event_timing:
+            probe.pause(5)
     except (Exception, KeyboardInterrupt) as error:
         metadata['error'] = repr(error)
         metadata['traceback'] = traceback.format_exc()
@@ -328,6 +344,7 @@ def main():
     parser.add_argument('--attempt', action='store_true')
     parser.add_argument('--instrument', action='store_true')
     parser.add_argument('--crossing-timing', action='store_true')
+    parser.add_argument('--event-timing', action='store_true')
     parser.add_argument('--no-image', action='store_true')
     parser.add_argument('--runs', type=int, default=10)
     parser.add_argument('--seconds', type=float, default=1200)
@@ -337,6 +354,9 @@ def main():
         parser.error('runs must be 1..10 and seconds must be >0 and <=1200')
     if args.crossing_timing and not (args.attempt or args.worker):
         parser.error('--crossing-timing requires --attempt; no automatic campaign')
+    if args.event_timing and (not (args.attempt or args.worker)
+                              or args.crossing_timing or args.instrument or args.pause_node):
+        parser.error('--event-timing requires a single unmodified attempt, without other tracing')
     if args.worker:
         worker(args)
     elif args.attempt:
