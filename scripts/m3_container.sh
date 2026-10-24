@@ -71,9 +71,19 @@ fi
 sha256sum src/smart_hub_sim/config/map_m1.yaml docs/contracts/m1-fields.json
 export ROS_DOMAIN_ID=72
 export ROS_LOCALHOST_ONLY=1
-python3 scripts/verify_m2.py --output "$results/m2-regression.json"
-export ROS_DOMAIN_ID=73
-python3 scripts/verify_m3.py --output "$results/m3/acceptance.json"
+if [ "${SMH_M4_ONLY:-0}" = 1 ]; then
+  if [ "${SMH_VERIFY_M4:-0}" != 1 ]; then
+    echo 'M4-only scope requires the M4 runner.' >&2
+    exit 2
+  fi
+  printf '%s\n' '{"scope":"M4 T07-T10 only","m2":"NOT RUN","m3":"NOT RUN"}' \
+    > "$results/scope.json"
+  echo 'SCOPE: M4 T07-T10 only; M2/M3 regressions NOT RUN in this invocation.'
+else
+  python3 scripts/verify_m2.py --output "$results/m2-regression.json"
+  export ROS_DOMAIN_ID=73
+  python3 scripts/verify_m3.py --output "$results/m3/acceptance.json"
+fi
 
 if [ "${SMH_VERIFY_M4:-0}" = 1 ]; then
   ament_flake8 scripts/verify_m4.py scripts/plot_m4.py

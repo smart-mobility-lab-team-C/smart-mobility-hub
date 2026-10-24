@@ -145,6 +145,26 @@ package-image layers only, never test results or build workspaces.
 
 ## M4 acceptance path and current result
 
+Assignment §§11–12 assess S4/S5 independently; §12.3 explicitly permits S5
+without motion commands. T07–T10 do not require ten bus docking missions first.
+The default combined M2/M3/M4 runner is a project regression choice, not an
+additional instructor acceptance condition. To execute all M4 probes from a
+fresh build, including package/style/interface checks, use:
+
+```sh
+sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+  -v "$PWD:/workspace" smh-m4-local \
+  bash scripts/m4_container.sh /workspace/evidence/runs/m4-UNIQUE --m4-only'
+```
+
+This explicit scope writes `scope.json` with M2/M3 **NOT RUN** and retains all
+nine M4 probes, bags, parameter dumps and plots. Omitting the flag preserves the
+combined runner and its failing prerequisites. M4-only PASS establishes T07–T10,
+not M3 recovery, moving integration, or T15–T18. The current clean combined run
+at `5e9757b` passed M2 but failed the first docking case on `crossing_stale`;
+that result remains FAIL, separate from M4's focused pass. Combined regression
+and reliable bus-mission timing remain open work for integration.
+
 The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
