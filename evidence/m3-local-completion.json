@@ -1,0 +1,534 @@
+{
+  "schema": "smart-mobility-hub/m3-local-completion-evidence-v1",
+  "created_utc": "2026-10-24",
+  "scope": "Completed local M2/M3 acceptance attempt and M3 diagnostic campaigns. Acceptance failures remain failures; diagnostic container exit 0 means data collection completed, not mission acceptance.",
+  "environment_common": {
+    "host": "Ubuntu 22.04 VM",
+    "container": "Ubuntu 24.04.5 LTS",
+    "ros_distro": "Jazzy",
+    "python": "3.12.3",
+    "image": {
+      "tag": "smh-m4-local:latest",
+      "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b"
+    },
+    "model": "none"
+  },
+  "runs": [
+    {
+      "id": "completion-baseline",
+      "kind": "acceptance_attempt",
+      "source_commit": "9f35fb6ac3bb915e146c26ce2890d7602f913bae",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5"
+      },
+      "command": "sg docker -c \"docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m3_container.sh /workspace/evidence/runs/m3-local-20261024-completion-baseline\"",
+      "seed_config": {
+        "M2_reset_seed": 99,
+        "M3": "not run"
+      },
+      "model": "none; deterministic simulator and ROS nodes",
+      "acceptance_eligible": true,
+      "status": "FAIL_BEFORE_M3",
+      "measurements": {
+        "M2": "17/18 PASS",
+        "failure": "scenario_parameter_dump: parameter dumps unavailable for /safety_supervisor and /reset_coordinator",
+        "M3": "NOT RUN"
+      },
+      "outputs": [
+        "evidence/runs/m3-local-20261024-completion-baseline/m2-regression.json",
+        "evidence/runs/m3-local-20261024-completion-baseline/transcript.log",
+        "evidence/runs/m3-local-20261024-completion-baseline-host/run.json"
+      ],
+      "source_sha256": {
+        "scripts/verify_m2.py": "5fad550a77516aa36bd5b60ffbb35fc9df3700dfdfe2e371ef1c7403a3d077cf",
+        "scripts/m3_container.sh": "6b52d19a49369c6489ac67424c1772826954ca7ceed66a8b1dc71af92445c224"
+      },
+      "artifact_sha256": {
+        "m2-regression.json": "505efdba2b00b01e1a613a48243bb7a02559becf445fa721b30975d86e4a8b7e",
+        "transcript.log": "d9df24d3168c98b515437c82a051cbdba4aed0e6e056ad4a0e2053daaf110f9b"
+      },
+      "milestone_closed": false
+    },
+    {
+      "id": "native-parameters",
+      "kind": "acceptance_attempt",
+      "source_commit": "7804e37a30fa9f3e36f826a932d0f479f309e239",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5"
+      },
+      "command": "sg docker -c \"docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m3_container.sh /workspace/evidence/runs/m3-local-20261024-native-parameters\"",
+      "seed_config": {
+        "M3_base_seed": 300,
+        "attempted_seeds": [
+          300,
+          301,
+          302,
+          303
+        ],
+        "initial_passengers": [
+          0,
+          2,
+          4,
+          6
+        ],
+        "parameter_capture": "enabled; per-node JSON dumps retained"
+      },
+      "model": "none; deterministic simulator and ROS nodes",
+      "acceptance_eligible": true,
+      "status": "FAIL",
+      "measurements": {
+        "M2": "18/18 PASS",
+        "M3": "3 nominal PASS; nominal_docking_04 FAIL; remaining 20 cases NOT RUN",
+        "failure": "SAFETY_STOP",
+        "nominal_position_error_m": [
+          0.010000000431216184,
+          0.03999999961561188,
+          0.040000000654069987
+        ],
+        "max_yaw_error_rad": 8.340364883396792e-10,
+        "eta_error_at_5m_sec": [
+          0.669026623472746,
+          0.08339961619640235,
+          0.30675901094218716
+        ],
+        "minimum_agent_separation_m": [
+          2.0000000010048593,
+          2.0000999990429738,
+          2.0001000021423625
+        ],
+        "door_open_sec": [
+          8.204323687998112,
+          8.29672012499941,
+          8.185264364001341
+        ],
+        "boarding_counts": [
+          0,
+          2,
+          4
+        ],
+        "probe_max_receipt_interval_sec": {
+          "odom": 0.39088500299840234,
+          "crossing": 0.3928273120036465,
+          "queue": 0.46299760599504225,
+          "safety": 0.3643872280008509,
+          "command": 0.36229799700231524,
+          "arrival": 0.7805563809961313,
+          "door": 0.37399962899507955,
+          "truth": 0.3739425400053733
+        }
+      },
+      "outputs": [
+        "evidence/runs/m3-local-20261024-native-parameters/metrics-summary.json",
+        "evidence/runs/m3-local-20261024-native-parameters/m3/acceptance.json",
+        "evidence/runs/m3-local-20261024-native-parameters/m3/failure-context.jsonl",
+        "evidence/runs/m3-local-20261024-native-parameters-host/run.json",
+        "evidence/runs/m3-local-20261024-native-parameters/m3/*-parameters.json"
+      ],
+      "source_sha256": {
+        "scripts/verify_m3.py": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2",
+        "src/smart_hub_control/smart_hub_control/bus.py": "23ba533ade83af4d3c384c67960cf2635eb22c303409af44ee25ad0d7f4f9d50"
+      },
+      "artifact_sha256": {
+        "metrics-summary.json": "fe901e4805fcf97a8ac635096f4e378adea2f9986fd73184243fc245b83c9852",
+        "m3/acceptance.json": "69ec2a2b5a487f3a5f991e9e84dda83ad8cd1cc5863e6653932f317c9b530a2f",
+        "m3/failure-context.jsonl": "9615629fe564750119f4cf5c38820d05e512eb0b60846942d4e91737f15319d0",
+        "m3/trace.jsonl": "879622759a36df7740aff0bcd78022560116a441317206e672092bf58d2d6ea6"
+      },
+      "milestone_closed": false
+    },
+    {
+      "id": "supervisor-profile",
+      "kind": "diagnostic_campaign",
+      "profile": "safety_supervisor instrumentation",
+      "source_commit": "7804e37a30fa9f3e36f826a932d0f479f309e239",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-gap-201572",
+        "--user",
+        "1000:137",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/vboxuser/smart-mobility-hub:/workspace:ro",
+        "-v",
+        "/home/vboxuser/smart-mobility-hub/evidence/runs/m3-local-20261024-supervisor-profile:/gap-results",
+        "smh-m4-local:latest",
+        "bash",
+        "scripts/gap_container.sh",
+        "/gap-results",
+        "5",
+        "450.0"
+      ],
+      "seed_config": {
+        "seed": 300,
+        "campaign_max_runs": 5,
+        "campaign_max_seconds": 450.0,
+        "variants": [
+          {
+            "instrumented": false,
+            "image_bypassed": false
+          },
+          {
+            "instrumented": true,
+            "image_bypassed": false
+          },
+          {
+            "instrumented": true,
+            "image_bypassed": true
+          },
+          {
+            "instrumented": true,
+            "image_bypassed": false
+          },
+          {
+            "instrumented": true,
+            "image_bypassed": true
+          }
+        ]
+      },
+      "model": "none; deterministic simulator and ROS nodes",
+      "acceptance_eligible": false,
+      "status": "DIAGNOSTIC_COLLECTION_EXIT_0_NOT_ACCEPTANCE",
+      "measurements": {
+        "attempts": [
+          {
+            "directory": "00-baseline",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "GAP_OBSERVED",
+            "gap_windows": 2,
+            "seed": 300,
+            "instrumented": false,
+            "image_bypassed": false,
+            "error": null,
+            "terminal_reason": "SAFETY_STOP"
+          },
+          {
+            "directory": "01-instrumented",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "GAP_OBSERVED",
+            "gap_windows": 4,
+            "seed": 300,
+            "instrumented": true,
+            "image_bypassed": false,
+            "error": null,
+            "terminal_reason": "STALE_POSE"
+          },
+          {
+            "directory": "02-no-image",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "GAP_OBSERVED",
+            "gap_windows": 2,
+            "seed": 300,
+            "instrumented": true,
+            "image_bypassed": true,
+            "error": null,
+            "terminal_reason": "STALE_POSE"
+          },
+          {
+            "directory": "03-instrumented",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "GAP_OBSERVED",
+            "gap_windows": 2,
+            "seed": 300,
+            "instrumented": true,
+            "image_bypassed": false,
+            "error": null,
+            "terminal_reason": "SAFETY_STOP"
+          },
+          {
+            "directory": "04-no-image",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "GAP_OBSERVED",
+            "gap_windows": 4,
+            "seed": 300,
+            "instrumented": true,
+            "image_bypassed": true,
+            "error": null,
+            "terminal_reason": "STALE_POSE"
+          }
+        ],
+        "campaign_container_exit_code": 0,
+        "campaign_result": "5 attempts, every mission failed",
+        "acceptance_eligible": false,
+        "interpretation": "Diagnostic collection outcome only; failed missions and GAP_OBSERVED do not constitute M3 acceptance."
+      },
+      "outputs": [
+        "evidence/runs/m3-local-20261024-supervisor-profile/campaign.json",
+        "evidence/runs/m3-local-20261024-supervisor-profile/00-baseline/run.json",
+        "evidence/runs/m3-local-20261024-supervisor-profile/01-instrumented/run.json",
+        "evidence/runs/m3-local-20261024-supervisor-profile/01-instrumented/analysis.json",
+        "evidence/runs/m3-local-20261024-supervisor-profile/overhead-comparison.json"
+      ],
+      "source_sha256": {
+        "scripts/diagnose_m3_gap.py": "a4412db49393a4a2be5acec98e0c515600b270291eef990737c387fe12ca1cbd",
+        "scripts/gap_tools.py": "6f9204fe22f889a50b3fe3787c7e4fb9ec5568571aa5ab1abe746777cd11b21a",
+        "src/smart_hub_control/smart_hub_control/bus.py": "23ba533ade83af4d3c384c67960cf2635eb22c303409af44ee25ad0d7f4f9d50"
+      },
+      "artifact_sha256": {
+        "campaign.json": "74761af962a0e2e7d5cdf27c8ff609e91382b8df6aad7ae6d6bdc6741c38d794",
+        "00-baseline/run.json": "f8bdf61ed8c2b5f45f2d2b0db14ee3bd5b6d00133b471f35da2cc57b219fbc74",
+        "01-instrumented/run.json": "71f5ef220806b946620518703d07fa74217c504e31f0f2ac632467243ad289af",
+        "01-instrumented/analysis.json": "5f3f48356e35da980146879222b9f77985974c73a6eda58fe9276ef907ca41e8",
+        "overhead-comparison.json": "3e9ccf79db9476d7d61232e50f612fff92afed3706c62167fd914502a65ff3e9"
+      }
+    },
+    {
+      "id": "bus-profile",
+      "kind": "diagnostic_campaign",
+      "profile": "BusManager diagnostic instrumentation",
+      "source_commit": "ccb5a0235853c6e2125eb356cfecf74aa363f7b7",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "smh-gap-207566",
+        "--user",
+        "1000:137",
+        "-e",
+        "HOME=/tmp",
+        "-v",
+        "/home/vboxuser/smart-mobility-hub:/workspace:ro",
+        "-v",
+        "/home/vboxuser/smart-mobility-hub/evidence/runs/m3-local-20261024-bus-profile:/gap-results",
+        "smh-m4-local:latest",
+        "bash",
+        "scripts/gap_container.sh",
+        "/gap-results",
+        "3",
+        "300.0"
+      ],
+      "seed_config": {
+        "seed": 300,
+        "campaign_max_runs": 3,
+        "campaign_max_seconds": 300.0,
+        "variants": [
+          {
+            "instrumented": false,
+            "image_bypassed": false
+          },
+          {
+            "instrumented": true,
+            "image_bypassed": false
+          },
+          {
+            "instrumented": true,
+            "image_bypassed": true
+          }
+        ]
+      },
+      "model": "none; deterministic simulator and ROS nodes",
+      "acceptance_eligible": false,
+      "status": "DIAGNOSTIC_COLLECTION_EXIT_0_NOT_ACCEPTANCE",
+      "measurements": {
+        "attempts": [
+          {
+            "directory": "00-baseline",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "NOT_REPRODUCED",
+            "gap_windows": 0,
+            "seed": 300,
+            "instrumented": false,
+            "image_bypassed": false,
+            "error": null,
+            "terminal_reason": "SAFETY_STOP"
+          },
+          {
+            "directory": "01-instrumented",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "GAP_OBSERVED",
+            "gap_windows": 3,
+            "seed": 300,
+            "instrumented": true,
+            "image_bypassed": false,
+            "error": null,
+            "terminal_reason": "SAFETY_STOP"
+          },
+          {
+            "directory": "02-no-image",
+            "mission_status": "ERROR",
+            "analysis_status": "GAP_OBSERVED",
+            "gap_windows": 2,
+            "seed": 300,
+            "instrumented": true,
+            "image_bypassed": true,
+            "error": "AssertionError('RESET_DEADLINE')",
+            "terminal_reason": null
+          }
+        ],
+        "campaign_container_exit_code": 0,
+        "campaign_result": "baseline stop; instrumented stop; final attempt errored during RESET_DEADLINE",
+        "acceptance_eligible": false,
+        "interpretation": "Diagnostic collection outcome only; failed missions and GAP_OBSERVED do not constitute M3 acceptance.",
+        "selected_observations": [
+          {
+            "directory": "00-baseline",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "NOT_REPRODUCED",
+            "bus_safety_input_count": 0,
+            "bus_safety_input_max_receipt_interval_sec": null,
+            "observer_safety_count": 193,
+            "observer_safety_max_receipt_interval_sec": 0.19381331399927149,
+            "supervisor_record_count": 0,
+            "bus_tick_max_start_interval_sec": null,
+            "bus_tick_max_duration_sec": null,
+            "gap_windows": []
+          },
+          {
+            "directory": "01-instrumented",
+            "mission_status": "MISSION_FAILED",
+            "analysis_status": "GAP_OBSERVED",
+            "bus_safety_input_count": 112,
+            "bus_safety_input_max_receipt_interval_sec": 0.9256728709951858,
+            "observer_safety_count": 235,
+            "observer_safety_max_receipt_interval_sec": 0.21456372600368923,
+            "supervisor_record_count": 1874,
+            "bus_tick_max_start_interval_sec": 0.23258203400473576,
+            "bus_tick_max_duration_sec": 0.15168646600068314,
+            "gap_windows": [
+              {
+                "duration_sec": 0.569682,
+                "classification": "probe_local_gap; independent observer continued"
+              },
+              {
+                "duration_sec": 0.692961,
+                "classification": "process_callback_gap; system samplers continued"
+              },
+              {
+                "duration_sec": 0.569602,
+                "classification": "process_callback_gap; system samplers continued"
+              }
+            ]
+          },
+          {
+            "directory": "02-no-image",
+            "mission_status": "ERROR",
+            "analysis_status": "GAP_OBSERVED",
+            "bus_safety_input_count": 38,
+            "bus_safety_input_max_receipt_interval_sec": 0.6552895709974109,
+            "observer_safety_count": 116,
+            "observer_safety_max_receipt_interval_sec": 0.20976373300072737,
+            "supervisor_record_count": 805,
+            "bus_tick_max_start_interval_sec": 0.38568338900222443,
+            "bus_tick_max_duration_sec": 0.148156488998211,
+            "gap_windows": [
+              {
+                "duration_sec": 2.264062,
+                "classification": "probe_local_gap; independent observer continued"
+              },
+              {
+                "duration_sec": 0.517321,
+                "classification": "process_callback_gap; system samplers continued"
+              }
+            ]
+          }
+        ]
+      },
+      "outputs": [
+        "evidence/runs/m3-local-20261024-bus-profile/campaign.json",
+        "evidence/runs/m3-local-20261024-bus-profile/00-baseline/run.json",
+        "evidence/runs/m3-local-20261024-bus-profile/01-instrumented/run.json",
+        "evidence/runs/m3-local-20261024-bus-profile/01-instrumented/analysis.json",
+        "evidence/runs/m3-local-20261024-bus-profile/metrics-summary.json"
+      ],
+      "source_sha256": {
+        "scripts/diagnose_m3_gap.py": "1a93bb3402e82c0316cbf1b23359fefcbaad0b3b1ac82badfb659c3014a2d410",
+        "scripts/gap_tools.py": "6f9204fe22f889a50b3fe3787c7e4fb9ec5568571aa5ab1abe746777cd11b21a",
+        "src/smart_hub_control/smart_hub_control/bus.py": "91c842f781ae3bd42723acab877c6ebff899e1020e90bd6ea04bd12aac21d31d"
+      },
+      "artifact_sha256": {
+        "campaign.json": "c4e0be2e398f7d76e32676ae68cbc7bf7a3bbc3adb4c5bb16c804f7dd5e43c0b",
+        "00-baseline/run.json": "49151e5a66078c806783e0265f2c176af6d6f852a2f106654df3ee1f369f1a91",
+        "01-instrumented/run.json": "591a888c9ab0257dab0dd1ec86d0d3e17a309aa3891d6e6e1a186305142d6cda",
+        "01-instrumented/analysis.json": "594c0cb3bb75dee900bc8cc381de11b60d6ee6366107d79c55e3a8921e35f113",
+        "metrics-summary.json": "f8d4346c7be267df0af401c8467d9af405044b9fbdea576650c4dad0fa86524a"
+      }
+    },
+    {
+      "id": "observation-group",
+      "kind": "acceptance_attempt",
+      "source_commit": "835b7c8d88bb6ed42dcb3fb90debc682822d97b3",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5"
+      },
+      "command": "sg docker -c \"docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m3_container.sh /workspace/evidence/runs/m3-local-20261024-observation-group\"",
+      "seed_config": {
+        "M3_base_seed": 300,
+        "attempted_seeds": [
+          300,
+          301
+        ],
+        "initial_passengers": [
+          0,
+          2
+        ],
+        "parameter_capture": "enabled; per-node JSON dumps retained"
+      },
+      "model": "none; deterministic simulator and ROS nodes",
+      "acceptance_eligible": true,
+      "milestone_closed": false,
+      "status": "FAIL",
+      "measurements": {
+        "M2": "18/18 PASS",
+        "M3": "1 nominal PASS; nominal_docking_02 reset failure; remaining 22 cases NOT RUN",
+        "failure": "/bus/finish_reset:BUS_RESET_UNSAFE",
+        "nominal_position_error_m": [
+          0.025000000238191263
+        ],
+        "max_yaw_error_rad": 3.329198516672435e-10,
+        "max_eta_error_at_5m_sec": 0.43042687700653914,
+        "minimum_separation_m": 2.000099998161637,
+        "door_open_sec": [
+          8.19980090700119
+        ],
+        "cancellation": "NOT RUN (stopped during second nominal reset)"
+      },
+      "outputs": [
+        "evidence/runs/m3-local-20261024-observation-group/metrics-summary.json",
+        "evidence/runs/m3-local-20261024-observation-group/m2-regression.json",
+        "evidence/runs/m3-local-20261024-observation-group/m3/acceptance.json",
+        "evidence/runs/m3-local-20261024-observation-group/m3/failure-context.jsonl",
+        "evidence/runs/m3-local-20261024-observation-group/m3/bus_manager.log",
+        "evidence/runs/m3-local-20261024-observation-group/m3/reset_coordinator.log",
+        "evidence/runs/m3-local-20261024-observation-group/m3/*-parameters.json"
+      ],
+      "source_sha256": {
+        "scripts/verify_m3.py": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2",
+        "src/smart_hub_control/smart_hub_control/bus.py": "8be9c85b05fe28ac112662b979d0dab6543fb3b390bc154d22aa2443753959bf"
+      },
+      "artifact_sha256": {
+        "metrics-summary.json": "0d0ccfd9d091b463a12b918ab31c0452c1b6cab5e73c3711e32e74d852018fc1",
+        "m2-regression.json": "05f776002e5acde5ffe44297e5822697a9bd12f08aec694b5ce6bf94f58f2891",
+        "m3/acceptance.json": "1a932f1c42cd823ae0b75bf31eea2287a1352c35d1a95cdf14c7f6ba987f092e",
+        "m3/failure-context.jsonl": "b50bb341103d799be725414e28adf285dec3b41869b4e326eafbb5efab5beebf",
+        "m3/trace.jsonl": "a24fb94ea6138828e9d1d3db8af2c180da681fdcbb4ebc7e99139b7104e39c99",
+        "m3/bus_manager.log": "6bc95fec6f7a2e90a13cc0ccd00174828d6538293981efcbffa2c78870fb7a9f",
+        "m3/reset_coordinator.log": "5193c10a7c5a9d5af16afac70344260bb384f030c8e3b25a7e574065aa3e85df"
+      }
+    }
+  ]
+}
