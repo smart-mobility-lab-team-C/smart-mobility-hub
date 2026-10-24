@@ -74,6 +74,15 @@ FAIL, BLOCKED and NOT RUN separately. Large raw evidence remains ignored; commit
 small result indexes that identify the exact run. Independent local reproduction
 is a separate human gate.
 
+M2 captures live parameters through native asynchronous ROS parameter services,
+matching M3. The probe continues servicing its operator heartbeat and observation
+callbacks during capture. Each node retains a ten-second overall capture bound,
+with three-second service/list/get phase bounds; missing or incomplete responses
+fail capture. The retained JSON text is also valid YAML and contains the actual
+`ros__parameters` values. This replaces blocking ROS CLI subprocesses after the
+local `m3-local-20261024-completion-baseline` attempt timed out on two dumps;
+that attempt remains FAIL and did not reach M3. No runtime watchdog is changed.
+
 For the observed `/bus/prepare_reset` timeout, source a locally built Jazzy
 workspace and run `python3 scripts/verify_reset.py --output
 evidence/runs/reset-UNIQUE/report.json`. The default five repetitions use seeds

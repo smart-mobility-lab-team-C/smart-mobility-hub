@@ -23,6 +23,8 @@ from geometry_msgs.msg import Twist, TwistStamped
 from nav_msgs.msg import Odometry
 import rclpy
 from rclpy.node import Node
+from rclpy.parameter import parameter_value_to_python
+from rclpy.parameter_client import AsyncParameterClient
 from rclpy.qos import DurabilityPolicy, QoSProfile
 from smart_hub_interfaces.msg import (
     CrossingState,
@@ -374,8 +376,8 @@ def _process_logs(log_dir: Path) -> dict:
     return logs
 
 
-def _parameter_dumps() -> dict:
-    """Capture live parameter dumps with bounded ROS CLI calls."""
+def _parameter_dumps(probe: Probe) -> dict:
+    """Capture live parameters asynchronously while servicing probe heartbeats."""
     dumps = {}
     for node_name in (
         '/scenario_runner',
@@ -383,22 +385,38 @@ def _parameter_dumps() -> dict:
         '/hub_coordinator',
         '/reset_coordinator',
     ):
+        started = time.monotonic()
+        deadline = started + 10.0
         try:
-            result = subprocess.run(
-                ['ros2', 'param', 'dump', '--no-daemon', '--spin-time', '2',
-                 '--timeout', '3', node_name],
-                text=True,
-                capture_output=True,
-                timeout=10.0,
-                check=False,
-            )
+            client = AsyncParameterClient(probe, node_name)
+
+            def wait_for(predicate):
+                if not probe.spin_until(predicate, min(3.0, max(
+                        0.0, deadline - time.monotonic()))):
+                    raise TimeoutError('parameter service deadline: ' + node_name)
+
+            wait_for(client.services_are_ready)
+            listing = client.list_parameters(prefixes=[], depth=0)
+            wait_for(listing.done)
+            names = listing.result().result.names
+            values = client.get_parameters(names)
+            wait_for(values.done)
+            values = values.result().values
+            if not names or len(names) != len(values):
+                raise ValueError('empty or incomplete parameter response: ' + node_name)
             dumps[node_name] = {
-                'returncode': result.returncode,
-                'stdout': result.stdout,
-                'stderr': result.stderr[-2000:],
+                'returncode': 0,
+                'stdout': json.dumps({node_name: {'ros__parameters': {
+                    name: parameter_value_to_python(value)
+                    for name, value in zip(names, values)
+                }}}, indent=2) + '\n',
+                'stderr': '',
+                'transport': 'native asynchronous ROS parameter services',
+                'elapsed_sec': time.monotonic() - started,
             }
-        except (OSError, subprocess.TimeoutExpired) as error:
-            dumps[node_name] = {'error': f'{type(error).__name__}: {error}'}
+        except Exception as error:
+            dumps[node_name] = {'error': f'{type(error).__name__}: {error}',
+                                'elapsed_sec': time.monotonic() - started}
     return dumps
 
 
@@ -1024,7 +1042,7 @@ def _run_main() -> int:
                     probe, processes, log_dir
                 ))
 
-                parameter_dumps = _parameter_dumps()
+                parameter_dumps = _parameter_dumps(probe)
                 report.run(
                     'scenario_parameter_dump',
                     lambda: _assert_parameter_dumps(parameter_dumps),
