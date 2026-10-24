@@ -243,6 +243,15 @@ class Case:
     observations: Optional[dict] = None
 
 
+class MeasurementFailure(AssertionError):
+    """Retain partial measurements when a bounded acceptance assertion fails."""
+
+    def __init__(self, message, observations):
+        """Keep evidence attached to its original failed outcome."""
+        super().__init__(message)
+        self.observations = observations
+
+
 class Report:
     """Collect each case without converting missing evidence to PASS."""
 
@@ -261,6 +270,7 @@ class Report:
             self.cases.append(Case(
                 name, 'FAIL', f'{type(error).__name__}: {error}',
                 time.monotonic() - started,
+                getattr(error, 'observations', None),
             ))
             return None
         self.cases.append(Case(
@@ -1397,6 +1407,7 @@ def _test_missing_participant(probe: Probe, processes: dict, log_dir: Path) -> d
 
 def _test_supervisor_loss(probe: Probe, processes: dict) -> dict:
     latencies = []
+    trials = []
     for repetition in range(5):
         probe.robot_candidate = (0.1, 0.0)
         probe.robot_candidate_enabled = True
@@ -1412,21 +1423,49 @@ def _test_supervisor_loss(probe: Probe, processes: dict) -> dict:
                   'reason': state.reason if state else 'NO_SAFETY',
                   'latched': state.stop_latched if state else None,
                   'command': _twist_value(command) if command else None}
-        _assert(moving, f'no measured motion before termination: {detail}')
+        if not moving:
+            raise MeasurementFailure('no measured motion before termination',
+                                     {'trials': trials, 'pre_fault': detail})
         supervisor = processes.get('safety_supervisor')
-        _assert(supervisor is not None and supervisor.poll() is None,
-                'safety supervisor process is unavailable')
+        if supervisor is None or supervisor.poll() is not None:
+            raise MeasurementFailure('safety supervisor process is unavailable',
+                                     {'trials': trials})
         terminated_at = time.monotonic()
-        _stop_process(supervisor)
+        os.killpg(supervisor.pid, signal.SIGTERM)
+        terminated_ros = probe.get_clock().now().nanoseconds * 1e-9
         probe.robot_candidate_enabled = False
+
+        def stopped_after_signal(message):
+            """Exclude queued pre-fault zero samples using acquisition and receipt time."""
+            stamp = message.header.stamp
+            return (_vehicle_speed(message, 'robot') == 0.0
+                    and stamp.sec + stamp.nanosec * 1e-9 >= terminated_ros)
+
         stopped = probe.wait_sample_after(
             probe.ground_truth, terminated_at,
-            lambda message: _vehicle_speed(message, 'robot') == 0.0,
+            stopped_after_signal,
             0.65,
         )
-        elapsed = time.monotonic() - terminated_at
-        _assert(stopped and elapsed <= 0.65,
-                f'adapter stop exceeded 0.65s ({elapsed:.3f}s)')
+        samples = [(received, message) for received, message in probe.ground_truth
+                   if received >= terminated_at and stopped_after_signal(message)]
+        elapsed = min(t for t, _ in samples) - terminated_at if samples else None
+        trials.append({
+            'trial': repetition + 1, 'signal_monotonic': terminated_at,
+            'source_cutoff_ros_sec': terminated_ros, 'zero_observed': stopped,
+            'zero_receipt_latency_sec': elapsed,
+            'truth_samples': [{
+                'received_monotonic': received,
+                'source_ros_sec': message.header.stamp.sec +
+                message.header.stamp.nanosec * 1e-9,
+                'robot_speed_mps': _vehicle_speed(message, 'robot'),
+            } for received, message in probe.ground_truth
+                if received >= terminated_at - 0.2],
+        })
+        reap_started = time.monotonic()
+        _stop_process(supervisor)
+        trials[-1]['process_reap_sec'] = time.monotonic() - reap_started
+        if not stopped or elapsed is None or elapsed > 0.65:
+            raise MeasurementFailure('adapter stop exceeded 0.65s', {'trials': trials})
         latencies.append(elapsed)
         if repetition == 4:
             continue
@@ -1452,9 +1491,14 @@ def _test_supervisor_loss(probe: Probe, processes: dict) -> dict:
             and not probe.safety_states[-1][1].stop_latched,
             STARTUP_TIMEOUT_SEC,
         )
-        _assert(restored, 'safety supervisor failed to restart for another repetition')
+        if not restored:
+            raise MeasurementFailure('safety supervisor failed to restart for another repetition',
+                                     {'trials': trials})
     return {'repetitions': len(latencies), 'supervisor_terminated_while_moving': True,
-            'measured_stop_sec': latencies, 'evaluator_ground_truth_used': True}
+            'measured_stop_sec': latencies, 'evaluator_ground_truth_used': True,
+            'measurement': 'signal to first received post-signal zero-speed truth sample; '
+                           'process reaping excluded; 0.65 s bound unchanged',
+            'trials': trials}
 
 
 def _emit_dict(data: dict, output: str) -> int:

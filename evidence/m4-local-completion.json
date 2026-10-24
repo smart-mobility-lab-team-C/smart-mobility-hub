@@ -1,0 +1,122 @@
+{
+  "schema": "smart-mobility-hub/m4-local-completion-evidence-v1",
+  "created_utc": "2026-10-24",
+  "scope": "Fresh full local M4 acceptance attempt. The build and M2 prerequisite ran; M2 failed in adapter_stops_after_supervisor_loss, so M3 and M4 were not run. No future outcome is asserted.",
+  "environment_common": {
+    "host": "Ubuntu 22.04 VM (KVM)",
+    "container": "Ubuntu 24.04.5 LTS",
+    "ros_distro": "Jazzy",
+    "python": "3.12.3",
+    "image": {
+      "tag": "smh-m4-local:latest",
+      "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b"
+    },
+    "model": null
+  },
+  "runs": [
+    {
+      "id": "completion-baseline",
+      "kind": "M4_full_acceptance_attempt",
+      "branch": "fix/m4-local-completion",
+      "source_commit": "cb1dd95129e32c596daace2d93e3aea33b5f48e0",
+      "source_worktree": "clean at run start",
+      "image": {
+        "tag": "smh-m4-local:latest",
+        "id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "ros_distro": "jazzy",
+        "container_os": "Ubuntu 24.04.5 LTS",
+        "python": "3.12.3"
+      },
+      "host_environment": {
+        "os": "Ubuntu 22.04 VM",
+        "virtualization": "KVM full virtualization",
+        "cpu_count": 18,
+        "memory": "10 GiB",
+        "platform_capture": "evidence/runs/m4-local-20261024-completion-baseline-host/platform.txt"
+      },
+      "command": "sg docker -c \"docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m4_container.sh /workspace/evidence/runs/m4-local-20261024-completion-baseline\"",
+      "start_utc": "2026-10-24T13:48:19Z",
+      "end_utc": "2026-10-24T13:52:17Z",
+      "exit_code": 1,
+      "seed_metadata": {
+        "M2_scenario_reset_seed": 99,
+        "M2_stale_reset_seeds_observed_in_log": [
+          100,
+          101,
+          102
+        ],
+        "M2_adapter_supervisor_loss_repetitions": 5,
+        "adapter_failure_iteration": "fourth inferred from three supervisor restart log files",
+        "M3": "NOT RUN",
+        "M4": "NOT RUN"
+      },
+      "model": null,
+      "acceptance_eligible": true,
+      "status": "FAIL_BEFORE_M3",
+      "milestone_closed": false,
+      "measurements": {
+        "build": "PASS; 8 packages built",
+        "colcon_tests": "PASS; 53 tests; 0 errors, 0 failures, 0 skipped",
+        "M2": "FAIL; 17/18 cases PASS",
+        "failed_case": "adapter_stops_after_supervisor_loss",
+        "failure_detail": "AssertionError: adapter stop exceeded 0.65s (0.678s)",
+        "adapter_measurement_semantics": "Verifier terminated safety_supervisor while motion was observed, then waited up to 0.65s for a post-termination evaluator ground-truth sample with robot speed zero. No qualifying sample was received before threshold. The reported elapsed includes wait-loop exit overhead and does not prove physical stop occurred at 0.678s.",
+        "supervisor_restart_logs": [
+          "safety_supervisor_restart_1.log",
+          "safety_supervisor_restart_2.log",
+          "safety_supervisor_restart_3.log"
+        ],
+        "process_log_observations": [
+          "safety_supervisor.log and safety_supervisor_restart_2.log contain publisher-context-invalid errors during shutdown/restart. No causal inference is recorded."
+        ],
+        "parameter_capture": "PASS; native async dumps captured for /scenario_runner, /safety_supervisor, /hub_coordinator, /reset_coordinator",
+        "M3": "NOT RUN; M2 prerequisite returned failure",
+        "M4": "NOT RUN; M2 prerequisite returned failure",
+        "host_sampler": {
+          "sample_count": 2097,
+          "max_interval_sec": 0.2586456029966939,
+          "max_interval_monotonic_sec": [
+            42465.29714368,
+            42465.555789283
+          ],
+          "wall_minus_monotonic_offset_range_sec": [
+            1792807340.3098302,
+            1792807340.320784
+          ],
+          "max_adjacent_offset_change_sec": 0.010953664779663086
+        },
+        "limitation": "M2 process logs and JSON are retained, but verify_m2.py does not persist per-message trace for this case. This run does not establish any M3 or M4 outcome."
+      },
+      "source_sha256": {
+        "scripts/m4_container.sh": "d6bad7e4ee0f911ff7ed509ddd7d76380d5bd85b77112150a1a59f811f4e579f",
+        "scripts/verify_m2.py": "a59358e1ab27f0006a46d18373166f35341440e83724aed88c3710bef3f64753",
+        "scripts/verify_m3.py": "c10e4ca9c54cf4b8bf00a0a969e8cab9249e40e907b8961e15ebeeadd08241f2",
+        "scripts/verify_m4.py": "291564f216a80c75b6cb1e7879610455b719b9df468de9240b78c11f747df49a",
+        "src/smart_hub_safety/smart_hub_safety/supervisor.py": "49acf25dced3d66ddf0e65c3856f8ed347af68edc8e022c1e7c50c90fa6462bf",
+        "src/smart_hub_sim/smart_hub_sim/scenario_runner.py": "fb01d87b5bd8b2d4401775ba4b289451c8c45a8c688f057d0921b977a675ffb4"
+      },
+      "source_manifest": "evidence/runs/m4-local-20261024-completion-baseline/source-sha256.txt",
+      "artifact_sha256": {
+        "evidence/runs/m4-local-20261024-completion-baseline/metrics-summary.json": "2987d3a13de26281711389bce4a8829ef41384996d6af44fb7fa13b48e2df7ed",
+        "evidence/runs/m4-local-20261024-completion-baseline/m2-failure-context.json": "5f168a546b78fe6ba4d3a2e9f4ccc0a06dfaef691f4f67e9b8cbbb59991a173a",
+        "evidence/runs/m4-local-20261024-completion-baseline/m2-regression.json": "3337995fc37facd5cdd054d5afbb2d8ee6e954a4d0e9fc2abfb252819edba7db",
+        "evidence/runs/m4-local-20261024-completion-baseline/transcript.log": "d333ab75c177bd3da923ec0cf37e65dd638f7f95c9f1d954c7713098f39d4ebb",
+        "evidence/runs/m4-local-20261024-completion-baseline/package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259"
+      },
+      "artifact_manifest": "evidence/runs/m4-local-20261024-completion-baseline-host/artifact-sha256.txt",
+      "outputs": [
+        "evidence/runs/m4-local-20261024-completion-baseline/metrics-summary.json",
+        "evidence/runs/m4-local-20261024-completion-baseline/m2-failure-context.json",
+        "evidence/runs/m4-local-20261024-completion-baseline/m2-regression.json",
+        "evidence/runs/m4-local-20261024-completion-baseline/transcript.log",
+        "evidence/runs/m4-local-20261024-completion-baseline/package-versions.tsv",
+        "evidence/runs/m4-local-20261024-completion-baseline/worktree.txt",
+        "evidence/runs/m4-local-20261024-completion-baseline/source-sha256.txt",
+        "evidence/runs/m4-local-20261024-completion-baseline-host/run.json",
+        "evidence/runs/m4-local-20261024-completion-baseline-host/host.jsonl",
+        "evidence/runs/m4-local-20261024-completion-baseline-host/platform.txt",
+        "evidence/runs/m4-local-20261024-completion-baseline-host/artifact-sha256.txt"
+      ]
+    }
+  ]
+}

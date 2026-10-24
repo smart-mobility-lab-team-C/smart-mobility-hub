@@ -15,7 +15,7 @@ import traceback
 
 import rclpy
 from rclpy.node import Node
-from rclpy.parameter import Parameter
+from rclpy.parameter import Parameter, parameter_value_to_python
 from rclpy.parameter_client import AsyncParameterClient
 from rclpy.qos import DurabilityPolicy, QoSProfile
 from rosidl_runtime_py.convert import message_to_ordereddict
@@ -427,6 +427,23 @@ def stop_process(process):
         process.wait(timeout=3)
 
 
+def capture_parameters(probe, directory):
+    """Read live values through bounded services while keeping probe callbacks active."""
+    for node in ('scenario_runner', 'parking_manager', 'traffic_monitor'):
+        deadline = time.monotonic() + 10
+        client = AsyncParameterClient(probe, node)
+        assert probe.wait(client.services_are_ready, 3), 'parameter services missing: ' + node
+        listing = probe.future(client.list_parameters(prefixes=[], depth=0),
+                               min(3, max(0, deadline - time.monotonic())))
+        names = listing.result.names
+        values = probe.future(client.get_parameters(names),
+                              min(3, max(0, deadline - time.monotonic()))).values
+        assert names and len(names) == len(values), 'incomplete parameter dump: ' + node
+        dump = {'/' + node: {'ros__parameters': {
+            name: parameter_value_to_python(value) for name, value in zip(names, values)}}}
+        (directory / (node + '-parameters.yaml')).write_text(json.dumps(dump, indent=2) + '\n')
+
+
 def main():
     """Retain logs, bags, parameters, raw trace and failure outcomes for every run."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -458,11 +475,7 @@ def main():
         assert all(process.poll() is None for process in processes), 'launch or recorder exited'
         parking_cases(probe, report['cases'])
         traffic_cases(probe, report['cases'])
-        for node in ('scenario_runner', 'parking_manager', 'traffic_monitor'):
-            dump = subprocess.run(['ros2', 'param', 'dump', '/' + node],
-                                  capture_output=True, text=True, timeout=10)
-            (directory / (node + '-parameters.yaml')).write_text(dump.stdout + dump.stderr)
-            assert dump.returncode == 0, 'parameter dump failed: ' + node
+        capture_parameters(probe, directory)
         report['status'] = 'PASS'
         report['scenario_acceptance'] = 'T07–T10 eligible; independent review remains open'
     except Exception as error:

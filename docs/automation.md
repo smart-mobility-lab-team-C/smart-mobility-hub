@@ -83,6 +83,19 @@ fail capture. The retained JSON text is also valid YAML and contains the actual
 `ros__parameters` values. This replaces blocking ROS CLI subprocesses after the
 local `m3-local-20261024-completion-baseline` attempt timed out on two dumps;
 that attempt remains FAIL and did not reach M3. No runtime watchdog is changed.
+M4 now uses the same asynchronous capture approach for its three parameter
+dumps, retaining JSON text (valid YAML) in the existing `.yaml` files. It keeps
+the probe's synthetic input and operator heartbeat callbacks active during
+evidence capture rather than blocking on ROS CLI subprocesses.
+
+Supervisor-loss verification sends the termination signal, continues receiving
+truth observations, and measures the first fresh post-signal zero-speed sample
+against the unchanged 0.65 s observer bound. Process reaping is measured
+separately afterward. Each trial retains signal/source/receipt times and speed
+samples, including partial data on failure. The earlier M4 completion baseline
+failed the old combined timing check at 0.678 s; it remains FAIL, with M3/M4
+NOT RUN in that attempt. Its missing per-trial trace cannot establish when the
+physical stop occurred. Runtime watchdogs and their thresholds are unchanged.
 
 For the observed `/bus/prepare_reset` timeout, source a locally built Jazzy
 workspace and run `python3 scripts/verify_reset.py --output
