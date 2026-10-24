@@ -14,8 +14,8 @@ regression (`5e9757b`) passed M2 18/18 but failed at its first nominal M3 case
 with `SAFE_STOP/SAFETY_INPUT_UNKNOWN:crossing_stale`; T05 is FAIL in that
 attempt and T06 was NOT RUN. An earlier full M3 run (`f6a97fd`) passed 24/24,
 including T05–T06, and remains historical evidence. Combined regression is
-still open at M3; this does not leave M4 assignment acceptance open. Current M4
-changes are on `fix/m4-local-completion`, not merged or pushed. See the [M4
+still open at M3; this does not leave M4 assignment acceptance open. M4 changes are merged into local `main` from `fix/m4-local-completion` and have not been
+pushed. See the [M4
 evidence index](evidence/m4-local-completion.json), [M3 handoff](docs/m3.md),
 and [setup](docs/setup.md). Independent review remains BLOCKED.
 

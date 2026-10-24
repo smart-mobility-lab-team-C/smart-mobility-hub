@@ -24,7 +24,7 @@ Original PDFs are not published in this public repository. Keep authorized local
 | R07 | N | <=10 files; <=1 GB each; no external links; leader upload, others validate | Packaging + portal process | Size/link audit and validation record |
 
 This is the initial traceability register. Current implementation and observed checks are recorded in [M0 status](m0-status.md), [M1 status](m1.md), [M2 status](m2.md), [M3 status](m3.md), and [M4 handoff](m4-handoff.md). An earlier full M3 run passed 24/24 cases. The latest combined regression (`5e9757b`) passed M2 but failed at its first nominal M3 case; T06 and M4 were not reached. The latest independent M4-only run (`b7d1df7`) passed all nine M4 cases, a fresh eight-package build, and 54 package tests; M2/M3 were explicitly NOT RUN in that scope. Assignment-scoped M4 T07–T10 functional acceptance is complete pending independent review, while the combined regression remains open at M3. Details are indexed in [local M4 evidence](../evidence/m4-local-completion.json) and [local M3 evidence](../evidence/m3-local-completion.json). The M3 completion changes from `fix/m3-local-completion` are merged into local
-`main` and have not been pushed. M4 changes remain on `fix/m4-local-completion`, not merged or pushed. The independent M4 scope does not substitute for combined M3 regression; other scenario rows remain NOT RUN and require their own verification.
+`main` and have not been pushed. M4 changes are merged into local `main` from `fix/m4-local-completion` and have not been pushed. The independent M4 scope does not substitute for combined M3 regression; other scenario rows remain NOT RUN and require their own verification.
 
 ## Mandatory source-review gate
 

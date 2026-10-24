@@ -336,5 +336,5 @@ stamps. Those source-to-publication delays were 0.200/0.369 s, within one
 include the source timer and delivery; they are retained as distinct metrics.
 
 [M4 handoff](m4-handoff.md) records reproduction and remaining work. Independent
-teammate review/reproduction is BLOCKED. M4 changes are committed on
-`fix/m4-local-completion`; they are not merged or pushed. No hosted run was used.
+teammate review/reproduction is BLOCKED. M4 changes are merged into local `main`
+from `fix/m4-local-completion`; they have not been pushed. No hosted run was used.
