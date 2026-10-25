@@ -65,6 +65,26 @@ def axis_heading(pose, target):
     return math.copysign(math.pi / 2, dy)
 
 
+def route_cost(config, observations, nodes, agent='robot'):
+    """Sum A section 13.2 edge costs (no crossing wait); None if any edge is unusable."""
+    cap = {'bus': 0.4, 'robot': 0.25, 'car': 0.35}[agent]
+    total = 0.0
+    for a, b in zip(nodes, nodes[1:]):
+        state = observations.get('-'.join(sorted((a, b))))
+        if state is None or not state.valid or state.blocked:
+            return None
+        length = math.dist(config['nodes'][a], config['nodes'][b])
+        total += length / max(min(state.mean_speed_mps, cap), 0.05) * (
+            1 + 2 * state.density_ratio)
+    return total
+
+
+def should_replace(current_cost, new_cost, ratio):
+    """Congestion-only replacement needs a route at least `ratio` cheaper."""
+    return current_cost is not None and new_cost is not None and \
+        new_cost <= (1.0 - ratio) * current_cost
+
+
 def path_length(points):
     """Sum straight segment lengths in map metres."""
     return sum(math.dist(a, b) for a, b in zip(points, points[1:]))
@@ -106,6 +126,8 @@ class RobotManager(Node):
             'crossing_backoff_max_sec': (1.0, 1.0),
             'crossing_renew_sec': (0.25, 0.5),
             'crossing_ack_timeout_sec': (0.5, 0.5),
+            'replan_improvement_ratio': (0.15, 0.9),
+            'replan_cooldown_sec': (2.0, 10.0),
         }
         for name, (value, _) in limits.items():
             self.declare_parameter(name, value, ParameterDescriptor(read_only=True))
@@ -200,6 +222,7 @@ class RobotManager(Node):
         self.ready = False
         self.ready_since = None
         self.arrived_since = None
+        self.last_replan_check = 0.0
         self.stop_reason = ''
         self.stop_started = None
         self.deadline = 0.0
@@ -736,6 +759,8 @@ class RobotManager(Node):
             self.route_attempt = 0
             self.set_phase('BLOCKED', 'ROUTE_INVALID_OR_STALE')
             return
+        if self.congestion_replan(now, pose):
+            return
         target = self.targets[0]
         distance = math.dist(pose[:2], target)
         final = len(self.targets) == 1
@@ -763,6 +788,29 @@ class RobotManager(Node):
         if final and distance <= self.p['final_approach_distance']:
             cap = self.p['final_approach_speed']
         self.command(min(cap, 2.0 * distance))
+
+    def congestion_replan(self, now, pose):
+        """Replace a still-valid route at a node, outside C, when markedly cheaper."""
+        if now - self.last_replan_check < self.p['replan_cooldown_sec'] or len(self.route) < 2:
+            return False
+        node = self.route[0]
+        if math.dist(pose[:2], self.config['nodes'][node]) > 1e-6 or intersects_crossing(
+                pose[0], pose[1], crossing_guard_radius(self.p['robot_speed_limit'])):
+            return False
+        self.last_replan_check = now
+        observations = self.edge_snapshot()
+        path, _, _ = shortest_path(self.config, observations, node, self.leg_goal, 'robot',
+                                   crossing=True)
+        current = route_cost(self.config, observations, self.route)
+        new = route_cost(self.config, observations, path) if path else None
+        ratio = self.p['replan_improvement_ratio']
+        if path == self.route or not should_replace(current, new, ratio):
+            return False
+        self.event('REPLAN', json.dumps({'reason': 'CONGESTION', 'old_cost': current,
+                                         'new_cost': new}))
+        self.route = self.targets = []
+        self.route_attempt = 0
+        return True
 
     def arrive(self, now, pose):
         """Require tolerance and measured zero held for the configured interval."""

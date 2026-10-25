@@ -1,6 +1,7 @@
 """ROS adapters for sensor-backed parking and traffic monitoring."""
 
 import json
+import math
 import time
 
 import rclpy
@@ -74,6 +75,11 @@ class ParkingManager(M4Node):
     def __init__(self):
         """Subscribe only to observed sensing; startup remains unknown/closed."""
         super().__init__('parking_manager')
+        # A section 17 parameter; A section 7.1 default client TTL 30 s, accepted 5..120.
+        self.declare_parameter('reservation_ttl_sec', 30.0)
+        self.default_ttl = float(self.get_parameter('reservation_ttl_sec').value)
+        if not math.isfinite(self.default_ttl) or not 5.0 <= self.default_ttl <= 120.0:
+            raise ValueError('reservation_ttl_sec must be in [5, 120]')
         self.distances = entrance_distances(load_map())
         self.core = Parking(distances=self.distances)
         self.source = None
@@ -154,7 +160,7 @@ class ParkingManager(M4Node):
     def reserve(self, req, res):
         """Return the cached service result for an identical retry."""
         result = self.core.reserve(req.request_id, req.vehicle_id, req.preferred_slot,
-                                   req.ttl_sec, self.now())
+                                   req.ttl_sec or self.default_ttl, self.now())
         res.success, res.reservation_id, res.slot_id, expiry, res.reason = result
         set_stamp(res.expires_at, expiry)
         self.event(req.vehicle_id, 'PARKING_RESERVE', res.reason, req.request_id)
@@ -214,7 +220,11 @@ class TrafficMonitor(M4Node):
     def __init__(self):
         """Keep evaluator-only truth out of all control subscriptions."""
         super().__init__('traffic_monitor')
-        self.core = Traffic(load_map())
+        # A section 17 parameter; A section 12.2 congestion at density >= 0.70.
+        self.declare_parameter('congestion_density_threshold', 0.7)
+        self.density_threshold = float(
+            self.get_parameter('congestion_density_threshold').value)
+        self.core = Traffic(load_map(), self.density_threshold)
         self.create_service(ResetScenario, '/traffic/reset_state', self.reset)
         self.output = self.create_publisher(EdgeStateArray, '/traffic/edges', 10)
         self.create_subscription(VehicleStateArray, '/hub/vehicles', self.observe, 10)
@@ -225,7 +235,7 @@ class TrafficMonitor(M4Node):
         res.success = self.reset_allowed(req)
         res.reason = 'ACKNOWLEDGED' if res.success else 'SAFETY_HOLD_REQUIRED'
         if res.success:
-            self.core = Traffic(load_map())
+            self.core = Traffic(load_map(), self.density_threshold)
             self.previous.clear()
             self.tick()
         return res

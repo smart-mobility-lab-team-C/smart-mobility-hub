@@ -1,0 +1,62 @@
+# JSON-formatted YAML 1.2, like map_m1.yaml.
+{
+  "scenario_id": "S7",
+  "source": "A §14 p20",
+  "title": "Robot passenger escort",
+  "graph": "m6",
+  "nodes": [
+    {
+      "package": "smart_hub_sim",
+      "executable": "scenario_runner",
+      "parameters": {
+        "m3_mode": true,
+        "m6_mode": true
+      }
+    },
+    {
+      "package": "smart_hub_safety",
+      "executable": "safety_supervisor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "crossing_arbiter",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "route_planner",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "bus_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "robot_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "m3_synthetic_roads",
+      "parameters": {}
+    }
+  ],
+  "stimulus_schedule": [
+    "normal escort R->D",
+    "no readiness",
+    "obstacle (blocked Cs-J)",
+    "cancel while moving",
+    "second goal while busy",
+    "unreachable destination",
+    "odometry freeze"
+  ],
+  "acceptance_tests": [
+    "T13",
+    "T14"
+  ],
+  "verifier": "python3 scripts/verify_m6.py --output <run>/m6.json",
+  "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
+}

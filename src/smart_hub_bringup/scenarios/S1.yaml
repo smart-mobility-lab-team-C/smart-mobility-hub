@@ -1,0 +1,48 @@
+# JSON-formatted YAML 1.2, like map_m1.yaml.
+{
+  "scenario_id": "S1",
+  "source": "A §8 p14",
+  "title": "Passenger detection, queue counting, crossing occupancy",
+  "graph": "s1",
+  "nodes": [
+    {
+      "package": "smart_hub_sim",
+      "executable": "scenario_runner",
+      "parameters": {
+        "m3_mode": true,
+        "publish_queue": false,
+        "s1_counting_script": true
+      }
+    },
+    {
+      "package": "smart_hub_perception",
+      "executable": "passenger_detector",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_safety",
+      "executable": "safety_supervisor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "crossing_arbiter",
+      "parameters": {}
+    }
+  ],
+  "stimulus_schedule": [
+    "t=0-5 s empty",
+    "t=5 s three queue tracks",
+    "t=10 s two more",
+    "t=15 s remove one",
+    "t=20 s crossing pedestrian for 4 s",
+    "t=30 s camera freeze",
+    "run 40 s"
+  ],
+  "acceptance_tests": [
+    "T01",
+    "T02"
+  ],
+  "verifier": "python3 scripts/verify_s1.py",
+  "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
+}

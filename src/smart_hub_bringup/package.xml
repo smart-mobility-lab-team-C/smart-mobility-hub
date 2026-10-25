@@ -11,6 +11,9 @@
   <exec_depend>smart_hub_interfaces</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>rosidl_runtime_py</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
   <exec_depend>smart_hub_sim</exec_depend>
   <exec_depend>smart_hub_perception</exec_depend>
   <exec_depend>smart_hub_prediction</exec_depend>

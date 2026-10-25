@@ -1,0 +1,92 @@
+# JSON-formatted YAML 1.2, like map_m1.yaml.
+{
+  "scenario_id": "S8",
+  "source": "A §15 p21",
+  "title": "Integrated hub coordination",
+  "graph": "integrated",
+  "nodes": [
+    {
+      "package": "smart_hub_sim",
+      "executable": "scenario_runner",
+      "parameters": {
+        "m3_mode": true,
+        "m4_mode": true,
+        "m6_mode": true,
+        "publish_queue": false
+      }
+    },
+    {
+      "package": "smart_hub_perception",
+      "executable": "passenger_detector",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_prediction",
+      "executable": "demand_predictor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_safety",
+      "executable": "safety_supervisor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "crossing_arbiter",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "route_planner",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "robot_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "bus_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "parking_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "traffic_monitor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_bringup",
+      "executable": "dashboard_marker_publisher",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_bringup",
+      "executable": "metrics_logger",
+      "parameters": {
+        "scenario_id": "S8"
+      }
+    }
+  ],
+  "stimulus_schedule": [
+    "0-60 s warm-up, P1 occupied",
+    "60 s arrivals rise (queue 7)",
+    "65 s C1/C2 parking",
+    "70 s escort R->D",
+    "75 s readiness",
+    "80-85 s pedestrian in C",
+    "90 s lower-road obstruction",
+    "120 s remove obstruction",
+    "180-300 s completion"
+  ],
+  "acceptance_tests": [
+    "T15"
+  ],
+  "verifier": "NOT IMPLEMENTED: S8 scheduler/verifier",
+  "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
+}

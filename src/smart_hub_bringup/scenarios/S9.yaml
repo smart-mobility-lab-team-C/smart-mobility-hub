@@ -1,0 +1,61 @@
+# JSON-formatted YAML 1.2, like map_m1.yaml.
+{
+  "scenario_id": "S9",
+  "source": "A §16 p22",
+  "title": "Faults, emergency stop and recovery",
+  "graph": "m6",
+  "nodes": [
+    {
+      "package": "smart_hub_sim",
+      "executable": "scenario_runner",
+      "parameters": {
+        "m3_mode": true,
+        "m6_mode": true
+      }
+    },
+    {
+      "package": "smart_hub_safety",
+      "executable": "safety_supervisor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "crossing_arbiter",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "route_planner",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "bus_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "robot_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "m3_synthetic_roads",
+      "parameters": {}
+    }
+  ],
+  "stimulus_schedule": [
+    "t=10 s assert stop while moving",
+    "t=12 s false stop",
+    "reset with stale sensor (reject)",
+    "fresh sensors, reset (accept)",
+    "kill controller then supervisor"
+  ],
+  "acceptance_tests": [
+    "T16",
+    "T17",
+    "T18"
+  ],
+  "verifier": "python3 scripts/verify_m2.py --output <run>/m2.json (prerequisite probes only)",
+  "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
+}

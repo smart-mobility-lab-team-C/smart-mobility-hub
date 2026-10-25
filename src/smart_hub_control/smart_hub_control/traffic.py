@@ -8,7 +8,7 @@ import statistics
 class Traffic:
     """Keep acquisition time separate from publication and reject malformed frames."""
 
-    def __init__(self, config):
+    def __init__(self, config, density_threshold=0.7):
         """Fit car footprints along usable edge length with declared center headway."""
         limits = config.get('limits', {})
         self.free_flow = limits.get('car_speed_mps', .35)
@@ -17,6 +17,9 @@ class Traffic:
         if (not all(math.isfinite(v) for v in (self.free_flow, headway, radius))
                 or not 0 < self.free_flow <= .35 or headway < .8 or radius <= 0):
             raise ValueError('invalid car speed, headway or footprint')
+        if not math.isfinite(density_threshold) or not 0 < density_threshold <= 1:
+            raise ValueError('congestion_density_threshold must be in (0, 1]')
+        self.density_threshold = density_threshold
         self.edges = {}
         self.allowed = {}
         for edge in config['edges']:
@@ -95,6 +98,7 @@ class Traffic:
                 self.slow[edge] = (self.slow[edge] + 1
                                    if valid and speeds and speed < .4 * self.free_flow else 0)
             label = ('BLOCKED' if blocked else 'UNKNOWN' if not valid else
-                     'CONGESTED' if density >= .7 or self.slow[edge] >= 3 else 'NORMAL')
+                     'CONGESTED' if (density >= self.density_threshold
+                                     or self.slow[edge] >= 3) else 'NORMAL')
             output[edge] = (speed, density, blocked, valid, label)
         return output

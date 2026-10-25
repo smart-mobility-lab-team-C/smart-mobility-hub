@@ -1,0 +1,60 @@
+# JSON-formatted YAML 1.2, like map_m1.yaml.
+{
+  "scenario_id": "S6",
+  "source": "A §13 p19",
+  "title": "Route replanning and NO_ROUTE",
+  "graph": "m6",
+  "nodes": [
+    {
+      "package": "smart_hub_sim",
+      "executable": "scenario_runner",
+      "parameters": {
+        "m3_mode": true,
+        "m6_mode": true
+      }
+    },
+    {
+      "package": "smart_hub_safety",
+      "executable": "safety_supervisor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "crossing_arbiter",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "route_planner",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "bus_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "robot_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "m3_synthetic_roads",
+      "parameters": {}
+    }
+  ],
+  "stimulus_schedule": [
+    "baseline A-Cs-J-E 10 m",
+    "block Cs-J -> upper detour",
+    "raise lower-road density",
+    "block Cs-J and Cn-B -> NO_ROUTE",
+    "restore"
+  ],
+  "acceptance_tests": [
+    "T11",
+    "T12"
+  ],
+  "verifier": "python3 scripts/verify_m6.py --output <run>/m6.json",
+  "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
+}

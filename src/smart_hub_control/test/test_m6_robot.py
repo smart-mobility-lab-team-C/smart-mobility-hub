@@ -10,7 +10,9 @@ from smart_hub_control.robot import (
     crossing_guard_radius,
     mission_progress,
     path_length,
+    route_cost,
     route_uses_permitted_edges,
+    should_replace,
 )
 from smart_hub_control.routing import load_map, shortest_path
 from smart_hub_sim.geometry import intersects_crossing
@@ -85,3 +87,20 @@ def test_axis_heading_near_node():
     assert axis_heading((5.0, 6.0, 0.0), (5.0, 2.0)) == -math.pi / 2
     assert axis_heading((5.0, 2.0, 0.0), (9.0, 2.0)) == 0.0
     assert axis_heading((9.0, 2.0, 0.0), (9.0, 1.0)) == -math.pi / 2
+
+
+def test_congestion_replan_rule():
+    """A section 13.2: replace only when at least 15% cheaper; blocked edges have no cost."""
+    config = load_map()
+    states = snapshots(config)
+    base = route_cost(config, states, ['R', 'W', 'Cn', 'Cs', 'J', 'D'])
+    assert math.isclose(base, 11 / 0.25)
+    states['Cs-J'].density_ratio = 1.0
+    congested = route_cost(config, states, ['R', 'W', 'Cn', 'Cs', 'J', 'D'])
+    detour = route_cost(config, states, ['R', 'W', 'Cn', 'B', 'U', 'E', 'J', 'D'])
+    assert should_replace(congested, detour, 0.15)
+    assert not should_replace(100.0, 86.0, 0.15)
+    assert should_replace(100.0, 85.0, 0.15)
+    states['Cs-J'].blocked = True
+    assert route_cost(config, states, ['Cs', 'J']) is None
+    assert not should_replace(None, 10.0, 0.15)
