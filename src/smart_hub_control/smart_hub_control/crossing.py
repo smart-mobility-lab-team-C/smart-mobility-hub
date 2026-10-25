@@ -54,6 +54,7 @@ class CrossingArbiter(Node):
         self.dispatch_escalated = False
         self.dispatch_outstanding = False
         self.last_dispatch = float('-inf')
+        self.dispatch_mode = 'NONE'
         self.vehicles = None
         self.owner = self.token = ''
         self.expiry = 0.0
@@ -117,14 +118,23 @@ class CrossingArbiter(Node):
                         self.demand[0].valid and
                         self.demand[0].horizon_sec == 30 and
                         math.isfinite(self.demand[0].predicted_count))
+        decision = 'PREDICTIVE'
         if self.dispatch_policy == 'predictive':
-            if not demand_fresh:
+            if demand_fresh:
+                value = self.demand[0].predicted_count
+            elif queue_fresh:
+                # A section 9.3 step 5: documented observed-queue fallback, marked FALLBACK.
+                if self.dispatch_mode != 'FALLBACK':
+                    self.dispatch_high_samples = self.dispatch_low_samples = 0
+                decision = 'FALLBACK'
+                value = self.queue[0].count
+            else:
                 self.dispatch_high_samples = self.dispatch_low_samples = 0
-                if queue_fresh:
-                    self._dispatch_event('QUEUE_FALLBACK_OBSERVED',
-                                         f'count={self.queue[0].count};forecast=invalid')
+                self.dispatch_mode = 'NONE'
                 return
-            value = self.demand[0].predicted_count
+            if decision != self.dispatch_mode and self.dispatch_mode == 'FALLBACK':
+                self.dispatch_high_samples = self.dispatch_low_samples = 0
+            self.dispatch_mode = decision
         else:
             if not queue_fresh:
                 self.dispatch_high_samples = self.dispatch_low_samples = 0
@@ -149,7 +159,7 @@ class CrossingArbiter(Node):
         self.dispatch_outstanding = True
         self.dispatch_escalated = True
         self.last_dispatch = time.monotonic()
-        self._dispatch_event('BUS_DISPATCH_REQUESTED', f'value={value}')
+        self._dispatch_event('BUS_DISPATCH_REQUESTED', f'value={value};decision={decision}')
         goal = DockBus.Goal(bus_id='bus', bay_id='B', max_duration_sec=120.0)
         future = self.bus_action.send_goal_async(goal)
         future.add_done_callback(self._dispatch_goal_response)

@@ -1,0 +1,326 @@
+{
+  "schema": "smart-mobility-hub/m4-verification-v1",
+  "status": "PASS",
+  "cases": [
+    {
+      "name": "reset_acknowledgments",
+      "status": "PASS",
+      "run_id": "c5705e82-1d95-4690-bae2-30a78d35defc"
+    },
+    {
+      "name": "T07_service_pairs",
+      "status": "PASS",
+      "pairs": 20,
+      "latencies_sec": [
+        0.001863107999724889,
+        0.0027451759997347835,
+        0.0016773659999671509,
+        0.0018934879999505938,
+        0.0011915199997929449,
+        0.0018869109999286593,
+        0.0011030980003852164,
+        0.0020113499999752094,
+        0.00129785199987964,
+        0.001773432999925717,
+        0.0015268570000444015,
+        0.0020645270001296012,
+        0.0009956469998542161,
+        0.0019749269999920216,
+        0.0011097110000264365,
+        0.0018635940000422124,
+        0.0014515080001729075,
+        0.002208108000104403,
+        0.0011307569998280087,
+        0.0020809069997085317,
+        0.0011539560000528581,
+        0.002180000999942422,
+        0.0012137000003349385,
+        0.0021195290000832756,
+        0.004010939000181679,
+        0.00441047799995431,
+        0.001044718999764882,
+        0.0014761459997316706,
+        0.0010844490002455132,
+        0.0017476970001553127,
+        0.001151168999967922,
+        0.001893988999654539,
+        0.0012319819998083403,
+        0.0017618099996070669,
+        0.0009926300003826327,
+        0.010568240000338847,
+        0.0018063160000565404,
+        0.0020894399999633606,
+        0.0011190010000063921,
+        0.0016346820002581808
+      ],
+      "p95_sec": 0.004010939000181679,
+      "double_allocations": 0
+    },
+    {
+      "name": "canonical_S4_timeline",
+      "status": "PASS",
+      "sample_count": 2,
+      "scheduled_request_times_sec": [
+        5,
+        6
+      ],
+      "occupancy_sec": 8,
+      "sensor_loss_sec": 10,
+      "expiry_check_sec": 40,
+      "occupied_slot": "P2",
+      "elapsed_sec": 40.00169942799994
+    },
+    {
+      "name": "T08_expiry_and_barrier",
+      "status": "PASS",
+      "occupied_after_expiry": true,
+      "stale_unavailable": true,
+      "wrong_entrance_denied": true,
+      "occupied_passage_held": true
+    },
+    {
+      "name": "parking_frozen_source",
+      "status": "PASS",
+      "unknown_sec": 1.0749316749997888
+    },
+    {
+      "name": "canonical_S5_timeline",
+      "status": "PASS",
+      "sample_count": 4,
+      "scheduled_phase_times_sec": [
+        0,
+        20,
+        45,
+        60,
+        62,
+        64
+      ],
+      "individual_source_loss": "aggregator explicitly marks frozen source invalid",
+      "congestion_delay_sec": 0.5612249499999962,
+      "unknown_delay_sec": 0.5581139019996044,
+      "obstruction_delay_sec": 0.5578498190002392,
+      "elapsed_sec": 64.56125475199997
+    },
+    {
+      "name": "T09_traffic_labels",
+      "status": "PASS",
+      "classification_scope": "stable probe checkpoints; transitions reported separately",
+      "classification_samples": [
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2810.181742379
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2816.182677249
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2822.184582811
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2828.191540592
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2834.191825824
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2840.19441059
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2846.202915601
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2852.205251196
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2858.213810081
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2864.224157205
+        },
+        {
+          "expected": "CONGESTED",
+          "observed": "CONGESTED",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.20000000298023224,
+          "t": 2929.283917875
+        },
+        {
+          "expected": "BLOCKED",
+          "observed": "BLOCKED",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.0,
+          "t": 2929.783285926
+        },
+        {
+          "expected": "UNKNOWN",
+          "observed": "UNKNOWN",
+          "valid": false,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.0,
+          "t": 2930.783655097
+        },
+        {
+          "expected": "UNKNOWN",
+          "observed": "UNKNOWN",
+          "valid": false,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.0,
+          "t": 2931.784592557
+        },
+        {
+          "expected": "NORMAL",
+          "observed": "NORMAL",
+          "valid": true,
+          "speed_mps": 0.3499999940395355,
+          "density": 0.0,
+          "t": 2932.783508856
+        }
+      ],
+      "per_class": {
+        "NORMAL": {
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "CONGESTED": {
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "BLOCKED": {
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "UNKNOWN": {
+          "precision": 1.0,
+          "recall": 1.0
+        }
+      },
+      "edge_sample_count": 259,
+      "valid_data_fraction": 0.8571428571428571,
+      "free_flow_trials": [
+        {
+          "trial_id": 0,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 1,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 2,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 3,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 4,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 5,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 6,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 7,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 8,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        },
+        {
+          "trial_id": 9,
+          "duration_sec": 6.0,
+          "false_congestion": 0
+        }
+      ],
+      "congestion_delay_sec": 0.49847383799988165,
+      "obstruction_delay_sec": 0.4993477399998483,
+      "invalid_samples_rejected": true,
+      "valid_empty_normal": true,
+      "invalid_individual_source_does_not_poison_healthy_edge": true
+    },
+    {
+      "name": "T10_frozen_source",
+      "status": "PASS",
+      "unknown_sec": 0.692712833999849
+    },
+    {
+      "name": "T10_missing_feed",
+      "status": "PASS",
+      "unknown_sec": 0.6927364230000421
+    }
+  ],
+  "seed": 17,
+  "model": null,
+  "configuration": "map_m1.yaml; m4.launch.py defaults",
+  "clocks": "monotonic latency; wall-backed ROS source timestamps",
+  "scenario_acceptance": "T07\u2013T10 eligible; independent review remains open",
+  "trace_sha256": "d16cad785bc37eb74b9c2a4ff27ab0f31ba809a5877b032f4faa3d2f84fc0ec5",
+  "revision_evidence": "../commit.txt and ../source-sha256.txt from container runner"
+}

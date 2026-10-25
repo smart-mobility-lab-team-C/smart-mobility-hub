@@ -8,7 +8,7 @@ def generate_launch_description():
     """Keep the passenger detector as the only queue publisher."""
     return LaunchDescription([
         Node(package='smart_hub_sim', executable='scenario_runner', output='screen',
-             parameters=[{'m3_mode': True, 'publish_queue': False,
+             parameters=[{'m3_mode': True, 'publish_queue': False, 'reset_bus': False,
                           's1_counting_script': True}]),
         Node(package='smart_hub_perception', executable='passenger_detector',
              output='screen'),

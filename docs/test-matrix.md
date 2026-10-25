@@ -26,7 +26,7 @@ were NOT RUN. See the [completion record](../evidence/door-validation-completion
 
 | ID | Area | Stimulus / repetitions | Acceptance | Status |
 |---|---|---|---|---|
-| T01 | S1 counting | 40 s script: empty, then 0/3/5/4 stable counts; crossing pedestrian at 20 s | Exact debounced foot-point counts; no new crossing entry during occupancy or 2 s clear interval; timestamped count/truth plot and zero conflicts | NOT RUN |
+| T01 | S1 counting | 40 s script: empty, then 0/3/5/4 stable counts; crossing pedestrian at 20 s | Exact debounced foot-point counts; no new crossing entry during occupancy or 2 s clear interval; timestamped count/truth plot and zero conflicts | FAIL at the S1 fixture: counts 0/3/4/3 vs 0/3/5/4 |
 | T02 | S1 occlusion/stale | 0.3 s missing track, repeated frames, camera freeze at 30 s | No duplicate count; preserve identity across 0.5 s occlusion; publish invalid within 1.2 s of feed freeze without restamping old data | NOT RUN |
 | T03 | S2 prediction | ≥30 independent six-minute episodes, 60/20/20 split by whole episode before windows; unseen test seeds | Held-out MAE/RMSE; model MAE ≤ persistence; inference p95 <100 ms; no future-data leakage; report baseline choice if model is worse | NOT RUN |
 | T04 | S2 dispatch | Noisy predictions around 6, stale forecast and feed gap | Dispatch after ≥6 for three valid predictions only when bus available; one outstanding goal, 30 s cooldown, clear escalation after five values <4; invalid forecast never dispatches; document fresh observed-queue fallback | NOT RUN |

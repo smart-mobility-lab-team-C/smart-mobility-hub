@@ -26,7 +26,8 @@ class Probe(Node):
         self.samples = []
         self.crossing = []
         self.started = None
-        self.estop = self.create_publisher(Bool, '/hub/estop', 1)
+        self.estop = self.create_publisher(Bool, '/hub/estop', rclpy.qos.QoSProfile(
+            depth=1, durability=rclpy.qos.DurabilityPolicy.TRANSIENT_LOCAL))
         self.create_timer(0.1, lambda: self.estop.publish(Bool(data=False)))
         self.create_subscription(QueueState, '/hub/queue', self.on_queue, 10)
         qos = rclpy.qos.QoSProfile(

@@ -206,3 +206,16 @@ This is a single run, so no repeatability claim is made.
 - An RViz image, config and demo script (`containers/Dockerfile.rviz`, `scripts/rviz_demo.sh`). The image has not been built.
 
 M4 and M6 need re-runs because their code changed.
+
+### M4 regression and first S1 run — 2026-10-25 17:58
+
+Both ran at `3da2614` on 8 vCPUs, in parallel.
+
+**M4: PASS 9/9** ([evidence](../evidence/m4-3da2614.json)). This was the first run with the new A §17
+parameters and the dispatch fallback. T07–T10 passed again.
+
+**S1: FAIL** ([evidence](../evidence/s1-3da2614.json)).
+- What worked: the reset fix let the run complete.
+- The defect: the stable counts were 0 → 3 → **4** → **3**, against the expected 0 → 3 → 5 → 4. The
+  detector consistently misses one of the five synthetic queue tracks. Root cause not yet found.
+- Status: T01/T02 remain FAIL / NOT RUN.
