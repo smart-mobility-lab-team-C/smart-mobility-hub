@@ -6,7 +6,7 @@ import random
 from types import SimpleNamespace
 
 from smart_hub_control.bus import crossing_exit_clear, crossing_guard_radius, route_waypoints
-from smart_hub_control.routing import load_map, shortest_path
+from smart_hub_control.routing import crossing_wait, load_map, shortest_path
 from smart_hub_sim.geometry import intersects_crossing
 
 
@@ -140,3 +140,18 @@ def test_remaining_crossing_wait_region():
     assert route_needs_crossing([(5, 4), (8, 4)])
     assert not route_needs_crossing([(6.1, 4), (8, 4)])
     assert not route_needs_crossing([(11, 2), (11, 4), (8, 4)])
+
+
+def test_crossing_cost_and_unavailable_edges():
+    """Use state-derived wait and remove crossing edges when state is unknown."""
+    config = load_map()
+    states = snapshots(config)
+    crossing = SimpleNamespace(valid=True, state='CLEAR',
+                               pedestrian_present=False, owner_id='')
+    path, baseline, _ = shortest_path(config, states, 'A', 'E', 'car', crossing=crossing)
+    assert path == ['A', 'Cs', 'J', 'E']
+    crossing.pedestrian_present = True
+    assert crossing_wait(crossing, 'car') == 2.0
+    path, delayed, _ = shortest_path(config, states, 'A', 'E', 'car', crossing=crossing)
+    assert delayed > baseline
+    assert shortest_path(config, states, 'A', 'E', 'car', crossing=None)[2] == 'NO_ROUTE'

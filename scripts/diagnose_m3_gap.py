@@ -22,8 +22,6 @@ COMMANDS = {
     'route_planner': ('smart_hub_control', 'route_planner'),
     'bus_manager': ('smart_hub_control', 'bus_manager'),
     'm3_synthetic_roads': ('smart_hub_control', 'm3_synthetic_roads'),
-    'reset_coordinator': ('smart_hub_bringup', 'reset_coordinator',
-                          '--ros-args', '-p', 'include_bus:=true'),
 }
 
 
@@ -227,7 +225,7 @@ def attempt(args):
         probe.params('scenario_runner', initial_passengers=0)
         nodes = (() if args.event_timing else (
             'scenario_runner', 'safety_supervisor', 'hub_coordinator',
-            'reset_coordinator', 'route_planner', 'bus_manager', 'm3_synthetic_roads'))
+            'route_planner', 'bus_manager', 'm3_synthetic_roads'))
         for node in nodes:
             client = AsyncParameterClient(probe, node)
             assert probe.wait(client.services_are_ready, 5), node

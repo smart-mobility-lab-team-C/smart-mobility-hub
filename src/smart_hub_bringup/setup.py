@@ -13,7 +13,9 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', glob('launch/*.py')),
     ],
-    entry_points={'console_scripts': ['reset_coordinator = smart_hub_bringup.reset:main']},
+    entry_points={'console_scripts': [
+        'dashboard_marker_publisher = smart_hub_bringup.markers:main',
+    ]},
     install_requires=['setuptools'],
     tests_require=['pytest'],
     zip_safe=True,

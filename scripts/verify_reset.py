@@ -46,7 +46,7 @@ def main():
         str(path.relative_to(repo)): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in (
             repo / 'src/smart_hub_control/smart_hub_control/bus.py',
-            repo / 'src/smart_hub_bringup/smart_hub_bringup/reset.py',
+            repo / 'src/smart_hub_sim/smart_hub_sim/reset_workflow.py',
             Path(__file__).resolve(),
         )
     }

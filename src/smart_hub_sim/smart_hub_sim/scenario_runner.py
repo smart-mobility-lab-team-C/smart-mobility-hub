@@ -13,6 +13,7 @@ from geometry_msgs.msg import TransformStamped, Twist
 from nav_msgs.msg import Odometry
 from rcl_interfaces.msg import SetParametersResult
 import rclpy
+from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import Image
@@ -35,6 +36,7 @@ from tf2_ros import TransformBroadcaster
 from .door_evidence import DoorEvidence
 from .geometry import intersects_crossing
 from .passengers import PassengerQueue
+from .reset_workflow import ResetWorkflow
 from .world import (
     AgentState,
     BUS_RADIUS,
@@ -60,7 +62,7 @@ def _qos(depth: int, transient_local: bool = False) -> QoSProfile:
     )
 
 
-class ScenarioRunner(Node):
+class ScenarioRunner(ResetWorkflow, Node):
     """Run deterministic physics and publish ROS observations at contract rates."""
 
     SAFETY_TTL_SEC = 0.5
@@ -93,14 +95,26 @@ class ScenarioRunner(Node):
             'passenger_arrivals_sec', rclpy.Parameter(
                 'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, []))])
         self.declare_parameter('pedestrian_present', False)
+        self.declare_parameter('s1_counting_script', False)
+        self.declare_parameter('camera_silent', False)
+        self.declare_parameter('camera_frozen', False)
+        self.declare_parameter('occluded_passenger_indices', [0])
+        self.declare_parameter('occlude_passengers', False)
+        self._frozen_image = None
         self.declare_parameter('publish_queue', True)
         self.declare_parameter('publish_bus_odom', True)
         self.m3_mode = bool(self.get_parameter('m3_mode').value)
+        self.s1_script = bool(self.get_parameter('s1_counting_script').value)
+        if self.s1_script and not self.m3_mode:
+            raise ValueError('S1 counting script requires passenger simulation')
+        self._s1_departed = False
+        initial = (0 if self.s1_script else int(self.get_parameter('initial_passengers').value))
+        arrivals = ([5.0] * 3 + [10.0] * 2 if self.s1_script else
+                    self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
+                        'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, [])).value)
         self.passengers = PassengerQueue(
             int(self.get_parameter('seed').value),
-            int(self.get_parameter('initial_passengers').value),
-            self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
-                'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, [])).value)
+            initial, arrivals)
         self.goal_id = ''
         self.add_on_set_parameters_callback(self._validate_m3_parameters)
         self.declare_parameter('obstacle_enabled', False)
@@ -191,6 +205,7 @@ class ScenarioRunner(Node):
         self._reset_srv = self.create_service(
             ResetScenario, '/sim/reset_world', self._reset_scenario
         )
+        self.configure_reset(include_bus=self.m3_mode, include_m4=self.m4_mode)
         self._queue_pub = (self.create_publisher(QueueState, '/hub/queue', _qos(10))
                            if self.m3_mode else None)
         self._boarding_pub = self.create_publisher(HubEvent, '/hub/events', _qos(100))
@@ -216,8 +231,14 @@ class ScenarioRunner(Node):
             if parameter.name in ('occupied_slots', 'invalid_slots') and not (
                     set(parameter.value) <= {'P1', 'P2', 'P3', ''}):
                 return SetParametersResult(successful=False, reason='unknown parking slot')
-            if parameter.name in ('m3_mode', 'm4_mode'):
-                return SetParametersResult(successful=False, reason='m3_mode is startup only')
+            if parameter.name in ('m3_mode', 'm4_mode', 's1_counting_script'):
+                return SetParametersResult(successful=False,
+                                           reason='scenario mode is startup only')
+            if parameter.name == 'occluded_passenger_indices' and (
+                    any(not isinstance(index, int) or index < 0 or index >= 24
+                        for index in parameter.value)):
+                return SetParametersResult(successful=False,
+                                           reason='invalid occlusion index')
         return SetParametersResult(successful=True)
 
     def _add_passenger(self, request, response):
@@ -265,6 +286,10 @@ class ScenarioRunner(Node):
         if not self.m3_mode:
             return
         elapsed = self.world.tick_count * DT_SEC
+        if self.s1_script and elapsed >= 15.0 and not self._s1_departed:
+            if self.passengers.waiting:
+                self.passengers.waiting.pop(0)
+            self._s1_departed = True
         safe = (self.world.bus.linear_x == 0 and self.world.bus.angular_z == 0 and
                 self.world.door_open)
         for record in self.passengers.tick(elapsed, self.world.door_open, safe, self.goal_id):
@@ -284,8 +309,14 @@ class ScenarioRunner(Node):
             queue.zone_id = 'Q'
             queue.count = len(self.passengers.waiting)
             queue.confidence, queue.valid = 1.0, True
-            queue.crossing_occupied = bool(self.get_parameter('pedestrian_present').value)
+            queue.crossing_occupied = self._pedestrian_visible()
             self._queue_pub.publish(queue)
+
+    def _pedestrian_visible(self):
+        """Return physical crossing occupancy from the scripted or manual fixture."""
+        elapsed = self.world.tick_count * DT_SEC
+        return (bool(self.get_parameter('pedestrian_present').value) or
+                self.s1_script and 20.0 <= elapsed < 24.0)
 
     def _validated_parameter(
         self,
@@ -509,7 +540,15 @@ class ScenarioRunner(Node):
         self._parking_pub.publish(message)
 
     def _publish_image(self, stamp) -> None:
-        """Publish a compact synthetic scene image without detector annotations."""
+        """Render visible pedestrians; preserve acquisition data under freeze faults."""
+        if self.get_parameter('camera_silent').value:
+            return
+        elapsed = self.world.tick_count * DT_SEC
+        frozen = self.get_parameter('camera_frozen').value or (
+            self.s1_script and elapsed >= 30.0)
+        if frozen and self._frozen_image is not None:
+            self._image_pub.publish(self._frozen_image)
+            return
         width, height = 160, 96
         pixels = bytearray([238] * (width * height * 3))
         # Draw a neutral crossing band and simple colored scene blobs only.
@@ -524,6 +563,20 @@ class ScenarioRunner(Node):
                     pixels[offset:offset + 3] = bytes((245, 245, 245))
         self._draw_agent(pixels, width, height, self.world.bus, (35, 35, 220))
         self._draw_agent(pixels, width, height, self.world.robot, (220, 90, 35))
+        hidden = (set(self.get_parameter('occluded_passenger_indices').value)
+                  if self.get_parameter('occlude_passengers').value else set())
+        if self.s1_script and 12.0 <= elapsed < 12.3:
+            hidden.add(0)
+        for index, _passenger in enumerate(self.passengers.waiting[:24]):
+            if index in hidden:
+                continue
+            x = 2.25 + 0.58 * (index % 6)
+            y = 5.4 + 0.42 * (index // 6)
+            self._draw_agent(pixels, width, height, AgentState(x=x, y=y, yaw=0.0),
+                             (220, 40, 220))
+        if self._pedestrian_visible():
+            self._draw_agent(pixels, width, height, AgentState(x=5.0, y=3.0, yaw=0.0),
+                             (220, 40, 220))
         image = Image()
         image.header.stamp = stamp
         image.header.frame_id = 'camera_link'
@@ -533,6 +586,7 @@ class ScenarioRunner(Node):
         image.is_bigendian = 0
         image.step = width * 3
         image.data = bytes(pixels)
+        self._frozen_image = image
         self._image_pub.publish(image)
 
     @staticmethod
@@ -722,14 +776,19 @@ class ScenarioRunner(Node):
                 )
                 return response
             record = self._capture_door('reset', lambda: self.world.reset(int(request.seed)))
-            self.passengers = PassengerQueue(
-                int(request.seed), int(self.get_parameter('initial_passengers').value),
-                self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
-                    'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY, [])).value)
+            initial = (0 if self.s1_script else
+                       int(self.get_parameter('initial_passengers').value))
+            arrivals = ([5.0] * 3 + [10.0] * 2 if self.s1_script else
+                        self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
+                            'passenger_arrivals_sec', rclpy.Parameter.Type.DOUBLE_ARRAY,
+                            [])).value)
+            self.passengers = PassengerQueue(int(request.seed), initial, arrivals)
+            self._s1_departed = False
             self.goal_id = ''
             self._parking_state = None
             self._parking_received = 0.0
             self._last_parking = self._frozen_vehicles = None
+            self._frozen_image = None
             self._commands = {
                 'bus': ((0.0, 0.0), now),
                 'robot': ((0.0, 0.0), now),
@@ -748,11 +807,14 @@ def main(args=None) -> None:
     """Run the M2 scenario node until interrupted."""
     rclpy.init(args=args)
     node = ScenarioRunner()
+    executor = MultiThreadedExecutor(num_threads=4)
+    executor.add_node(node)
     try:
-        rclpy.spin(node)
+        executor.spin()
     except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
     finally:
+        executor.shutdown()
         node.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()

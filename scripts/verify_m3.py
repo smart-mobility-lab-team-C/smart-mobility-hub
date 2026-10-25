@@ -462,7 +462,6 @@ def _verify_cases(probe, processes, nominal_runs, only_case, door_comparison, ca
         'scenario_runner',
         'safety_supervisor',
         'hub_coordinator',
-        'reset_coordinator',
         'route_planner',
         'bus_manager',
         'm3_synthetic_roads',
@@ -904,13 +903,6 @@ def main():
         'route_planner': ['smart_hub_control', 'route_planner'],
         'bus_manager': ['smart_hub_control', 'bus_manager'],
         'm3_synthetic_roads': ['smart_hub_control', 'm3_synthetic_roads'],
-        'reset_coordinator': [
-            'smart_hub_bringup',
-            'reset_coordinator',
-            '--ros-args',
-            '-p',
-            'include_bus:=true',
-        ],
     }
     started = time.monotonic()
     probe = None

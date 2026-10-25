@@ -134,21 +134,18 @@ chain. Both odometry streams carry measured linear and angular velocities;
 clear/reset require exact zero for both simulated agents.
 
 Internal `/safety/reset_state`, `/safety/finish_reset`, `/crossing/reset_state`
-and `/sim/reset_world` use `ResetScenario`. Only the coordinator owns the public
-`/scenario/reset`. No mission servers participate until their milestone implements
+and `/sim/reset_world` use `ResetScenario`. The `scenario_runner` node owns the
+public `/scenario/reset` and awaits launched participants under one monotonic
+one-second deadline. No mission servers participate until their milestone implements
 the corresponding cancellation/acknowledgement behavior. Measured door/barrier
 status heartbeat is 10 Hz in this simulator, with a 0.5 s local watchdog for door
 safety; this is a declared M2 choice where the assignment specifies no rate.
 Evaluator-only `/sim/evaluator/ground_truth` is `VehicleStateArray`, 10 Hz R10 in
 `map`; it is excluded from all control subscriptions.
 
-**Unresolved assignment ownership difference:** A §§4, 7.1 pp5, 10 names
-`scenario_runner` as the public `/scenario/reset` service server, as the table
-above records. The current M2–M4 implementation exposes that same public name
-and schema from `reset_coordinator` to collect participant acknowledgements.
-This is a node-owner deviation, not an added interface or an assignment-approved
-change. Retain it as an open contract review item until the public owner is
-restored or the instructor explicitly accepts the alternate owner.
+The former `reset_coordinator` node was removed from M2–M4 launches when
+public ownership was restored to `scenario_runner` on the mandatory-scenarios
+branch. Fresh real-node regression is required before acceptance.
 
 ## M3 runtime additions
 
@@ -162,7 +159,7 @@ M3 synthetic bringup opts into simulator-owned `/hub/queue` (5 Hz R10) and a
 labelled fixture-owned `/traffic/edges` (2 Hz R10). Neither implements perception
 or traffic monitoring. Internal bay/goal/run/arrival/reset endpoints, ownership,
 QoS, watchdogs and invalid-value conventions are documented in M3. Public reset
-remains `/scenario/reset`, owned by reset_coordinator; M3 adds explicit bus
+remains `/scenario/reset`, owned by scenario_runner; M3 adds explicit bus
 prepare/finish acknowledgements within the existing total 1 s deadline.
 
 The bus process uses internal `bus_observations` solely to receive the existing
