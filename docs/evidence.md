@@ -366,6 +366,21 @@ captured package manifest hash matches the first pass. No retry was performed.
 See the [repeat attempt index](../evidence/m234-repeat-20261025.json) and retained
 raw files in `evidence/runs/combined-m234-repeat-20261025/`.
 
+## Combined repeat run — 2026-10-25
+
+The second complete pipeline invocation used the same implementation commit
+`58f5afee`, pinned image, and package manifest. The in-container preflight
+passed. Build and package tests passed (8 packages; 54/54); M2 passed 18/18.
+M3 stopped on nominal seed 309: **9/10 nominal cases passed**, then the final
+DockBus result was `SAFE_STOP` with `SAFETY_INPUT_UNKNOWN:estop_stale`. M4 was
+NOT RUN. The first full run at the same source had passed seed 309 in 65.092 s,
+all M3 cases (24/24), and M4 (9/9), so this is an acceptance repeatability
+failure rather than the earlier Git mount issue. No root cause is inferred and
+no retry was performed. The run lasted 14m 16.905s through the M3 failure.
+The [repeat result index](../evidence/m234-repeat2-20261025.json) records exact
+environment and artifact hashes; full transcript, trace and node logs are in
+`evidence/runs/combined-m234-repeat2-20261025/`.
+
 ## Linked-worktree container preflight — 2026-10-25
 
 The container originally saw the worktree's `.git` pointer but not its target

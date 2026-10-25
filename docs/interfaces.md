@@ -199,6 +199,8 @@ the combined M2+M3+M4 run at `58f5afee4bd53567634f022d836c6a94f5daeaa7`.
 The simulator's existing `freeze_parking` fault now repeats the last published
 acquisition immediately, without taking one extra frame on its next tick.
 Public message/QoS/timing contracts and stale thresholds are unchanged.
-The combined M2/M3/M4 regression passed once; repeatability and moving
-integration remain open. The earlier `5e9757b` failure remains separately
-recorded in the [M4 evidence index](../evidence/m4-local-completion.json).
+The first combined M2/M3/M4 regression passed, while a same-commit repeat failed
+M3 on stale estop input before reaching M4. Repeatability and moving integration
+remain open. Both results are recorded in the [combined evidence indexes](../evidence/m234-combined-20261025.json)
+and [repeat result](../evidence/m234-repeat2-20261025.json); the earlier
+`5e9757b` failure remains in the [M4 evidence index](../evidence/m4-local-completion.json).

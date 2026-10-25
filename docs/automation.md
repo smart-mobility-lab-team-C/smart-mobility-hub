@@ -189,7 +189,9 @@ M2/M3 prerequisite checks before M4. M4-only PASS establishes T07–T10,
 not M3 recovery, moving integration, or T15–T18. The combined run at
 `58f5afee4bd53567634f022d836c6a94f5daeaa7` now passes M2, M3 and M4 once;
 the earlier `5e9757b` `crossing_stale` result remains a FAIL for that run.
-Repeatability and independent review remain open.
+The same-commit repeat passed M2 18/18 but failed M3 nominal seed 309 with
+`SAFETY_INPUT_UNKNOWN:estop_stale`; M4 was NOT RUN. Repeatability and independent
+review remain open. See the [repeat result](../evidence/m234-repeat2-20261025.json).
 
 The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
@@ -198,9 +200,10 @@ launches and default `m3_container.sh` behavior are preserved. The combined
 local run at `58f5afee4bd53567634f022d836c6a94f5daeaa7` passed M2 18/18, M3
 24/24 including seeds 300–309, and M4 9/9, after a fresh eight-package build,
 style/interface checks and 54 package tests. Optional diagnostic instrumentation
-was disabled; runtime was 21m 44.868s. The earlier `5e9757b` `crossing_stale`
-failure remains recorded for that run. This single pass does not establish
-repeatability. See the [combined evidence index](../evidence/m234-combined-20261025.json).
+was disabled; the first run took 21m 44.868s. A same-commit repeat passed the
+build, package tests, and M2, then failed M3 nominal seed 309 on stale estop
+input; M4 was NOT RUN. See the [first pass](../evidence/m234-combined-20261025.json)
+and [repeat result](../evidence/m234-repeat2-20261025.json).
 The M3 completion changes from `fix/m3-local-completion` are merged into local
 `main` and published to `origin/main`. See the
 [local M3 evidence index](../evidence/m3-local-completion.json), [M4 handoff](m4-handoff.md),
