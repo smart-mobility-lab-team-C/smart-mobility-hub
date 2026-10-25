@@ -219,3 +219,25 @@ parameters and the dispatch fallback. T07–T10 passed again.
 - The defect: the stable counts were 0 → 3 → **4** → **3**, against the expected 0 → 3 → 5 → 4. The
   detector consistently misses one of the five synthetic queue tracks. Root cause not yet found.
 - Status: T01/T02 remain FAIL / NOT RUN.
+
+### S1 counting fixed — 2026-10-25 18:07
+
+**Cause:** synthetic passengers were drawn 0.58 m apart, which at 13.25 px/m is 7–8 px. That is
+the same as the 7 px disc width, so neighbouring discs touched. The 4-connected blob finder then
+merged passengers 3 and 4.
+
+**Fix:** passengers are now drawn 0.65 m × 0.70 m apart, at least 8 px between discs, and at most
+18 are drawn, all inside Q.
+
+**Result:** `verify_s1.py` PASS twice ([run 1](../evidence/s1-fix-run1.json),
+[run 2](../evidence/s1-fix-run2.json)).
+
+| Check | Result |
+|---|---|
+| Stable counts | 0/3/5/4 |
+| 0.3 s occlusion | no double count |
+| Pedestrian in C | detected |
+| Camera freeze at 30 s | invalid by 31.2 s |
+| Frozen acquisition stamp | detected |
+
+The A §8 ≥100-frame annotated video evaluation remains **BLOCKED**: there is no team video yet.

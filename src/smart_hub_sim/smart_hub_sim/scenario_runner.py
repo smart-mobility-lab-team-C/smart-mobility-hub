@@ -602,11 +602,13 @@ class ScenarioRunner(ResetWorkflow, Node):
                   if self.get_parameter('occlude_passengers').value else set())
         if self.s1_script and 12.0 <= elapsed < 12.3:
             hidden.add(0)
-        for index, _passenger in enumerate(self.passengers.waiting[:24]):
+        # Discs are 7 px wide at about 13 px/m; spacing of at least 8 px keeps every
+        # passenger a separate blob (0.58 m spacing merged neighbours and undercounted).
+        for index, _passenger in enumerate(self.passengers.waiting[:18]):
             if index in hidden:
                 continue
-            x = 2.25 + 0.58 * (index % 6)
-            y = 5.4 + 0.42 * (index // 6)
+            x = 2.25 + 0.65 * (index % 6)
+            y = 5.35 + 0.70 * (index // 6)
             self._draw_agent(pixels, width, height, AgentState(x=x, y=y, yaw=0.0),
                              (220, 40, 220))
         if self._pedestrian_visible():
