@@ -365,3 +365,17 @@ RUN** for this attempt; this does not contradict or alter the earlier PASS. The
 captured package manifest hash matches the first pass. No retry was performed.
 See the [repeat attempt index](../evidence/m234-repeat-20261025.json) and retained
 raw files in `evidence/runs/combined-m234-repeat-20261025/`.
+
+## Linked-worktree container preflight — 2026-10-25
+
+The container originally saw the worktree's `.git` pointer but not its target
+under the main checkout's `.git/worktrees/`; the admin directory also referred
+back to the worktree's absolute `/tmp` path. The preflight now binds both paths
+and the common Git directory at their original locations. From inside the same
+pinned image it resolved commit `58f5afee`, confirmed the worktree was clean,
+matched all 142 tracked source records to the first successful run, and matched
+the full dependency manifest. The first run's full source manifest also listed
+nine ignored `.pytest_cache` files; those generated cache entries were excluded
+from the tracked-source comparison. The preflight passed without a build or
+acceptance run. See the [preflight record](../evidence/m234-container-preflight-20261025.json)
+and [preflight helper](../scripts/m234_container_preflight.sh).

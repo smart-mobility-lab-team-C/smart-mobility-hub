@@ -153,6 +153,24 @@ package-image layers only, never test results or build workspaces.
 
 ## M4 acceptance path and current result
 
+For linked worktrees, `.git` is a pointer to a Git admin directory outside the
+worktree. A container must mount the worktree at `/workspace`, the same source
+at its original absolute path (for the admin `gitdir` backlink), and the common
+Git directory at its original absolute path. Use the provenance-only preflight
+before a repeat run:
+
+```sh
+bash scripts/m234_container_preflight.sh /tmp/smh-m234-preflight-58f5afee \
+  58f5afee4bd53567634f022d836c6a94f5daeaa7 \
+  evidence/runs/combined-m234-20261025/source-sha256.txt \
+  437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259
+```
+
+It runs inside the pinned acceptance image with read-only mounts and checks the
+revision, worktree status, tracked source records, package manifest and ROS
+runtime. It does not build or run milestone checks. The corrected mount setup
+passed; results are in the [preflight record](../evidence/m234-container-preflight-20261025.json).
+
 Assignment §§11–12 assess S4/S5 independently; §12.3 explicitly permits S5
 without motion commands. T07–T10 do not require ten bus docking missions first.
 The default combined M2/M3/M4 runner is a project regression choice, not an

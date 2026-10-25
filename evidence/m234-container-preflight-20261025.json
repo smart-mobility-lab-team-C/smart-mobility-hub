@@ -1,0 +1,48 @@
+{
+  "schema": "smart-mobility-hub/m234-container-preflight-v1",
+  "status": "PASS",
+  "date_utc": "2026-10-25",
+  "target_commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+  "container_image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "environment": {
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros_distro": "Jazzy",
+    "python": "3.12.3",
+    "rclpy": "7.1.12-1noble.20260912.162354",
+    "rmw": "rmw_cyclonedds_cpp 2.2.4-1noble.20260911.095700"
+  },
+  "worktree_metadata": {
+    "git_file_reference": "gitdir: /home/vboxuser/smart-mobility-hub/.git/worktrees/smh-m234-preflight-58f5afee",
+    "admin_commondir": "../..",
+    "admin_gitdir_backlink": "/tmp/smh-m234-preflight-58f5afee/.git",
+    "resolved_revision_inside_container": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+    "worktree_clean_inside_container": true,
+    "mounts": [
+      "/tmp/smh-m234-preflight-58f5afee -> /workspace",
+      "/tmp/smh-m234-preflight-58f5afee -> /tmp/smh-m234-preflight-58f5afee",
+      "/home/vboxuser/smart-mobility-hub/.git -> /home/vboxuser/smart-mobility-hub/.git"
+    ],
+    "mounts_read_only": true
+  },
+  "source_manifest": {
+    "tracked_file_count": 142,
+    "tracked_manifest_sha256": "48b162b8dd07ac412d933deb9c28389c0f19c4425b4e44381c9e970eca8b2ff3",
+    "matches_first_successful_run_tracked_records": true,
+    "first_run_full_manifest_sha256": "c14ad26cef3b40e1c66eadc020100dd608db99392d065599bdd4d364eaa2f8c6",
+    "first_run_only_untracked_records": 9,
+    "untracked_record_type": ".pytest_cache files"
+  },
+  "dependency_manifest": {
+    "sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "matches_first_successful_run": true
+  },
+  "preflight_runtime_seconds": 14.012,
+  "acceptance_pipeline_started": false,
+  "checks": [
+    "pinned image digest",
+    "Git revision and clean status from inside container",
+    "tracked src/scripts/docs records against first-run manifest",
+    "complete dpkg package manifest against first run",
+    "ROS_DISTRO and Python runtime"
+  ]
+}
