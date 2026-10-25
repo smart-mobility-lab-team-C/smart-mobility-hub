@@ -109,15 +109,18 @@ During the later `m4-local-20261024-active-probe` attempt, M2 passed but M3 had
 two failed fault cases: a total reset deadline and an unexpected `estop_stale`
 stop during crossing-denial testing. The evaluator probe had roughly 0.7 s
 callback gaps while independent host sampling continued. M3's explicit operator
-heartbeat now runs in a joined publisher thread within the probe process,
-independent of evaluator callback dispatch. It publishes only the probe's chosen
-stop value; process suspension still suspends it, and real stop assertions and
-watchdogs are unchanged. Launches still provide no operator heartbeat.
+heartbeat then ran in a joined publisher thread within the probe process,
+independent of evaluator callback dispatch. That historical arrangement still
+shared its process and could not survive process suspension. The current M3
+acceptance harness moves that publisher to a fail-closed child process, described
+in [M3](m3.md). The ROS topic,
+QoS, stop assertions and watchdogs are unchanged; production launches still
+provide no operator heartbeat.
 The later full run at `5976e15` still failed its tenth docking mission with
 `estop_stale`, so the publisher-thread change alone did not establish a complete
 repair. The focused M4 checks passed, but full regression remains open. The M3
-probe now retains operator publication start/return timestamps in a separate
-JSONL file; the independent diagnostic observer also receives the stop topic.
+probe at that time retained operator publication start/return timestamps in a
+separate JSONL file; the independent diagnostic observer also received the stop topic.
 These records distinguish publisher scheduling from observer/supervisor receipt.
 The first recorded baseline mission succeeded without stale stop input. Its
 publisher intervals reached 0.365 s and publish calls reached 0.170 s; it did not

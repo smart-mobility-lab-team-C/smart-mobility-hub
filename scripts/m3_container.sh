@@ -55,8 +55,9 @@ for root in ('src', 'scripts', 'docs'):
 PY
 bash scripts/smoke.sh
 python3 scripts/check_m1.py
-ament_flake8 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py
-ament_pep257 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py
+ament_flake8 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py scripts/m3_operator_heartbeat.py scripts/test_m3_operator_heartbeat.py
+ament_pep257 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py scripts/m3_operator_heartbeat.py scripts/test_m3_operator_heartbeat.py
+python3 scripts/test_m3_operator_heartbeat.py
 colcon build --event-handlers console_direct+
 set +u
 source install/setup.bash

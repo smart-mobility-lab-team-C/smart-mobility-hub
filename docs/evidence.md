@@ -394,3 +394,19 @@ nine ignored `.pytest_cache` files; those generated cache entries were excluded
 from the tracked-source comparison. The preflight passed without a build or
 acceptance run. See the [preflight record](../evidence/m234-container-preflight-20261025.json)
 and [preflight helper](../scripts/m234_container_preflight.sh).
+
+## M3 operator heartbeat isolation attempt — 2026-10-25
+
+The acceptance harness moved its existing E-stop publisher into a fail-closed
+child process; production source, topic, QoS and freshness limits were unchanged.
+One cached-build M3 verifier run used the same pinned image and dependencies as
+the combined acceptance runs. It completed in 836.579 s with 22/24 cases passing.
+All ten nominal seeds passed, including the previously failing seed 309, and the
+E-stop abort/latch case passed. The first failure was `busy_goal_rejection`
+because the cancel response contained no goals; a later failure was the bus
+position/stop assertion in `crossing_denial_renewal_loss_and_explicit_recovery`.
+M2 and M4 were NOT RUN. M3 remains **FAIL** for this run. The child's 8,177
+recorded publish starts had a maximum interval of 0.166901 s; that observation
+does not establish why the previous run produced `estop_stale`. No retry or
+follow-up investigation was performed. See the [result index](../evidence/m3-operator-isolation-20261025.json)
+and ignored [raw evidence](../evidence/runs/m3-operator-isolation-20261025/).

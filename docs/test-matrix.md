@@ -8,7 +8,10 @@ case with `SAFETY_INPUT_UNKNOWN:estop_stale`; T06 and M4 were NOT RUN in that
 repeat. The earlier `5e9757b` `crossing_stale` failure and other outcomes remain
 in the [first run](../evidence/m234-combined-20261025.json), [repeat result](../evidence/m234-repeat2-20261025.json),
 [M4 attempt index](../evidence/m4-local-completion.json), and [local M3 evidence
-index](../evidence/m3-local-completion.json). Repeatability remains open.
+index](../evidence/m3-local-completion.json). A later harness-only M3 verifier
+run passed all ten nominal seeds and the E-stop latch case, but failed two other
+cases (22/24 overall); M2/M4 were NOT RUN. See the [harness attempt](../evidence/m3-operator-isolation-20261025.json).
+Repeatability remains open.
 
 | ID | Area | Stimulus / repetitions | Acceptance | Status |
 |---|---|---|---|---|
@@ -16,8 +19,8 @@ index](../evidence/m3-local-completion.json). Repeatability remains open.
 | T02 | S1 occlusion/stale | 0.3 s occlusion, repeated/frozen frames | No duplicate count; invalid within 1.2 s freeze | NOT RUN |
 | T03 | S2 prediction | Unseen episode seeds | MAE/RMSE; MAE <= persistence; inference p95 <100 ms; no leakage | NOT RUN |
 | T04 | S2 dispatch | Threshold noise and stale forecast | One outstanding goal; explicit fallback | NOT RUN |
-| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | PASS first run (10/10); repeat FAIL (9/10, seed 309 estop_stale) |
-| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | PASS first run; NOT RUN in repeat |
+| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | PASS first run (10/10); combined repeat FAIL (9/10, seed 309 estop_stale); harness run 10/10 |
+| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | PASS first run; harness cancel-during-approach PASS (0.146 s); overall harness verifier FAIL on two cases |
 | T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists | PASS first run; NOT RUN in repeat (independent review pending) |
 | T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected | PASS first run; NOT RUN in repeat (independent review pending) |
 | T09 | S5 congestion | Free flow, slow dense flow, obstruction | Correct labels; bounded scenario-defined delay; no stale-as-clear | PASS first run; NOT RUN in repeat (independent review pending) |
@@ -68,10 +71,13 @@ remain separately identified in the report.
 `scripts/verify_m3.py` exercises real route, bus action, simulator, safety,
 crossing and reset nodes with explicit synthetic queue/road inputs. The earlier
 local run (`f6a97fd`) passed all 24 cases, including ten nominal docking runs
-and S3 fault/door/ETA checks. The latest full attempt's artifact records T05
-failure at seed 309; interruption makes the overall regression incomplete, and
-T06 was not reached. Earlier hosted results remain recorded with their original
-provenance. Pure routing enumerator and queue tests
+and S3 fault/door/ETA checks. The combined repeat's artifact records T05
+failure at seed 309; M4 was not reached. A subsequent harness-only verifier
+attempt passed the ten nominal runs, including seed 309, and the E-stop latch
+case, but failed `busy_goal_rejection` and
+`crossing_denial_renewal_loss_and_explicit_recovery`. Its overall result remains
+FAIL; M2/M4 were NOT RUN. Earlier hosted results remain recorded with their
+original provenance. Pure routing enumerator and queue tests
 do not close T11–T12, perception, mission-phase safety repetition or any other
 complete scenario row. M3 fault probes are additional prerequisites; T16–T18
 remain NOT RUN.

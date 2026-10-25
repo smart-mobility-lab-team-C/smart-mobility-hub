@@ -1,6 +1,6 @@
 # Dependency-ordered execution plan
 
-No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). One combined local run at `58f5afee` passed M2 18/18, M3 24/24, and M4 9/9 after a fresh build and 54 package tests. The same-commit repeat passed M2 but failed M3 nominal seed 309 with `SAFETY_INPUT_UNKNOWN:estop_stale`; M4 was NOT RUN. The earlier `5e9757b` `crossing_stale` failure and M2+M3 reference `f6a97fd` remain historical evidence. See the [first run](../evidence/m234-combined-20261025.json), [repeat attempt](../evidence/m234-repeat2-20261025.json), [M4 evidence](../evidence/m4-local-completion.json), and [M3 evidence](../evidence/m3-local-completion.json). Repeatability and independent review/reproduction remain open. Other assignment checks beyond those recorded remain NOT RUN. Proposed owners are roles, not named assignments.
+No deadline or available team hours have been confirmed. Use acceptance gates before choosing calendar dates. M0 tooling and local ROS smoke checks pass, with independent review/reproduction BLOCKED (see [status](m0-status.md)); M1 source and verification are tracked in [M1 status](m1.md); M2 implementation and automated acceptance are PASS after [PR #5](https://github.com/smart-mobility-lab-team-C/smart-mobility-hub/pull/5) merged at `6c25993525bf083214c14fdbb8abab224a5a75bd` (see [evidence index](evidence.md#m2-implementation-closure-2026-10-23)). One combined local run at `58f5afee` passed M2 18/18, M3 24/24, and M4 9/9 after a fresh build and 54 package tests. The same-commit repeat passed M2 but failed M3 nominal seed 309 with `SAFETY_INPUT_UNKNOWN:estop_stale`; M4 was NOT RUN. A later harness-only M3 verifier passed ten nominal cases but failed two other cases (22/24 overall); M2/M4 were NOT RUN. The earlier `5e9757b` `crossing_stale` failure and M2+M3 reference `f6a97fd` remain historical evidence. See the [first run](../evidence/m234-combined-20261025.json), [repeat attempt](../evidence/m234-repeat2-20261025.json), [harness attempt](../evidence/m3-operator-isolation-20261025.json), [M4 evidence](../evidence/m4-local-completion.json), and [M3 evidence](../evidence/m3-local-completion.json). Repeatability and independent review/reproduction remain open. Other assignment checks beyond those recorded remain NOT RUN. Proposed owners are roles, not named assignments.
 
 | Gate | Deliverable | Acceptance | Owner role |
 |---|---|---|---|
@@ -23,10 +23,12 @@ Historical hosted and failed local evidence retain their original environment
 and outcomes. The earlier observation-gap investigation remains useful context;
 see the [diagnostic record](m3-gap-diagnostic.md#investigation-reopened--2026-10-24).
 One complete combined run passed at the commit above. Its repeat then failed at
-M3 nominal seed 309 on stale estop input before reaching M4. Preserve the first
-pass and repeat failure separately; do not claim repeatability. See the
+M3 nominal seed 309 on stale estop input before reaching M4. The subsequent
+harness-only M3 run passed its nominal seeds but failed two other cases. Preserve
+each result independently; combined repeatability is still unconfirmed. See the
 [first run](../evidence/m234-combined-20261025.json), [repeat result](../evidence/m234-repeat2-20261025.json),
-and [M4 handoff](m4-handoff.md).
+[harness attempt](../evidence/m3-operator-isolation-20261025.json), and
+[M4 handoff](m4-handoff.md).
 
 ## Work cycle
 

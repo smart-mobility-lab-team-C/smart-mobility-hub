@@ -8,9 +8,10 @@ import json
 import math
 import os
 from pathlib import Path
+import select
 import signal
 import subprocess
-from threading import Event, Thread
+import sys
 import time
 import traceback
 
@@ -39,6 +40,93 @@ from std_msgs.msg import Bool
 from std_srvs.srv import Trigger
 
 
+class OperatorHeartbeat:
+    """Control the dedicated process that owns `/hub/estop`."""
+
+    def __init__(self, directory):
+        """Start asserted and wait until the child has published that state."""
+        self.sequence = 0
+        self.log = (directory / 'operator-process.log').open('w')
+        command = [
+            sys.executable,
+            str(Path(__file__).with_name('m3_operator_heartbeat.py')),
+            '--parent-pid', str(os.getpid()),
+            '--output', str(directory / 'operator-heartbeat.jsonl'),
+        ]
+        self.process = subprocess.Popen(
+            command,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=self.log,
+            text=True,
+            bufsize=1,
+            start_new_session=True,
+        )
+        try:
+            ready = self._read_response(5.0)
+            if ready.get('event') != 'ready' or ready.get('published') is not True:
+                raise RuntimeError(f'operator publisher failed startup: {ready}')
+        except Exception:
+            self._stop_child()
+            raise
+
+    def _read_response(self, timeout):
+        """Wait briefly for a response without blocking on a dead publisher."""
+        ready, _, _ = select.select([self.process.stdout], [], [], timeout)
+        if not ready:
+            raise TimeoutError('operator publisher acknowledgement timed out')
+        line = self.process.stdout.readline()
+        if not line:
+            raise RuntimeError(f'operator publisher exited: {self.process.poll()}')
+        return json.loads(line)
+
+    def _request(self, operation, value=None):
+        """Send a command and require its publication acknowledgement."""
+        if self.process.poll() is not None:
+            raise RuntimeError(f'operator publisher exited: {self.process.returncode}')
+        self.sequence += 1
+        request = {'id': self.sequence, 'operation': operation}
+        if operation == 'set':
+            request['value'] = bool(value)
+        self.process.stdin.write(json.dumps(request) + '\n')
+        self.process.stdin.flush()
+        response = self._read_response(2.0)
+        if response.get('id') != self.sequence or not response.get('ok'):
+            raise RuntimeError(f'operator publisher rejected command: {response}')
+        if operation == 'set' and response.get('published') is not bool(value):
+            raise RuntimeError(f'operator publisher state mismatch: {response}')
+        return response.get('published')
+
+    def set_state(self, value):
+        """Set the operator state through the child process."""
+        return self._request('set', value)
+
+    def close(self):
+        """Assert stop, stop the child, and reap it within a fixed bound."""
+        try:
+            if self.process.poll() is None:
+                self._request('shutdown')
+            self.process.wait(timeout=2.0)
+        except (OSError, RuntimeError, TimeoutError, subprocess.TimeoutExpired):
+            self._stop_child()
+        finally:
+            if self.process.stdin and not self.process.stdin.closed:
+                self.process.stdin.close()
+            if self.process.stdout and not self.process.stdout.closed:
+                self.process.stdout.close()
+            self.log.close()
+
+    def _stop_child(self):
+        """Terminate and reap a child that did not complete its shutdown."""
+        if self.process.poll() is None:
+            self.process.terminate()
+            try:
+                self.process.wait(timeout=1.0)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+                self.process.wait(timeout=1.0)
+
+
 class Probe(Node):
     """Own only the operator heartbeat and test clients; retain all observed traces."""
 
@@ -48,10 +136,6 @@ class Probe(Node):
         self.output = (directory / 'trace.jsonl').open('w')
         self.samples = {}
         self.history = {}
-        self.estop = False
-        self.heartbeat = self.create_publisher(
-            Bool, '/hub/estop', QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
-        )
         transient = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
         for name, kind, topic, qos in (
             ('truth', VehicleStateArray, '/sim/evaluator/ground_truth', 10),
@@ -80,39 +164,15 @@ class Probe(Node):
             for name in ('scenario_runner', 'm3_synthetic_roads', 'bus_manager')
         }
         self.feedback = deque(maxlen=30000)
-        self.heartbeat_output = (directory / 'operator-heartbeat.jsonl').open('w', buffering=1)
-        self.heartbeat_stop = Event()
-        self.heartbeat_thread = Thread(
-            target=self.operator_heartbeat, name='m3-operator-heartbeat')
-        self.heartbeat_thread.start()
+        self.operator_heartbeat = OperatorHeartbeat(directory)
 
-    def operator_heartbeat(self):
-        """Keep the explicit operator input independent of evaluator callback dispatch."""
-        next_publish = time.monotonic()
-        while not self.heartbeat_stop.is_set() and self.context.ok():
-            try:
-                started = time.monotonic()
-                value = self.estop
-                self.heartbeat.publish(Bool(data=value))
-                self.heartbeat_output.write(json.dumps({
-                    'started': started, 'returned': time.monotonic(), 'stop': value}) + '\n')
-            except Exception:
-                if not self.context.ok():
-                    return
-                raise
-            next_publish += 0.1
-            now = time.monotonic()
-            if next_publish <= now:
-                next_publish += (math.floor((now - next_publish) / 0.1) + 1) * 0.1
-            self.heartbeat_stop.wait(max(0.0, next_publish - now))
+    def set_estop(self, value):
+        """Set operator state and require acknowledgement from its publisher process."""
+        self.operator_heartbeat.set_state(value)
 
     def destroy_node(self):
-        """Join the operator publisher before destroying its ROS entities."""
-        self.heartbeat_stop.set()
-        self.heartbeat_thread.join(timeout=2)
-        if self.heartbeat_thread.is_alive():
-            raise RuntimeError('operator heartbeat publisher did not stop')
-        self.heartbeat_output.close()
+        """Stop the external operator before destroying evaluator ROS entities."""
+        self.operator_heartbeat.close()
         return super().destroy_node()
 
     def renew_robot(self):
@@ -249,7 +309,7 @@ class Probe(Node):
 
     def reset(self, seed):
         """Restore fixture inputs, explicitly clear latch and obtain all reset acknowledgements."""
-        self.estop = False
+        self.set_estop(False)
         self.params(
             'scenario_runner', publish_bus_odom=True, publish_queue=True, pedestrian_present=False
         )
@@ -622,10 +682,10 @@ def verify(probe, processes, nominal_runs):
         probe.reset(407)
         _, result = probe.send(30)
         assert probe.wait(probe.moving, 25)
-        probe.estop = True
+        probe.set_estop(True)
         terminal = probe.future(result, 4)
         assert terminal.result.reason == 'SAFETY_STOP', str(terminal)
-        probe.estop = False
+        probe.set_estop(False)
         probe.pause(0.3)
         assert probe.samples['safety'].stop_latched
         return {'reason': terminal.result.reason, 'false_does_not_clear': True}
