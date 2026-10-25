@@ -76,6 +76,8 @@ class ScenarioRunner(ResetWorkflow, Node):
         self.declare_parameter('m3_mode', False)
         self.declare_parameter('m4_mode', False)
         self.declare_parameter('m6_mode', False)
+        # Graphs without bus_manager (S1) must not wait for bus reset participants.
+        self.declare_parameter('reset_bus', True)
         self.m4_mode = bool(self.get_parameter('m4_mode').value)
         self.declare_parameter('occupied_slots', ['P1'])
         self.declare_parameter('invalid_slots', [''])
@@ -210,7 +212,8 @@ class ScenarioRunner(ResetWorkflow, Node):
             ResetScenario, '/sim/reset_world', self._reset_scenario,
             callback_group=MutuallyExclusiveCallbackGroup(),
         )
-        self.configure_reset(include_bus=self.m3_mode, include_m4=self.m4_mode,
+        self.configure_reset(include_bus=self.m3_mode and bool(self.get_parameter('reset_bus').value),
+                             include_m4=self.m4_mode,
                              include_robot=bool(self.get_parameter('m6_mode').value))
         self._queue_pub = (self.create_publisher(QueueState, '/hub/queue', _qos(10))
                            if self.m3_mode else None)

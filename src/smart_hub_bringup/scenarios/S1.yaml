@@ -11,7 +11,8 @@
       "parameters": {
         "m3_mode": true,
         "publish_queue": false,
-        "s1_counting_script": true
+        "s1_counting_script": true,
+        "reset_bus": false
       }
     },
     {
