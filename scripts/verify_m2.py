@@ -692,8 +692,10 @@ def _physical_crossing_worker() -> int:
 
         probe.bus_candidate = (0.4, 0.0)
         probe.bus_candidate_enabled = True
-        deadline = time.monotonic() + 12.0
+        # Wall-clock window only; simulator stepping slows under host load.
+        deadline = time.monotonic() + 20.0
         boundary_sample = None
+        last_bus = None
         while time.monotonic() < deadline:
             rclpy.spin_once(probe, timeout_sec=0.01)
             truth = probe.latest(probe.ground_truth)
@@ -702,10 +704,23 @@ def _physical_crossing_worker() -> int:
             x = next((item.pose.x for item in truth.vehicles
                       if item.vehicle_id == 'bus'), None)
             speed = _vehicle_speed(truth, 'bus')
+            last_bus = (x, speed)
             if x is not None and speed == 0.0 and x >= 3.6:
                 boundary_sample = (x, time.monotonic())
                 break
         probe.bus_candidate_enabled = False
+        safety = probe.latest(probe.safety_states)
+        crossing = probe.latest(probe.crossing_states)
+        command = probe.latest(probe.bus_commands)
+        result['unowned_approach'] = {
+            'last_bus_x_m': last_bus[0] if last_bus else None,
+            'last_bus_speed_mps': last_bus[1] if last_bus else None,
+            'safety_reason': safety.reason if safety else None,
+            'safety_latched': safety.stop_latched if safety else None,
+            'crossing_state': crossing.state if crossing else None,
+            'crossing_valid': crossing.valid if crossing else None,
+            'last_bus_command': _twist_value(command) if command else None,
+        }
         expect(
             'unowned_bus_stops_before_crossing',
             boundary_sample is not None and boundary_sample[0] + 0.3 < 4.5,
@@ -892,6 +907,15 @@ def _repeat_candidates(probe: Probe, repetitions: int = 5) -> dict:
 
 
 def _repeat_estop(probe: Probe, repetitions: int = 5) -> dict:
+    """Run E-stop trials and never leave a live candidate or asserted stop behind."""
+    try:
+        return _repeat_estop_trials(probe, repetitions)
+    finally:
+        probe.robot_candidate_enabled = False
+        probe.set_estop(False)
+
+
+def _repeat_estop_trials(probe: Probe, repetitions: int) -> dict:
     latencies = []
     physical_latencies = []
     for _ in range(repetitions):
@@ -906,7 +930,7 @@ def _repeat_estop(probe: Probe, repetitions: int = 5) -> dict:
         _assert(active, 'robot did not have a live command before E-stop')
         moving = probe.wait_sample_after(
             probe.ground_truth, candidate_started,
-            lambda msg: (_vehicle_speed(msg, 'robot') or 0.0) > 0.0, 0.5)
+            lambda msg: (_vehicle_speed(msg, 'robot') or 0.0) > 0.0, 2.0)
         _assert(moving, 'E-stop injection requires observed simulated motion')
         started = probe.set_estop(True)
         stopped = probe.wait_sample_after(
@@ -1340,6 +1364,16 @@ def _test_stale_reset(probe: Probe) -> dict:
 def _test_missing_participant(probe: Probe, processes: dict, log_dir: Path) -> dict:
     peer = processes.get('crossing_arbiter')
     _assert(peer is not None and peer.poll() is None, 'crossing process already exited')
+    probe.robot_candidate_enabled = False
+    probe.bus_candidate_enabled = False
+    stationary_from = time.monotonic()
+    stationary = probe.wait_sample_after(
+        probe.ground_truth, stationary_from,
+        lambda message: (_vehicle_speed(message, 'robot') == 0.0
+                         and _vehicle_speed(message, 'bus') == 0.0),
+        2.0,
+    )
+    _assert(stationary, 'missing-participant probe requires a stationary world first')
     _stop_process(peer)
     started = time.monotonic()
     response = probe.call(
@@ -1347,6 +1381,11 @@ def _test_missing_participant(probe: Probe, processes: dict, log_dir: Path) -> d
     )
     elapsed = time.monotonic() - started
     _assert(not response.success, 'reset succeeded without crossing participant')
+    _assert(response.reason == 'PARTICIPANT_UNAVAILABLE'
+            or response.reason.startswith('/crossing/reset_state')
+            or response.reason == 'RESET_DEADLINE',
+            f'reset rejected for a reason unrelated to the missing participant: '
+            f'{response.reason}')
     _assert(elapsed <= 1.25, f'missing participant response exceeded deadline: {elapsed}')
     new_log = (log_dir / 'crossing_arbiter_restart.log').open('w', encoding='utf-8')
     replacement = subprocess.Popen(

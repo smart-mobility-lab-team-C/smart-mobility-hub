@@ -23,10 +23,13 @@ class ResetWorkflow:
         self._hold_waiter = None
         self._clear_waiter = None
         qos = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
-        self.create_subscription(CrossingState, '/crossing/state',
-                                 self._reset_on_crossing, qos)
-        self.create_subscription(SafetyState, '/hub/safety', self._reset_on_safety, qos)
+        # Reset observations must not queue behind simulator stepping callbacks.
         self._reset_group = ReentrantCallbackGroup()
+        self.create_subscription(CrossingState, '/crossing/state',
+                                 self._reset_on_crossing, qos,
+                                 callback_group=self._reset_group)
+        self.create_subscription(SafetyState, '/hub/safety', self._reset_on_safety, qos,
+                                 callback_group=self._reset_group)
         endpoints = ('/safety/reset_state', '/crossing/reset_state',
                      '/sim/reset_world', '/safety/finish_reset')
         if include_bus:
@@ -45,6 +48,7 @@ class ResetWorkflow:
     def _reset_on_crossing(self, message):
         """Observe the published clear state after participant acknowledgment."""
         self._reset_crossing = (message, time.monotonic())
+        self._crossing_state(message)
         if self._clear_waiter is not None and not self._clear_waiter.done():
             if message.valid and not message.owner_id and message.state == 'CLEAR':
                 self._clear_waiter.set_result(True)
@@ -52,6 +56,7 @@ class ResetWorkflow:
     def _reset_on_safety(self, message):
         """Observe the published supervisor reset hold."""
         self._reset_safety = (message, time.monotonic())
+        self._safety_state(message)
         if self._hold_waiter is not None and not self._hold_waiter.done():
             if not message.stop_latched and message.reason == 'reset_in_progress':
                 self._hold_waiter.set_result(True)
@@ -71,7 +76,8 @@ class ResetWorkflow:
                 return response
             self.busy = True
         started = time.monotonic()
-        deadline = started + 1.0
+        # Leave response margin inside the 1 s client timeout (assignment section 7.1).
+        deadline = started + 0.9
         future = None
         active_client = None
         phase = 'start'

@@ -13,6 +13,7 @@ from geometry_msgs.msg import TransformStamped, Twist
 from nav_msgs.msg import Odometry
 from rcl_interfaces.msg import SetParametersResult
 import rclpy
+from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
@@ -203,7 +204,8 @@ class ScenarioRunner(ResetWorkflow, Node):
             Bool, '/parking/barrier_request', self._barrier_request, _qos(1)
         )
         self._reset_srv = self.create_service(
-            ResetScenario, '/sim/reset_world', self._reset_scenario
+            ResetScenario, '/sim/reset_world', self._reset_scenario,
+            callback_group=MutuallyExclusiveCallbackGroup(),
         )
         self.configure_reset(include_bus=self.m3_mode, include_m4=self.m4_mode)
         self._queue_pub = (self.create_publisher(QueueState, '/hub/queue', _qos(10))
@@ -215,7 +217,9 @@ class ScenarioRunner(ResetWorkflow, Node):
         if self.m3_mode:
             self.create_service(Trigger, '/sim/add_passenger', self._add_passenger)
         self._tf = TransformBroadcaster(self)
-        self._timer = self.create_timer(DT_SEC, self._step)
+        # The 20 Hz physics and adapter watchdog must not queue behind subscriptions.
+        self._timer = self.create_timer(
+            DT_SEC, self._step, callback_group=MutuallyExclusiveCallbackGroup())
         self.get_logger().info(
             f'M2 simulator ready: seed={seed} run_id={self._run_id}'
         )
@@ -380,14 +384,26 @@ class ScenarioRunner(ResetWorkflow, Node):
     def _safety_state(self, message: SafetyState) -> None:
         """Track the supervisor heartbeat independently of its aggregate permission."""
         with self._lock:
+            if self._older_than(message, self._safety):
+                return
             self._safety = message
             self._safety_received = time.monotonic()
 
     def _crossing_state(self, message: CrossingState) -> None:
         """Track the crossing owner and validity with local receipt age."""
         with self._lock:
+            if self._older_than(message, self._crossing):
+                return
             self._crossing = message
             self._crossing_received = time.monotonic()
+
+    @staticmethod
+    def _older_than(message, current) -> bool:
+        """Ignore a duplicate delivery that predates the stored sample."""
+        if current is None:
+            return False
+        stamp, held = message.header.stamp, current.header.stamp
+        return (stamp.sec, stamp.nanosec) < (held.sec, held.nanosec)
 
     def _door_request(self, message: Bool) -> None:
         """Apply the bus door request; measured opening remains interlocked in World."""
@@ -512,6 +528,17 @@ class ScenarioRunner(ResetWorkflow, Node):
             self._frozen_vehicles = None
         if not self.m4_mode or self.get_parameter('publish_vehicles').value:
             self._vehicles_pub.publish(observations)
+        self._truth_pub.publish(truth)
+
+    def _publish_truth(self, stamp) -> None:
+        """Publish noise-free evaluator ground truth without perception records."""
+        truth = VehicleStateArray()
+        truth.header.stamp = stamp
+        truth.header.frame_id = 'map'
+        for vehicle_id, kind, state in self.world.ground_truth():
+            truth.vehicles.append(
+                self._vehicle_record(vehicle_id, kind, state, noisy=False)
+            )
         self._truth_pub.publish(truth)
 
     def _publish_parking(self, stamp) -> None:
@@ -726,6 +753,9 @@ class ScenarioRunner(ResetWorkflow, Node):
             self._publish_vehicles(stamp)
             self._publish_image(stamp)
             self._publish_interlocks()
+        else:
+            # Evaluator-only truth at the 20 Hz step rate; observation noise RNG untouched.
+            self._publish_truth(stamp)
         if tick % 4 == 0:
             self._publish_parking(stamp)
 
