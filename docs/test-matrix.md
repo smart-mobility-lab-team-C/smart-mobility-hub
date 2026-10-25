@@ -113,3 +113,7 @@ test status changed. See [both stopped attempts](door-measurement.md) and the
 The isolated-cache continuation is authorized in the current user plan. Its
 ordered gates and conditional comparison/acceptance are documented in
 [door measurement validation](door-measurement.md#isolated-cache-continuation).
+The committed `583859e` attempt passed preparation, interface/import checks,
+and the two-package incremental build, then failed its first style gate on seven
+format findings. All later control, comparison, adoption, and clean acceptance
+stages are NOT RUN. See the [isolated-cache result](../evidence/door-validation-isolated-20261025.json).

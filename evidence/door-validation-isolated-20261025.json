@@ -1,0 +1,274 @@
+{
+  "schema": "smart-mobility-hub/door-validation-isolated-v1",
+  "run_id": "door-validation-isolated-20261025",
+  "status": "FAIL",
+  "recorded_utc": "2026-10-25T03:47:26.285998+00:00",
+  "command": [
+    "python3",
+    "scripts/door_measurement.py",
+    "/home/vboxuser/smart-mobility-hub/evidence/runs/door-validation-isolated-20261025",
+    "controls"
+  ],
+  "source_revision_at_attempt": "583859e046a3ea32f34baf7cc1ba658f462bae27",
+  "worktree_clean_at_attempt": true,
+  "automatic_retries": 0,
+  "started_utc": "2026-10-25T03:45:27.321840+00:00",
+  "ended_utc": "2026-10-25T03:46:33.080655+00:00",
+  "total_elapsed_sec": 65.75882491801167,
+  "cache_path": "/home/vboxuser/smart-mobility-hub/.cache/door-validation/door-validation-isolated-20261025",
+  "original_cache_path": "/home/vboxuser/smart-mobility-hub/.cache/m4-completion-v1",
+  "original_cache_unchanged_during_preparation": true,
+  "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "package_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+  "expected_package_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+  "mount_identity": {
+    "repo": [
+      2051,
+      1981480
+    ],
+    "cache": [
+      2051,
+      2146196
+    ]
+  },
+  "host_gates": [
+    {
+      "name": "host_preflight",
+      "status": "PASS",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vboxuser/smart-mobility-hub/scripts/door_measurement.py",
+        "/home/vboxuser/smart-mobility-hub/evidence/runs/door-validation-isolated-20261025",
+        "host-preflight",
+        "--stage",
+        "controls"
+      ],
+      "cwd": "/home/vboxuser/smart-mobility-hub",
+      "started_utc": "2026-10-25T03:45:27.496900+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "interrupted": false,
+      "cleanup_errors": [],
+      "elapsed_sec": 3.21806022299279,
+      "total_limit_sec": 1800.0,
+      "cleanup_reserve_sec": 20.0,
+      "ended_utc": "2026-10-25T03:45:30.733932+00:00"
+    },
+    {
+      "name": "cache_preparation",
+      "status": "PASS",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vboxuser/smart-mobility-hub/scripts/door_measurement.py",
+        "/home/vboxuser/smart-mobility-hub/evidence/runs/door-validation-isolated-20261025",
+        "prepare-cache"
+      ],
+      "cwd": "/home/vboxuser/smart-mobility-hub",
+      "started_utc": "2026-10-25T03:45:30.741390+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "interrupted": false,
+      "cleanup_errors": [],
+      "elapsed_sec": 24.544586578005692,
+      "total_limit_sec": 1800.0,
+      "cleanup_reserve_sec": 20.0,
+      "ended_utc": "2026-10-25T03:45:55.299391+00:00"
+    },
+    {
+      "name": "container",
+      "status": "FAIL",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--init",
+        "--name",
+        "smh-door-437390",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-e",
+        "ROS_DOMAIN_ID=73",
+        "-e",
+        "ROS_LOCALHOST_ONLY=1",
+        "--mount",
+        "type=bind,src=/home/vboxuser/smart-mobility-hub,dst=/workspace",
+        "--mount",
+        "type=bind,src=/home/vboxuser/smart-mobility-hub/.cache/door-validation/door-validation-isolated-20261025,dst=/cache",
+        "-w",
+        "/workspace",
+        "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "bash",
+        "scripts/door_measurement_container.sh",
+        "/workspace/evidence/runs/door-validation-isolated-20261025",
+        "controls"
+      ],
+      "cwd": "/home/vboxuser/smart-mobility-hub",
+      "started_utc": "2026-10-25T03:45:55.320106+00:00",
+      "exit_code": 1,
+      "timed_out": false,
+      "interrupted": false,
+      "cleanup_errors": [],
+      "elapsed_sec": 37.713948792996234,
+      "total_limit_sec": 1800.0,
+      "cleanup_reserve_sec": 20.0,
+      "ended_utc": "2026-10-25T03:46:33.050365+00:00"
+    },
+    {
+      "name": "installation_fingerprint",
+      "status": "NOT RUN"
+    }
+  ],
+  "controls_gates": [
+    {
+      "name": "mounts_and_dependencies",
+      "status": "PASS",
+      "command": [
+        "/usr/bin/python3",
+        "/workspace/scripts/door_measurement.py",
+        "/workspace/evidence/runs/door-validation-isolated-20261025",
+        "preflight",
+        "--inside"
+      ],
+      "cwd": "/workspace",
+      "started_utc": "2026-10-25T03:46:04.832079+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "interrupted": false,
+      "cleanup_errors": [],
+      "elapsed_sec": 13.216652985007386,
+      "total_limit_sec": 1800.0,
+      "cleanup_reserve_sec": 20.0,
+      "ended_utc": "2026-10-25T03:46:18.050597+00:00"
+    },
+    {
+      "name": "incremental_build",
+      "status": "PASS",
+      "command": [
+        "colcon",
+        "build",
+        "--packages-select",
+        "smart_hub_sim",
+        "smart_hub_control",
+        "--event-handlers",
+        "console_direct+"
+      ],
+      "cwd": "/cache",
+      "started_utc": "2026-10-25T03:46:18.080993+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "interrupted": false,
+      "cleanup_errors": [],
+      "elapsed_sec": 5.611563908998505,
+      "total_limit_sec": 1800.0,
+      "cleanup_reserve_sec": 20.0,
+      "ended_utc": "2026-10-25T03:46:23.700049+00:00"
+    },
+    {
+      "name": "flake8",
+      "status": "FAIL",
+      "command": [
+        "bash",
+        "-c",
+        "set -eo pipefail; source /cache/install/setup.bash; exec \"$@\"",
+        "--",
+        "ament_flake8",
+        "src/smart_hub_sim",
+        "src/smart_hub_control",
+        "scripts/door_duration.py",
+        "scripts/verify_m3.py",
+        "scripts/verification.py",
+        "scripts/door_measurement.py",
+        "scripts/test_verification.py"
+      ],
+      "cwd": "/cache",
+      "started_utc": "2026-10-25T03:46:23.732289+00:00",
+      "exit_code": 1,
+      "timed_out": false,
+      "interrupted": false,
+      "cleanup_errors": [],
+      "elapsed_sec": 2.566036117001204,
+      "total_limit_sec": 1800.0,
+      "cleanup_reserve_sec": 20.0,
+      "ended_utc": "2026-10-25T03:46:26.300655+00:00"
+    },
+    {
+      "name": "pep257",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "producer_and_evaluator_controls",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "harness_controls",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "world_and_routing_regressions",
+      "status": "NOT RUN"
+    }
+  ],
+  "downstream": {
+    "comparison": "NOT RUN",
+    "adoption": "NOT RUN",
+    "clean_M2_M3_M4": "NOT RUN"
+  },
+  "first_failure": {
+    "gate": "flake8",
+    "status": "FAIL",
+    "exit_code": 1,
+    "findings": "5 E128 indentation and 2 I101 import-order errors in the committed preparation revision",
+    "build_packages_completed": [
+      "smart_hub_sim",
+      "smart_hub_control"
+    ],
+    "style_fix_after_attempt": "prepared separately; not part of this validation attempt"
+  },
+  "prior_attempt_indexes_sha256": {
+    "evidence/door-measurement-20261025.json": "e1414617c6a5bd5daf0e04fd119463813dc6338ff4e976e92fd2f6d43162d5be",
+    "evidence/door-measurement-resume-20261025.json": "07fcb07e623ebf133a5aabe64e9c2641501f8ac7b89e4eb09c9ebf132fd06790",
+    "evidence/m234-node-boundary-fix-20261025.json": "cb8b2391c1c22bfb524c5d1fa89acf96b62624d0655e159734de562beb21a884"
+  },
+  "artifacts": {
+    "evidence/runs/door-validation-isolated-20261025/artifact-sha256.txt": "a82859c062c33b995319e7651ac22e1c758e4ce3e3a465cf3a16cb30c77cca2e",
+    "evidence/runs/door-validation-isolated-20261025/attempt.json": "4d87c005c13b1783460f932898bf5d8ff4f5925538796e55e48b41bfb4916b6b",
+    "evidence/runs/door-validation-isolated-20261025/controls/artifact-sha256.txt": "419d0ba25403237e188a33463ef3140808f837efe0bb45cffe49cb2d8db8d577",
+    "evidence/runs/door-validation-isolated-20261025/controls/cache_preparation.log": "dd2804ec3d50776fb71813b82feda2e693d3e29453d120609d657fdcf9ba8c6a",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/COLCON_IGNORE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/events.log": "036d5c5c67984ad5789b9b4e02d80f1abeda4f45ea2757499bd6128ad37391c5",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/logger_all.log": "db6cbdda44c52d421512a8288831247e928f6b63cca89f93a2df890c8918a384",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_control/command.log": "c0c042eb0736e0c9ce61012981100351d8e7f155618c694016010bb7873ce269",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_control/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_control/stdout.log": "2d2dc233660d528fe87928f5dd6d9d0b72835752a5fc5d10fcce314ab29bb3cb",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_control/stdout_stderr.log": "2d2dc233660d528fe87928f5dd6d9d0b72835752a5fc5d10fcce314ab29bb3cb",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_control/streams.log": "883eb41a0e09c6dedfc6eab384f7948a3db14b6389616f2fab72b192a654e98e",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_sim/command.log": "6db6ab5965f01e5a3e83c0732b8ac7a6e624ba691a9f24a4717ca36613151c93",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_sim/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_sim/stdout.log": "8568dd61a35f520c1e306ee7fafb78d7971485b163cdc17199b759c9fbb2b1f7",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_sim/stdout_stderr.log": "8568dd61a35f520c1e306ee7fafb78d7971485b163cdc17199b759c9fbb2b1f7",
+    "evidence/runs/door-validation-isolated-20261025/controls/colcon-log/build_2026-10-25_03-46-18/smart_hub_sim/streams.log": "6749cf47bdc68dabfc9117128ca5974736f2ffb8bb9bc352b6c9ec80107244e9",
+    "evidence/runs/door-validation-isolated-20261025/controls/container.log": "e7758770147f2861325002d98590d0cf9fe92d083d973edf7b084bc42d4a8f40",
+    "evidence/runs/door-validation-isolated-20261025/controls/flake8.log": "c20332fc418d24f08eda97a97fcf4b242c27c9b67251faf6484e6483b9bebcda",
+    "evidence/runs/door-validation-isolated-20261025/controls/gates.json": "8f67e8dcebd76637f6e068e83b95b0e6b799ae3efb3617dce057929373e71eae",
+    "evidence/runs/door-validation-isolated-20261025/controls/host-gates.json": "de380eb3e299cac296f1ae923ba9f3414809495cbd2c3dedf49535080152e203",
+    "evidence/runs/door-validation-isolated-20261025/controls/host_preflight.log": "ca4ed8f105844e51bbd16209d223cfc5188a48709c298a72a5e726f6222acf44",
+    "evidence/runs/door-validation-isolated-20261025/controls/incremental_build.log": "356889809d4df2768695912ba9a811e022a8e906e162bbbc2789e522f8724790",
+    "evidence/runs/door-validation-isolated-20261025/controls/mounts_and_dependencies.log": "83e234fd9f57a80c9cf9c38d7aa951642e29c6a6fc95c4d1466686b23c12752f",
+    "evidence/runs/door-validation-isolated-20261025/controls/package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "evidence/runs/door-validation-isolated-20261025/controls/prerequisite-source-hashes.json": "98b2bf1ff33c5c0f8ba9be76822c025f2db92e1d7f04bed93d07273a4478e1bd",
+    "evidence/runs/door-validation-isolated-20261025/original-cache-after.json": "91c2bf8ebb065813f4a453b97ec615fe997eab5bb50d0a40c3f3f671b06780ce",
+    "evidence/runs/door-validation-isolated-20261025/original-cache-before.json": "91c2bf8ebb065813f4a453b97ec615fe997eab5bb50d0a40c3f3f671b06780ce",
+    "evidence/runs/door-validation-isolated-20261025/prepared-cache.json": "9790e950136f48d025612f7aca48a4f78e24a6c9d610372dd03f5d1ec41e0d28",
+    "evidence/runs/door-validation-isolated-20261025/source-sha256.txt": "b3a231ce6e785e68085f07a2520f4afa8de67009bb3484a79a2429987f8927e7",
+    "evidence/runs/door-validation-isolated-20261025/source.patch": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "historical_duration": {
+    "receipt_sec": 7.973234,
+    "status": "FAIL",
+    "physical_cause": "unproven",
+    "timing_recommendation": "withdrawn"
+  },
+  "limits": "Producer/evaluator controls, harness controls, world/routing regressions, comparison, adoption and clean milestone pipeline NOT RUN. No repeatability claim."
+}

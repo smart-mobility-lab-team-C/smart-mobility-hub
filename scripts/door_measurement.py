@@ -407,7 +407,7 @@ def host(repo, results, mode):
     bounded = {'deadline': deadline} if deadline is not None else None
     try:
         ledger.run('host_preflight', [sys.executable, str(Path(__file__).resolve()),
-                                     str(results), 'host-preflight', '--stage', mode],
+                                      str(results), 'host-preflight', '--stage', mode],
                    repo, setup=True, bounded=bounded)
         stage = 'prepare-cache' if mode == 'controls' else 'verify-workspace'
         ledger.run(names[1], [sys.executable, str(Path(__file__).resolve()), str(results), stage],

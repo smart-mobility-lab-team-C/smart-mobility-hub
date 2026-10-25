@@ -31,7 +31,28 @@ passing comparison authorizes source-gate adoption. Only then is a clean
 M2+M3+M4 pipeline eligible. Neither one comparison nor one combined PASS would
 establish repeatability or explain the historical 7.973234-second FAIL.
 
-Latest resume: **FAIL at incremental build** after verified mounts, pinned
+### Isolated cache attempt outcome
+
+The fresh attempt at committed revision `583859e` ran once and stopped at
+`ament_flake8` with **FAIL** (exit 1). Preparation passed in 24.545 s: the
+original cache's contents and metadata matched before and after copying. The
+pinned image, manifest, mounts, native interface imports, prerequisite hashes,
+and write probes passed. The incremental build completed both affected packages
+in 5.612 s. Style then reported five `E128` indentation errors and two `I101`
+import-order errors in the preparation code. It failed after 2.566 s; `pep257`,
+producer/evaluator controls, harness controls, and world/routing regressions
+are **NOT RUN**. The comparison, gate adoption, and clean M2+M3+M4 pipeline
+are **NOT RUN**. Total attempt time was 65.759 s. The
+[machine-readable index](../evidence/door-validation-isolated-20261025.json)
+links the exact commands, timestamps, dependency manifest, source revision,
+logs, and artifact hashes. The two older attempt indexes remain unchanged.
+
+The seven style findings were corrected after this attempt for a future fresh
+validation. They are unvalidated by the ordered controls; no retry or second
+mission was started. The 7.973234-second result remains a historical FAIL with
+unproven physical cause, and the prior timing recommendation remains withdrawn.
+
+Earlier resume: **FAIL at incremental build** after verified mounts, pinned
 package manifest, native interface imports and prerequisite source checks passed.
 Cached simulator package metadata is root-owned and cannot be replaced by the
 non-root build user. All later gates are NOT RUN. See the

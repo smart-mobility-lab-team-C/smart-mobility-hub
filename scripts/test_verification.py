@@ -18,7 +18,7 @@ from door_measurement import (
     prepare_cache, sha, tree_manifest, writable_tree, write_json,
 )
 from verification import (
-    Blocked, CaseRunner, cleanup_error, overall_status, run_bounded, StopCases, stop_processes,
+    Blocked, CaseRunner, cleanup_error, overall_status, run_bounded, stop_processes, StopCases,
 )
 
 

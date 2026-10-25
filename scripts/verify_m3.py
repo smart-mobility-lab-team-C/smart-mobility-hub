@@ -40,7 +40,7 @@ from smart_hub_interfaces.srv import ClearSafetyStop, ComputeRoute, RequestCross
 from std_msgs.msg import Bool
 from std_srvs.srv import Trigger
 from verification import (
-    Blocked, CaseRunner, cleanup_error, overall_status, StopCases, stop_processes,
+    Blocked, CaseRunner, cleanup_error, overall_status, stop_processes, StopCases,
 )
 
 
@@ -947,11 +947,10 @@ def main():
         report['cases'] = verify(
             probe, processes, args.nominal_runs, args.only_case, args.door_comparison)
         report['status'] = overall_status(report['cases'])
-        report['scenario_acceptance'] = ('NOT RUN: comparison is not milestone acceptance'
-                                        if args.door_comparison else
-                                        'T05/T06 eligible only with ten nominal runs and '
-                                        'complete source-required fault evidence; '
-                                        'other T rows NOT RUN')
+        report['scenario_acceptance'] = (
+            'NOT RUN: comparison is not milestone acceptance' if args.door_comparison else
+            'T05/T06 eligible only with ten nominal runs and '
+            'complete source-required fault evidence; other T rows NOT RUN')
     except (Exception, KeyboardInterrupt) as error:
         report['status'] = 'BLOCKED'
         report['error'] = repr(error)
