@@ -183,3 +183,26 @@ turn horizontally on its route, so it was left unchanged.
 This is one run, not T13. The full `verify_m6.py` run (10 escorts, T14, T12, T11) was started; its
 result lands in `.cache/m6full/run1.json` and still needs recording. T12–T14 remain **NOT RUN**
 until that result is recorded.
+
+### M6 full run PASS — 2026-10-25 17:41
+
+`scripts/verify_m6.py` passed **18/18** at `1218e30` on 8 vCPUs, taking 1290 s
+([evidence](../evidence/m6-1218e30.json)).
+
+| Test | Result |
+|---|---|
+| T13 | 10/10 escorts. Final error 0.04 m, 0 crossing conflicts, feedback p95 ≤ 0.507 s. |
+| T14 | Busy and duplicate goals rejected. No readiness aborts after 20.05 s without moving. Cancel reaches a zero command in 0.008 s. Unreachable goals rejected. Frozen odometry stops the robot within 1.05 s. A blocked Cs–J edge forces a detour through B. |
+| T12 | NO_ROUTE aborts, and nothing restarts after the road is restored. |
+| T11 | 60 requests (48 with a route) all match the oracle, p95 9.6 ms. |
+
+This is a single run, so no repeatability claim is made.
+
+**Added afterwards (package tests: 94 tests, 0 failures; no ROS run yet):**
+- The three A §17 parameters.
+- A congestion-only replan rule in the robot, which must save at least 15% and waits at least 2 s between switches.
+- `hub.launch.py` with `scenario`, `seed` and `mode`, plus `scenarios/S1–S9.yaml`.
+- `metrics_logger`.
+- An RViz image, config and demo script (`containers/Dockerfile.rviz`, `scripts/rviz_demo.sh`). The image has not been built.
+
+M4 and M6 need re-runs because their code changed.
