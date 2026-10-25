@@ -194,9 +194,11 @@ other records make density invalid. Parking reservation/release events use the
 service request ID as correlation ID. Full endpoint ownership, reset behavior,
 freshness policies and acceptance blockers are in the [M4 handoff](m4-handoff.md).
 
-Assignment-scoped T07–T10 passed the independent fresh M4 run at `b7d1df7`.
+Assignment-scoped T07–T10 passed the independent fresh M4 run at `b7d1df7` and
+the combined M2+M3+M4 run at `58f5afee4bd53567634f022d836c6a94f5daeaa7`.
 The simulator's existing `freeze_parking` fault now repeats the last published
 acquisition immediately, without taking one extra frame on its next tick.
 Public message/QoS/timing contracts and stale thresholds are unchanged.
-Combined M3 regression and moving integration remain open, separately recorded
-in the [M4 evidence index](../evidence/m4-local-completion.json).
+The combined M2/M3/M4 regression passed once; repeatability and moving
+integration remain open. The earlier `5e9757b` failure remains separately
+recorded in the [M4 evidence index](../evidence/m4-local-completion.json).

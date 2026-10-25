@@ -314,8 +314,9 @@ all eight package builds, interface/style checks, 54 package tests and all nine
 real-node M4 cases. Its scope file records M2/M3 NOT RUN. This is independent
 M4 functional acceptance under assignment §§11–12, not a green combined suite.
 The combined `5e9757b` attempt passed M2 but failed M3 on `crossing_stale`;
-that regression remains unresolved. The interrupted attempt and all other
-failures retain their original status in the [M4 index](../evidence/m4-local-completion.json).
+that failure remains preserved for its run. The later combined result is recorded
+below. The interrupted attempt and all other failures retain their original
+status in the [M4 index](../evidence/m4-local-completion.json).
 
 The final run followed a genuine M4 correction: freezing parking now repeats
 the last published acquisition immediately rather than taking one extra frame
@@ -338,3 +339,20 @@ include the source timer and delivery; they are retained as distinct metrics.
 [M4 handoff](m4-handoff.md) records reproduction and remaining work. Independent
 teammate review/reproduction is BLOCKED. M4 changes are merged into local `main`
 from `fix/m4-local-completion` and published to `origin/main`. No hosted run was used.
+
+## Combined M2+M3+M4 local acceptance — 2026-10-25
+
+The official clean-workspace `m4_container.sh` pipeline passed at run commit
+`58f5afee4bd53567634f022d836c6a94f5daeaa7`: M2 18/18, M3 24/24 (including
+seeds 300–309), and M4 9/9. The fresh build passed all eight packages, interface
+and style checks, and 54 package tests. Runtime was 21m 44.868s in the pinned
+Ubuntu 24.04.5 / ROS Jazzy image; rclpy was 7.1.12 and Cyclone DDS 2.2.4.
+Optional profiling and event instrumentation were disabled. No assertion failed.
+
+The run used implementation source through `b7d1df7`; the historical M2+M3
+comparison remains `f6a97fd`. The previous `5e9757b` `crossing_stale` failure is
+preserved as a failure for that run. One pass does not establish reliability;
+independent review remains BLOCKED. Raw logs, traces, results, package versions,
+source hashes and the exact image identity are in the
+[combined result index](../evidence/m234-combined-20261025.json) and its ignored
+raw directory `evidence/runs/combined-m234-20261025/`.

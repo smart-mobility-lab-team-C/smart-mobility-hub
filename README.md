@@ -6,17 +6,14 @@ Verification runs locally in the Ubuntu 24.04/Jazzy Docker environment by defaul
 GitHub Actions is an optional project tool, not a recorded assignment requirement;
 hosted runs require an explicit request. See [verification policy](docs/automation.md#local-verification-default).
 
-**Current acceptance status:** The fresh M4-only run at `b7d1df7` passed all
-9/9 M4 cases, 54 package tests, and a fresh eight-package build. Its scoped
-runner explicitly left M2/M3 NOT RUN. Assignment-scoped M4 functional
-acceptance T07–T10 is complete, pending independent review. The latest combined
-regression (`5e9757b`) passed M2 18/18 but failed at its first nominal M3 case
-with `SAFE_STOP/SAFETY_INPUT_UNKNOWN:crossing_stale`; T05 is FAIL in that
-attempt and T06 was NOT RUN. An earlier full M3 run (`f6a97fd`) passed 24/24,
-including T05–T06, and remains historical evidence. Combined regression is
-still open at M3; this does not leave M4 assignment acceptance open. M4 changes are merged into local `main` from `fix/m4-local-completion` and published to `origin/main`. See the [M4
-evidence index](evidence/m4-local-completion.json), [M3 handoff](docs/m3.md),
-and [setup](docs/setup.md). Independent review remains BLOCKED.
+**Current acceptance status:** The combined local M2+M3+M4 pipeline passed at
+`58f5afee4bd53567634f022d836c6a94f5daeaa7`: M2 18/18, M3 24/24, M4 9/9,
+plus a fresh eight-package build and 54 passing package tests. This is one pass,
+not evidence of repeatability; independent review remains BLOCKED. The earlier
+`5e9757b` `crossing_stale` failure and M2+M3 reference `f6a97fd` remain in the
+record. See the [combined evidence index](evidence/m234-combined-20261025.json),
+[M4 evidence](evidence/m4-local-completion.json), [M3 handoff](docs/m3.md), and
+[setup](docs/setup.md).
 
 ## Start here
 

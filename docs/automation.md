@@ -166,20 +166,24 @@ sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
 ```
 
 This explicit scope writes `scope.json` with M2/M3 **NOT RUN** and retains all
-nine M4 probes, bags, parameter dumps and plots. Omitting the flag preserves the
-combined runner and its failing prerequisites. M4-only PASS establishes T07–T10,
-not M3 recovery, moving integration, or T15–T18. The current clean combined run
-at `5e9757b` passed M2 but failed the first docking case on `crossing_stale`;
-that result remains FAIL, separate from M4's focused pass. Combined regression
-and reliable bus-mission timing remain open work for integration.
+nine M4 probes, bags, parameter dumps and plots. Omitting the flag runs the full
+M2/M3 prerequisite checks before M4. M4-only PASS establishes T07–T10,
+not M3 recovery, moving integration, or T15–T18. The combined run at
+`58f5afee4bd53567634f022d836c6a94f5daeaa7` now passes M2, M3 and M4 once;
+the earlier `5e9757b` `crossing_stale` result remains a FAIL for that run.
+Repeatability and independent review remain open.
 
 The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
-launches and default `m3_container.sh` behavior are preserved. The completed local
-M3 run (`f6a97fd`) passed M2 18/18, all 53 package tests, and M3 24/24 including
-T05–T06. The later independent M4 run at `b7d1df7` passed all 54 package tests
-and nine M4 cases, establishing assignment-scoped T07–T10 PASS. The M3 completion changes from `fix/m3-local-completion` are merged into local
+launches and default `m3_container.sh` behavior are preserved. The combined
+local run at `58f5afee4bd53567634f022d836c6a94f5daeaa7` passed M2 18/18, M3
+24/24 including seeds 300–309, and M4 9/9, after a fresh eight-package build,
+style/interface checks and 54 package tests. Optional diagnostic instrumentation
+was disabled; runtime was 21m 44.868s. The earlier `5e9757b` `crossing_stale`
+failure remains recorded for that run. This single pass does not establish
+repeatability. See the [combined evidence index](../evidence/m234-combined-20261025.json).
+The M3 completion changes from `fix/m3-local-completion` are merged into local
 `main` and published to `origin/main`. See the
 [local M3 evidence index](../evidence/m3-local-completion.json), [M4 handoff](m4-handoff.md),
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).

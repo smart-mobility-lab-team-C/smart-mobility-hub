@@ -1,14 +1,13 @@
 # T01–T18 verification plan
 
-Source: assignment §21 pp29–30 and relevant scenario sections. The latest
-combined regression (`5e9757b`) passed M2 but failed at the first nominal M3
-case (`crossing_stale`); T06 and combined M4 were not reached. Separately, the
-fresh M4-only run (`b7d1df7`) passed all nine M4 cases after an eight-package
-build and 54 package tests; that scope explicitly left M2/M3 NOT RUN. This
-completes assignment-scoped T07–T10 functional acceptance, pending independent
-review. The combined regression remains open at M3. Earlier complete passes and
-failures remain recorded in the [M4 attempt index](../evidence/m4-local-completion.json)
-and [local M3 evidence index](../evidence/m3-local-completion.json).
+Source: assignment §21 pp29–30 and relevant scenario sections. The combined
+local run at `58f5afee4bd53567634f022d836c6a94f5daeaa7` passed M2 18/18, M3
+24/24 and M4 9/9 after a fresh build and 54 package tests. T05 and T06 passed
+in that run. This is one run; independent review and repeatability remain open.
+The earlier `5e9757b` `crossing_stale` failure and other outcomes remain in the
+[combined evidence index](../evidence/m234-combined-20261025.json), [M4 attempt
+index](../evidence/m4-local-completion.json), and [local M3 evidence
+index](../evidence/m3-local-completion.json).
 
 | ID | Area | Stimulus / repetitions | Acceptance | Status |
 |---|---|---|---|---|
@@ -16,12 +15,12 @@ and [local M3 evidence index](../evidence/m3-local-completion.json).
 | T02 | S1 occlusion/stale | 0.3 s occlusion, repeated/frozen frames | No duplicate count; invalid within 1.2 s freeze | NOT RUN |
 | T03 | S2 prediction | Unseen episode seeds | MAE/RMSE; MAE <= persistence; inference p95 <100 ms; no leakage | NOT RUN |
 | T04 | S2 dispatch | Threshold noise and stale forecast | One outstanding goal; explicit fallback | NOT RUN |
-| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | FAIL in latest combined regression: first nominal case SAFE_STOP/crossing_stale |
-| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | NOT RUN in latest combined regression |
-| T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists | PASS (fresh M4-only scope; independent review pending) |
-| T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected | PASS (fresh M4-only scope; independent review pending) |
-| T09 | S5 congestion | Free flow, slow dense flow, obstruction | Correct labels; bounded scenario-defined delay; no stale-as-clear | PASS (fresh M4-only scope; independent review pending) |
-| T10 | S5 stale | Freeze/restore vehicle observations | UNKNOWN within source-defined threshold; clean recovery | PASS (fresh M4-only scope; independent review pending) |
+| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | PASS (combined run; 10/10 seeds 300–309) |
+| T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | PASS (combined run; cancellation case) |
+| T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists | PASS (combined run; independent review pending) |
+| T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected | PASS (combined run; independent review pending) |
+| T09 | S5 congestion | Free flow, slow dense flow, obstruction | Correct labels; bounded scenario-defined delay; no stale-as-clear | PASS (combined run; independent review pending) |
+| T10 | S5 stale | Freeze/restore vehicle observations | UNKNOWN within source-defined threshold; clean recovery | PASS (combined run; independent review pending) |
 | T11 | S6 routing | 20 graph-state seeds | Oracle cost match within 1e-6 relative tolerance; no forbidden edges; p95 <250 ms | NOT RUN |
 | T12 | S6 no route | Block two critical edges | Explicit NO_ROUTE; zero candidate motion | NOT RUN |
 | T13 | S7 escort | 10 nominal missions | 10/10; final error <=0.20 m | NOT RUN |

@@ -1,0 +1,63 @@
+{
+  "schema": "smart-mobility-hub/combined-m234-acceptance-v1",
+  "run_id": "combined-m234-20261025",
+  "status": "PASS",
+  "branch": "diagnose/crossing-timing-boundaries",
+  "run_commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+  "implementation_source_commit": "b7d1df7d36b457ad7c8d416e3c9f9d9a63d51ca7",
+  "historical_m2_m3_reference": "f6a97fd7bf98a19662055eb462c21c0ae1085f5f",
+  "worktree_clean_at_start": true,
+  "command": "docker run --rm --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace smh-m4-local:latest bash scripts/m4_container.sh /workspace/evidence/runs/combined-m234-20261025",
+  "start_utc": "2026-10-25T00:08:40.252190Z",
+  "end_utc": "2026-10-25T00:30:25.120360Z",
+  "wall_runtime_seconds": 1304.86817,
+  "environment": {
+    "host": "Ubuntu 22.04 VM",
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros_distro": "Jazzy",
+    "docker_image_tag": "smh-m4-local:latest",
+    "docker_image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "python": "3.12.3",
+    "rclpy_package": "ros-jazzy-rclpy 7.1.12-1noble.20260912.162354",
+    "rmw": "rmw_cyclonedds_cpp",
+    "rmw_package": "ros-jazzy-rmw-cyclonedds-cpp 2.2.4-1noble.20260911.095700"
+  },
+  "diagnostic_instrumentation": "disabled",
+  "fresh_workspace_build": {
+    "status": "PASS",
+    "packages": 8,
+    "colcon_tests": 54,
+    "test_failures": 0,
+    "test_errors": 0,
+    "test_skips": 0,
+    "interface_and_style_checks": "PASS"
+  },
+  "milestones": {
+    "M2": {"status": "PASS", "passed": 18, "total": 18},
+    "M3": {"status": "PASS", "passed": 24, "total": 24, "nominal_seeds": [300, 301, 302, 303, 304, 305, 306, 307, 308, 309]},
+    "M4": {"status": "PASS", "passed": 9, "total": 9}
+  },
+  "first_failure": null,
+  "runner_exit_code": 0,
+  "raw_evidence": "evidence/runs/combined-m234-20261025/",
+  "artifacts": {
+    "transcript": "evidence/runs/combined-m234-20261025/transcript.log",
+    "package_versions": "evidence/runs/combined-m234-20261025/package-versions.tsv",
+    "source_hashes": "evidence/runs/combined-m234-20261025/source-sha256.txt",
+    "worktree_identity": "evidence/runs/combined-m234-20261025/worktree.txt",
+    "M2_results": "evidence/runs/combined-m234-20261025/m2-regression.json",
+    "M3_results": "evidence/runs/combined-m234-20261025/m3/acceptance.json",
+    "M3_logs_and_trace": "evidence/runs/combined-m234-20261025/m3/",
+    "M4_results": "evidence/runs/combined-m234-20261025/m4/acceptance.json",
+    "M4_logs_and_trace": "evidence/runs/combined-m234-20261025/m4/"
+  },
+  "artifact_sha256": {
+    "transcript.log": "aef09a42d7f5a1f5f809bab12d03312311b9c76bbc022ebaa5544f62776055e9",
+    "package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "source-sha256.txt": "c14ad26cef3b40e1c66eadc020100dd608db99392d065599bdd4d364eaa2f8c6",
+    "m2-regression.json": "9bc18b335de02e7f1a337b01acdb120629e27ad54b3c27ad1a4fe7dd0f05f520",
+    "m3/acceptance.json": "ca740dea0f26c712fcab75413cb73b8e5ef6fb3e50892079af3c2d300e1550a3",
+    "m4/acceptance.json": "300af07c85cb953884384b88f67dce6c0d06c224681ece13689cb61cce7a9cf0"
+  },
+  "reliability_note": "This single combined pass does not establish repeatability. The historical 5e9757b crossing_stale failure remains a valid result for that earlier commit and environment."
+}

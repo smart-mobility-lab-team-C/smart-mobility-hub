@@ -9,10 +9,13 @@ published to `origin/main`.
 
 Assignment §§11–12 assess parking and congestion independently; §12.3 permits
 S5 without commanding motion. The combined regression runner is an additional
-project check. Its latest clean run at `5e9757b` passed M2 but failed M3's first
-mission on `crossing_stale`; that failure remains unresolved. This M4 result does
-not establish reliable bus missions or moving integration. Historical M3 PASS
-and all failed/interrupted M4 attempts remain in the [evidence index](../evidence/m4-local-completion.json).
+project check. Its run at `58f5afee4bd53567634f022d836c6a94f5daeaa7` passed
+M2 18/18, M3 24/24 and M4 9/9 once. The earlier `5e9757b` M3
+`crossing_stale` failure remains preserved for that run. One pass does not
+establish repeatability or independent review. See the
+[combined evidence index](../evidence/m234-combined-20261025.json). Historical
+M3 results and all failed/interrupted M4 attempts remain in the
+[M4 evidence index](../evidence/m4-local-completion.json).
 
 The M4-only run exposed and fixed a real freeze fault: the simulator previously
 acquired one extra parking frame on the next 5 Hz tick after freeze was requested.
