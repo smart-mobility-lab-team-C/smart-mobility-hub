@@ -64,7 +64,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 - No ROS integration test covers congestion replan, `metrics_logger`, or A9.3
   fallback dispatch.
 - S1 video-frame evaluation (A §8) is BLOCKED until annotated video exists.
-- M2 has no result on 8 vCPUs.
+- M2 passed twice on 8 vCPUs; M3 has not been rerun on 8 vCPUs.
 - S2, S8 and S9 have no ROS test results.
 - No result has been repeated. Acceptance needs two clean repeat passes.
 - The annotated S1 video (at least 100 frames) has not been produced.
@@ -81,7 +81,7 @@ Priority order. Owners are to be assigned by the team.
 | # | Task | Owner |
 |---|---|---|
 | 1 | ~~Debug the S1 missing track~~ done (synthetic T01/T02 PASS ×2) | — |
-| 2 | Rerun M2 on 8 vCPUs | TBD |
+| 2 | ~~Rerun M2 on 8 vCPUs~~ done (18/18 ×2); rerun M3 on 8 vCPUs | TBD |
 | 3 | S2 ROS tests T03/T04, including fallback | TBD |
 | 4 | S8 integration T15 (cars, timed schedule, paired predictive/reactive) | TBD |
 | 5 | S9 fault suite T16–T18, five phase-varied repetitions | TBD |
