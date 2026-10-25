@@ -60,6 +60,7 @@ Real-node verifiers, run inside the same container after `source .cache/install/
 
 ## Documentation map
 
+0. [Team handoff](docs/HANDOFF.md)
 1. [Requirements and sources](docs/requirements.md) and the [compliance register](docs/compliance.md)
 2. [Interface contracts](docs/interfaces.md) and [architecture](docs/architecture.md)
 3. [Verification matrix T01–T18](docs/test-matrix.md) and [evidence](docs/evidence.md)
