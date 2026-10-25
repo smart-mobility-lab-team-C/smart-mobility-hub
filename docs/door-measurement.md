@@ -1,5 +1,39 @@
 # Door measurement validation — 2026-10-25
 
+## Fresh validation and source gate adoption
+
+The fresh attempt `door-validation-20261025T035302Z` started from clean
+`d00b23ef759ab4db9fbdb4a014018099a2885477` in the pinned Jazzy image.
+Its user-owned cache, mount and dependency checks, two-package build, flake8,
+pep257, producer/evaluator controls (33 passed), harness controls (12 passed),
+and world/routing regressions (14 passed) all passed. The tested installation
+and sources were fingerprinted and found unchanged before comparison. The
+controls took 79.853 s. The same cache then ran exactly one seed-304,
+zero-passenger comparison under the shared 240 s bound, taking 118.164 s.
+Source duration bounds were 8.125094930–8.125098802 s, so the conservative
+integer-nanosecond assessment passed. The separate receipt duration was
+8.091999096 s and also passed; disagreement was false. Other nominal
+requirements passed. This comparison is one targeted case, not M3 acceptance
+or repeatability evidence. Raw commands, timestamps, logs, manifests and
+artifact hashes are retained under
+`evidence/runs/door-validation-20261025T035302Z/`.
+
+Because all controls and the comparison passed, the official nominal M3 door
+duration assertion now uses the source assessment. The evaluator requires a
+minimum bound of at least 8,000,000,000 ns for PASS; an upper bound below that
+is FAIL, and incomplete evidence or bounds crossing the threshold are BLOCKED.
+Receipt duration and its original assertion remain in the report, together
+with the disagreement flag. Dwell, safety timing, and public ROS interfaces
+remain unchanged. The clean combined runner now records every gate, including
+explicit evaluator and harness controls, before M2, M3 and M4. The combined
+run outcome is recorded separately from this targeted comparison.
+
+The historical 7.973234 s receipt result remains FAIL with unproven physical
+cause. One comparison or combined PASS does not establish repeatability. A
+later measurement disagreement would require a separate callback-timing
+diagnostic using [ROS 2 tracing guidance](https://github.com/ros2/ros2_tracing/blob/rolling/doc/design_ros_2.md);
+tracing does not replace the source-bound acceptance rule.
+
 ## Isolated cache continuation
 
 The current user plan authorizes one new attempt from clean `2a90b94`, after

@@ -13,6 +13,13 @@ run passed all ten nominal seeds and the E-stop latch case, but failed two other
 cases (22/24 overall); M2/M4 were NOT RUN. See the [harness attempt](../evidence/m3-operator-isolation-20261025.json).
 Repeatability remains open.
 
+The fresh `d00b23e` door validation passed all ordered controls and one
+seed-304 comparison, with source bounds 8.125094930–8.125098802 s and a
+separately retained 8.091999096 s receipt duration. The official nominal M3
+gate now uses conservative source bounds; incomplete or threshold-crossing
+evidence is BLOCKED. The historical 7.973234 s receipt failure remains
+unchanged. See [door measurement validation](door-measurement.md#fresh-validation-and-source-gate-adoption).
+
 | ID | Area | Stimulus / repetitions | Acceptance | Status |
 |---|---|---|---|---|
 | T01 | S1 counting | Known 0,3,5,4 sequence | Exact stable counts; timestamped plot | NOT RUN |

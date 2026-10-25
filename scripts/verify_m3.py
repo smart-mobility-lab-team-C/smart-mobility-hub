@@ -562,12 +562,9 @@ def _verify_cases(probe, processes, nominal_runs, only_case, door_comparison, ca
         assert error <= 3.0, f'ETA error {error}'
         invalid = sum(0.5 for t, m in probe.feedback if t >= start and m.eta_sec < 0)
         measurement['other_nominal_requirements'] = 'PASS'
-        if door_comparison:
-            if source['status'] == 'BLOCKED':
-                raise Blocked(str(source))
-            assert source['status'] == 'PASS', str(source)
-        else:
-            assert closed - opened >= 8.0
+        if source['status'] == 'BLOCKED':
+            raise Blocked(str(source))
+        assert source['status'] == 'PASS', str(source)
         return {
             **measurement,
             'run_id': run_id,
