@@ -212,7 +212,8 @@ class ScenarioRunner(ResetWorkflow, Node):
             ResetScenario, '/sim/reset_world', self._reset_scenario,
             callback_group=MutuallyExclusiveCallbackGroup(),
         )
-        self.configure_reset(include_bus=self.m3_mode and bool(self.get_parameter('reset_bus').value),
+        reset_bus = self.m3_mode and bool(self.get_parameter('reset_bus').value)
+        self.configure_reset(include_bus=reset_bus,
                              include_m4=self.m4_mode,
                              include_robot=bool(self.get_parameter('m6_mode').value))
         self._queue_pub = (self.create_publisher(QueueState, '/hub/queue', _qos(10))
