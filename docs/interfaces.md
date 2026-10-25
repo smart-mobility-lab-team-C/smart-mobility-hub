@@ -142,6 +142,14 @@ safety; this is a declared M2 choice where the assignment specifies no rate.
 Evaluator-only `/sim/evaluator/ground_truth` is `VehicleStateArray`, 10 Hz R10 in
 `map`; it is excluded from all control subscriptions.
 
+**Unresolved assignment ownership difference:** A §§4, 7.1 pp5, 10 names
+`scenario_runner` as the public `/scenario/reset` service server, as the table
+above records. The current M2–M4 implementation exposes that same public name
+and schema from `reset_coordinator` to collect participant acknowledgements.
+This is a node-owner deviation, not an added interface or an assignment-approved
+change. Retain it as an open contract review item until the public owner is
+restored or the instructor explicitly accepts the alternate owner.
+
 ## M3 runtime additions
 
 [M3](m3.md) preserves every public M1 schema. `route_planner` owns `/route/compute`;

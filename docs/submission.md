@@ -1,6 +1,6 @@
 # Submission checklist
 
-Source: instructor announcement supplied by the team; technical content from assignment §§24–25. Deadline and final team name remain unknown.
+Source: instructor announcement supplied by the team; technical content from assignment §24 pp33–34. Deadline and final team name remain unknown.
 
 ## Required direct uploads
 

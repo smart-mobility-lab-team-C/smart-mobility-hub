@@ -14,6 +14,9 @@ the previous nine nominal cases passed. M4 was NOT RUN in that repeat. The
 combined result is not yet repeatable; no production changes were made. See the
 [first pass](evidence/m234-combined-20261025.json), [repeat result](evidence/m234-repeat2-20261025.json),
 [M4 evidence](evidence/m4-local-completion.json), and [M3 handoff](docs/m3.md).
+The later source-door candidate at `67caa06` passed targeted controls and one
+seed-304 comparison, then its clean combined run stopped at M2 FAIL (16/18);
+M3 and M4 were NOT RUN. See the [candidate result](evidence/door-validation-completion-20261025.json).
 
 ## Start here
 
