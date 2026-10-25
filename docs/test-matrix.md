@@ -1,5 +1,7 @@
 # T01–T18 verification plan
 
+**Current branch (2026-10-25):** M2 prerequisite probes are FAIL at `038695b`, 17/18 ([run](../evidence/mandatory-m2-038695b.json)). No T-row changed status. T13–T15 cannot run until `robot_manager` exists; see the [compliance register](compliance.md).
+
 Source: assignment §21 pp29–30 and relevant scenario sections. The combined
 local run at `58f5afee4bd53567634f022d836c6a94f5daeaa7` passed M2 18/18, M3
 24/24 and M4 9/9 after a fresh build and 54 package tests. T05 and T06 passed

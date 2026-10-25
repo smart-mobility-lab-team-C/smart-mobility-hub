@@ -1,0 +1,742 @@
+{
+  "cases": [
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 8.497999942846945e-06,
+      "name": "real_processes_and_services_ready",
+      "observations": {
+        "processes": {
+          "crossing_arbiter": null,
+          "safety_supervisor": null,
+          "scenario_runner": null
+        },
+        "ready": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 7.0369999320973875e-06,
+      "name": "simulator_observations_ready",
+      "observations": {
+        "observed_vehicle_ids": [
+          "bus",
+          "robot"
+        ],
+        "ready": true,
+        "truth_vehicle_ids": [
+          "bus",
+          "robot"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.4002240620000066,
+      "name": "startup_zero_motion",
+      "observations": {
+        "bus_zero": true,
+        "robot_zero": true,
+        "sample_count": 9
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 2.1448830320000525,
+      "name": "crossing_exclusive_acquire_release",
+      "observations": {
+        "clear_release_granted": true,
+        "competing_grant_denied": true,
+        "first_token_granted": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 3.3162587760000406,
+      "name": "candidate_expiry_repetitions",
+      "observations": {
+        "latencies_sec": [
+          0.5001797810000426,
+          0.5005828809999002,
+          0.4949154290000024,
+          0.4954230099999677,
+          0.4994789930000252
+        ],
+        "repetitions": 5,
+        "safe_movement": {
+          "bus_pose": [
+            1.0,
+            2.0
+          ],
+          "center_separation_m": 4.473926239892652,
+          "crossing_clearance_proven": true,
+          "robot_pose": [
+            3.004,
+            6.0
+          ]
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 6.1774587229999725,
+      "name": "queue_staleness_unknown_and_stop",
+      "observations": {
+        "command_stopped": true,
+        "crossing_unknown": true,
+        "freeze_to_zero_sec": [
+          1.0184972340000513,
+          1.0282477160000099,
+          1.0163590860000795,
+          1.0215394549999246,
+          1.033296125999982
+        ],
+        "repetitions": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 6.292010797999978,
+      "name": "frozen_queue_source_stamp",
+      "observations": {
+        "freeze_to_unknown_and_zero_sec": [
+          1.0518592360000412,
+          1.0730334300000095,
+          1.0861928240000225,
+          1.0431459610000502,
+          1.048796067000012
+        ],
+        "live_receipts": true,
+        "repetitions": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.4295860239999456,
+      "name": "invalid_queue_denies_motion",
+      "observations": {
+        "crossing_unknown": true,
+        "valid_false_deny_motion": true,
+        "zero_command_after_input_sec": 0.3761790869999686
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.11893654100003914,
+      "name": "nonfinite_candidate_rejected",
+      "observations": {
+        "nan_candidate_rejected": true,
+        "zero_command_after_injection_sec": 0.1189235759999292
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 4.194186197000022,
+      "name": "estop_latch_and_recovery_repetitions",
+      "observations": {
+        "latencies_sec": [
+          0.04711145500004932,
+          0.06170215199995255,
+          0.03921586999990723,
+          0.035327825999956985,
+          0.07915307799999027
+        ],
+        "repetitions": 5,
+        "simulated_velocity_stop_sec": [
+          0.07539535099999739,
+          0.2301740799999834,
+          0.3049139379999133,
+          0.1177853919999734,
+          0.34870489200000065
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 8.164152091999995,
+      "name": "clear_stop_rejects_stale_inputs",
+      "observations": {
+        "fresh_stationary_accepted": true,
+        "repetitions": 5,
+        "stale_reasons": [
+          "queue_stale",
+          "queue_stale",
+          "queue_stale",
+          "queue_stale",
+          "queue_stale"
+        ],
+        "stale_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "AssertionError: safe reset not acknowledged: RESET_DEADLINE",
+      "elapsed_sec": 1.048687338000036,
+      "name": "scenario_reset_acceptance",
+      "observations": null,
+      "status": "FAIL"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.7770034270000679,
+      "name": "scenario_reset_stale_rejection",
+      "observations": {
+        "reason": "/safety/reset_state:queue_stale",
+        "stale_reset_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 5.826457542000071,
+      "name": "reset_missing_participant",
+      "observations": {
+        "recovery_run_id": "9802cd75-b908-473b-b2d0-06ebf90aff95",
+        "rejected": true,
+        "response_sec": 1.1228399139999965,
+        "safe_reset_recovered": true,
+        "simulator_restarted": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.2212000001454726e-05,
+      "name": "scenario_parameter_dump",
+      "observations": {
+        "all_dumps_nonempty": true,
+        "nodes": [
+          "/hub_coordinator",
+          "/safety_supervisor",
+          "/scenario_runner"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 11.598957110000015,
+      "name": "isolated_crossing_occupied_release_and_expiry",
+      "observations": {
+        "cases": [
+          {
+            "detail": "crossing service and state topic discovered",
+            "name": "arbiter_ready",
+            "status": "PASS"
+          },
+          {
+            "detail": "valid empty crossing observed",
+            "name": "fresh_observation",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED",
+            "name": "acquire_first_owner",
+            "status": "PASS"
+          },
+          {
+            "detail": "TOKEN_OR_CLEARANCE_REQUIRED",
+            "name": "release_rejected_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "UNSAFE_OR_UNKNOWN",
+            "name": "reset_rejected_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "expired_owner_not_reassigned_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED",
+            "name": "reassign_after_proven_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "RELEASED",
+            "name": "release_after_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "RESET",
+            "name": "reset_after_proven_clear",
+            "status": "PASS"
+          }
+        ],
+        "status": "PASS",
+        "stderr_tail": "",
+        "worker_domain_id": 116
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 26.128814723999994,
+      "name": "full_graph_physical_crossing_entry_and_expiry",
+      "observations": {
+        "cases": [
+          {
+            "detail": "simulator, safety, crossing, reset ready",
+            "name": "full_graph_ready",
+            "status": "PASS"
+          },
+          {
+            "detail": "both final commands zero",
+            "name": "initial_zero",
+            "status": "PASS"
+          },
+          {
+            "detail": "bus stopped with its full footprint before region C",
+            "name": "unowned_bus_stops_before_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "stopped bus leaves C available",
+            "name": "upstream_wait_is_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED; attempts=1",
+            "name": "bus_acquires_before_entry",
+            "status": "PASS"
+          },
+          {
+            "detail": "evaluator pose confirms full bus footprint in C under ownership",
+            "name": "owned_bus_enters_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "competitor_denied_while_bus_inside",
+            "status": "PASS"
+          },
+          {
+            "detail": "owner retained in HOLD after lease expiry while footprint occupies C",
+            "name": "expired_lease_holds_occupied_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "no_transfer_after_lease_expiry",
+            "status": "PASS"
+          },
+          {
+            "detail": "RENEWED",
+            "name": "expired_owner_can_restore_heartbeat",
+            "status": "PASS"
+          },
+          {
+            "detail": "bus remains owner after matching-token renewal",
+            "name": "renewal_restores_only_same_owner",
+            "status": "PASS"
+          },
+          {
+            "detail": "/crossing/reset_state:UNSAFE_OR_UNKNOWN",
+            "name": "reset_rejected_while_occupied",
+            "status": "PASS"
+          }
+        ],
+        "entry_pose": [
+          4.219999999999998,
+          2.0
+        ],
+        "status": "PASS",
+        "stderr_tail": "",
+        "unowned_approach": {
+          "crossing_state": "CLEAR",
+          "crossing_valid": true,
+          "last_bus_command": [
+            0.0,
+            0.0
+          ],
+          "last_bus_speed_mps": 0.0,
+          "last_bus_x_m": 4.000000000000003,
+          "safety_latched": false,
+          "safety_reason": "crossing_not_owned"
+        },
+        "unowned_stop_x_m": 4.000000000000003,
+        "worker_domain_id": 117
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 13.235213627000007,
+      "name": "adapter_stops_after_supervisor_loss",
+      "observations": {
+        "evaluator_ground_truth_used": true,
+        "measured_stop_sec": [
+          0.44151862399996844,
+          0.5407865260000335,
+          0.5616051399999833,
+          0.6304832050000186,
+          0.6040371699999696
+        ],
+        "measurement": "signal to first received post-signal zero-speed truth sample; process reaping excluded; 0.65 s bound unchanged",
+        "repetitions": 5,
+        "supervisor_terminated_while_moving": true,
+        "trials": [
+          {
+            "process_reap_sec": 0.003027309999993122,
+            "signal_monotonic": 672.491362621,
+            "source_cutoff_ros_sec": 1792911597.0184302,
+            "trial": 1,
+            "truth_samples": [
+              {
+                "received_monotonic": 672.457479475,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911596.834308
+              },
+              {
+                "received_monotonic": 672.491335113,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911596.9812255
+              },
+              {
+                "received_monotonic": 672.58411606,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911597.0869737
+              },
+              {
+                "received_monotonic": 672.665027182,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911597.1601782
+              },
+              {
+                "received_monotonic": 672.801961603,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911597.2198696
+              },
+              {
+                "received_monotonic": 672.842015551,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911597.3338556
+              },
+              {
+                "received_monotonic": 672.932881245,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911597.4299777
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.44151862399996844
+          },
+          {
+            "process_reap_sec": 0.0024981509999406626,
+            "signal_monotonic": 675.405253357,
+            "source_cutoff_ros_sec": 1792911599.929476,
+            "trial": 2,
+            "truth_samples": [
+              {
+                "received_monotonic": 675.324416452,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911599.7704976
+              },
+              {
+                "received_monotonic": 675.405224659,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911599.876555
+              },
+              {
+                "received_monotonic": 675.451869307,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911599.9223216
+              },
+              {
+                "received_monotonic": 675.504072264,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911599.9964077
+              },
+              {
+                "received_monotonic": 675.559798635,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911600.0264077
+              },
+              {
+                "received_monotonic": 675.644706312,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911600.111371
+              },
+              {
+                "received_monotonic": 675.719249095,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911600.1783283
+              },
+              {
+                "received_monotonic": 675.783044586,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911600.2672548
+              },
+              {
+                "received_monotonic": 675.896184319,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911600.3353071
+              },
+              {
+                "received_monotonic": 675.946039883,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911600.4452877
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.5407865260000335
+          },
+          {
+            "process_reap_sec": 4.0261000094687915e-05,
+            "signal_monotonic": 678.064572231,
+            "source_cutoff_ros_sec": 1792911602.5821288,
+            "trial": 3,
+            "truth_samples": [
+              {
+                "received_monotonic": 677.868830595,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911602.3731942
+              },
+              {
+                "received_monotonic": 677.957608899,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911602.4072206
+              },
+              {
+                "received_monotonic": 677.974898345,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911602.4906752
+              },
+              {
+                "received_monotonic": 678.014356461,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911602.5295403
+              },
+              {
+                "received_monotonic": 678.064547616,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911602.5798814
+              },
+              {
+                "received_monotonic": 678.113986484,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911602.6302543
+              },
+              {
+                "received_monotonic": 678.163954946,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911602.680183
+              },
+              {
+                "received_monotonic": 678.255119239,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911602.7380452
+              },
+              {
+                "received_monotonic": 678.344093363,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911602.7974236
+              },
+              {
+                "received_monotonic": 678.419727665,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911602.866116
+              },
+              {
+                "received_monotonic": 678.565699142,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911602.9840748
+              },
+              {
+                "received_monotonic": 678.626177371,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911603.125137
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.5616051399999833
+          },
+          {
+            "process_reap_sec": 0.004176458999950228,
+            "signal_monotonic": 680.92156115,
+            "source_cutoff_ros_sec": 1792911605.4462218,
+            "trial": 4,
+            "truth_samples": [
+              {
+                "received_monotonic": 680.736416685,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911605.1734755
+              },
+              {
+                "received_monotonic": 680.838833434,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911605.292549
+              },
+              {
+                "received_monotonic": 680.921523001,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.394362
+              },
+              {
+                "received_monotonic": 681.026163104,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.4474006
+              },
+              {
+                "received_monotonic": 681.06699986,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.5490072
+              },
+              {
+                "received_monotonic": 681.106463866,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.5893922
+              },
+              {
+                "received_monotonic": 681.153084401,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.6448483
+              },
+              {
+                "received_monotonic": 681.33064322,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.7542658
+              },
+              {
+                "received_monotonic": 681.367453803,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.856368
+              },
+              {
+                "received_monotonic": 681.423921697,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911605.8886952
+              },
+              {
+                "received_monotonic": 681.552044355,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911605.9632719
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.6304832050000186
+          },
+          {
+            "process_reap_sec": 0.003593844999954854,
+            "signal_monotonic": 684.774167923,
+            "source_cutoff_ros_sec": 1792911609.3025222,
+            "trial": 5,
+            "truth_samples": [
+              {
+                "received_monotonic": 684.580099682,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911608.9959786
+              },
+              {
+                "received_monotonic": 684.630198789,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911609.120045
+              },
+              {
+                "received_monotonic": 684.725241378,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911609.1644657
+              },
+              {
+                "received_monotonic": 684.772170853,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911609.257584
+              },
+              {
+                "received_monotonic": 684.844610504,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911609.3222733
+              },
+              {
+                "received_monotonic": 684.88419934,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911609.370191
+              },
+              {
+                "received_monotonic": 684.980078221,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911609.4096494
+              },
+              {
+                "received_monotonic": 685.067944419,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911609.5328271
+              },
+              {
+                "received_monotonic": 685.246345713,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911609.6524377
+              },
+              {
+                "received_monotonic": 685.312393504,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792911609.776165
+              },
+              {
+                "received_monotonic": 685.378205093,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792911609.8575878
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.6040371699999696
+          }
+        ]
+      },
+      "status": "PASS"
+    }
+  ],
+  "environment": {
+    "clock": "monotonic latency; ROS stamps for freshness",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "ros_distro": "jazzy",
+    "ros_domain_id": "43"
+  },
+  "parameter_dumps": {
+    "/hub_coordinator": {
+      "elapsed_sec": 0.18379425599994192,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"/hub_coordinator\": {\n    \"ros__parameters\": {\n      \"use_sim_time\": false,\n      \"start_type_description_service\": true,\n      \"crossing_clear_sec\": 2.0,\n      \"crossing_lease_sec\": 1.0,\n      \"queue_confidence_min\": 0.5,\n      \"dispatch_high\": 6.0,\n      \"dispatch_low\": 4.0,\n      \"dispatch_policy\": \"predictive\"\n    }\n  }\n}\n",
+      "transport": "native asynchronous ROS parameter services"
+    },
+    "/safety_supervisor": {
+      "elapsed_sec": 0.15523788600000898,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"/safety_supervisor\": {\n    \"ros__parameters\": {\n      \"use_sim_time\": false,\n      \"start_type_description_service\": true,\n      \"queue_confidence_min\": 0.5,\n      \"command_timeout_sec\": 0.5,\n      \"robot_speed_limit\": 0.25,\n      \"bus_speed_limit\": 0.4,\n      \"angular_speed_limit\": 1.0,\n      \"future_tolerance_sec\": 0.0\n    }\n  }\n}\n",
+      "transport": "native asynchronous ROS parameter services"
+    },
+    "/scenario_runner": {
+      "elapsed_sec": 0.3691995980000229,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"/scenario_runner\": {\n    \"ros__parameters\": {\n      \"use_sim_time\": false,\n      \"start_type_description_service\": true,\n      \"seed\": 17,\n      \"m3_mode\": false,\n      \"m4_mode\": false,\n      \"occupied_slots\": [\n        \"P1\"\n      ],\n      \"invalid_slots\": [\n        \"\"\n      ],\n      \"publish_parking\": true,\n      \"freeze_parking\": false,\n      \"publish_vehicles\": true,\n      \"freeze_vehicles\": false,\n      \"entry_vehicle_id\": \"\",\n      \"passage_occupied\": false,\n      \"publish_entrance\": true,\n      \"publish_barrier_status\": true,\n      \"initial_passengers\": 6,\n      \"passenger_arrivals_sec\": [],\n      \"pedestrian_present\": false,\n      \"s1_counting_script\": false,\n      \"camera_silent\": false,\n      \"camera_frozen\": false,\n      \"occluded_passenger_indices\": [\n        0\n      ],\n      \"occlude_passengers\": false,\n      \"publish_queue\": true,\n      \"publish_bus_odom\": true,\n      \"obstacle_enabled\": false,\n      \"command_timeout_sec\": 0.5,\n      \"robot_speed_limit\": 0.25,\n      \"bus_speed_limit\": 0.4,\n      \"angular_speed_limit\": 1.0,\n      \"future_tolerance_sec\": 0.0\n    }\n  }\n}\n",
+      "transport": "native asynchronous ROS parameter services"
+    }
+  },
+  "process_log_tails": {
+    "crossing_arbiter.log": "",
+    "crossing_arbiter_restart.log": "",
+    "safety_supervisor.log": "",
+    "safety_supervisor_restart_1.log": "Traceback (most recent call last):\n  File \"/workspace/.cache/m2fix-install/smart_hub_safety/lib/smart_hub_safety/safety_supervisor\", line 33, in <module>\n    sys.exit(load_entry_point('smart-hub-safety', 'console_scripts', 'safety_supervisor')())\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/.cache/m2fix-build/smart_hub_safety/smart_hub_safety/supervisor.py\", line 525, in main\n    rclpy.spin(node)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py\", line 247, in spin\n    executor.spin_once()\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 926, in spin_once\n    self._spin_once_impl(timeout_sec)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 907, in _spin_once_impl\n    handler, entity, node = self.wait_for_ready_callbacks(\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 877, in wait_for_ready_callbacks\n    return next(self._cb_iter)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 757, in _wait_for_ready_callbacks\n    wait_set = _rclpy.WaitSet(\n               ^^^^^^^^^^^^^^^\nrclpy._rclpy_pybind11.RCLError: failed to initialize wait set: the given context is not valid, either rcl_init() was not called or rcl_shutdown() was called., at ./src/rcl/wait.c:130\n",
+    "safety_supervisor_restart_2.log": "",
+    "safety_supervisor_restart_3.log": "Traceback (most recent call last):\n  File \"/workspace/.cache/m2fix-install/smart_hub_safety/lib/smart_hub_safety/safety_supervisor\", line 33, in <module>\n    sys.exit(load_entry_point('smart-hub-safety', 'console_scripts', 'safety_supervisor')())\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/.cache/m2fix-build/smart_hub_safety/smart_hub_safety/supervisor.py\", line 525, in main\n    rclpy.spin(node)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py\", line 247, in spin\n    executor.spin_once()\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 926, in spin_once\n    self._spin_once_impl(timeout_sec)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 918, in _spin_once_impl\n    raise handler.exception()\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/task.py\", line 286, in _execute_coroutine_step\n    result = coro.send(None)\n             ^^^^^^^^^^^^^^^\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 592, in handler\n    await call_coroutine()\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 454, in _execute\n    await await_or_execute(tmr.callback)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 115, in await_or_execute\n    return callback(*args)\n           ^^^^^^^^^^^^^^^\n  File \"/workspace/.cache/m2fix-build/smart_hub_safety/smart_hub_safety/supervisor.py\", line 402, in _tick\n    self._bus_pub.publish(commands['bus'] or Twist())\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/publisher.py\", line 70, in publish\n    self.__publisher.publish(msg)\nrclpy._rclpy_pybind11.RCLError: Failed to publish: publisher's context is invalid, at ./src/rcl/publisher.c:423\n",
+    "safety_supervisor_restart_4.log": "",
+    "scenario_runner.log": "r ready: seed=17 run_id=83629d14-159d-467f-944c-75fb81a178db\n{\"elapsed_sec\": 0.1916536429999951, \"event\": \"scenario_reset_start\", \"participants\": [\"/safety/reset_state\", \"/crossing/reset_state\", \"/sim/reset_world\", \"/safety/finish_reset\"], \"phase\": \"start\", \"seed\": 99}\n{\"elapsed_sec\": 0.19171153100000993, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 99}\n{\"elapsed_sec\": 0.3119355620000306, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"safe_state_acknowledged\", \"seed\": 99, \"service_sec\": 0.12022307200004434, \"success\": true}\n{\"elapsed_sec\": 0.31200748800006295, \"event\": \"scenario_reset_request\", \"phase\": \"/crossing/reset_state\", \"seed\": 99}\n{\"elapsed_sec\": 0.41257303099996534, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/crossing/reset_state\", \"reason\": \"RESET\", \"seed\": 99, \"service_sec\": 0.10056474200007415, \"success\": true}\n{\"elapsed_sec\": 0.4126211279999552, \"event\": \"scenario_reset_request\", \"phase\": \"/sim/reset_world\", \"seed\": 99}\n{\"elapsed_sec\": 0.7614306350000106, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/sim/reset_world\", \"reason\": \"seeded m2_baseline reset complete; command leases flushed\", \"seed\": 99, \"service_sec\": 0.3488078319999204, \"success\": true}\n{\"elapsed_sec\": 0.7614839049999773, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/finish_reset\", \"seed\": 99}\n{\"elapsed_sec\": 0.9506497610000224, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/finish_reset\", \"reason\": \"reset_complete_waiting_for_new_candidates\", \"seed\": 99, \"service_sec\": 0.1891638539999576, \"success\": true}\n{\"elapsed_sec\": 0.9506982999999991, \"event\": \"scenario_reset_failed\", \"phase\": \"/safety/finish_reset\", \"reason\": \"RESET_DEADLINE\", \"seed\": 99}\n{\"elapsed_sec\": 2.6231999981973786e-05, \"event\": \"scenario_reset_start\", \"participants\": [\"/safety/reset_state\", \"/crossing/reset_state\", \"/sim/reset_world\", \"/safety/finish_reset\"], \"phase\": \"start\", \"seed\": 100}\n{\"elapsed_sec\": 0.01425779400005922, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 100}\n{\"elapsed_sec\": 0.22577030499996908, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"queue_stale\", \"seed\": 100, \"service_sec\": 0.21151219299997592, \"success\": false}\n{\"elapsed_sec\": 0.3053306450000264, \"event\": \"scenario_reset_rejected\", \"phase\": \"/safety/reset_state\", \"reason\": \"/safety/reset_state:queue_stale\", \"seed\": 100}\n{\"elapsed_sec\": 1.9890000089617388e-05, \"event\": \"scenario_reset_start\", \"participants\": [\"/safety/reset_state\", \"/crossing/reset_state\", \"/sim/reset_world\", \"/safety/finish_reset\"], \"phase\": \"start\", \"seed\": 101}\n{\"elapsed_sec\": 6.574300005013356e-05, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 101}\n{\"elapsed_sec\": 0.13075921400002244, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"safe_state_acknowledged\", \"seed\": 101, \"service_sec\": 0.1306919520000065, \"success\": true}\n{\"elapsed_sec\": 0.1308086760000151, \"event\": \"scenario_reset_request\", \"phase\": \"/crossing/reset_state\", \"seed\": 101}\n{\"elapsed_sec\": 0.971430005000002, \"event\": \"scenario_reset_failed\", \"phase\": \"/crossing/reset_state\", \"reason\": \"RESET_DEADLINE\", \"seed\": 101}\n{\"elapsed_sec\": 2.6573000013740966e-05, \"event\": \"scenario_reset_start\", \"participants\": [\"/safety/reset_state\", \"/crossing/reset_state\", \"/sim/reset_world\", \"/safety/finish_reset\"], \"phase\": \"start\", \"seed\": 102}\n{\"elapsed_sec\": 7.468799992693675e-05, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 102}\n{\"elapsed_sec\": 0.2786356799999794, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"safe_state_acknowledged\", \"seed\": 102, \"service_sec\": 0.27855923699996765, \"success\": true}\n{\"elapsed_sec\": 0.2786787559999766, \"event\": \"scenario_reset_request\", \"phase\": \"/crossing/reset_state\", \"seed\": 102}\n{\"elapsed_sec\": 0.33964520999995784, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/crossing/reset_state\", \"reason\": \"RESET\", \"seed\": 102, \"service_sec\": 0.06096482600003128, \"success\": true}\n{\"elapsed_sec\": 0.3397031939999806, \"event\": \"scenario_reset_request\", \"phase\": \"/sim/reset_world\", \"seed\": 102}\n{\"elapsed_sec\": 0.5043685580000101, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/sim/reset_world\", \"reason\": \"seeded m2_baseline reset complete; command leases flushed\", \"seed\": 102, \"service_sec\": 0.16466385000001083, \"success\": true}\n{\"elapsed_sec\": 0.5073228259999496, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/finish_reset\", \"seed\": 102}\n{\"elapsed_sec\": 0.72033257399994, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/finish_reset\", \"reason\": \"reset_complete_waiting_for_new_candidates\", \"seed\": 102, \"service_sec\": 0.21300863499993739, \"success\": true}\n{\"elapsed_sec\": 0.7203786139999693, \"event\": \"scenario_reset_complete\", \"phase\": \"/safety/finish_reset\", \"reason\": \"ALL_M2_PARTICIPANTS_ACKNOWLEDGED\", \"seed\": 102}\n"
+  },
+  "schema": "smart-mobility-hub/m2-verification-v1",
+  "status": "FAIL"
+}

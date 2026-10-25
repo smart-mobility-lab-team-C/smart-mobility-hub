@@ -74,3 +74,52 @@ phase-varied S9 faults, full metrics aggregation and the final fail-fast T01–T
 runner remain unimplemented. Do not mark those gates PASS. M2 repeatability
 requires two complete separately recorded passes; neither repeatability nor
 clean final-tree acceptance is established here.
+
+## M2 regression work — 2026-10-25 (later)
+
+Source changes are in commit `038695b`. Each item gives the assignment rule it
+preserves.
+
+- **E-stop verifier:** a failing trial no longer leaves a live robot candidate behind.
+  That candidate caused the cascaded `robot_not_stopped` reset rejection in the first
+  run. The motion precondition now waits 2.0 s, the same as the supervisor-loss case.
+  The 0.20 s stop bound (A §16.3) is unchanged.
+- **Missing-participant probe:** it now requires a stationary world first, and the
+  rejection must name the missing participant.
+- **Physical-crossing worker:** it records bus pose, speed and safety reason on
+  failure. Its unowned-approach window is 20 s of wall time. Run standalone, it passed
+  12/12, with the bus stopped at x=4.02 m for `crossing_not_owned`.
+- **Supervisor:** it publishes the reset hold immediately and reports
+  `reset_in_progress` while holding. `/hub/safety` stays 10 Hz (A §5 p7).
+- **`scenario_runner`:** reset service, reset observations and the 20 Hz step each
+  have their own callback group, and snapshots that arrive out of order are rejected.
+  Evaluator-only truth is now published every step (20 Hz). The seeded observation
+  noise is untouched.
+- **Internal reset deadline:** 0.9 s, inside the 1 s client timeout (A §7.1 p10).
+
+Package tests: `colcon test` for `smart_hub_sim`, `smart_hub_safety` and
+`smart_hub_tests` gave 65 tests, 0 failures. `git diff --check` passed.
+
+Full `scripts/verify_m2.py` on the committed tree:
+[`evidence/mandatory-m2-038695b.json`](../evidence/mandatory-m2-038695b.json),
+status **FAIL**, 17/18.
+
+- `scenario_reset_acceptance` failed. Seed 99 reached `RESET_DEADLINE` at 0.951 s
+  against the 0.9 s internal deadline.
+- Every other case passed. Adapter stops after supervisor loss were 0.44–0.63 s
+  (bound 0.65 s). E-stop latency was 0.035–0.079 s.
+- Host load average was 8.3–12.8 during the run, on 18 CPUs, with a desktop session
+  and IDE active after a reboot.
+
+Six earlier full runs used intermediate uncommitted trees. They scored 15–17/18 and
+are not acceptance evidence. Two of them missed the 0.65 s adapter bound by 1–9 ms
+(0.651 s and 0.659 s). That bound has no margin: 0.5 s command timeout + 0.05 s step
++ truth sampling.
+
+Next steps:
+1. Rerun on a quiet host.
+2. If failures persist, profile `scenario_runner` step jitter before changing any
+   threshold.
+
+M2 repeatability, M3 and M4 remain NOT RUN on this revision. See the
+[compliance register](compliance.md) for every unimplemented assignment item.

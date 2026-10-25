@@ -506,3 +506,13 @@ are NOT RUN. The failed M2 cases were simulator observations readiness and a
 commands, UTC times, dependencies, installed hashes, gate statuses and raw
 artifact manifests. Earlier attempts and the historical 7.973234 s receipt
 FAIL retain their original status. Repeatability is unestablished.
+
+## M2 regression after reset/callback-group changes — 2026-10-25
+
+Source commit `038695b`. Package tests gave 65 tests, 0 failures. The full
+`scripts/verify_m2.py` run was **FAIL**, 17/18, with `scenario_reset_acceptance` hitting
+seed 99 `RESET_DEADLINE` at 0.951 s. Host load average was 8.3–12.8. The
+report is [mandatory-m2-038695b.json](../evidence/mandatory-m2-038695b.json).
+Six intermediate-tree runs are summarized, not retained, in
+[progress](mandatory-scenarios-progress.md#m2-regression-work--2026-10-25-later).
+No repeatability or acceptance claim follows.

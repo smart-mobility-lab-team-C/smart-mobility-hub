@@ -1,5 +1,7 @@
 # Windows host test for VM observation gaps
 
+> Historical diagnostic record. Current status is in the [README](../README.md) and [compliance register](compliance.md).
+
 Status: **UNRESOLVED**. The local VBS flag is now 0 according to the user's
 post-reboot query, but Windows still reports VBS running and the fresh VM log
 uses NEM. All three post-change diagnostic attempts failed. A Windows System

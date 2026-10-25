@@ -2,23 +2,27 @@
 
 | ID | Decision | Reason | Status |
 |---|---|---|---|
-| D01 | Codex and ROS inside WSL2 Ubuntu 24.04 | Shared Linux runtime on Windows | User selected; installation NOT RUN |
+| D01 | Codex and ROS inside WSL2 Ubuntu 24.04 | Shared Linux runtime on Windows | Superseded for the development host by the M0 update below (VirtualBox Ubuntu 22.04 + Ubuntu 24.04/Jazzy container); WSL remains the documented teammate path |
 | D02 | ROS 2 Jazzy + rclpy | Assignment preferred distribution | Planned |
 | D03 | Deterministic 2D baseline before optional extensions | Required scope and reproducibility | Planned |
 | D04 | Safety supervisor and adapter watchdog from early integration | Independent stop paths | Required |
-| D05 | Newer 20–30-minute video rule overrides shorter handbook demo | Instructor announcement | Documented |
+| D05 | Newer 20–30-minute video rule (N) overrides the 8-minute demo in A §24.1 p33 and H §7.3 p16 | Instructor announcement | Documented |
 | D06 | Development links allowed in Git; separate link-free submission staging | Direct-upload submission rule | Planned |
-| D07 | Branch + PR for this documentation | Reviewable change to team repository | In progress |
+| D07 | Branch + PR for documentation and code changes | Reviewable change to team repository | Adopted; merges remain a human decision |
+| D08 | Course PDFs kept as local ignored copies, not tracked | A/H are course material in a public repository | Untracked 2026-10-25; still present in pushed history of `be224bb` until an approved rewrite |
+| D09 | Public reset uses an internal 0.9 s deadline | A §7.1 p10 sets a 1 s client timeout; a failure must reach the client before it | Adopted 2026-10-25 (`038695b`); M2 still FAIL |
+| D10 | Evaluator-only ground truth published every 20 Hz simulator step | Finer stop-time measurement; topic has no assignment rate; `/hub/vehicles` stays 10 Hz | Adopted 2026-10-25 (`038695b`) |
 
 ## Needed before implementation freeze
 
+Still open on 2026-10-25 unless noted. Assignment gaps are tracked in the [compliance register](compliance.md).
+
 - Submission date/time/timezone.
 - Final TEAMNAME and members' GitHub handles.
-- Actual Windows/WSL state and machine resources.
+- Teammate machine resources (development host is recorded in [M0 status](m0-status.md)).
 - Available hours and confirmed owner/reviewer per role.
 - Authorized real video and annotation responsibility.
-- Source interface/map review, especially ambiguities caused by PDF text extraction.
-- Current official ROS installation retrieval before bootstrap coding.
+- Independent (human) source interface/map review; agent transcription is done in [M1](m1.md).
 
 No performance measurements, test passes, installation success or calendar commitments are established by this documentation.
 
