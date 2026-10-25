@@ -1,0 +1,52 @@
+{
+  "schema": "smart-mobility-hub/combined-m234-repeat-attempt-v1",
+  "run_id": "combined-m234-repeat-20261025",
+  "attempt_status": "TERMINATED_BEFORE_ACCEPTANCE",
+  "acceptance_status": "NOT RUN",
+  "intended_run_commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+  "production_source_commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+  "worktree_head_verified_before_launch": true,
+  "worktree_clean_before_launch": true,
+  "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "environment": {
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros_distro": "Jazzy",
+    "python": "3.12.3",
+    "rclpy_package": "ros-jazzy-rclpy 7.1.12-1noble.20260912.162354",
+    "rmw": "rmw_cyclonedds_cpp",
+    "rmw_package": "ros-jazzy-rmw-cyclonedds-cpp 2.2.4-1noble.20260911.095700",
+    "package_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "same_package_manifest_as_first_pass": true
+  },
+  "diagnostic_instrumentation": "disabled",
+  "command": "docker run --rm --user 1000:1000 -e HOME=/tmp -v /tmp/smh-m234-repeat-58f5afee:/workspace smh-m4-local:latest bash scripts/m4_container.sh /workspace/evidence/runs/combined-m234-repeat-20261025",
+  "failure": {
+    "category": "container_could_not_resolve_detached_worktree_git_metadata",
+    "first_error": "fatal: not a git repository: /home/vboxuser/smart-mobility-hub/.git/worktrees/smh-m234-repeat-58f5afee",
+    "stage": "m3_container.sh provenance capture at git rev-parse HEAD",
+    "runner_exit_code": 128,
+    "milestones": {
+      "M2": "NOT RUN",
+      "M3": "NOT RUN",
+      "M4": "NOT RUN"
+    },
+    "assertion_failure": null
+  },
+  "elapsed_seconds_approx": 9,
+  "completed_utc": "2026-10-25T00:38:44Z",
+  "raw_evidence": "evidence/runs/combined-m234-repeat-20261025/",
+  "artifacts": {
+    "transcript": "evidence/runs/combined-m234-repeat-20261025/transcript.log",
+    "package_versions": "evidence/runs/combined-m234-repeat-20261025/package-versions.tsv",
+    "runner_exit_code": "evidence/runs/combined-m234-repeat-20261025/exit-code.txt",
+    "commit_file_created_before_git_error": "evidence/runs/combined-m234-repeat-20261025/commit.txt"
+  },
+  "artifact_sha256": {
+    "transcript.log": "2fb40c0734bcf7eb642d904c55189e835745d52a1720c06b1ef6f23ce33465ec",
+    "package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "exit-code.txt": "56292515f7d3a7110811eb8de26b3f75f82a0766aa5a1fd66ebcfcb84fe6d5ff",
+    "commit.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "comparison": "The prior run at the same source commit passed M2 18/18, M3 24/24 and M4 9/9. This attempt failed before smoke checks, build or milestone verifiers, so it is an execution setup failure and provides no evidence of a production regression.",
+  "retry": "Not performed, per authorization limit."
+}

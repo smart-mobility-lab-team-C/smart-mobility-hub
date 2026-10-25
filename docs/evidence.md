@@ -356,3 +356,12 @@ independent review remains BLOCKED. Raw logs, traces, results, package versions,
 source hashes and the exact image identity are in the
 [combined result index](../evidence/m234-combined-20261025.json) and its ignored
 raw directory `evidence/runs/combined-m234-20261025/`.
+
+The one authorized repeat attempt at the same commit and image terminated before
+smoke checks, build or milestone tests. Docker mounted the detached worktree,
+but not the host `.git/worktrees` path referenced by its `.git` file, so the
+runner's initial `git rev-parse HEAD` failed with exit 128. M2/M3/M4 are **NOT
+RUN** for this attempt; this does not contradict or alter the earlier PASS. The
+captured package manifest hash matches the first pass. No retry was performed.
+See the [repeat attempt index](../evidence/m234-repeat-20261025.json) and retained
+raw files in `evidence/runs/combined-m234-repeat-20261025/`.
