@@ -1,0 +1,9 @@
+{
+  "name": "OpenCV Zoo NanoDet-m-plus-1.5x_416",
+  "source_commit": "25f423d0e04c31a17254620e58febd7386da523b",
+  "source_url": "https://github.com/opencv/opencv_zoo/tree/25f423d0e04c31a17254620e58febd7386da523b/models/object_detection_nanodet",
+  "asset": "object_detection_nanodet_2022nov.onnx",
+  "sha256": "4b82da9944b88577175ee23a459dce2e26e6e4be573def65b1055dc2d9720186",
+  "license": "Apache-2.0",
+  "runtime_download": false
+}

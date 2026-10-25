@@ -348,3 +348,176 @@ docks. See [local completion evidence](../evidence/m3-local-completion.json) and
 QoS or freshness threshold changed. This acceptance result applies to the
 recorded environment and does not establish a common cause for all historical
 VirtualBox, host-clock or middleware gaps.
+
+## Bounded crossing boundary diagnostic — 2026-10-25
+
+The user requested one targeted diagnosis of the retained `5e9757b`
+`crossing_stale` failure before any correction or full regression. The existing
+trace lacks publisher/subscriber boundaries. `scripts/crossing_timing.py` adds
+opt-in diagnostic instrumentation only: crossing publication entry/return,
+executor ready/take, supervisor receipt with available middleware timestamps,
+callback duration and crossing freshness ages. Production entry points do not
+load it. No freshness, heartbeat, lease, reset or watchdog limits change.
+
+Inside the existing Jazzy image, run from `/workspace`:
+
+```bash
+bash scripts/crossing_timing_container.sh /workspace/evidence/runs/UNIQUE_RUN
+```
+
+This runs exactly one seed-300 mission, with a 240-second outer bound, using
+`.cache/m4-completion-v1/install` for generated interfaces and current source
+Python modules. It checks interface definitions and installed map identity and
+records module paths/hashes before starting. It performs no build and is not
+acceptance. The host wrapper must provide `host.jsonl` alongside `container.jsonl`.
+Unavailable middleware metadata remains unknown. A successful mission without
+reproduction cannot establish a root cause or reliability. Final clean-build
+acceptance continues to use `m4_container.sh` without `--m4-only`.
+
+### Result and stop condition
+
+One run at clean `c7c8777` completed in 68.481 s without a build. The collector
+exited zero, but the mission **FAILED** with `STALE_DOOR`; this is not acceptance
+PASS. The original `crossing_stale` was **NOT REPRODUCED**. Across 474 crossing
+publications, 429 supervisor receives and 867 crossing freshness checks, there
+were zero crossing-stale decisions. Maxima were: publication start interval
+155.953 ms, publish call 102.278 ms, supervisor receive interval 297.101 ms,
+middleware source-to-receive 130.381 ms, middleware receive-to-callback 82.603 ms,
+executor-ready-to-take 26.839 ms, take-to-callback 82.614 ms, and checked source
+age 232.917 ms. These maxima are separate observations, not additive latency
+components of one message. Middleware times assume the shared host clock; the
+instrumentation has no paired overhead measurement.
+
+The historical failure remains unexplained. Its trace does not contain these
+boundaries, and this run did not capture that failure. Neither crossing nor
+supervisor has an application shared lock; the bus lock is downstream of the
+supervisor's stale decision. Publisher scheduling, transport and supervisor
+dispatch remain unassigned for the historical event. No runtime correction is
+justified, and no second mission or full suite was run. The incidental door
+failure is retained without starting another investigation. Combined integration
+readiness remains **BLOCKED** on explaining the original failure and resolving
+the observed mission failure, not on changing any safety threshold.
+
+[Indexed evidence](../evidence/crossing-timing-20261025.json) retains provenance,
+measurements, raw locations and limitations. Raw data and the offline analyzer
+are under ignored `evidence/runs/crossing-boundaries-20261025/`.
+
+### Development test tiers
+
+- Fast pure checks: invoke the relevant existing core test directly; Python-only
+  changes do not require regenerating interfaces or rebuilding the image.
+- Targeted components: reuse a known Jazzy install with verified unchanged
+  interface definitions/map; overlay current Python sources and record imports
+  and hashes. The crossing runner demonstrates this without modifying the cache.
+- M3 timing: the opt-in single-mission boundary diagnostic is diagnostic evidence,
+  not a completed timing regression or reliability test. No passing timing
+  regression is claimed until the failing mechanism is identified and covered.
+- Final M2+M3+M4: retain the existing fresh-workspace `m4_container.sh` combined
+  acceptance. Run only after the diagnosis and targeted correction are complete.
+
+Build reuse avoids repeated setup cost but cannot repair timing defects. It must
+be rejected after interface or installed-resource changes; clean acceptance
+remains mandatory before claiming combined success.
+
+### Single py-spy attempt — 2026-10-25
+
+At the user's request, py-spy 0.4.2 was downloaded to the ignored cache with its
+PyPI wheel SHA256 verified. A harmless Python 3.12 child compatibility capture
+passed at 50 Hz with idle threads, 44 samples and zero errors. Parent-child
+memory access works with the existing UID 1000, zero effective capabilities and
+Docker seccomp enabled. No security settings, system packages, ROS configuration
+or production sources changed. No environment or workspace rebuild was needed.
+
+Exactly one targeted attempt then launched the unchanged bus worker under py-spy
+with `--rate 50 --idle --threads --format chrometrace`, retaining a timestamped
+profile. The existing 240-second outer bound and all safety/startup deadlines
+were preserved. The run ended in 42.917 s, failing the existing 20-second startup
+readiness check before any mission goal. Collection exit zero means artifacts
+were retained, not acceptance PASS. Neither `STALE_DOOR` nor `crossing_stale`
+occurred. No bus executor heartbeat was recorded, so there is no runtime
+executor-heartbeat gap to correlate with a mission failure.
+
+The profile contains 353 samples, zero reported read errors and a 13.38-second
+sampling backlog warning. MainThread samples show imports and ROS entity
+initialization; the only other sampled Python thread is the diagnostic recorder,
+mostly at `threading.wait`. Observation/mission worker execution was not reached.
+This is **INCONCLUSIVE**, not evidence of a specific runtime bottleneck or a
+resolved failure. The backlog prevents reliable timing attribution; sampled
+stacks cannot establish lock-wait duration, GIL starvation or transport delay.
+Profiler overhead and host contention remain unseparated.
+
+[Evidence index](../evidence/bus-pyspy-20261025.json) points to the raw profile,
+launcher/provenance, heartbeat records and analysis under ignored
+`evidence/runs/bus-pyspy-20261025/`. No second diagnostic or fix was attempted.
+The smallest proposed next step, requiring a new authorization, is to prepare
+parent-preserving attachment after bus readiness and verify a sustainable sample
+rate before interpreting a future profile. This would avoid profiling imports
+and ROS initialization without extending any startup or safety deadline.
+
+### Final bounded event experiment — 2026-10-25
+
+The user authorized one final custom experiment and abandoned py-spy for this
+pass. `freshness_events.py`, selected only by `diagnose_m3_gap.py --attempt
+--event-timing`, wraps existing bus callbacks/RLock and door/crossing publication.
+Per-thread deques have a fixed 16,384-record limit and a 16-thread limit;
+overwrites and trigger/thread overflow are reported. Failure markers do not
+freeze the buffers, so delayed callback returns survive. The retained preceding
+window is checked after the run; no claim is made if it was overwritten.
+
+There are no added recorder threads or timers, no runtime event serialization
+or file writes, and no periodic OS sampler. Existing operator heartbeat and
+mission behavior are retained; probe observation logging is memory-only.
+Worker buffers flush only after node/executor shutdown. Executor activity uses
+the existing 20 Hz control callback and 2 Hz state timer as heartbeat proxies;
+it is not the previous diagnostic's additional 10 Hz heartbeat. No public
+message, QoS, safety limit, production source or executor architecture changes.
+
+From `/workspace` in the existing Jazzy image, reuse the verified cached install:
+
+```bash
+bash scripts/crossing_timing_container.sh /workspace/evidence/runs/UNIQUE_RUN \
+  /workspace/.cache/m4-completion-v1 --event-timing
+```
+
+The runner verifies interface definitions, map and current Python import paths;
+one seed-300 mission has a 240-second outer bound, without retries or full
+acceptance. Bool door messages cannot be matched publisher-to-receiver one to
+one. Callback entry is not DDS receipt; no transport/dispatch split is claimed.
+Acquire-call wall duration includes descheduling. Corroborating owner intervals
+can establish contention overlap, not that all elapsed time was lock waiting.
+
+Result at clean `e918121`: **F — no relevant failure captured; root cause remains
+unresolved**. The one mission completed `DOCKED_BOARDED_DOOR_CLOSED`, with no
+bus/supervisor stale triggers. Goal execution took 65.150 s; the complete wrapper
+took 93.076 s with zero builds. No retry, full acceptance or production fix ran.
+
+Measured maxima: door callback-entry interval 307.580 ms; entry-to-cache update
+53.826 ms; logged cached-door age 268.075 ms over 1,057 checks (500 ms limit);
+control callback-entry interval 416.097 ms; callback wall span 150.835 ms;
+inner control body 64.715 ms; existing 2 Hz state-timer interval 966.582 ms.
+The state-timer metric is not comparable directly with the old added 10 Hz
+heartbeat. Lock acquire-call span reached 79.879 ms and recorded ownership
+span 130.300 ms. One 73.620 ms acquisition call overlapped a corroborated
+other-owner interval by 18.785 ms: contention exists, but the entire acquisition
+span is not established lock-wait time or the cause of a stale failure.
+
+Door/crossing publish-call entry intervals reached 303.926/290.181 ms; supervisor
+crossing callback interval reached 273.071 ms. These show publication/callback
+jitter, not a captured 500 ms freshness failure. No per-message door delivery
+matching or transport/dispatch separation is possible here. Callback and lock
+wall spans include descheduling and instrumentation overhead, not just CPU work.
+
+The observation-thread ring overwrote 18,447 older records, retaining its last
+33.9 s; other rings had no overwrites. There was no thread/trigger overflow, and
+every ring retained the final ten seconds. Observation-thread maxima apply only
+to its retained portion; control-thread freshness records cover the mission.
+[Indexed evidence](../evidence/freshness-events-20261025.json) links all raw
+records, offline analysis and provenance. This is not repeatable M3 acceptance.
+
+Custom diagnostics stop here. Practical stabilization should use the historical
+full M2+M3 pass `f6a97fd` as a comparison control, keep necessary M4 corrections
+scoped, and use the existing regression tools with a pinned Jazzy runtime.
+That historical pass is not a guarantee of reliability. The documented upstream
+Jazzy scheduling correction is an isolated runtime-change candidate to evaluate,
+not a proven fix; no framework change is applied or further experiment scheduled.
+

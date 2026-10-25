@@ -31,6 +31,12 @@ def test_world_rejects_off_graph_motion_and_accepts_permitted_edges():
     assert world.nearest_edge_id('bus', 1.0, 2.0) == 'A-Cs'
 
 
+def test_world_allows_straight_motion_across_a_shared_graph_node():
+    """A fixed physics step may straddle two collinear edges at their shared node."""
+    assert World._motion_on_allowed_edge('bus', (4.981, 4.0), (5.001, 4.0))
+    assert not World._motion_on_allowed_edge('bus', (4.981, 4.0), (5.001, 4.01))
+
+
 def test_world_sweeps_motion_against_optional_obstacle():
     """A fast step stops before entering the obstacle's inflated footprint."""
     world = World(seed=9, obstacle_enabled=True)

@@ -48,7 +48,6 @@ PROCESSES = (
     ('scenario_runner', 'smart_hub_sim', 'scenario_runner'),
     ('safety_supervisor', 'smart_hub_safety', 'safety_supervisor'),
     ('crossing_arbiter', 'smart_hub_control', 'crossing_arbiter'),
-    ('reset_coordinator', 'smart_hub_bringup', 'reset_coordinator'),
 )
 
 
@@ -393,7 +392,6 @@ def _parameter_dumps(probe: Probe) -> dict:
         '/scenario_runner',
         '/safety_supervisor',
         '/hub_coordinator',
-        '/reset_coordinator',
     ):
         started = time.monotonic()
         deadline = started + 10.0
@@ -1340,33 +1338,32 @@ def _test_stale_reset(probe: Probe) -> dict:
 
 
 def _test_missing_participant(probe: Probe, processes: dict, log_dir: Path) -> dict:
-    sim = processes.get('scenario_runner')
-    _assert(sim is not None and sim.poll() is None, 'scenario process already exited')
-    _stop_process(sim)
-    probe.ground_truth.clear()
+    peer = processes.get('crossing_arbiter')
+    _assert(peer is not None and peer.poll() is None, 'crossing process already exited')
+    _stop_process(peer)
     started = time.monotonic()
     response = probe.call(
         probe.reset_client, _service_request('m2_baseline', 101), timeout=1.25
     )
     elapsed = time.monotonic() - started
-    _assert(not response.success, 'reset succeeded without a simulator participant')
+    _assert(not response.success, 'reset succeeded without crossing participant')
     _assert(elapsed <= 1.25, f'missing participant response exceeded deadline: {elapsed}')
-    new_log = (log_dir / 'scenario_runner_restart.log').open('w', encoding='utf-8')
+    new_log = (log_dir / 'crossing_arbiter_restart.log').open('w', encoding='utf-8')
     replacement = subprocess.Popen(
-        ['ros2', 'run', 'smart_hub_sim', 'scenario_runner'],
+        ['ros2', 'run', 'smart_hub_control', 'crossing_arbiter'],
         stdout=new_log,
         stderr=subprocess.STDOUT,
         start_new_session=True,
     )
     replacement._m2_log_file = new_log
-    processes['scenario_runner'] = replacement
+    processes['crossing_arbiter'] = replacement
     restarted_at = time.monotonic()
     restored = probe.spin_until(
-        lambda: replacement.poll() is None and probe.ground_truth
-        and probe.ground_truth[-1][0] >= restarted_at,
+        lambda: replacement.poll() is None and probe.crossing_states
+        and probe.crossing_states[-1][0] >= restarted_at,
         STARTUP_TIMEOUT_SEC,
     )
-    _assert(restored, 'simulator did not restart after missing-participant test')
+    _assert(restored, 'crossing arbiter did not restart after missing-participant test')
     ready_for_reset = probe.spin_until(
         lambda: probe.crossing_states and probe.safety_states
         and probe.crossing_states[-1][0] >= restarted_at

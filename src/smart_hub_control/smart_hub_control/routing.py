@@ -11,7 +11,7 @@ from geometry_msgs.msg import Point
 from rcl_interfaces.msg import ParameterDescriptor
 import rclpy
 from rclpy.node import Node
-from smart_hub_interfaces.msg import EdgeStateArray
+from smart_hub_interfaces.msg import CrossingState, EdgeStateArray
 from smart_hub_interfaces.srv import ComputeRoute
 
 
@@ -52,7 +52,39 @@ def valid_edges(message, known):
     return edges
 
 
-def shortest_path(config, observations, start, goal, agent, excluded=()):
+def crossing_edge(config, edge):
+    """Identify edges whose line segment meets the C rectangle (map metres)."""
+    a, b = (config['nodes'][name] for name in edge['nodes'])
+    bounds = config['zones']['C']
+    if a[0] == b[0]:
+        return (bounds['x'][0] <= a[0] <= bounds['x'][1] and
+                max(min(a[1], b[1]), bounds['y'][0]) <=
+                min(max(a[1], b[1]), bounds['y'][1]))
+    if a[1] == b[1]:
+        return (bounds['y'][0] <= a[1] <= bounds['y'][1] and
+                max(min(a[0], b[0]), bounds['x'][0]) <=
+                min(max(a[0], b[0]), bounds['x'][1]))
+    return False
+
+
+def crossing_wait(state, agent):
+    """
+    Estimate wait from fresh arbitration state, without treating unknown as clear.
+
+    This conservative static estimate uses the two-second clearance debounce and
+    a one-second ownership lease. It is a planning cost, never motion permission.
+    """
+    if (state is None or not state.valid or
+            state.state not in ('CLEAR', 'OWNED', 'OCCUPIED', 'HOLD')):
+        return None
+    if state.pedestrian_present or state.state in ('OCCUPIED', 'HOLD'):
+        return 2.0
+    if state.owner_id and state.owner_id != agent:
+        return 1.0
+    return 0.0
+
+
+def shortest_path(config, observations, start, goal, agent, excluded=(), crossing=True):
     """Use nonnegative assignment costs and deterministic Dijkstra tie breaking."""
     if start not in config['nodes'] or goal not in config['nodes']:
         return [], 0.0, 'INVALID_NODE'
@@ -73,14 +105,18 @@ def shortest_path(config, observations, start, goal, agent, excluded=()):
             or agent not in edge['agents']
         ):
             continue
+        wait = 0.0
+        if crossing_edge(config, edge):
+            wait = 0.0 if crossing is True else crossing_wait(crossing, agent)
+            if wait is None:
+                continue
         a, b = edge['nodes']
         length = math.dist(config['nodes'][a], config['nodes'][b])
-        # No credible crossing-wait estimate exists in M3: declared cost term is zero.
         cost = (
             length
             / max(min(state.mean_speed_mps, speed_cap), 0.05)
             * (1 + 2 * state.density_ratio)
-        )
+        ) + wait
         graph[a].append((b, cost))
         graph[b].append((a, cost))
     pending = [(0.0, (start,))]
@@ -112,18 +148,29 @@ class RoutePlanner(Node):
         if not math.isfinite(self.ttl) or not 0 < self.ttl <= 1.0:
             raise ValueError('edge_freshness_sec must be in (0, 1]')
         self.sample = None
+        self.crossing_sample = None
         self.create_subscription(EdgeStateArray, '/traffic/edges', self.observe, 10)
+        qos = rclpy.qos.QoSProfile(
+            depth=1, durability=rclpy.qos.DurabilityPolicy.TRANSIENT_LOCAL)
+        self.create_subscription(CrossingState, '/crossing/state',
+                                 self.observe_crossing, qos)
         self.create_service(ComputeRoute, '/route/compute', self.compute)
 
     def observe(self, message):
         """Preserve the original acquisition stamp and receipt clock."""
         self.sample = (message, time.monotonic())
 
+    def observe_crossing(self, message):
+        """Retain acquisition and receipt ages for route eligibility."""
+        self.crossing_sample = (message, time.monotonic())
+
     def compute(self, request, response):
         """Return explicit failure and no waypoints for unavailable routes."""
         observations = {}
         if fresh(self, self.sample, self.ttl):
             observations = valid_edges(self.sample[0], {e['id'] for e in self.config['edges']})
+        crossing = (self.crossing_sample[0] if fresh(self, self.crossing_sample, 0.5)
+                    else None)
         path, cost, reason = shortest_path(
             self.config,
             observations,
@@ -131,6 +178,7 @@ class RoutePlanner(Node):
             request.goal_node,
             request.agent_type,
             request.excluded_edges,
+            crossing,
         )
         response.success = bool(path)
         response.node_ids = path

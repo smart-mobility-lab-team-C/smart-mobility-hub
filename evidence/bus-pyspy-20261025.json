@@ -1,0 +1,135 @@
+{
+  "schema": "smart-mobility-hub/bus-pyspy-diagnostic-v1",
+  "status": "INCONCLUSIVE_STARTUP_FAILURE",
+  "acceptance_eligible": false,
+  "source_commit": "87c8794718537f8a44a44a8513d069bd15e6961d",
+  "source_worktree": "",
+  "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "start_utc": "2026-10-24T23:16:42.024370+00:00",
+  "end_utc": "2026-10-24T23:17:24.941507+00:00",
+  "wall_duration_sec": 42.91709409400937,
+  "seed": 300,
+  "model": null,
+  "attempts": 1,
+  "goals_sent": 0,
+  "maximum_mission_seconds": 240,
+  "command": [
+    "sg",
+    "docker",
+    "-c",
+    "docker run --rm --name smh-bus-pyspy --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace -w /workspace smh-m4-local:latest bash /workspace/evidence/runs/bus-pyspy-20261025/bootstrap.sh /workspace/evidence/runs/bus-pyspy-20261025"
+  ],
+  "preflight": {
+    "py_spy": {
+      "version": "0.4.2",
+      "url": "https://files.pythonhosted.org/packages/f9/34/dd7d3c763a00b7b965e25a5eab0acd1a345dbaf0f45fffe595278873a1c0/py_spy-0.4.2-py2.py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.whl",
+      "wheel_sha256": "aeb0323409199c785f730645e9f4bb7a7b9ca2c481f2c331a55642b5d13fa52f",
+      "binary_sha256": "9b4d1f39b2a47ae44f4c6a46f615dcc0287d7755beba5065f32391951e07d594"
+    },
+    "python_version": "3.12; same retained Jazzy image",
+    "compatibility": "PASS: 44 samples, zero errors, idle threads, 50 Hz",
+    "process_vm_readv_parent_child": "PASS: 17 bytes read with UID 1000, CapEff=0, Seccomp=2",
+    "host_ptrace_scope": 1,
+    "attachment_method": "profiler launches bus child; no unrelated-PID attach",
+    "security_settings_changed": false,
+    "system_packages_installed": false
+  },
+  "build_reuse": {
+    "scope": "one M3 diagnostic; no acceptance; no build",
+    "modules": {
+      "smart_hub_sim.scenario_runner": {
+        "path": "/workspace/src/smart_hub_sim/smart_hub_sim/scenario_runner.py",
+        "sha256": "99181f23242fa1422d16cf81a05c40b27d649d1015780cd6dd953b2d2b16da43"
+      },
+      "smart_hub_safety.supervisor": {
+        "path": "/workspace/src/smart_hub_safety/smart_hub_safety/supervisor.py",
+        "sha256": "49acf25dced3d66ddf0e65c3856f8ed347af68edc8e022c1e7c50c90fa6462bf"
+      },
+      "smart_hub_control.crossing": {
+        "path": "/workspace/src/smart_hub_control/smart_hub_control/crossing.py",
+        "sha256": "62d89ef7f5b94cffef3b1c617c557ad6e6f97fdad9309cfd9e1e032df4fd5255"
+      },
+      "smart_hub_control.bus": {
+        "path": "/workspace/src/smart_hub_control/smart_hub_control/bus.py",
+        "sha256": "1e0021168f6a939d5f5f4548406c82e10fdbc7551a8ebbceb75684016b835743"
+      },
+      "smart_hub_control.routing": {
+        "path": "/workspace/src/smart_hub_control/smart_hub_control/routing.py",
+        "sha256": "84e6d038d9ff2ba2793a51018586d08e138aadcd92484cb13b9f72c11837cf50"
+      },
+      "smart_hub_bringup.reset": {
+        "path": "/workspace/src/smart_hub_bringup/smart_hub_bringup/reset.py",
+        "sha256": "0ef4a01dbe2f45ed975ee7680cc8ff5ad2af93e5eeb304fdd7982bda3e8f03ed"
+      }
+    }
+  },
+  "analysis": {
+    "status": "INCONCLUSIVE_STARTUP_FAILURE",
+    "collector_exit_code": 0,
+    "mission_status": "ERROR",
+    "mission_error": "AssertionError()",
+    "active_interval_established": false,
+    "goal_sent": false,
+    "STALE_DOOR_observed": false,
+    "crossing_stale_observed": false,
+    "requested_rate_hz": 50,
+    "idle_threads_included": true,
+    "profile_format": "chrometrace",
+    "profile_events": 3842,
+    "profile_threads": [
+      "thread (157)",
+      "thread (157): Thread-1 (_heartbeat)",
+      "thread (68)",
+      "thread (68): MainThread"
+    ],
+    "profile_relative_seconds": [
+      0.025646,
+      20.491989999999998
+    ],
+    "profile_launch_monotonic": 76473.491303708,
+    "first_background_heartbeat_after_profiler_launch_sec": 12.514598378009396,
+    "executor_heartbeat_count": 0,
+    "background_heartbeat_count": 17,
+    "background_heartbeat_max_gap_sec": 0.890375656003016,
+    "sampler_max_backlog_sec": 13.38,
+    "profiler_samples_and_errors": [
+      [
+        "353",
+        "0"
+      ]
+    ],
+    "interpretation": "MainThread samples show imports and ROS entity initialization; the recorder thread is mostly at threading.wait. No normal mission or executor-heartbeat interval was established.",
+    "limitations": [
+      "Sampling backlog invalidates reliable runtime timing attribution.",
+      "Sampled spans do not measure lock waits or GIL starvation.",
+      "Startup delay cannot be separated into profiler overhead and host contention from this capture.",
+      "Profile zero is relative to profiler recording, not a verified absolute clock anchor; launch metadata supplies an approximate bound."
+    ]
+  },
+  "confirmed": "The attempt never established bus readiness or sent a goal. Requested 50 Hz profiling fell behind by up to 13.38 s. Only initialization and the recorder Python thread were captured, not normal mission execution.",
+  "unproven": [
+    "GIL contention",
+    "RLock contention or wait duration",
+    "executor starvation",
+    "middleware delivery delay",
+    "how much startup delay came from profiling versus host contention"
+  ],
+  "next_action_recommendation": "For any separately authorized future capture, arrange parent-preserving attachment after readiness and validate sustainable sampling before interpreting timing.",
+  "changes": {
+    "production": false,
+    "ROS_configuration": false,
+    "safety_limits": false,
+    "executor_architecture": false,
+    "ROS_patches": false
+  },
+  "full_milestone_acceptance": "NOT RUN",
+  "artifacts": {
+    "root": "evidence/runs/bus-pyspy-20261025",
+    "profile": "evidence/runs/bus-pyspy-20261025/bus.chrometrace.json",
+    "analysis": "evidence/runs/bus-pyspy-20261025/analysis.json",
+    "offline_analyzer": "evidence/runs/bus-pyspy-20261025/analyze.py",
+    "manifest": "evidence/runs/bus-pyspy-20261025/artifact-sha256.json",
+    "file_count": 35,
+    "manifest_sha256": "2b521b362ce8e8c0167e8c27cc1534be6bf98e6f75f30f759541cf88be40cea1"
+  }
+}

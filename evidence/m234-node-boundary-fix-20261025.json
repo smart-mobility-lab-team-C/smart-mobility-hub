@@ -1,0 +1,97 @@
+{
+  "schema": "smart-mobility-hub/combined-m234-acceptance-v1",
+  "run_id": "m234-node-boundary-fix-20261025",
+  "status": "FAIL",
+  "base_commit": "85ecece15da6d2500651b58b92acaea20af3e391",
+  "worktree_clean_at_start": false,
+  "scope": "official clean-build combined pipeline; stopped on first M3 acceptance failure",
+  "command": "docker run --rm --network host --user 1000:1000 -e HOME=/tmp -v /home/vboxuser/smart-mobility-hub:/workspace -w /workspace sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b bash -lc 'revision/source-hash preflight; bash scripts/m4_container.sh /workspace/evidence/runs/m234-node-boundary-fix-20261025'",
+  "start_utc": "2026-10-25T02:46:14Z",
+  "end_utc": "2026-10-25T02:55:57.133069Z",
+  "wall_runtime_seconds": 583.133,
+  "environment": {
+    "host": "Ubuntu 22.04 VM",
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros_distro": "Jazzy",
+    "python": "3.12.3",
+    "rclpy": "7.1.12-1noble.20260912.162354",
+    "rmw": "Cyclone DDS 2.2.4",
+    "docker_image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "package_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "container_preflight": "PASS: revision, workspace root, and five changed source hashes matched before acceptance"
+  },
+  "fresh_workspace_build": {
+    "status": "PASS",
+    "packages": 8,
+    "interface_inspection": "PASS",
+    "package_tests": 58,
+    "test_errors": 0,
+    "test_failures": 0,
+    "test_skips": 0,
+    "style_checks": "PASS"
+  },
+  "milestones": {
+    "M2": {
+      "status": "PASS",
+      "passed": 18,
+      "total": 18
+    },
+    "M3": {
+      "status": "FAIL",
+      "attempted_cases": 5,
+      "passed": 4,
+      "failed": 1,
+      "not_run": 19,
+      "first_failure": {
+        "case": "nominal_docking_05",
+        "seed": 304,
+        "assertion": "closed - opened >= 8.0",
+        "measured_door_open_seconds": 7.973234,
+        "elapsed_seconds": 74.978925,
+        "status": "FAIL"
+      }
+    },
+    "M4": {
+      "status": "NOT RUN"
+    }
+  },
+  "failure_analysis": {
+    "classification": "acceptance failure, not infrastructure",
+    "same_seed_prior_results": {
+      "first_combined_pass_door_open_seconds": 8.201097,
+      "same_commit_repeat_door_open_seconds": 8.118734
+    },
+    "source_observation": "BusManager starts board_since at the control-tick time when it first sees door.data true, then closes after exactly eight seconds from that point. The external trace measured 7.973234 seconds from its first true sample.",
+    "likely_cause": "Control-timer phase and separate subscriber receipt timing can make the test's observed open interval shorter than eight seconds even though the bus waits eight seconds after sampling open.",
+    "recommended_correction": "Start the dwell from the recorded monotonic receipt time of the first confirmed open door sample and retain a one-control-period margin before requesting closure.",
+    "code_changed_after_failure": false,
+    "additional_tests_after_failure": false
+  },
+  "raw_evidence": "evidence/runs/m234-node-boundary-fix-20261025/",
+  "artifacts": {
+    "transcript": "evidence/runs/m234-node-boundary-fix-20261025/transcript.log",
+    "package_versions": "evidence/runs/m234-node-boundary-fix-20261025/package-versions.tsv",
+    "source_hashes": "evidence/runs/m234-node-boundary-fix-20261025/source-sha256.txt",
+    "worktree_identity": "evidence/runs/m234-node-boundary-fix-20261025/worktree.txt",
+    "M2_results": "evidence/runs/m234-node-boundary-fix-20261025/m2-regression.json",
+    "M3_results": "evidence/runs/m234-node-boundary-fix-20261025/m3/acceptance.json",
+    "M3_trace": "evidence/runs/m234-node-boundary-fix-20261025/m3/trace.jsonl",
+    "M4": "NOT RUN"
+  },
+  "artifact_manifest": "evidence/runs/m234-node-boundary-fix-20261025/artifact-sha256.txt",
+  "artifact_manifest_sha256": "b1126159f1cd68bc6d55a4da99fab0550e9ff8f99494b65851af62655022b76b",
+  "artifact_sha256": {
+    "transcript.log": "05518fa1b2f368cd9461fbc542e11ae7f0a1ab08d1186efecfe404d7752e193f",
+    "package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "source-sha256.txt": "e6128265647b489d0ca725a4971238beceea38ce3fae06203dae10c38c6f1bb2",
+    "m2-regression.json": "e9c762e27766e702522576d35cfc677d4f2461995beb7bd66a6b9824d61f5a17",
+    "m3/acceptance.json": "22cbee05e656f71b932d4d785b04835a17c212b78ba721d34a3706b878aa7aee",
+    "m3/trace.jsonl": "94d8b2102bf45b3479efc333efe3c739dfc218feef59a59b107bf404434d0cce"
+  },
+  "historical_success": {
+    "index": "evidence/m234-combined-20261025.json",
+    "commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+    "status": "PASS",
+    "preserved": true
+  }
+}

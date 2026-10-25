@@ -314,8 +314,9 @@ all eight package builds, interface/style checks, 54 package tests and all nine
 real-node M4 cases. Its scope file records M2/M3 NOT RUN. This is independent
 M4 functional acceptance under assignment §§11–12, not a green combined suite.
 The combined `5e9757b` attempt passed M2 but failed M3 on `crossing_stale`;
-that regression remains unresolved. The interrupted attempt and all other
-failures retain their original status in the [M4 index](../evidence/m4-local-completion.json).
+that failure remains preserved for its run. The later combined result is recorded
+below. The interrupted attempt and all other failures retain their original
+status in the [M4 index](../evidence/m4-local-completion.json).
 
 The final run followed a genuine M4 correction: freezing parking now repeats
 the last published acquisition immediately rather than taking one extra frame
@@ -338,3 +339,170 @@ include the source timer and delivery; they are retained as distinct metrics.
 [M4 handoff](m4-handoff.md) records reproduction and remaining work. Independent
 teammate review/reproduction is BLOCKED. M4 changes are merged into local `main`
 from `fix/m4-local-completion` and published to `origin/main`. No hosted run was used.
+
+## Combined M2+M3+M4 local acceptance — 2026-10-25
+
+The official clean-workspace `m4_container.sh` pipeline passed at run commit
+`58f5afee4bd53567634f022d836c6a94f5daeaa7`: M2 18/18, M3 24/24 (including
+seeds 300–309), and M4 9/9. The fresh build passed all eight packages, interface
+and style checks, and 54 package tests. Runtime was 21m 44.868s in the pinned
+Ubuntu 24.04.5 / ROS Jazzy image; rclpy was 7.1.12 and Cyclone DDS 2.2.4.
+Optional profiling and event instrumentation were disabled. No assertion failed.
+
+The run used implementation source through `b7d1df7`; the historical M2+M3
+comparison remains `f6a97fd`. The previous `5e9757b` `crossing_stale` failure is
+preserved as a failure for that run. One pass does not establish reliability;
+independent review remains BLOCKED. Raw logs, traces, results, package versions,
+source hashes and the exact image identity are in the
+[combined result index](../evidence/m234-combined-20261025.json) and its ignored
+raw directory `evidence/runs/combined-m234-20261025/`.
+
+The one authorized repeat attempt at the same commit and image terminated before
+smoke checks, build or milestone tests. Docker mounted the detached worktree,
+but not the host `.git/worktrees` path referenced by its `.git` file, so the
+runner's initial `git rev-parse HEAD` failed with exit 128. M2/M3/M4 are **NOT
+RUN** for this attempt; this does not contradict or alter the earlier PASS. The
+captured package manifest hash matches the first pass. No retry was performed.
+See the [repeat attempt index](../evidence/m234-repeat-20261025.json) and retained
+raw files in `evidence/runs/combined-m234-repeat-20261025/`.
+
+## Combined repeat run — 2026-10-25
+
+The second complete pipeline invocation used the same implementation commit
+`58f5afee`, pinned image, and package manifest. The in-container preflight
+passed. Build and package tests passed (8 packages; 54/54); M2 passed 18/18.
+M3 stopped on nominal seed 309: **9/10 nominal cases passed**, then the final
+DockBus result was `SAFE_STOP` with `SAFETY_INPUT_UNKNOWN:estop_stale`. M4 was
+NOT RUN. The first full run at the same source had passed seed 309 in 65.092 s,
+all M3 cases (24/24), and M4 (9/9), so this is an acceptance repeatability
+failure rather than the earlier Git mount issue. No root cause is inferred and
+no retry was performed. The run lasted 14m 16.905s through the M3 failure.
+The [repeat result index](../evidence/m234-repeat2-20261025.json) records exact
+environment and artifact hashes; full transcript, trace and node logs are in
+`evidence/runs/combined-m234-repeat2-20261025/`.
+
+## Linked-worktree container preflight — 2026-10-25
+
+The container originally saw the worktree's `.git` pointer but not its target
+under the main checkout's `.git/worktrees/`; the admin directory also referred
+back to the worktree's absolute `/tmp` path. The preflight now binds both paths
+and the common Git directory at their original locations. From inside the same
+pinned image it resolved commit `58f5afee`, confirmed the worktree was clean,
+matched all 142 tracked source records to the first successful run, and matched
+the full dependency manifest. The first run's full source manifest also listed
+nine ignored `.pytest_cache` files; those generated cache entries were excluded
+from the tracked-source comparison. The preflight passed without a build or
+acceptance run. See the [preflight record](../evidence/m234-container-preflight-20261025.json)
+and [preflight helper](../scripts/m234_container_preflight.sh).
+
+## M3 operator heartbeat isolation attempt — 2026-10-25
+
+The acceptance harness moved its existing E-stop publisher into a fail-closed
+child process; production source, topic, QoS and freshness limits were unchanged.
+One cached-build M3 verifier run used the same pinned image and dependencies as
+the combined acceptance runs. It completed in 836.579 s with 22/24 cases passing.
+All ten nominal seeds passed, including the previously failing seed 309, and the
+E-stop abort/latch case passed. The first failure was `busy_goal_rejection`
+because the cancel response contained no goals; a later failure was the bus
+position/stop assertion in `crossing_denial_renewal_loss_and_explicit_recovery`.
+M2 and M4 were NOT RUN. M3 remains **FAIL** for this run. The child's 8,177
+recorded publish starts had a maximum interval of 0.166901 s; that observation
+does not establish why the previous run produced `estop_stale`. No retry or
+follow-up investigation was performed. See the [result index](../evidence/m3-operator-isolation-20261025.json)
+and ignored [raw evidence](../evidence/runs/m3-operator-isolation-20261025/).
+
+## M3 shared-node route correction — 2026-10-25
+
+The cached-build real-node recovery trace at base commit `85ecece` showed the
+bus issuing forward commands while the fixed-step simulator held it at
+x=4.981 m. The controller had accepted the Cn waypoint within 0.05 m and moved
+to the next edge, but the simulator required each translation step's endpoints
+to lie on one identical graph edge. The simulator now allows a straight step
+through a shared permitted endpoint, while requiring both endpoints to remain
+on permitted edges. This did not alter safety thresholds.
+
+The incremental `smart_hub_sim` build, style checks and 13 focused M2 world/M3
+routing tests passed. One targeted M3 crossing-recovery run then failed after
+116.937 s: the bus crossed Cn and reached x=6.247 m, but the recovery action
+ended with `SAFETY_INPUT_UNKNOWN:crossing_stale`. Crossing publications were
+visible in the verifier trace at that time; supervisor-local receipt timing is
+not available, so the stale-input cause remains unresolved. The run did not
+include the nominal M3 suite, M2 or M4 acceptance. No combined pipeline or retry
+was run. See the [attempt index](../evidence/m3-node-boundary-fix-20261025.json) and
+hash-indexed ignored [raw evidence](../evidence/runs/m3-node-boundary-fix-20261025/).
+
+Subsequent source review found a confirmed guard/release mismatch introduced by
+the working-tree guard enlargement: ownership is required through x=6.48 m,
+release begins after x=6.10 m, and acquisition is disabled beyond x=5.80 m.
+The trace shows release at 88118.859 s and crossing-unavailable WAIT at
+88118.874 s, followed by 68.803 s of waiting before the final freshness abort.
+The recommended correction aligns outgoing release with the movement guard.
+The timing cause of the later `crossing_stale` remains unresolved. No code
+change or additional run accompanied this source/trace comparison.
+
+The release rule was then changed to retain ownership until the bus has passed
+the crossing and cleared the same expanded region required by the motion gate.
+The cached `smart_hub_control` build and 14 focused M2 world/M3 routing tests
+passed. A second run of the real-node recovery case passed in 67.773 s. It
+recorded five acquisition denials, a successful renewal-loss stop, retained
+ownership while occupied, and recovery by a new goal. The bus did not remain at
+x=6.247 m. This confirms the recorded release/wait deadlock is corrected. It
+does not establish that unrelated historical `crossing_stale` failures share
+that cause. The later full M2+M3+M4 pipeline outcome is recorded below. The updated
+[attempt index](../evidence/m3-node-boundary-fix-20261025.json) records both attempts and
+their hashes.
+
+## Combined M2+M3+M4 attempt — 2026-10-25
+
+The official pinned clean-build pipeline against working tree `85ecece` passed
+the fresh build, interface/style checks, 58 package tests and M2 (18/18), then
+stopped at the first M3 failure after 583.133 s. Four nominal seeds passed;
+seed 304 failed the 8.0 s door-open threshold at 7.973234 s. M3's remaining
+cases and M4 were NOT RUN. Earlier same-seed runs measured 8.201097 s and
+8.118734 s. Source review suggests the control timer starts dwell after first
+observing the open sample, but this timing explanation is not proven. No code
+change or retry followed. The [result index](../evidence/m234-node-boundary-fix-20261025.json)
+records the pinned Jazzy environment, run identity and hashes; full output
+remains in ignored [raw artifacts](../evidence/runs/m234-node-boundary-fix-20261025/).
+The first complete PASS at `58f5afee` remains preserved independently.
+
+## Door measurement validation attempt — 2026-10-25
+
+The new transition producer, conservative evaluator, and controlled tests are
+implemented provisionally. Validation is **BLOCKED**: the incremental build
+failed on the cached workspace's missing `/cache/install/smart_hub_interfaces`
+mount. Controls, the seed-304 comparison, adoption, and clean combined acceptance
+are **NOT RUN**. No retry followed. The official receipt assertion and the
+historical 7.973234 s FAIL remain unchanged. See the
+[validation record](door-measurement.md) and
+[result index](../evidence/door-measurement-20261025.json).
+
+
+## Door measurement resume — 2026-10-25
+
+The user-authorized fresh attempt from `98cbfb2` ran at clean revision `2c9ad87`.
+The pinned image, both mount aliases, package manifest, native interface imports,
+and prerequisite source checks passed. The incremental simulator build then
+**FAIL**ed on root-owned cached package metadata; zero packages completed and
+`smart_hub_control` was not processed. The timestamp span was 21.217213 s.
+Style, producer/evaluator controls, harness tests, world/routing regressions,
+comparison, adoption and clean acceptance are **NOT RUN**. No retry or permission
+change followed. See the [resume index](../evidence/door-measurement-resume-20261025.json)
+and [validation record](door-measurement.md). The previous BLOCKED attempt and
+historical 7.973234 s FAIL are unchanged. The historical physical cause remains
+unproven and the earlier dwell-timing/margin recommendation remains withdrawn.
+
+## Fresh door validation and stopped combined run — 2026-10-25
+
+At clean `d00b23e`, all seven ordered door controls passed and one seed-304,
+zero-passenger comparison passed with conservative source bounds
+8.125094930–8.125098802 s. Receipt time was separately retained at
+8.091999096 s. Candidate `67caa06` adopted the source gate. Its one pinned
+clean-build M2+M3+M4 run passed build, package tests, evaluator controls and
+harness controls, then stopped at M2 FAIL (16/18) after 288.773 s. M3 and M4
+are NOT RUN. The failed M2 cases were simulator observations readiness and a
+0.678119 s adapter stop against a 0.65 s limit. See the
+[completion index](../evidence/door-validation-completion-20261025.json) for
+commands, UTC times, dependencies, installed hashes, gate statuses and raw
+artifact manifests. Earlier attempts and the historical 7.973234 s receipt
+FAIL retain their original status. Repeatability is unestablished.

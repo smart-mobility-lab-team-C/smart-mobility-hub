@@ -1,0 +1,79 @@
+{
+  "schema": "smart-mobility-hub/m3-operator-isolation-v1",
+  "run_id": "m3-operator-isolation-20261025",
+  "status": "FAIL",
+  "scope": "single M3 verifier only; M2 and M4 NOT RUN; no combined pipeline",
+  "implementation_commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+  "harness_base_commit": "c5a0362ae764a05ba43a9c009ff5ed2bd8e4dbaf",
+  "worktree_was_dirty_for_harness_changes": true,
+  "production_src_unchanged_from_58f5afee": true,
+  "environment": {
+    "container_image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros": "Jazzy",
+    "python": "3.12.3",
+    "rclpy": "7.1.12-1noble.20260912.162354",
+    "rmw": "Cyclone DDS 2.2.4",
+    "dependency_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "build": "reused .cache/m4-completion-v1/install; no rebuild"
+  },
+  "start_utc": "2026-10-25T01:28:55Z",
+  "end_utc": "2026-10-25T01:42:51.579319Z",
+  "runtime_seconds": 836.579,
+  "acceptance": {
+    "cases_total": 24,
+    "passed": 22,
+    "failed": 2,
+    "nominal_runs": 10,
+    "nominal_seed_309": "PASS",
+    "estop_aborts_and_latches": "PASS",
+    "first_failure": {
+      "name": "busy_goal_rejection",
+      "reason": "AssertionError('cancel denied: action_msgs.srv.CancelGoal_Response(return_code=0, goals_canceling=[])')",
+      "elapsed_sec": 5.2115336260030745
+    },
+    "other_failure": [
+      {
+        "name": "crossing_denial_renewal_loss_and_explicit_recovery",
+        "reason": "AssertionError()",
+        "elapsed_sec": 35.39072093499999
+      }
+    ]
+  },
+  "operator_publisher": {
+    "process_isolated": true,
+    "topic": "/hub/estop",
+    "qos": "transient-local depth 1",
+    "recorded_publications": 8177,
+    "maximum_publish_start_interval_seconds": 0.166901,
+    "buffer_capacity": 30000,
+    "buffer_overflowed": false,
+    "note": "Own-process publish timing only; does not measure subscriber receipt or prove the source of the prior stale failure."
+  },
+  "preacceptance_issue": "One container shell launch exited before acceptance because nounset was active during ROS setup; corrected invocation then ran the verifier once.",
+  "fast_checks": {
+    "ament_flake8": "PASS",
+    "ament_pep257": "PASS",
+    "operator_state_unit_tests": "4/4 PASS"
+  },
+  "source_sha256": {
+    "scripts/verify_m3.py": "e9afa1ed2f9e20a5373e4f3fa1e1e458c471bafff502297813443250389620bd",
+    "scripts/m3_operator_heartbeat.py": "d0ae59b0386d7711793897d3dfe300b6f4c66588ede67bfd380c244cf632df5d",
+    "scripts/test_m3_operator_heartbeat.py": "83a0eea8cac9f8683be756a50b0fb97193ea0b604ffb1d92edf8615e4289e387",
+    "scripts/m3_container.sh": "967cbfe9ec06133392dd37b4a2c33e844d3bb73eb9b50ea6177d503a0204b08a",
+    "docs/m3.md": "df40043c15edcefdfc56438d8a372cbc974316abe5b2c4614b40910fe0a6fcc3",
+    "docs/automation.md": "890941b546979d3cf1cab74404406708e298bee28e12d70da1abf36b86b00d23",
+    "docs/evidence.md": "91e81a2fc2947bf9c52737e83aaf99220f1fd8ca523bb3a41bf7852b6ce3e1bd",
+    "docs/requirements.md": "786d2cbfa501222808ec8a3f3af19be52193634e76bf388644feb94b710bd623",
+    "docs/plan.md": "803271ae17ffb3109bd963509f367bb0300b164c8faa12ff0e7524fa0f8730c7",
+    "docs/test-matrix.md": "20347413d72414991820027128993a3943640a506c0ec9222b7c275cd4bef4d6"
+  },
+  "artifact_manifest": "evidence/runs/m3-operator-isolation-20261025/artifact-sha256.txt",
+  "artifact_manifest_sha256": "84fcdc894e7ac730e85a965f2289b1708d965e3447432511d2146165702ee263",
+  "primary_artifacts_sha256": {
+    "acceptance": "evidence/runs/m3-operator-isolation-20261025/m3/acceptance.json: 6b6fba7efb18eab75b848a156f44a65da9e45b1793d3fe8a2f3de128a9717d1c",
+    "trace": "evidence/runs/m3-operator-isolation-20261025/m3/trace.jsonl: 4b68f5db688f9f067125e3d7aaf354fd72ef10a90ee8f904361c78293aa8148c",
+    "operator_heartbeat": "evidence/runs/m3-operator-isolation-20261025/m3/operator-heartbeat.jsonl: 32cdccf72ee08d30e8f18dab60f41f79c33bd18b31a39ce0f7c48cd15c4dd37c",
+    "transcript": "evidence/runs/m3-operator-isolation-20261025/transcript.log: 9ed98df0e8a2440fed3748fa8020d17b73696ebe35adba689eba76390edb7b14"
+  }
+}

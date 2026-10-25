@@ -1,0 +1,178 @@
+{
+  "schema": "smart-mobility-hub/freshness-events-v1",
+  "classification": "F: no relevant failure captured",
+  "root_cause": "UNRESOLVED; successful single mission is not evidence of reliability",
+  "source_commit": "e918121e8f78d5ff18a1b40e470a19876216d1ab",
+  "source_worktree": "",
+  "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "start_utc": "2026-10-24T23:49:42.132314+00:00",
+  "end_utc": "2026-10-24T23:51:15.208583+00:00",
+  "wall_duration_sec": 93.076263287,
+  "goal_duration_sec": 65.150349872,
+  "seed": 300,
+  "model": null,
+  "attempts": 1,
+  "retries": 0,
+  "builds": 0,
+  "outer_limit_seconds": 240,
+  "collector_exit_code": 0,
+  "mission_status": "MISSION_SUCCEEDED",
+  "terminal": {
+    "status": 4,
+    "result": {
+      "success": true,
+      "final_state": "COMPLETE",
+      "reason": "DOCKED_BOARDED_DOOR_CLOSED"
+    }
+  },
+  "acceptance_eligible": false,
+  "full_acceptance": "NOT RUN",
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--name",
+    "smh-freshness-events",
+    "--user",
+    "1000:1000",
+    "-e",
+    "HOME=/tmp",
+    "-v",
+    "/home/vboxuser/smart-mobility-hub:/workspace",
+    "-w",
+    "/workspace",
+    "smh-m4-local:latest",
+    "bash",
+    "scripts/crossing_timing_container.sh",
+    "/workspace/evidence/runs/freshness-events-20261025",
+    "/workspace/.cache/m4-completion-v1",
+    "--event-timing"
+  ],
+  "reuse_provenance": {
+    "scope": "one M3 diagnostic; no acceptance; no build",
+    "modules": {
+      "smart_hub_sim.scenario_runner": {
+        "path": "/workspace/src/smart_hub_sim/smart_hub_sim/scenario_runner.py",
+        "sha256": "99181f23242fa1422d16cf81a05c40b27d649d1015780cd6dd953b2d2b16da43"
+      },
+      "smart_hub_safety.supervisor": {
+        "path": "/workspace/src/smart_hub_safety/smart_hub_safety/supervisor.py",
+        "sha256": "49acf25dced3d66ddf0e65c3856f8ed347af68edc8e022c1e7c50c90fa6462bf"
+      },
+      "smart_hub_control.crossing": {
+        "path": "/workspace/src/smart_hub_control/smart_hub_control/crossing.py",
+        "sha256": "62d89ef7f5b94cffef3b1c617c557ad6e6f97fdad9309cfd9e1e032df4fd5255"
+      },
+      "smart_hub_control.bus": {
+        "path": "/workspace/src/smart_hub_control/smart_hub_control/bus.py",
+        "sha256": "1e0021168f6a939d5f5f4548406c82e10fdbc7551a8ebbceb75684016b835743"
+      },
+      "smart_hub_control.routing": {
+        "path": "/workspace/src/smart_hub_control/smart_hub_control/routing.py",
+        "sha256": "84e6d038d9ff2ba2793a51018586d08e138aadcd92484cb13b9f72c11837cf50"
+      },
+      "smart_hub_bringup.reset": {
+        "path": "/workspace/src/smart_hub_bringup/smart_hub_bringup/reset.py",
+        "sha256": "0ef4a01dbe2f45ed975ee7680cc8ff5ad2af93e5eeb304fdd7982bda3e8f03ed"
+      }
+    }
+  },
+  "measurements_seconds": {
+    "door_callback_entry_interval_max": 0.307579872,
+    "door_entry_to_cache_update_max": 0.053825974,
+    "cached_door_age_logged_max": 0.2680746900005033,
+    "door_freshness_limit": 0.5,
+    "control_callback_entry_interval_max": 0.416097461,
+    "control_callback_wall_span_max": 0.150834575,
+    "inner_control_body_wall_span_max": 0.064715316,
+    "state_timer_interval_max": 0.96658214,
+    "state_timer_nominal_period": 0.5,
+    "lock_acquire_call_wall_span_max": 0.079878624,
+    "lock_owned_wall_span_max": 0.130299734,
+    "door_publish_call_entry_interval_max": 0.303925795,
+    "crossing_publish_call_entry_interval_max": 0.290181111,
+    "crossing_receive_callback_interval_max": 0.273070898
+  },
+  "sample_counts": {
+    "door_freshness_checks": 1057,
+    "invalid_door_freshness_checks": 0,
+    "retained_door_cache_updates": 320,
+    "bus_failure_triggers": 0,
+    "supervisor_crossing_stale_triggers": 0
+  },
+  "incidental_contention_example": {
+    "seconds": 0.0736201,
+    "start_ns": 78507398354988,
+    "end_ns": 78507471975088,
+    "tid": 145,
+    "owner_at_request": 147,
+    "corroborated_owner_overlap_sec": 0.018784691
+  },
+  "buffer_overwritten": {
+    "bus_manager": {
+      "145": 18447,
+      "146": 0,
+      "147": 0
+    },
+    "scenario_runner": {
+      "61": 0
+    },
+    "safety_supervisor": {
+      "62": 0
+    },
+    "probe": {
+      "48": 0
+    },
+    "crossing_arbiter": {
+      "63": 0
+    }
+  },
+  "thread_overflow": {
+    "bus_manager": 0,
+    "scenario_runner": 0,
+    "safety_supervisor": 0,
+    "probe": 0,
+    "crossing_arbiter": 0
+  },
+  "trigger_overflow": {
+    "bus_manager": 0,
+    "scenario_runner": 0,
+    "safety_supervisor": 0,
+    "probe": 0,
+    "crossing_arbiter": 0
+  },
+  "preceding_window_coverage": {
+    "bus_manager": true,
+    "scenario_runner": true,
+    "safety_supervisor": true,
+    "probe": true,
+    "crossing_arbiter": true
+  },
+  "limitations": [
+    "No one-to-one door publication/callback matching.",
+    "No DDS receipt timestamp: transport and dispatch are inseparable.",
+    "Acquire/hold wall spans include descheduling and tracing overhead.",
+    "Executor heartbeat proxy is existing control/state timers.",
+    "Observation-thread maxima cover retained final 33.9 s only; 18,447 older records overwritten.",
+    "Control-thread records were not overwritten and freshness checks cover normal mission execution.",
+    "Publication jitter and incidental contention do not establish the historical failure mechanism.",
+    "No extra recorder threads, timers, periodic samplers or runtime event serialization were used."
+  ],
+  "verification": {
+    "bounded_rollover_and_RLock_semantics": "PASS: reentrancy, competing thread, native invalid release",
+    "style": "PASS: ament_flake8 and ament_pep257 for changed Python diagnostics",
+    "syntax": "PASS: Python compilation and shell syntax",
+    "documentation_links": "PASS",
+    "production_changes": false,
+    "safety_QoS_deadline_changes": false
+  },
+  "next_step": "Stop custom instrumentation. Use historical f6a97fd as a comparison control, retain scoped M4 corrections, and evaluate a pinned supported Jazzy runtime with existing regression tools. No additional experiment or fix authorized here.",
+  "artifacts": {
+    "root": "evidence/runs/freshness-events-20261025",
+    "analysis": "evidence/runs/freshness-events-20261025/analysis.json",
+    "offline_analyzer": "evidence/runs/freshness-events-20261025/analyze.py",
+    "manifest": "evidence/runs/freshness-events-20261025/artifact-sha256.json",
+    "files": 28,
+    "manifest_sha256": "f56194cd530f4665779abc0b0af9ed95e54c9824f4efd1823980180970298626"
+  }
+}

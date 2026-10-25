@@ -1,0 +1,487 @@
+{
+  "schema": "smart-mobility-hub/door-validation-completion-v1",
+  "run_id": "door-validation-20261025T035302Z",
+  "status": "FAIL",
+  "reason": "clean combined pipeline stopped at M2; M3 and M4 NOT RUN",
+  "source_revision": "d00b23ef759ab4db9fbdb4a014018099a2885477",
+  "candidate_revision": "67caa06cacf7fa291de0ca3c4c2288b7653772d9",
+  "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "dependency_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+  "cache_path": "/home/vboxuser/smart-mobility-hub/.cache/door-validation/door-validation-20261025T035302Z",
+  "mount_identity": {
+    "repo": [
+      2051,
+      1981480
+    ],
+    "cache": [
+      2051,
+      2647915
+    ]
+  },
+  "controls": {
+    "status": "PASS",
+    "elapsed_sec": 79.85252373899857,
+    "gates": [
+      {
+        "name": "mounts_and_dependencies",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:53:23.561592+00:00",
+        "ended_utc": "2026-10-25T03:53:35.772509+00:00",
+        "elapsed_sec": 12.199611732998164
+      },
+      {
+        "name": "incremental_build",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:53:35.801315+00:00",
+        "ended_utc": "2026-10-25T03:53:42.211965+00:00",
+        "elapsed_sec": 6.408549654996023
+      },
+      {
+        "name": "flake8",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:53:42.247022+00:00",
+        "ended_utc": "2026-10-25T03:53:44.640120+00:00",
+        "elapsed_sec": 2.385700334998546
+      },
+      {
+        "name": "pep257",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:53:44.662379+00:00",
+        "ended_utc": "2026-10-25T03:53:45.939191+00:00",
+        "elapsed_sec": 1.26059459199314
+      },
+      {
+        "name": "producer_and_evaluator_controls",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:53:45.940540+00:00",
+        "ended_utc": "2026-10-25T03:54:07.505310+00:00",
+        "elapsed_sec": 21.564018745993963
+      },
+      {
+        "name": "harness_controls",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:54:07.527386+00:00",
+        "ended_utc": "2026-10-25T03:54:12.483000+00:00",
+        "elapsed_sec": 4.936859106004704
+      },
+      {
+        "name": "world_and_routing_regressions",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:54:12.505840+00:00",
+        "ended_utc": "2026-10-25T03:54:16.092888+00:00",
+        "elapsed_sec": 3.5846961829956854
+      }
+    ]
+  },
+  "comparison": {
+    "status": "PASS",
+    "elapsed_sec": 118.16406993100827,
+    "seed": 304,
+    "initial_passengers": 0,
+    "source_status": "PASS",
+    "source_minimum_ns": 8125094930,
+    "source_maximum_ns": 8125098802,
+    "receipt_assertion": {
+      "status": "PASS",
+      "duration_sec": 8.091999095995561,
+      "assertion": "closed - opened >= 8.0",
+      "disagrees_with_source": false
+    },
+    "other_nominal_requirements": "PASS",
+    "deadline_sec": 240,
+    "cleanup_reserve_sec": 20
+  },
+  "adoption": {
+    "status": "PASS",
+    "revision": "67caa06cacf7fa291de0ca3c4c2288b7653772d9",
+    "rule": "minimum_ns >= 8000000000 PASS; maximum_ns < 8000000000 FAIL; otherwise BLOCKED"
+  },
+  "clean_pipeline": {
+    "status": "FAIL",
+    "run_id": "combined-m234-source-gate-20261025T0400Z",
+    "host_elapsed_sec": 288.77328543399926,
+    "container_elapsed_sec": 254.08612160700432,
+    "revision": "67caa06cacf7fa291de0ca3c4c2288b7653772d9",
+    "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "dependency_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "installed_manifest_sha256": "b2ecc3c171d64743c4683301abbba619e9e10bfeb13250ffedbe37f87498c6bd",
+    "installed_artifact_count": 843,
+    "gates": [
+      {
+        "name": "smoke",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T03:59:58.689092+00:00",
+        "ended_utc": "2026-10-25T04:00:03.374285+00:00",
+        "elapsed_sec": 4.685194801990292,
+        "command": [
+          "bash",
+          "scripts/smoke.sh"
+        ],
+        "log": "gate-logs/smoke.log"
+      },
+      {
+        "name": "m1_check",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:00:03.464872+00:00",
+        "ended_utc": "2026-10-25T04:00:03.769928+00:00",
+        "elapsed_sec": 0.3065475100011099,
+        "command": [
+          "python3",
+          "scripts/check_m1.py"
+        ],
+        "log": "gate-logs/m1_check.log"
+      },
+      {
+        "name": "style",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:00:03.956748+00:00",
+        "ended_utc": "2026-10-25T04:00:07.464869+00:00",
+        "elapsed_sec": 3.5081186719908146,
+        "command": [
+          "bash",
+          "-c",
+          "ament_flake8 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py scripts/m3_operator_heartbeat.py scripts/test_m3_operator_heartbeat.py scripts/door_duration.py scripts/verification.py scripts/door_measurement.py scripts/test_verification.py scripts/m234_gate.py && ament_pep257 src scripts/check_m1.py scripts/inspect_m1_interfaces.py scripts/verify_m2.py scripts/verify_m3.py scripts/m3_operator_heartbeat.py scripts/test_m3_operator_heartbeat.py scripts/door_duration.py scripts/verification.py scripts/door_measurement.py scripts/test_verification.py scripts/m234_gate.py"
+        ],
+        "log": "gate-logs/style.log"
+      },
+      {
+        "name": "operator_controls",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:00:07.631503+00:00",
+        "ended_utc": "2026-10-25T04:00:08.789639+00:00",
+        "elapsed_sec": 1.1581350400083466,
+        "command": [
+          "python3",
+          "scripts/test_m3_operator_heartbeat.py"
+        ],
+        "log": "gate-logs/operator_controls.log"
+      },
+      {
+        "name": "fresh_build",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:00:08.907597+00:00",
+        "ended_utc": "2026-10-25T04:01:31.365114+00:00",
+        "elapsed_sec": 82.45751781298895,
+        "command": [
+          "colcon",
+          "build",
+          "--event-handlers",
+          "console_direct+"
+        ],
+        "log": "gate-logs/fresh_build.log"
+      },
+      {
+        "name": "installed_fingerprint",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:01:31.395435+00:00",
+        "ended_utc": "2026-10-25T04:01:31.623536+00:00",
+        "elapsed_sec": 0.22810092898725998,
+        "command": [
+          "python3",
+          "scripts/m234_gate.py",
+          "/workspace/evidence/runs/combined-m234-source-gate-20261025T0400Z",
+          "fingerprint",
+          "/tmp/smh-m3.rzo3Tw/install"
+        ],
+        "log": "gate-logs/installed_fingerprint.log"
+      },
+      {
+        "name": "overlay_check",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:01:31.656452+00:00",
+        "ended_utc": "2026-10-25T04:01:31.879420+00:00",
+        "elapsed_sec": 0.22296940699743573,
+        "command": [
+          "bash",
+          "-c",
+          "source install/setup.bash"
+        ],
+        "log": "gate-logs/overlay_check.log"
+      },
+      {
+        "name": "interface_check",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:01:32.683005+00:00",
+        "ended_utc": "2026-10-25T04:01:50.466844+00:00",
+        "elapsed_sec": 17.78383815199777,
+        "command": [
+          "python3",
+          "scripts/inspect_m1_interfaces.py"
+        ],
+        "log": "gate-logs/interface_check.log"
+      },
+      {
+        "name": "package_tests",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:01:50.541622+00:00",
+        "ended_utc": "2026-10-25T04:02:25.136084+00:00",
+        "elapsed_sec": 34.59447588700277,
+        "command": [
+          "bash",
+          "-c",
+          "test_status=0; colcon test --event-handlers console_direct+ --return-code-on-test-failure || test_status=$?; colcon test-result --verbose || test_status=$?; exit \"$test_status\""
+        ],
+        "log": "gate-logs/package_tests.log"
+      },
+      {
+        "name": "evaluator_controls",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:02:25.265257+00:00",
+        "ended_utc": "2026-10-25T04:02:46.658641+00:00",
+        "elapsed_sec": 21.393381082991255,
+        "command": [
+          "python3",
+          "-m",
+          "pytest",
+          "-x",
+          "-v",
+          "src/smart_hub_sim/test/test_m3_door_evidence.py"
+        ],
+        "log": "gate-logs/evaluator_controls.log"
+      },
+      {
+        "name": "harness_controls",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:02:46.791930+00:00",
+        "ended_utc": "2026-10-25T04:02:50.978560+00:00",
+        "elapsed_sec": 4.186632519005798,
+        "command": [
+          "python3",
+          "-m",
+          "pytest",
+          "-x",
+          "-v",
+          "scripts/test_verification.py"
+        ],
+        "log": "gate-logs/harness_controls.log"
+      },
+      {
+        "name": "reference_hashes",
+        "status": "PASS",
+        "exit_code": 0,
+        "started_utc": "2026-10-25T04:02:51.129950+00:00",
+        "ended_utc": "2026-10-25T04:02:51.358970+00:00",
+        "elapsed_sec": 0.22901954500412103,
+        "command": [
+          "sha256sum",
+          "src/smart_hub_sim/config/map_m1.yaml",
+          "docs/contracts/m1-fields.json"
+        ],
+        "log": "gate-logs/reference_hashes.log"
+      },
+      {
+        "name": "m2",
+        "status": "FAIL",
+        "exit_code": 1,
+        "started_utc": "2026-10-25T04:02:51.492934+00:00",
+        "ended_utc": "2026-10-25T04:04:11.392138+00:00",
+        "elapsed_sec": 79.89921491401037,
+        "command": [
+          "python3",
+          "scripts/verify_m2.py",
+          "--output",
+          "/workspace/evidence/runs/combined-m234-source-gate-20261025T0400Z/m2-regression.json"
+        ],
+        "log": "gate-logs/m2.log"
+      },
+      {
+        "name": "m3",
+        "status": "NOT RUN",
+        "exit_code": null,
+        "started_utc": null,
+        "ended_utc": null,
+        "elapsed_sec": null,
+        "command": null,
+        "log": null
+      },
+      {
+        "name": "m4_style",
+        "status": "NOT RUN",
+        "exit_code": null,
+        "started_utc": null,
+        "ended_utc": null,
+        "elapsed_sec": null,
+        "command": null,
+        "log": null
+      },
+      {
+        "name": "m4",
+        "status": "NOT RUN",
+        "exit_code": null,
+        "started_utc": null,
+        "ended_utc": null,
+        "elapsed_sec": null,
+        "command": null,
+        "log": null
+      },
+      {
+        "name": "m4_plot",
+        "status": "NOT RUN",
+        "exit_code": null,
+        "started_utc": null,
+        "ended_utc": null,
+        "elapsed_sec": null,
+        "command": null,
+        "log": null
+      }
+    ],
+    "m2": {
+      "status": "FAIL",
+      "passed_cases": 16,
+      "failed_cases": [
+        {
+          "name": "simulator_observations_ready",
+          "detail": "RuntimeError: no odometry/observation/evaluator output",
+          "observations": null
+        },
+        {
+          "name": "adapter_stops_after_supervisor_loss",
+          "detail": "MeasurementFailure: adapter stop exceeded 0.65s",
+          "observations": {
+            "trials": [
+              {
+                "process_reap_sec": 5.3508993005380034e-05,
+                "signal_monotonic": 93706.804025959,
+                "source_cutoff_ros_sec": 1792901047.119872,
+                "trial": 1,
+                "truth_samples": [
+                  {
+                    "received_monotonic": 93706.630043019,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901045.9016683
+                  },
+                  {
+                    "received_monotonic": 93706.644735846,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.0457253
+                  },
+                  {
+                    "received_monotonic": 93706.645151444,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.1526103
+                  },
+                  {
+                    "received_monotonic": 93706.64983603,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.247111
+                  },
+                  {
+                    "received_monotonic": 93706.650194689,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.3467016
+                  },
+                  {
+                    "received_monotonic": 93706.654953585,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.4633515
+                  },
+                  {
+                    "received_monotonic": 93706.655286128,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.5523515
+                  },
+                  {
+                    "received_monotonic": 93706.664909375,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.6670117
+                  },
+                  {
+                    "received_monotonic": 93706.665248115,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.7593355
+                  },
+                  {
+                    "received_monotonic": 93706.676031422,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.8488722
+                  },
+                  {
+                    "received_monotonic": 93706.676401168,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901046.9549606
+                  },
+                  {
+                    "received_monotonic": 93706.804002857,
+                    "robot_speed_mps": 0.10000000149011612,
+                    "source_ros_sec": 1792901047.050761
+                  },
+                  {
+                    "received_monotonic": 93706.863787374,
+                    "robot_speed_mps": 0.10000000149011612,
+                    "source_ros_sec": 1792901047.1477349
+                  },
+                  {
+                    "received_monotonic": 93706.963099131,
+                    "robot_speed_mps": 0.10000000149011612,
+                    "source_ros_sec": 1792901047.2649884
+                  },
+                  {
+                    "received_monotonic": 93707.072265162,
+                    "robot_speed_mps": 0.10000000149011612,
+                    "source_ros_sec": 1792901047.3508894
+                  },
+                  {
+                    "received_monotonic": 93707.220035186,
+                    "robot_speed_mps": 0.10000000149011612,
+                    "source_ros_sec": 1792901047.4927328
+                  },
+                  {
+                    "received_monotonic": 93707.254693773,
+                    "robot_speed_mps": 0.10000000149011612,
+                    "source_ros_sec": 1792901047.5508897
+                  },
+                  {
+                    "received_monotonic": 93707.482145329,
+                    "robot_speed_mps": 0.0,
+                    "source_ros_sec": 1792901047.6727135
+                  }
+                ],
+                "zero_observed": true,
+                "zero_receipt_latency_sec": 0.6781193700007861
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "m3": "NOT RUN",
+    "m4": "NOT RUN"
+  },
+  "historical_duration": {
+    "receipt_sec": 7.973234,
+    "status": "FAIL",
+    "physical_cause": "unproven"
+  },
+  "repeatability": "not established by one comparison or one combined attempt",
+  "raw_artifacts": {
+    "door_attempt": "evidence/runs/door-validation-20261025T035302Z",
+    "door_manifest_sha256": "06a9e3cfce459c11c75b460907f2a28fb8dbe07f7b99f27138a3d2bdb7ee316a",
+    "combined_run": "evidence/runs/combined-m234-source-gate-20261025T0400Z",
+    "combined_manifest_sha256": "bc7d6b6f3fb508741fc99cf6c03728a02e43e63e8976a0cefaae7a48faa025c9",
+    "m2_report_sha256": "4ee5bd72c0d4f9a554f05630a5ce3529c92c16c8efd8cf45ee195b68402631d8",
+    "host_run_sha256": "e4b5bed1be6284ac9ed6fd8b33aa5ba12991fba648e526370096498c22ddb729"
+  },
+  "prior_attempt_indexes_sha256": {
+    "evidence/door-measurement-20261025.json": "e1414617c6a5bd5daf0e04fd119463813dc6338ff4e976e92fd2f6d43162d5be",
+    "evidence/door-measurement-resume-20261025.json": "07fcb07e623ebf133a5aabe64e9c2641501f8ac7b89e4eb09c9ebf132fd06790",
+    "evidence/door-validation-isolated-20261025.json": "b60689e11ef795f122e064ae8b56566e8c64acecb38a024a217ee4b6c7c3cf9a"
+  }
+}

@@ -6,17 +6,17 @@ Verification runs locally in the Ubuntu 24.04/Jazzy Docker environment by defaul
 GitHub Actions is an optional project tool, not a recorded assignment requirement;
 hosted runs require an explicit request. See [verification policy](docs/automation.md#local-verification-default).
 
-**Current acceptance status:** The fresh M4-only run at `b7d1df7` passed all
-9/9 M4 cases, 54 package tests, and a fresh eight-package build. Its scoped
-runner explicitly left M2/M3 NOT RUN. Assignment-scoped M4 functional
-acceptance T07–T10 is complete, pending independent review. The latest combined
-regression (`5e9757b`) passed M2 18/18 but failed at its first nominal M3 case
-with `SAFE_STOP/SAFETY_INPUT_UNKNOWN:crossing_stale`; T05 is FAIL in that
-attempt and T06 was NOT RUN. An earlier full M3 run (`f6a97fd`) passed 24/24,
-including T05–T06, and remains historical evidence. Combined regression is
-still open at M3; this does not leave M4 assignment acceptance open. M4 changes are merged into local `main` from `fix/m4-local-completion` and published to `origin/main`. See the [M4
-evidence index](evidence/m4-local-completion.json), [M3 handoff](docs/m3.md),
-and [setup](docs/setup.md). Independent review remains BLOCKED.
+**Current acceptance status:** One complete combined run at `58f5afee` passed
+M2 18/18, M3 24/24 and M4 9/9, with a fresh build and 54 passing package tests.
+The repeat run used the same commit, image and dependencies; M2 passed 18/18,
+but M3 nominal seed 309 stopped with `SAFETY_INPUT_UNKNOWN:estop_stale` after
+the previous nine nominal cases passed. M4 was NOT RUN in that repeat. The
+combined result is not yet repeatable; no production changes were made. See the
+[first pass](evidence/m234-combined-20261025.json), [repeat result](evidence/m234-repeat2-20261025.json),
+[M4 evidence](evidence/m4-local-completion.json), and [M3 handoff](docs/m3.md).
+The later source-door candidate at `67caa06` passed targeted controls and one
+seed-304 comparison, then its clean combined run stopped at M2 FAIL (16/18);
+M3 and M4 were NOT RUN. See the [candidate result](evidence/door-validation-completion-20261025.json).
 
 ## Start here
 

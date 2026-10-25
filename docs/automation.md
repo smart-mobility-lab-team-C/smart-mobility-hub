@@ -39,6 +39,14 @@ their attributed source change.
 
 Run `bash scripts/check_fast.sh` on the local PC for syntax, tooling tests, M1
 source contracts and documentation links. This does not establish ROS acceptance.
+For Python-only diagnosis, reuse the verified generated-interface install and
+overlay current sources rather than rebuilding every package. The
+[bounded crossing diagnostic and test tiers](m3-gap-diagnostic.md#bounded-crossing-boundary-diagnostic--2026-10-25)
+describe identity checks, recorded results and limits. This development shortcut
+does not replace final clean-build acceptance. The single crossing diagnostic
+did not reproduce `crossing_stale`; it failed separately with `STALE_DOOR`, so
+integration readiness remains blocked and no runtime correction is claimed.
+
 From the repository root, use the installed Jazzy image for full M4 verification:
 
 ```sh
@@ -101,15 +109,18 @@ During the later `m4-local-20261024-active-probe` attempt, M2 passed but M3 had
 two failed fault cases: a total reset deadline and an unexpected `estop_stale`
 stop during crossing-denial testing. The evaluator probe had roughly 0.7 s
 callback gaps while independent host sampling continued. M3's explicit operator
-heartbeat now runs in a joined publisher thread within the probe process,
-independent of evaluator callback dispatch. It publishes only the probe's chosen
-stop value; process suspension still suspends it, and real stop assertions and
-watchdogs are unchanged. Launches still provide no operator heartbeat.
+heartbeat then ran in a joined publisher thread within the probe process,
+independent of evaluator callback dispatch. That historical arrangement still
+shared its process and could not survive process suspension. The current M3
+acceptance harness moves that publisher to a fail-closed child process, described
+in [M3](m3.md). The ROS topic,
+QoS, stop assertions and watchdogs are unchanged; production launches still
+provide no operator heartbeat.
 The later full run at `5976e15` still failed its tenth docking mission with
 `estop_stale`, so the publisher-thread change alone did not establish a complete
 repair. The focused M4 checks passed, but full regression remains open. The M3
-probe now retains operator publication start/return timestamps in a separate
-JSONL file; the independent diagnostic observer also receives the stop topic.
+probe at that time retained operator publication start/return timestamps in a
+separate JSONL file; the independent diagnostic observer also received the stop topic.
 These records distinguish publisher scheduling from observer/supervisor receipt.
 The first recorded baseline mission succeeded without stale stop input. Its
 publisher intervals reached 0.365 s and publish calls reached 0.170 s; it did not
@@ -145,6 +156,24 @@ package-image layers only, never test results or build workspaces.
 
 ## M4 acceptance path and current result
 
+For linked worktrees, `.git` is a pointer to a Git admin directory outside the
+worktree. A container must mount the worktree at `/workspace`, the same source
+at its original absolute path (for the admin `gitdir` backlink), and the common
+Git directory at its original absolute path. Use the provenance-only preflight
+before a repeat run:
+
+```sh
+bash scripts/m234_container_preflight.sh /tmp/smh-m234-preflight-58f5afee \
+  58f5afee4bd53567634f022d836c6a94f5daeaa7 \
+  evidence/runs/combined-m234-20261025/source-sha256.txt \
+  437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259
+```
+
+It runs inside the pinned acceptance image with read-only mounts and checks the
+revision, worktree status, tracked source records, package manifest and ROS
+runtime. It does not build or run milestone checks. The corrected mount setup
+passed; results are in the [preflight record](../evidence/m234-container-preflight-20261025.json).
+
 Assignment §§11–12 assess S4/S5 independently; §12.3 explicitly permits S5
 without motion commands. T07–T10 do not require ten bus docking missions first.
 The default combined M2/M3/M4 runner is a project regression choice, not an
@@ -158,20 +187,27 @@ sg docker -c 'docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
 ```
 
 This explicit scope writes `scope.json` with M2/M3 **NOT RUN** and retains all
-nine M4 probes, bags, parameter dumps and plots. Omitting the flag preserves the
-combined runner and its failing prerequisites. M4-only PASS establishes T07–T10,
-not M3 recovery, moving integration, or T15–T18. The current clean combined run
-at `5e9757b` passed M2 but failed the first docking case on `crossing_stale`;
-that result remains FAIL, separate from M4's focused pass. Combined regression
-and reliable bus-mission timing remain open work for integration.
+nine M4 probes, bags, parameter dumps and plots. Omitting the flag runs the full
+M2/M3 prerequisite checks before M4. M4-only PASS establishes T07–T10,
+not M3 recovery, moving integration, or T15–T18. The combined run at
+`58f5afee4bd53567634f022d836c6a94f5daeaa7` now passes M2, M3 and M4 once;
+the earlier `5e9757b` `crossing_stale` result remains a FAIL for that run.
+The same-commit repeat passed M2 18/18 but failed M3 nominal seed 309 with
+`SAFETY_INPUT_UNKNOWN:estop_stale`; M4 was NOT RUN. Repeatability and independent
+review remain open. See the [repeat result](../evidence/m234-repeat2-20261025.json).
 
 The local full-suite command invokes `scripts/m4_container.sh`, which reuses the
 fresh M3 build, style/interface/colcon checks and M2/M3 regressions, then runs M4
 in ROS domain 74 and renders the recorded measurement plot. M2/M3 diagnostic
-launches and default `m3_container.sh` behavior are preserved. The completed local
-M3 run (`f6a97fd`) passed M2 18/18, all 53 package tests, and M3 24/24 including
-T05–T06. The later independent M4 run at `b7d1df7` passed all 54 package tests
-and nine M4 cases, establishing assignment-scoped T07–T10 PASS. The M3 completion changes from `fix/m3-local-completion` are merged into local
+launches and default `m3_container.sh` behavior are preserved. The combined
+local run at `58f5afee4bd53567634f022d836c6a94f5daeaa7` passed M2 18/18, M3
+24/24 including seeds 300–309, and M4 9/9, after a fresh eight-package build,
+style/interface checks and 54 package tests. Optional diagnostic instrumentation
+was disabled; the first run took 21m 44.868s. A same-commit repeat passed the
+build, package tests, and M2, then failed M3 nominal seed 309 on stale estop
+input; M4 was NOT RUN. See the [first pass](../evidence/m234-combined-20261025.json)
+and [repeat result](../evidence/m234-repeat2-20261025.json).
+The M3 completion changes from `fix/m3-local-completion` are merged into local
 `main` and published to `origin/main`. See the
 [local M3 evidence index](../evidence/m3-local-completion.json), [M4 handoff](m4-handoff.md),
 and [local runtime evidence](../evidence/m4-jazzy-runtime.json).

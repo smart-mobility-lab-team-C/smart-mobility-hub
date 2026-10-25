@@ -134,13 +134,18 @@ chain. Both odometry streams carry measured linear and angular velocities;
 clear/reset require exact zero for both simulated agents.
 
 Internal `/safety/reset_state`, `/safety/finish_reset`, `/crossing/reset_state`
-and `/sim/reset_world` use `ResetScenario`. Only the coordinator owns the public
-`/scenario/reset`. No mission servers participate until their milestone implements
+and `/sim/reset_world` use `ResetScenario`. The `scenario_runner` node owns the
+public `/scenario/reset` and awaits launched participants under one monotonic
+one-second deadline. No mission servers participate until their milestone implements
 the corresponding cancellation/acknowledgement behavior. Measured door/barrier
 status heartbeat is 10 Hz in this simulator, with a 0.5 s local watchdog for door
 safety; this is a declared M2 choice where the assignment specifies no rate.
 Evaluator-only `/sim/evaluator/ground_truth` is `VehicleStateArray`, 10 Hz R10 in
 `map`; it is excluded from all control subscriptions.
+
+The former `reset_coordinator` node was removed from M2–M4 launches when
+public ownership was restored to `scenario_runner` on the mandatory-scenarios
+branch. Fresh real-node regression is required before acceptance.
 
 ## M3 runtime additions
 
@@ -154,7 +159,7 @@ M3 synthetic bringup opts into simulator-owned `/hub/queue` (5 Hz R10) and a
 labelled fixture-owned `/traffic/edges` (2 Hz R10). Neither implements perception
 or traffic monitoring. Internal bay/goal/run/arrival/reset endpoints, ownership,
 QoS, watchdogs and invalid-value conventions are documented in M3. Public reset
-remains `/scenario/reset`, owned by reset_coordinator; M3 adds explicit bus
+remains `/scenario/reset`, owned by scenario_runner; M3 adds explicit bus
 prepare/finish acknowledgements within the existing total 1 s deadline.
 
 The bus process uses internal `bus_observations` solely to receive the existing
@@ -194,9 +199,13 @@ other records make density invalid. Parking reservation/release events use the
 service request ID as correlation ID. Full endpoint ownership, reset behavior,
 freshness policies and acceptance blockers are in the [M4 handoff](m4-handoff.md).
 
-Assignment-scoped T07–T10 passed the independent fresh M4 run at `b7d1df7`.
+Assignment-scoped T07–T10 passed the independent fresh M4 run at `b7d1df7` and
+the combined M2+M3+M4 run at `58f5afee4bd53567634f022d836c6a94f5daeaa7`.
 The simulator's existing `freeze_parking` fault now repeats the last published
 acquisition immediately, without taking one extra frame on its next tick.
 Public message/QoS/timing contracts and stale thresholds are unchanged.
-Combined M3 regression and moving integration remain open, separately recorded
-in the [M4 evidence index](../evidence/m4-local-completion.json).
+The first combined M2/M3/M4 regression passed, while a same-commit repeat failed
+M3 on stale estop input before reaching M4. Repeatability and moving integration
+remain open. Both results are recorded in the [combined evidence indexes](../evidence/m234-combined-20261025.json)
+and [repeat result](../evidence/m234-repeat2-20261025.json); the earlier
+`5e9757b` failure remains in the [M4 evidence index](../evidence/m4-local-completion.json).

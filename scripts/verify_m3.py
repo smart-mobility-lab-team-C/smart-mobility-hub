@@ -8,14 +8,16 @@ import json
 import math
 import os
 from pathlib import Path
+import select
 import signal
 import subprocess
-from threading import Event, Thread
+import sys
 import time
 import traceback
 
 from action_msgs.msg import GoalStatus
 from ament_index_python.packages import get_package_prefix
+from door_duration import assess_receipts, assess_source
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 import rclpy
@@ -37,6 +39,96 @@ from smart_hub_interfaces.msg import (
 from smart_hub_interfaces.srv import ClearSafetyStop, ComputeRoute, RequestCrossing, ResetScenario
 from std_msgs.msg import Bool
 from std_srvs.srv import Trigger
+from verification import (
+    Blocked, CaseRunner, cleanup_error, overall_status, stop_processes, StopCases,
+)
+
+
+class OperatorHeartbeat:
+    """Control the dedicated process that owns `/hub/estop`."""
+
+    def __init__(self, directory):
+        """Start asserted and wait until the child has published that state."""
+        self.sequence = 0
+        self.log = (directory / 'operator-process.log').open('w')
+        command = [
+            sys.executable,
+            str(Path(__file__).with_name('m3_operator_heartbeat.py')),
+            '--parent-pid', str(os.getpid()),
+            '--output', str(directory / 'operator-heartbeat.jsonl'),
+        ]
+        self.process = subprocess.Popen(
+            command,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=self.log,
+            text=True,
+            bufsize=1,
+            start_new_session=True,
+        )
+        try:
+            ready = self._read_response(5.0)
+            if ready.get('event') != 'ready' or ready.get('published') is not True:
+                raise RuntimeError(f'operator publisher failed startup: {ready}')
+        except Exception:
+            self._stop_child()
+            raise
+
+    def _read_response(self, timeout):
+        """Wait briefly for a response without blocking on a dead publisher."""
+        ready, _, _ = select.select([self.process.stdout], [], [], timeout)
+        if not ready:
+            raise TimeoutError('operator publisher acknowledgement timed out')
+        line = self.process.stdout.readline()
+        if not line:
+            raise RuntimeError(f'operator publisher exited: {self.process.poll()}')
+        return json.loads(line)
+
+    def _request(self, operation, value=None):
+        """Send a command and require its publication acknowledgement."""
+        if self.process.poll() is not None:
+            raise RuntimeError(f'operator publisher exited: {self.process.returncode}')
+        self.sequence += 1
+        request = {'id': self.sequence, 'operation': operation}
+        if operation == 'set':
+            request['value'] = bool(value)
+        self.process.stdin.write(json.dumps(request) + '\n')
+        self.process.stdin.flush()
+        response = self._read_response(2.0)
+        if response.get('id') != self.sequence or not response.get('ok'):
+            raise RuntimeError(f'operator publisher rejected command: {response}')
+        if operation == 'set' and response.get('published') is not bool(value):
+            raise RuntimeError(f'operator publisher state mismatch: {response}')
+        return response.get('published')
+
+    def set_state(self, value):
+        """Set the operator state through the child process."""
+        return self._request('set', value)
+
+    def close(self):
+        """Assert stop, stop the child, and reap it within a fixed bound."""
+        try:
+            if self.process.poll() is None:
+                self._request('shutdown')
+            self.process.wait(timeout=2.0)
+        except (OSError, RuntimeError, TimeoutError, subprocess.TimeoutExpired):
+            self._stop_child()
+        finally:
+            if self.process.stdin and not self.process.stdin.closed:
+                self.process.stdin.close()
+            if self.process.stdout and not self.process.stdout.closed:
+                self.process.stdout.close()
+            self.log.close()
+
+    def _stop_child(self):
+        """Terminate and reap a child that did not complete its shutdown."""
+        if self.process.poll() is None:
+            self.process.terminate()
+            try:
+                self.process.wait(timeout=1.0)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+                self.process.wait(timeout=1.0)
 
 
 class Probe(Node):
@@ -48,10 +140,6 @@ class Probe(Node):
         self.output = (directory / 'trace.jsonl').open('w')
         self.samples = {}
         self.history = {}
-        self.estop = False
-        self.heartbeat = self.create_publisher(
-            Bool, '/hub/estop', QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
-        )
         transient = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
         for name, kind, topic, qos in (
             ('truth', VehicleStateArray, '/sim/evaluator/ground_truth', 10),
@@ -80,39 +168,15 @@ class Probe(Node):
             for name in ('scenario_runner', 'm3_synthetic_roads', 'bus_manager')
         }
         self.feedback = deque(maxlen=30000)
-        self.heartbeat_output = (directory / 'operator-heartbeat.jsonl').open('w', buffering=1)
-        self.heartbeat_stop = Event()
-        self.heartbeat_thread = Thread(
-            target=self.operator_heartbeat, name='m3-operator-heartbeat')
-        self.heartbeat_thread.start()
+        self.operator_heartbeat = OperatorHeartbeat(directory)
 
-    def operator_heartbeat(self):
-        """Keep the explicit operator input independent of evaluator callback dispatch."""
-        next_publish = time.monotonic()
-        while not self.heartbeat_stop.is_set() and self.context.ok():
-            try:
-                started = time.monotonic()
-                value = self.estop
-                self.heartbeat.publish(Bool(data=value))
-                self.heartbeat_output.write(json.dumps({
-                    'started': started, 'returned': time.monotonic(), 'stop': value}) + '\n')
-            except Exception:
-                if not self.context.ok():
-                    return
-                raise
-            next_publish += 0.1
-            now = time.monotonic()
-            if next_publish <= now:
-                next_publish += (math.floor((now - next_publish) / 0.1) + 1) * 0.1
-            self.heartbeat_stop.wait(max(0.0, next_publish - now))
+    def set_estop(self, value):
+        """Set operator state and require acknowledgement from its publisher process."""
+        self.operator_heartbeat.set_state(value)
 
     def destroy_node(self):
-        """Join the operator publisher before destroying its ROS entities."""
-        self.heartbeat_stop.set()
-        self.heartbeat_thread.join(timeout=2)
-        if self.heartbeat_thread.is_alive():
-            raise RuntimeError('operator heartbeat publisher did not stop')
-        self.heartbeat_output.close()
+        """Stop the external operator before destroying evaluator ROS entities."""
+        self.operator_heartbeat.close()
         return super().destroy_node()
 
     def renew_robot(self):
@@ -249,7 +313,7 @@ class Probe(Node):
 
     def reset(self, seed):
         """Restore fixture inputs, explicitly clear latch and obtain all reset acknowledgements."""
-        self.estop = False
+        self.set_estop(False)
         self.params(
             'scenario_runner', publish_bus_odom=True, publish_queue=True, pedestrian_present=False
         )
@@ -348,34 +412,56 @@ class Probe(Node):
         return latency
 
 
-def verify(probe, processes, nominal_runs):
-    """Run nominal missions and fault cases, preserving failed cases individually."""
-    results = []
+FAULT_CASES = [
+    'arrival_during_boarding_and_interruption',
+    'cancel_during_approach',
+    'action_timeout',
+    'blocked_bay_wait',
+    'planner_timeout_retries_and_late_reply',
+    'no_route',
+    'frozen_edge_source_stamp',
+    'stale_bus_pose',
+    'estop_aborts_and_latches',
+    'pedestrian_before_crossing_entry',
+    'active_route_missing_feed',
+    'busy_goal_rejection',
+    'crossing_denial_renewal_loss_and_explicit_recovery',
+    'active_mission_reset',
+]
 
-    def case(name, operation):
-        started = time.monotonic()
-        try:
-            observed = operation()
-            record = {'name': name, 'status': 'PASS', 'observations': observed}
-        except Exception as error:
-            record = {
-                'name': name,
-                'status': 'FAIL',
-                'reason': repr(error),
-                'traceback': traceback.format_exc(),
-            }
-        record['elapsed_sec'] = time.monotonic() - started
-        results.append(record)
-        print(json.dumps(record), flush=True)
-        return record['status'] == 'PASS'
 
+def verify(probe, processes, nominal_runs, only_case=None, door_comparison=False):
+    """Stop at the first FAIL or BLOCKED case and retain every downstream NOT RUN."""
+    names = [f'nominal_docking_{i + 1:02}' for i in range(nominal_runs)] + FAULT_CASES
+    if not nominal_runs:
+        names.remove('arrival_during_boarding_and_interruption')
+    if only_case:
+        names = [only_case]
+    if door_comparison:
+        names = ['door_comparison_seed_304']
+    measurement = {}
+    runner = CaseRunner(names, measurement)
+    try:
+        _verify_cases(probe, processes, nominal_runs, only_case, door_comparison,
+                      runner.run, measurement)
+    except StopCases:
+        pass
+    except (Exception, KeyboardInterrupt) as error:
+        runner.results.append({
+            'name': 'verifier_setup', 'status': 'BLOCKED', 'reason': repr(error),
+            'traceback': traceback.format_exc(),
+        })
+    return runner.finish()
+
+
+def _verify_cases(probe, processes, nominal_runs, only_case, door_comparison, case, measurement):
+    """Exercise the declared M3 cases through the fail-fast recording harness."""
     assert probe.wait(lambda: probe.action.server_is_ready() and len(probe.samples) >= 8, 15)
     probe.pause(2.5)
     for node in (
         'scenario_runner',
         'safety_supervisor',
         'hub_coordinator',
-        'reset_coordinator',
         'route_planner',
         'bus_manager',
         'm3_synthetic_roads',
@@ -402,6 +488,18 @@ def verify(probe, processes, nominal_runs):
         handle, result = probe.send()
         assert probe.wait(result.done, 180), 'mission did not terminate'
         terminal = result.result()
+        goal_id = bytes(handle.goal_id.uuid).hex()
+        # Event delivery can trail the action result; this wait is evaluator-only.
+        probe.wait(lambda: any(
+            m.event == 'DOOR_MEASURED' and m.run_id == run_id
+            and m.correlation_id == goal_id and json.loads(m.reason)['operation'] == 'goal_end'
+            for _, m in probe.history['event']), 1.0)
+        source = assess_source(
+            [message_to_ordereddict(m) for _, m in probe.history['event']],
+            run_id, goal_id,
+            terminal.status == GoalStatus.STATUS_SUCCEEDED and terminal.result.success)
+        measurement.update(run_id=run_id, goal_id=goal_id, seed=300 + index,
+                           source_door_assessment=source, other_nominal_requirements='NOT PASS')
         assert terminal.status == GoalStatus.STATUS_SUCCEEDED, str(terminal)
         bus = probe.bus()
         position = math.hypot(bus.pose.x - 8, bus.pose.y - 4)
@@ -450,7 +548,8 @@ def verify(probe, processes, nominal_runs):
         doors = [(t, m.data) for t, m in probe.history['door'] if t >= start]
         opened = min(t for t, value in doors if value)
         closed = min(t for t, value in doors if t > opened and not value)
-        assert closed - opened >= 8.0
+        receipt = assess_receipts(opened, closed, source)
+        measurement.update(receipt_assertion=receipt, measured_door_open_sec=closed - opened)
         sample = [
             (abs(m.distance_remaining_m - 5), t, m.eta_sec)
             for t, m in probe.feedback
@@ -461,7 +560,12 @@ def verify(probe, processes, nominal_runs):
         error = abs(eta - (docked - at))
         assert error <= 3.0, f'ETA error {error}'
         invalid = sum(0.5 for t, m in probe.feedback if t >= start and m.eta_sec < 0)
+        measurement['other_nominal_requirements'] = 'PASS'
+        if source['status'] == 'BLOCKED':
+            raise Blocked(str(source))
+        assert source['status'] == 'PASS', str(source)
         return {
+            **measurement,
             'run_id': run_id,
             'seed': 300 + index,
             'position_error_m': position,
@@ -469,16 +573,19 @@ def verify(probe, processes, nominal_runs):
             'eta_error_at_5m_sec': error,
             'eta_invalid_duration_sampled_sec': invalid,
             'boarding': boarding,
-            'goal_id': bytes(handle.goal_id.uuid).hex(),
+            'goal_id': goal_id,
             'minimum_agent_separation_m': min(separation),
             'measured_door_open_sec': closed - opened,
             'initial_passengers': count,
         }
 
     probe.parameters_count = 6
-    for index in range(nominal_runs):
+    if door_comparison:
+        case('door_comparison_seed_304', lambda: nominal(4))
+        return
+    for index in range(0 if only_case else nominal_runs):
         if not case(f'nominal_docking_{index + 1:02}', lambda i=index: nominal(i)):
-            return results
+            return
 
     def arrival_during_boarding():
         # The preceding nominal goal leaves the bus stopped at B; no teleport is used.
@@ -524,7 +631,7 @@ def verify(probe, processes, nominal_runs):
         return {'command_zero_latency_sec': probe.cancel_goal(handle, result)}
 
     if not case('cancel_during_approach', cancel):
-        return results
+        return
 
     def timeout():
         probe.reset(401)
@@ -622,10 +729,10 @@ def verify(probe, processes, nominal_runs):
         probe.reset(407)
         _, result = probe.send(30)
         assert probe.wait(probe.moving, 25)
-        probe.estop = True
+        probe.set_estop(True)
         terminal = probe.future(result, 4)
         assert terminal.result.reason == 'SAFETY_STOP', str(terminal)
-        probe.estop = False
+        probe.set_estop(False)
         probe.pause(0.3)
         assert probe.samples['safety'].stop_latched
         return {'reason': terminal.result.reason, 'false_does_not_clear': True}
@@ -759,7 +866,6 @@ def verify(probe, processes, nominal_runs):
         }
 
     case('active_mission_reset', active_reset)
-    return results
 
 
 def main():
@@ -767,7 +873,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', required=True)
     parser.add_argument('--nominal-runs', type=int, default=10)
+    parser.add_argument('--door-comparison', action='store_true',
+                        help='one seed-304 comparison; retain receipt assertion separately')
+    parser.add_argument(
+        '--only-case',
+        choices=(
+            'busy_goal_rejection',
+            'crossing_denial_renewal_loss_and_explicit_recovery',
+        ),
+    )
     args = parser.parse_args()
+    if args.door_comparison and args.only_case:
+        parser.error('--door-comparison cannot be combined with --only-case')
     directory = Path(args.output).resolve().parent
     if directory.exists():
         raise SystemExit('Evidence directory already exists; choose a unique run ID')
@@ -786,25 +903,23 @@ def main():
         'route_planner': ['smart_hub_control', 'route_planner'],
         'bus_manager': ['smart_hub_control', 'bus_manager'],
         'm3_synthetic_roads': ['smart_hub_control', 'm3_synthetic_roads'],
-        'reset_coordinator': [
-            'smart_hub_bringup',
-            'reset_coordinator',
-            '--ros-args',
-            '-p',
-            'include_bus:=true',
-        ],
     }
-    rclpy.init()
-    probe = Probe(directory)
+    started = time.monotonic()
+    probe = None
     report = {
         'schema': 'smart-mobility-hub/m3-verification-v1',
         'status': 'FAIL',
-        'nominal_runs': args.nominal_runs,
+        'nominal_runs': 1 if args.door_comparison else args.nominal_runs,
+        'only_case': args.only_case,
+        'scope': 'door measurement comparison only' if args.door_comparison else 'M3 verifier',
+        'full_milestone_acceptance': False if args.door_comparison else None,
         'cases': [],
         'commands': commands,
         'clocks': 'monotonic latency; wall-backed ROS source stamps',
     }
     try:
+        rclpy.init()
+        probe = Probe(directory)
         for name, command in commands.items():
             log = (directory / (name + '.log')).open('w')
             logs.append(log)
@@ -818,43 +933,52 @@ def main():
                 stderr=subprocess.STDOUT,
                 start_new_session=True,
             )
-        report['cases'] = verify(probe, processes, args.nominal_runs)
-        report['status'] = (
-            'PASS'
-            if report['cases'] and all(c['status'] == 'PASS' for c in report['cases'])
-            else 'FAIL'
-        )
+        report['cases'] = verify(
+            probe, processes, args.nominal_runs, args.only_case, args.door_comparison)
+        report['status'] = overall_status(report['cases'])
         report['scenario_acceptance'] = (
+            'NOT RUN: comparison is not milestone acceptance' if args.door_comparison else
             'T05/T06 eligible only with ten nominal runs and '
-            'complete source-required fault evidence; other T rows NOT RUN'
-        )
-    except Exception as error:
+            'complete source-required fault evidence; other T rows NOT RUN')
+    except (Exception, KeyboardInterrupt) as error:
+        report['status'] = 'BLOCKED'
         report['error'] = repr(error)
         report['traceback'] = traceback.format_exc()
     finally:
-        for process in processes.values():
+        try:
+            if probe is not None:
+                probe.destroy_node()
+        except Exception as error:
+            cleanup_error(report, 'operator', error)
+        try:
+            stop_processes(processes.values())
+        except Exception as error:
+            cleanup_error(report, 'nodes', error)
+        if probe is not None:
             try:
-                os.killpg(process.pid, signal.SIGCONT)
-                os.killpg(process.pid, signal.SIGINT)
-            except ProcessLookupError:
-                pass
-        for process in processes.values():
-            try:
-                process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                os.killpg(process.pid, signal.SIGKILL)
-                process.wait(timeout=2)
-        probe.output.close()
+                probe.output.close()
+            except Exception as error:
+                cleanup_error(report, 'trace_file', error)
         for log in logs:
-            log.close()
-        report['trace_sha256'] = hashlib.sha256(
-            (directory / 'trace.jsonl').read_bytes()
-        ).hexdigest()
+            try:
+                log.close()
+            except Exception as error:
+                cleanup_error(report, 'node_log', error)
+        if rclpy.ok():
+            try:
+                rclpy.shutdown()
+            except Exception as error:
+                cleanup_error(report, 'rclpy', error)
+        trace = directory / 'trace.jsonl'
+        if trace.exists():
+            try:
+                report['trace_sha256'] = hashlib.sha256(trace.read_bytes()).hexdigest()
+            except Exception as error:
+                cleanup_error(report, 'trace_hash', error)
+        report['elapsed_sec'] = time.monotonic() - started
         Path(args.output).write_text(json.dumps(report, indent=2) + '\n')
-        probe.destroy_node()
-        rclpy.shutdown()
     print(json.dumps({'status': report['status'], 'output': args.output}), flush=True)
-    raise SystemExit(0 if report['status'] == 'PASS' else 1)
+    raise SystemExit({'PASS': 0, 'FAIL': 1, 'BLOCKED': 2}[report['status']])
 
 
 if __name__ == '__main__':

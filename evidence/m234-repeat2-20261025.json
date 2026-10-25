@@ -1,0 +1,81 @@
+{
+  "schema": "smart-mobility-hub/combined-m234-acceptance-attempt-v1",
+  "run_id": "combined-m234-repeat2-20261025",
+  "attempt_status": "FAIL",
+  "run_commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+  "production_implementation_commit": "58f5afee4bd53567634f022d836c6a94f5daeaa7",
+  "worktree_clean_inside_container": true,
+  "preflight_in_same_container": "PASS",
+  "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+  "environment": {
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros_distro": "Jazzy",
+    "python": "3.12.3",
+    "rclpy_package": "ros-jazzy-rclpy 7.1.12-1noble.20260912.162354",
+    "rmw": "rmw_cyclonedds_cpp",
+    "rmw_package": "ros-jazzy-rmw-cyclonedds-cpp 2.2.4-1noble.20260911.095700",
+    "package_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "matches_first_successful_run": true
+  },
+  "source_identity": {
+    "tracked_source_file_count": 142,
+    "tracked_source_manifest_sha256": "48b162b8dd07ac412d933deb9c28389c0f19c4425b4e44381c9e970eca8b2ff3",
+    "matches_first_successful_run_tracked_records": true,
+    "first_run_full_manifest_sha256": "c14ad26cef3b40e1c66eadc020100dd608db99392d065599bdd4d364eaa2f8c6",
+    "first_run_extra_ignored_cache_records": 9
+  },
+  "diagnostic_instrumentation": "disabled",
+  "fresh_build": {"status": "PASS", "packages": 8},
+  "package_tests": {"status": "PASS", "count": 54, "failures": 0, "errors": 0, "skips": 0},
+  "milestones": {
+    "M2": {"status": "PASS", "passed": 18, "total": 18},
+    "M3": {"status": "FAIL", "passed": 9, "failed": 1, "total_executed": 10},
+    "M4": {"status": "NOT RUN", "reason": "M3 prerequisite failed"}
+  },
+  "first_failure": {
+    "milestone": "M3",
+    "case": "nominal_docking_10",
+    "seed": 309,
+    "assertion": "DockBus terminal status was not STATUS_SUCCEEDED",
+    "result": "SAFE_STOP",
+    "reason": "SAFETY_INPUT_UNKNOWN:estop_stale",
+    "case_elapsed_seconds": 47.02508751700225,
+    "classification": "acceptance failure after successful container preflight; not a Git or image setup failure"
+  },
+  "comparison_with_first_pass": {
+    "same_implementation_commit": true,
+    "same_image_id": true,
+    "same_package_manifest_sha256": true,
+    "first_run_seed_309": "PASS",
+    "first_run_seed_309_elapsed_seconds": 65.09207888100354,
+    "first_run_m3": "PASS 24/24",
+    "first_run_m4": "PASS 9/9"
+  },
+  "runner_exit_code": 1,
+  "runner_elapsed_seconds": 856.904651,
+  "raw_evidence": "evidence/runs/combined-m234-repeat2-20261025/",
+  "artifacts": {
+    "transcript": "evidence/runs/combined-m234-repeat2-20261025/transcript.log",
+    "package_versions": "evidence/runs/combined-m234-repeat2-20261025/package-versions.tsv",
+    "source_hashes": "evidence/runs/combined-m234-repeat2-20261025/source-sha256.txt",
+    "M2_results": "evidence/runs/combined-m234-repeat2-20261025/m2-regression.json",
+    "M3_results": "evidence/runs/combined-m234-repeat2-20261025/m3/acceptance.json",
+    "M3_trace": "evidence/runs/combined-m234-repeat2-20261025/m3/trace.jsonl",
+    "M3_logs": "evidence/runs/combined-m234-repeat2-20261025/m3/"
+  },
+  "artifact_sha256": {
+    "transcript.log": "57725fd46ab56a2fa90f6ac1a0c900be6125b625ca817d827bf4319f0a8cd09b",
+    "package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "source-sha256.txt": "48b162b8dd07ac412d933deb9c28389c0f19c4425b4e44381c9e970eca8b2ff3",
+    "m2-regression.json": "789294ef539d2babc65ca83e0fef3c06d34a169ae4fec8e6691ab2cf9cf3e57b",
+    "m3/acceptance.json": "25cbae6a2d652b1f805833871e708334f5350e728233c2f51734d939494702b6",
+    "m3/trace.jsonl": "ae04911696d460bc95926df6798175b767faf68661ba27ca6f1ff4e0e4f8f4d2",
+    "m3/bus_manager.log": "8f86a07a918d34a83b0e0070f16155a7fae6a591d1e6b95d01e3dd13b8ff4ac4",
+    "m3/safety_supervisor.log": "e464bd1cc26f43ce1c9ae2c945f0fdfa3dcb9a6b0f93e7e74ec86684ec908072",
+    "m3/reset_coordinator.log": "8910ec62792e999a4fbae626c27b66fb18691f55931c58871682df58b93dbf27",
+    "commit.txt": "5947c854bc515ee61d3ee252c1d0ded0cc3446e6dc9ada3255e72a30fd85c7a9",
+    "worktree.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exit-code.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  "retry": "Not performed."
+}
