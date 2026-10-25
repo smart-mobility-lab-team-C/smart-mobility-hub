@@ -55,6 +55,16 @@ def crossing_exit_clear(pose, speed_limit):
     )
 
 
+def axis_heading(pose, target):
+    """Head along the dominant axis of an axis-aligned road segment."""
+    # Choosing by the larger offset avoids copysign(pi/2, 0.0) turning north when the
+    # final micrometres of a horizontal approach fall below a fixed axis tolerance.
+    dx, dy = target[0] - pose[0], target[1] - pose[1]
+    if abs(dx) >= abs(dy):
+        return 0.0 if dx >= 0 else math.pi
+    return math.copysign(math.pi / 2, dy)
+
+
 def path_length(points):
     """Sum straight segment lengths in map metres."""
     return sum(math.dist(a, b) for a, b in zip(points, points[1:]))
@@ -737,12 +747,7 @@ class RobotManager(Node):
             self.arrive(now, pose)
             return
         self.arrived_since = None
-        desired = math.atan2(target[1] - pose[1], target[0] - pose[0])
-        # Roads are axis aligned: rotate precisely at nodes, then translate on the edge.
-        if abs(target[0] - pose[0]) < 1e-6:
-            desired = math.copysign(math.pi / 2, target[1] - pose[1])
-        elif abs(target[1] - pose[1]) < 1e-6:
-            desired = 0.0 if target[0] > pose[0] else math.pi
+        desired = axis_heading(pose, target)
         error = wrap(desired - pose[2])
         if abs(error) > 1e-9:
             self.set_phase(self.leg_phase, self.leg_goal)

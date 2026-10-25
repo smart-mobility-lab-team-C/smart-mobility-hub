@@ -5,6 +5,7 @@ from types import SimpleNamespace
 
 from smart_hub_control.bus import route_needs_crossing, route_waypoints
 from smart_hub_control.robot import (
+    axis_heading,
     crossing_exit_clear,
     crossing_guard_radius,
     mission_progress,
@@ -75,3 +76,12 @@ def test_waypoints_and_progress():
     assert mission_progress(5.5, 5.5) == 0.5
     assert mission_progress(6.0, 9.0) < mission_progress(6.0, 5.0)
     assert 0.0 <= mission_progress(1e9, 0.0) <= 1.0
+
+
+def test_axis_heading_near_node():
+    """A residual horizontal offset at W must not turn the robot north (regression)."""
+    assert axis_heading((4.9999991, 6.0, 0.0), (5.0, 6.0)) == 0.0
+    assert axis_heading((5.0000004, 6.0, 0.0), (5.0, 6.0)) == math.pi
+    assert axis_heading((5.0, 6.0, 0.0), (5.0, 2.0)) == -math.pi / 2
+    assert axis_heading((5.0, 2.0, 0.0), (9.0, 2.0)) == 0.0
+    assert axis_heading((9.0, 2.0, 0.0), (9.0, 1.0)) == -math.pi / 2
