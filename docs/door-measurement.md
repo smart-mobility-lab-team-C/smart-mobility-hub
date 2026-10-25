@@ -1,5 +1,36 @@
 # Door measurement validation — 2026-10-25
 
+## Isolated cache continuation
+
+The current user plan authorizes one new attempt from clean `2a90b94`, after
+committing the preparation code. The two attempts described below remain
+historical and unchanged. The launcher now creates an ignored, dedicated cache
+under `.cache/door-validation/<run-id>` by copying the existing cache as the
+normal user. It preserves prerequisite files and executable permissions, excludes
+old logs and Python/test caches, and removes only the copied build and install
+outputs of `smart_hub_sim` and `smart_hub_control`. It records the original cache's
+content and metadata before and after copying. The selected cache path and mount
+identity stay in the attempt record and are reused for comparison.
+
+Before building, the launcher checks the pinned image, package manifest,
+`/workspace` and `/cache` mounts, prerequisite source hashes, native generated
+interface imports, and effective write access. It probes create, replace, and
+delete in writable directories. Preparation errors are BLOCKED; build and test
+failures are FAIL. Every gate starts as NOT RUN, and the first unsuccessful gate
+ends the attempt. The controls are incremental build of only the two affected
+packages, style checks, producer/evaluator controls, harness controls, then
+world/routing regressions. After all pass, a fingerprint of source, harness,
+and installed artifacts is required unchanged before one seed-304, zero-passenger
+comparison.
+
+The comparison has one 240-second deadline starting before host setup, with its
+final 20 seconds reserved for cleanup. A timeout retains partial evidence and
+is BLOCKED. Cleanup errors are recorded separately without replacing the
+original result. The official receipt duration gate remains in force until a
+passing comparison authorizes source-gate adoption. Only then is a clean
+M2+M3+M4 pipeline eligible. Neither one comparison nor one combined PASS would
+establish repeatability or explain the historical 7.973234-second FAIL.
+
 Latest resume: **FAIL at incremental build** after verified mounts, pinned
 package manifest, native interface imports and prerequisite source checks passed.
 Cached simulator package metadata is root-owned and cannot be replaced by the

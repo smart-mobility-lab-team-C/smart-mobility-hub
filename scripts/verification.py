@@ -81,48 +81,85 @@ def stop_processes(processes, grace_seconds=5.0, kill_seconds=2.0):
     """Reap all child groups using shared deadlines instead of per-child waits."""
     processes = list(processes)
     deadline = time.monotonic() + grace_seconds
+    errors = []
     for process in processes:
-        signal_group(process, signal.SIGINT)
+        try:
+            signal_group(process, signal.SIGINT)
+        except Exception as error:
+            errors.append(repr(error))
     for process in processes:
         try:
             process.wait(timeout=max(0, deadline - time.monotonic()))
         except subprocess.TimeoutExpired:
             pass
+        except Exception as error:
+            errors.append(repr(error))
     # Kill every group, including surviving descendants of reaped leaders.
     for process in processes:
-        signal_group(process, signal.SIGKILL)
+        try:
+            signal_group(process, signal.SIGKILL)
+        except Exception as error:
+            errors.append(repr(error))
     deadline = time.monotonic() + kill_seconds
     for process in processes:
-        process.wait(timeout=max(0, deadline - time.monotonic()))
+        try:
+            process.wait(timeout=max(0, deadline - time.monotonic()))
+        except Exception as error:
+            errors.append(repr(error))
+    if errors:
+        raise RuntimeError(errors)
+
+
+def cleanup_error(record, operation, error):
+    """Retain the primary failure while reporting unsuccessful cleanup separately."""
+    record.setdefault('cleanup_errors', []).append({'operation': operation, 'error': repr(error)})
+    if record['status'] == 'PASS':
+        record['status'] = 'BLOCKED'
 
 
 def run_bounded(command, output, total_seconds=240.0, cleanup_seconds=20.0,
-                interrupt=None, kill=None):
+                interrupt=None, kill=None, deadline=None, cwd=None):
     """Reserve cleanup inside one total deadline; never restart a timed-out run."""
     started = time.monotonic()
-    deadline = started + total_seconds
+    deadline = started + total_seconds if deadline is None else deadline
+    if time.monotonic() >= deadline - cleanup_seconds:
+        return {'exit_code': None, 'timed_out': True, 'error': 'execution deadline exhausted',
+                'cleanup_errors': [], 'elapsed_sec': 0.0}
     process = subprocess.Popen(
-        command, stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
-    timed_out = False
+        command, cwd=cwd, stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
+    timed_out, interrupted, errors = False, False, []
+
+    def cleanup(operation, callback):
+        try:
+            callback()
+        except (Exception, KeyboardInterrupt) as error:
+            errors.append({'operation': operation, 'error': repr(error)})
+
     try:
-        process.wait(timeout=max(0, started + total_seconds - cleanup_seconds - time.monotonic()))
+        process.wait(timeout=max(0, deadline - cleanup_seconds - time.monotonic()))
     except subprocess.TimeoutExpired:
         timed_out = True
-        if interrupt:
-            interrupt(deadline)
-        else:
-            signal_group(process, signal.SIGINT)
-        try:
-            process.wait(timeout=max(0, deadline - time.monotonic() - 3.0))
-        except subprocess.TimeoutExpired:
-            pass
-        finally:
-            if kill:
-                kill(deadline)
-            signal_group(process, signal.SIGKILL)
-            process.wait(timeout=max(0, deadline - time.monotonic()))
+    except KeyboardInterrupt:
+        interrupted = True
+        deadline = min(deadline, time.monotonic() + cleanup_seconds)
+    finally:
+        if timed_out or interrupted:
+            cleanup('interrupt', lambda: interrupt(deadline) if interrupt
+                    else signal_group(process, signal.SIGINT))
+            try:
+                process.wait(timeout=max(0, deadline - time.monotonic() - 3.0))
+            except subprocess.TimeoutExpired:
+                pass
+            except (Exception, KeyboardInterrupt) as error:
+                errors.append({'operation': 'grace_wait', 'error': repr(error)})
+        # Also remove descendants after an ordinary failure or successful exit.
+        if kill:
+            cleanup('external_kill', lambda: kill(deadline))
+        cleanup('group_kill', lambda: signal_group(process, signal.SIGKILL))
+        cleanup('reap', lambda: process.wait(timeout=max(0, deadline - time.monotonic())))
     return {
         'exit_code': process.returncode, 'timed_out': timed_out,
+        'interrupted': interrupted, 'cleanup_errors': errors,
         'elapsed_sec': time.monotonic() - started,
         'total_limit_sec': total_seconds, 'cleanup_reserve_sec': cleanup_seconds,
     }

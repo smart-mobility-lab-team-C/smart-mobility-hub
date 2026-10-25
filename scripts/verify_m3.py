@@ -39,7 +39,9 @@ from smart_hub_interfaces.msg import (
 from smart_hub_interfaces.srv import ClearSafetyStop, ComputeRoute, RequestCrossing, ResetScenario
 from std_msgs.msg import Bool
 from std_srvs.srv import Trigger
-from verification import Blocked, CaseRunner, overall_status, StopCases, stop_processes
+from verification import (
+    Blocked, CaseRunner, cleanup_error, overall_status, StopCases, stop_processes,
+)
 
 
 class OperatorHeartbeat:
@@ -959,22 +961,32 @@ def main():
             if probe is not None:
                 probe.destroy_node()
         except Exception as error:
-            report['operator_cleanup_error'] = repr(error)
-            report['status'] = 'BLOCKED'
+            cleanup_error(report, 'operator', error)
         try:
             stop_processes(processes.values())
         except Exception as error:
-            report['node_cleanup_error'] = repr(error)
-            report['status'] = 'BLOCKED'
+            cleanup_error(report, 'nodes', error)
         if probe is not None:
-            probe.output.close()
+            try:
+                probe.output.close()
+            except Exception as error:
+                cleanup_error(report, 'trace_file', error)
         for log in logs:
-            log.close()
+            try:
+                log.close()
+            except Exception as error:
+                cleanup_error(report, 'node_log', error)
         if rclpy.ok():
-            rclpy.shutdown()
+            try:
+                rclpy.shutdown()
+            except Exception as error:
+                cleanup_error(report, 'rclpy', error)
         trace = directory / 'trace.jsonl'
         if trace.exists():
-            report['trace_sha256'] = hashlib.sha256(trace.read_bytes()).hexdigest()
+            try:
+                report['trace_sha256'] = hashlib.sha256(trace.read_bytes()).hexdigest()
+            except Exception as error:
+                cleanup_error(report, 'trace_hash', error)
         report['elapsed_sec'] = time.monotonic() - started
         Path(args.output).write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps({'status': report['status'], 'output': args.output}), flush=True)

@@ -109,3 +109,7 @@ controls, world/routing regressions, seed-304 comparison, adoption, and clean
 M2+M3+M4 acceptance are NOT RUN for the resume. No retry followed and no historical
 test status changed. See [both stopped attempts](door-measurement.md) and the
 [resume index](../evidence/door-measurement-resume-20261025.json).
+
+The isolated-cache continuation is authorized in the current user plan. Its
+ordered gates and conditional comparison/acceptance are documented in
+[door measurement validation](door-measurement.md#isolated-cache-continuation).
