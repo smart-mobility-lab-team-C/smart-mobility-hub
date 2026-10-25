@@ -26,16 +26,51 @@ from smart_hub_interfaces.msg import (
     VehicleStateArray,
 )
 from smart_hub_interfaces.srv import ComputeRoute, RequestCrossing, ResetScenario
-from smart_hub_sim.geometry import intersects_crossing, segment_distance
+from smart_hub_sim.geometry import CROSSING, intersects_crossing, segment_distance
 from std_msgs.msg import Bool, String
 from tf2_ros import Buffer, TransformException, TransformListener
 
 from .routing import fresh, load_map, shortest_path, valid_edges
 
+BUS_ODOM_FRESHNESS_SEC = 1.0
+BUS_CONTROL_PERIOD_SEC = 0.05
+BUS_CROSSING_BASE_MARGIN_M = 0.56
+
 
 def wrap(angle):
     """Normalize planar yaw differences."""
     return math.atan2(math.sin(angle), math.cos(angle))
+
+
+def crossing_guard_radius(speed_limit):
+    """Cover one fresh-odometry window and one control step before crossing C."""
+    return BUS_CROSSING_BASE_MARGIN_M + speed_limit * (
+        BUS_ODOM_FRESHNESS_SEC + BUS_CONTROL_PERIOD_SEC
+    )
+
+
+def crossing_exit_clear(pose, speed_limit):
+    """Release eastbound ownership only after leaving the guarded crossing."""
+    return pose[0] > CROSSING[1] and not intersects_crossing(
+        pose[0], pose[1], crossing_guard_radius(speed_limit)
+    )
+
+
+def route_waypoints(config, route, pose):
+    """Keep the nearest start node as a waypoint when starting mid-edge."""
+    nodes = [tuple(config['nodes'][name]) for name in route]
+    if not nodes:
+        return [], False
+    waypoints = [nodes[0]]
+    for index in range(1, len(nodes) - 1):
+        a, b, c = nodes[index - 1:index + 2]
+        if abs((b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0])) > 1e-9:
+            waypoints.append(b)
+    waypoints.append(nodes[-1])
+    approach_start = math.dist(pose[:2], nodes[0]) > 0.05
+    if not approach_start and len(waypoints) > 1:
+        waypoints = waypoints[1:]
+    return waypoints, approach_start
 
 
 def route_needs_crossing(points):
@@ -114,6 +149,7 @@ class BusManager(Node):
         self.run_id = ''
         self.route = []
         self.targets = []
+        self.mid_edge_waypoint = False
         self.pending_route = None
         self.route_attempt = 0
         self.route_next = 0.0
@@ -174,7 +210,7 @@ class BusManager(Node):
         )
         self.create_service(
             ResetScenario, '/bus/finish_reset', self.finish_reset, callback_group=self.group)
-        self.create_timer(0.05, self.tick)
+        self.create_timer(BUS_CONTROL_PERIOD_SEC, self.tick)
         self.create_timer(0.5, self.publish_state)
 
     @synchronized
@@ -187,7 +223,7 @@ class BusManager(Node):
         """Store acquisition and receipt ages without refreshing the source stamp."""
         self.samples[key] = (message, time.monotonic())
 
-    def state(self, key, ttl=1.0):
+    def state(self, key, ttl=BUS_ODOM_FRESHNESS_SEC):
         """Return a fresh message, including receipt-only Bool watchdogs."""
         sample = self.samples.get(key)
         if key in ('door', 'bay', 'final'):
@@ -306,6 +342,7 @@ class BusManager(Node):
         self.correlation = bytes(handle.goal_id.uuid).hex()
         self.goal_ids.publish(String(data=self.correlation))
         self.route = self.targets = []
+        self.mid_edge_waypoint = False
         self.route_attempt = 0
         self.route_next = 0.0
         self.distance, self.eta = -1.0, -1.0
@@ -449,24 +486,10 @@ class BusManager(Node):
                     ):
                         self.begin_stop('INVALID_ROUTE')
                         return
-                    if self.route_prefix and (len(ids) < 2 or ids[1] != self.route_prefix):
-                        ids = [self.route_prefix, *ids]
                     self.route = ids
-                    targets = [tuple(self.config['nodes'][n]) for n in ids]
-                    if not self.route_prefix and math.dist(pose[:2], targets[0]) > 0.05:
-                        self.begin_stop('ROUTE_START_MISMATCH')
-                        return
-                    # Collinear graph nodes do not require a physical stop.
-                    self.targets = [targets[0]]
-                    for i in range(1, len(targets) - 1):
-                        a, b, c = targets[i-1:i+2]
-                        if (
-                            abs((b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]))
-                            > 1e-9
-                        ):
-                            self.targets.append(b)
-                    self.targets.append(targets[-1])
-                    self.targets = self.targets[1:]
+                    self.targets, self.mid_edge_waypoint = route_waypoints(
+                        self.config, ids, pose
+                    )
                     self.event(
                         'ROUTE',
                         json.dumps({'nodes': ids, 'cost_sec': response.estimated_cost_sec}),
@@ -487,18 +510,18 @@ class BusManager(Node):
         node = min(
             self.config['nodes'], key=lambda n: math.dist(pose[:2], self.config['nodes'][n])
         )
-        self.route_prefix = ''
+        on_edge = math.dist(pose[:2], self.config['nodes'][node]) <= 0.05
         if math.dist(pose[:2], self.config['nodes'][node]) > 0.05:
             for edge in self.config['edges']:
                 if node not in edge['nodes'] or 'bus' not in edge['agents']:
                     continue
                 a, b = (self.config['nodes'][n] for n in edge['nodes'])
                 if segment_distance(pose[0], pose[1], *a, *b) <= 1e-6:
-                    self.route_prefix = next(n for n in edge['nodes'] if n != node)
+                    on_edge = True
                     break
-            if not self.route_prefix:
-                self.begin_stop('OFF_GRAPH_START')
-                return
+        if not on_edge:
+            self.begin_stop('OFF_GRAPH_START')
+            return
         request = ComputeRoute.Request(start_node=node, goal_node='B', agent_type='bus')
         future = self.route_client.call_async(request)
         self.pending_route = (future, now)
@@ -563,8 +586,10 @@ class BusManager(Node):
             ):
                 self.token = ''
                 return
-            # Release only after travelling beyond C, or safe terminal cleanup outside C.
-            cleared = pose[0] > 6.1 or (self.goal is None or self.stop_reason) and not inside
+            # Keep ownership through the same guarded area required for motion.
+            cleared = crossing_exit_clear(
+                pose, self.p['bus_speed_limit']
+            ) or (self.goal is None or self.stop_reason) and not inside
             operation = 'RELEASE' if cleared else 'RENEW'
             if operation == 'RENEW' and now - self.last_renewed < self.p['crossing_renew_sec']:
                 return
@@ -751,6 +776,9 @@ class BusManager(Node):
                 and self.samples['final'][0].linear.x == 0
                 and self.samples['final'][0].angular.z == 0
             ):
+                # ActionServer marks the goal canceling just after this callback returns.
+                if self.stop_reason == 'CANCELED' and not self.goal.is_cancel_requested:
+                    return
                 self.finish(False, self.stop_reason, canceled=self.goal.is_cancel_requested)
             elif now - self.stop_started >= 2.0:
                 self.finish(False, self.stop_reason + ':STOP_UNCONFIRMED')
@@ -775,10 +803,11 @@ class BusManager(Node):
         target = self.targets[0]
         distance = math.dist(pose[:2], target)
         final = len(self.targets) == 1
-        threshold = 0.05 if final else 1e-8
+        threshold = 0.05 if final or self.mid_edge_waypoint else 1e-8
         if distance <= threshold:
             if not final:
                 self.targets.pop(0)
+                self.mid_edge_waypoint = False
                 return
             yaw_error = wrap(-pose[2])
             if not self.board_requested:
@@ -837,7 +866,7 @@ class BusManager(Node):
             self.update_eta(pose, now, error)
             self.command(0.0, max(-1.0, min(1.0, 2.0 * error)))
             return
-        if intersects_crossing(pose[0], pose[1], 0.56):
+        if intersects_crossing(pose[0], pose[1], crossing_guard_radius(self.p['bus_speed_limit'])):
             state = self.state('crossing', 0.5)
             if not (
                 self.token

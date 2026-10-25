@@ -19,7 +19,7 @@ Repeatability remains open.
 | T02 | S1 occlusion/stale | 0.3 s occlusion, repeated/frozen frames | No duplicate count; invalid within 1.2 s freeze | NOT RUN |
 | T03 | S2 prediction | Unseen episode seeds | MAE/RMSE; MAE <= persistence; inference p95 <100 ms; no leakage | NOT RUN |
 | T04 | S2 dispatch | Threshold noise and stale forecast | One outstanding goal; explicit fallback | NOT RUN |
-| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | PASS first run (10/10); combined repeat FAIL (9/10, seed 309 estop_stale); harness run 10/10 |
+| T05 | S3 docking | 10 nominal approaches | 10/10; <=0.20 m and <=0.17 rad after 1 s hold; stopped-door interlock | Historical PASS at 58f5afee (10/10); same-commit repeat FAIL (9/10, seed 309 estop_stale); latest working-tree run FAIL (4/5 attempted, seed 304 door open 7.973234 s); harness run 10/10 |
 | T06 | S3 cancellation | Cancel during approach | Correct terminal status; zero <=0.5 s after cancellation acceptance | PASS first run; harness cancel-during-approach PASS (0.146 s); overall harness verifier FAIL on two cases |
 | T07 | S4 atomicity | 20 concurrent request pairs | Zero double allocations; same-ID retry stable; correct allocation when capacity exists | PASS first run; NOT RUN in repeat (independent review pending) |
 | T08 | S4 expiry | Occupied/stale slot at TTL | Never falsely free; invalid release rejected | PASS first run; NOT RUN in repeat (independent review pending) |
@@ -81,3 +81,20 @@ original provenance. Pure routing enumerator and queue tests
 do not close T11–T12, perception, mission-phase safety repetition or any other
 complete scenario row. M3 fault probes are additional prerequisites; T16–T18
 remain NOT RUN.
+
+A targeted correction fixed the simulator's shared-Cn-node deadlock. The first
+real-node recovery attempt then exposed a guard/release mismatch: the bus
+released ownership while its expanded movement guard still required it, waited
+at x=6.247 m for 68.803 s, then stopped on `crossing_stale`. The release rule
+was aligned with the movement guard. The follow-up recovery case passed in
+67.773 s, and 14 focused M2 world/M3 routing unit tests passed. This verifies
+the targeted correction; it does not close the full M3 suite or the combined
+M2+M3+M4 pipeline. See the [attempt index](../evidence/m3-node-boundary-fix-20261025.json).
+
+The later official clean-build combined run passed build, interface/style,
+58 package tests and M2 (18/18), then failed M3 at nominal seed 304: observed
+door-open time was 7.973234 s against the 8.0 s threshold. It stopped on first
+failure; remaining M3 cases and M4 were NOT RUN. Prior same-seed runs measured
+8.201097 s and 8.118734 s. The cause is not proven; a control-timer/sample-time
+offset is the leading source-level explanation. No change or rerun followed.
+See the [combined result index](../evidence/m234-node-boundary-fix-20261025.json).

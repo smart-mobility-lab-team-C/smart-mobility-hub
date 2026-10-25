@@ -408,11 +408,13 @@ class Probe(Node):
         return latency
 
 
-def verify(probe, processes, nominal_runs):
+def verify(probe, processes, nominal_runs, only_case=None):
     """Run nominal missions and fault cases, preserving failed cases individually."""
     results = []
 
     def case(name, operation):
+        if only_case is not None and name != only_case:
+            return True
         started = time.monotonic()
         try:
             observed = operation()
@@ -536,7 +538,7 @@ def verify(probe, processes, nominal_runs):
         }
 
     probe.parameters_count = 6
-    for index in range(nominal_runs):
+    for index in range(0 if only_case else nominal_runs):
         if not case(f'nominal_docking_{index + 1:02}', lambda i=index: nominal(i)):
             return results
 
@@ -819,6 +821,8 @@ def verify(probe, processes, nominal_runs):
         }
 
     case('active_mission_reset', active_reset)
+    if only_case and not any(result['name'] == only_case for result in results):
+        raise ValueError(f'unknown M3 case: {only_case}')
     return results
 
 
@@ -827,6 +831,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', required=True)
     parser.add_argument('--nominal-runs', type=int, default=10)
+    parser.add_argument(
+        '--only-case',
+        choices=(
+            'busy_goal_rejection',
+            'crossing_denial_renewal_loss_and_explicit_recovery',
+        ),
+    )
     args = parser.parse_args()
     directory = Path(args.output).resolve().parent
     if directory.exists():
@@ -860,6 +871,7 @@ def main():
         'schema': 'smart-mobility-hub/m3-verification-v1',
         'status': 'FAIL',
         'nominal_runs': args.nominal_runs,
+        'only_case': args.only_case,
         'cases': [],
         'commands': commands,
         'clocks': 'monotonic latency; wall-backed ROS source stamps',
@@ -878,7 +890,7 @@ def main():
                 stderr=subprocess.STDOUT,
                 start_new_session=True,
             )
-        report['cases'] = verify(probe, processes, args.nominal_runs)
+        report['cases'] = verify(probe, processes, args.nominal_runs, args.only_case)
         report['status'] = (
             'PASS'
             if report['cases'] and all(c['status'] == 'PASS' for c in report['cases'])

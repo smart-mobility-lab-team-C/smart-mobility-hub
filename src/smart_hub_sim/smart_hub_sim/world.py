@@ -135,10 +135,11 @@ class World:
     def _motion_on_allowed_edge(
         cls, agent: str, start: Tuple[float, float], end: Tuple[float, float]
     ) -> bool:
-        """Allow translation only when both endpoints share a permitted edge."""
+        """Allow a permitted edge step or a straight step through a shared node."""
         if math.hypot(end[0] - start[0], end[1] - start[1]) <= EDGE_TOLERANCE:
             return True
-        for _edge_id, edge_start, edge_end in cls._allowed_edges(agent):
+        edges = cls._allowed_edges(agent)
+        for _edge_id, edge_start, edge_end in edges:
             if (
                 segment_distance(
                     start[0], start[1], edge_start[0], edge_start[1],
@@ -150,6 +151,27 @@ class World:
                 ) <= EDGE_TOLERANCE
             ):
                 return True
+        for first_id, first_start, first_end in edges:
+            for second_id, second_start, second_end in edges:
+                if first_id == second_id:
+                    continue
+                for node in {first_start, first_end} & {second_start, second_end}:
+                    if (
+                        segment_distance(
+                            start[0], start[1], first_start[0], first_start[1],
+                            first_end[0], first_end[1],
+                        ) <= EDGE_TOLERANCE
+                        and segment_distance(
+                            end[0], end[1], second_start[0], second_start[1],
+                            second_end[0], second_end[1],
+                        ) <= EDGE_TOLERANCE
+                        and abs(
+                            math.dist(start, node)
+                            + math.dist(node, end)
+                            - math.dist(start, end)
+                        ) <= EDGE_TOLERANCE
+                    ):
+                        return True
         return False
 
     @classmethod

@@ -1,0 +1,79 @@
+{
+  "schema": "smart-mobility-hub/m3-node-boundary-fix-v2",
+  "run_id": "m3-node-boundary-fix-20261025",
+  "base_commit": "85ecece",
+  "worktree_dirty": true,
+  "scope": "targeted M3 crossing recovery only; full M2, nominal M3, and M4 acceptance not run",
+  "status": "PASS",
+  "related_combined_run": {
+    "index": "evidence/m234-node-boundary-fix-20261025.json",
+    "status": "FAIL",
+    "note": "This targeted crossing recovery PASS is not full M3 acceptance; the later combined run passed M2 and failed M3 nominal seed 304 on the 8.0 s door-open threshold."
+  },
+  "environment": {
+    "container_image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "container_os": "Ubuntu 24.04.5 LTS",
+    "ros": "Jazzy",
+    "python": "3.12.3",
+    "rclpy": "7.1.12-1noble.20260912.162354",
+    "rmw": "Cyclone DDS 2.2.4",
+    "build": "reused .cache/m4-completion-v1; incrementally rebuilt smart_hub_sim and smart_hub_control"
+  },
+  "change": {
+    "confirmed_issue": "A bus physics step crossing the shared Cn graph node was rejected when its endpoints belonged to two adjacent permitted edges, leaving the bus at x=4.981 m despite forward commands.",
+    "correction": "Permit a straight step only across a shared permitted graph endpoint; derive eastbound token release from the same crossing geometry and guard radius used by movement permission.",
+    "safety_limits_changed": false,
+    "trace_confirmation": "The bus crossed the node after the correction and reached x=6.247 m."
+  },
+  "fast_checks": {
+    "incremental_build_smart_hub_sim_and_smart_hub_control": "PASS",
+    "ament_flake8": "PASS",
+    "ament_pep257": "PASS",
+    "pytest_test_m2_world_and_test_m3_routing": "14/14 PASS"
+  },
+  "targeted_acceptance": {
+    "command": "python3 scripts/verify_m3.py --nominal-runs 0 --only-case crossing_denial_renewal_loss_and_explicit_recovery",
+    "cases_total": 1,
+    "passed": 1,
+    "failed": 0,
+    "elapsed_seconds": 67.773,
+    "observations": {
+      "denials": 5,
+      "renewal_loss_stopped": true,
+      "occupied_owner_retained": true,
+      "explicit_new_goal_recovered": true
+    },
+    "artifact_directory": "evidence/runs/m3-node-boundary-fix-20261025/crossing-02/"
+  },
+  "earlier_attempt": {
+    "status": "FAIL",
+    "artifact_directory": "evidence/runs/m3-node-boundary-fix-20261025/crossing-01/",
+    "elapsed_seconds": 116.937,
+    "failure": "Recovery action ended SAFE_STOP with SAFETY_INPUT_UNKNOWN:crossing_stale after release/wait deadlock.",
+    "release_event_monotonic_seconds": 88118.859,
+    "crossing_unavailable_wait_monotonic_seconds": 88118.874,
+    "wait_to_stale_abort_seconds": 68.803,
+    "artifact_manifest_sha256": "56a901435071061fd32f17eaa8a4714617df81b541e7541660f0c9036f3aeb7a",
+    "acceptance_sha256": "c23dce0ba46b7201b5b0fd503ac13a9800e39ef172f52a988c7d3964695a4287",
+    "trace_sha256": "bb4a7e1c0b6fd876e9ed8f1d64a667ad2a595c2527d9c00f47c1db6ab4ce8087"
+  },
+  "post_run_source_review": {
+    "confirmed_regression": "The old x=6.10 m release point fell inside the x=6.48 m movement guard, while acquisition ended at x=5.80 m.",
+    "correction": "crossing_exit_clear now requires the bus to be east of the crossing and outside the movement guard.",
+    "validation": "The targeted recovery attempt passed and no longer waited at x=6.247 m.",
+    "remaining_uncertainty": "This pass does not establish whether unrelated or historical crossing_stale failures share the same cause."
+  },
+  "artifact_manifest": "evidence/runs/m3-node-boundary-fix-20261025/crossing-02/artifact-sha256.txt",
+  "artifact_manifest_sha256": "1c53ac64144d865090996ea81ca02a5bd5188c65d319ef0cb7494f59229442c0",
+  "primary_artifacts_sha256": {
+    "acceptance": "evidence/runs/m3-node-boundary-fix-20261025/crossing-02/acceptance.json: ee30be73f89f5d92b9d2bde4005c931f3fec46e8e038f9ecebdfb236a4e2d662",
+    "trace": "evidence/runs/m3-node-boundary-fix-20261025/crossing-02/trace.jsonl: a9eee6229b7aae0cea6eb46e6ee08958e36907b5a376c519751ebd811f66a044"
+  },
+  "source_sha256": {
+    "src/smart_hub_sim/smart_hub_sim/world.py": "df2cff0385a946f909dfabd11c69afe33ebf1d339e7221bc7876f816f5f05509",
+    "src/smart_hub_sim/test/test_m2_world.py": "77b5b66e61021212be33675bddd92bbe021fbf87cb72f273ca4c4fbc0cb81209",
+    "src/smart_hub_control/smart_hub_control/bus.py": "f116f18a152f1f1630ea7a67e2fef046833c8f9ae3f8e3af96a2dd4160644c3a",
+    "src/smart_hub_control/test/test_m3_routing.py": "0beb0cbf77cb14bbe2a16189fe04a38466eb68c3524a0db677953be14c9378d6",
+    "scripts/verify_m3.py": "2cb5f920c953499138eda4766421086ada60622397b9eb43aa86a2bd4a9e23be"
+  }
+}

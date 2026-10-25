@@ -410,3 +410,58 @@ recorded publish starts had a maximum interval of 0.166901 s; that observation
 does not establish why the previous run produced `estop_stale`. No retry or
 follow-up investigation was performed. See the [result index](../evidence/m3-operator-isolation-20261025.json)
 and ignored [raw evidence](../evidence/runs/m3-operator-isolation-20261025/).
+
+## M3 shared-node route correction — 2026-10-25
+
+The cached-build real-node recovery trace at base commit `85ecece` showed the
+bus issuing forward commands while the fixed-step simulator held it at
+x=4.981 m. The controller had accepted the Cn waypoint within 0.05 m and moved
+to the next edge, but the simulator required each translation step's endpoints
+to lie on one identical graph edge. The simulator now allows a straight step
+through a shared permitted endpoint, while requiring both endpoints to remain
+on permitted edges. This did not alter safety thresholds.
+
+The incremental `smart_hub_sim` build, style checks and 13 focused M2 world/M3
+routing tests passed. One targeted M3 crossing-recovery run then failed after
+116.937 s: the bus crossed Cn and reached x=6.247 m, but the recovery action
+ended with `SAFETY_INPUT_UNKNOWN:crossing_stale`. Crossing publications were
+visible in the verifier trace at that time; supervisor-local receipt timing is
+not available, so the stale-input cause remains unresolved. The run did not
+include the nominal M3 suite, M2 or M4 acceptance. No combined pipeline or retry
+was run. See the [attempt index](m3-node-boundary-fix-20261025.json) and
+hash-indexed ignored [raw evidence](runs/m3-node-boundary-fix-20261025/).
+
+Subsequent source review found a confirmed guard/release mismatch introduced by
+the working-tree guard enlargement: ownership is required through x=6.48 m,
+release begins after x=6.10 m, and acquisition is disabled beyond x=5.80 m.
+The trace shows release at 88118.859 s and crossing-unavailable WAIT at
+88118.874 s, followed by 68.803 s of waiting before the final freshness abort.
+The recommended correction aligns outgoing release with the movement guard.
+The timing cause of the later `crossing_stale` remains unresolved. No code
+change or additional run accompanied this source/trace comparison.
+
+The release rule was then changed to retain ownership until the bus has passed
+the crossing and cleared the same expanded region required by the motion gate.
+The cached `smart_hub_control` build and 14 focused M2 world/M3 routing tests
+passed. A second run of the real-node recovery case passed in 67.773 s. It
+recorded five acquisition denials, a successful renewal-loss stop, retained
+ownership while occupied, and recovery by a new goal. The bus did not remain at
+x=6.247 m. This confirms the recorded release/wait deadlock is corrected. It
+does not establish that unrelated historical `crossing_stale` failures share
+that cause. The later full M2+M3+M4 pipeline outcome is recorded below. The updated
+[attempt index](m3-node-boundary-fix-20261025.json) records both attempts and
+their hashes.
+
+## Combined M2+M3+M4 attempt — 2026-10-25
+
+The official pinned clean-build pipeline against working tree `85ecece` passed
+the fresh build, interface/style checks, 58 package tests and M2 (18/18), then
+stopped at the first M3 failure after 583.133 s. Four nominal seeds passed;
+seed 304 failed the 8.0 s door-open threshold at 7.973234 s. M3's remaining
+cases and M4 were NOT RUN. Earlier same-seed runs measured 8.201097 s and
+8.118734 s. Source review suggests the control timer starts dwell after first
+observing the open sample, but this timing explanation is not proven. No code
+change or retry followed. The [result index](../evidence/m234-node-boundary-fix-20261025.json)
+records the pinned Jazzy environment, run identity and hashes; full output
+remains in ignored [raw artifacts](runs/m234-node-boundary-fix-20261025/).
+The first complete PASS at `58f5afee` remains preserved independently.

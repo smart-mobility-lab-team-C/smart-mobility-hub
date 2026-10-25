@@ -5,7 +5,9 @@ import math
 import random
 from types import SimpleNamespace
 
+from smart_hub_control.bus import crossing_exit_clear, crossing_guard_radius, route_waypoints
 from smart_hub_control.routing import load_map, shortest_path
+from smart_hub_sim.geometry import intersects_crossing
 
 
 def snapshots(config):
@@ -73,6 +75,33 @@ def test_cost_against_independent_enumerator():
         assert bool(path) == math.isfinite(best)
         if path:
             assert math.isclose(cost, best, rel_tol=1e-6)
+
+
+def test_crossing_guard_covers_bus_motion_during_freshness_window():
+    """Keep the bus outside the tested stop line through one freshness window."""
+    radius = crossing_guard_radius(0.4)
+    assert math.isclose(radius, 0.98)
+    assert intersects_crossing(3.52, 4.0, radius)
+    assert not intersects_crossing(3.51, 4.0, radius)
+
+
+def test_crossing_ownership_is_retained_until_the_guard_is_cleared():
+    """Do not release at the old exit mark while movement still needs ownership."""
+    assert not crossing_exit_clear((4.0, 4.0, 0.0), 0.4)
+    assert not crossing_exit_clear((6.1, 4.0, 0.0), 0.4)
+    assert not crossing_exit_clear((6.48, 4.0, 0.0), 0.4)
+    assert crossing_exit_clear((6.481, 4.0, 0.0), 0.4)
+
+
+def test_mid_edge_replan_keeps_nearest_node_as_first_waypoint():
+    """Continue through the nearest endpoint instead of reversing to its neighbor."""
+    config = load_map()
+    waypoints, approach_start = route_waypoints(config, ['Cn', 'B'], (4.6, 4.0, 0.0))
+    assert waypoints == [(5.0, 4.0), (8.0, 4.0)]
+    assert approach_start
+    waypoints, approach_start = route_waypoints(config, ['B'], (8.0, 4.0, 0.0))
+    assert waypoints == [(8.0, 4.0)]
+    assert not approach_start
 
 
 def test_freshness_boundary_and_invalid_snapshots(monkeypatch):
