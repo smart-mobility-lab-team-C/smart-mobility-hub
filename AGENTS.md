@@ -25,6 +25,11 @@ Distinguish assignment/instructor requirements from project workflow choices and
 - Mocks and pure Python tests do not establish ROS integration.
 - Do not commit secrets, personal footage without permission, generated caches, or large raw evidence.
 - Do not bypass approvals or run Codex as root. Humans handle passwords and sign-in.
+  Exception (owner decision, 2026-10-25): on the project owner's development VM, the
+  owner may start Claude Code in bypass-permissions mode
+  (`claude --dangerously-skip-permissions`) as an ordinary user, never as root. In that
+  mode the agent still asks before force-pushing, rewriting history, deleting branches
+  or files, pushing to the public remote, or starting hosted CI.
 
 ## Delivery
 
