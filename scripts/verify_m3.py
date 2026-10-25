@@ -39,6 +39,7 @@ from smart_hub_interfaces.msg import (
 from smart_hub_interfaces.srv import ClearSafetyStop, ComputeRoute, RequestCrossing, ResetScenario
 from std_msgs.msg import Bool
 from std_srvs.srv import Trigger
+from verification import Blocked, CaseRunner, overall_status, StopCases, stop_processes
 
 
 class OperatorHeartbeat:
@@ -409,33 +410,50 @@ class Probe(Node):
         return latency
 
 
+FAULT_CASES = [
+    'arrival_during_boarding_and_interruption',
+    'cancel_during_approach',
+    'action_timeout',
+    'blocked_bay_wait',
+    'planner_timeout_retries_and_late_reply',
+    'no_route',
+    'frozen_edge_source_stamp',
+    'stale_bus_pose',
+    'estop_aborts_and_latches',
+    'pedestrian_before_crossing_entry',
+    'active_route_missing_feed',
+    'busy_goal_rejection',
+    'crossing_denial_renewal_loss_and_explicit_recovery',
+    'active_mission_reset',
+]
+
+
 def verify(probe, processes, nominal_runs, only_case=None, door_comparison=False):
-    """Run nominal missions and fault cases, preserving failed cases individually."""
-    results = []
+    """Stop at the first FAIL or BLOCKED case and retain every downstream NOT RUN."""
+    names = [f'nominal_docking_{i + 1:02}' for i in range(nominal_runs)] + FAULT_CASES
+    if not nominal_runs:
+        names.remove('arrival_during_boarding_and_interruption')
+    if only_case:
+        names = [only_case]
+    if door_comparison:
+        names = ['door_comparison_seed_304']
     measurement = {}
+    runner = CaseRunner(names, measurement)
+    try:
+        _verify_cases(probe, processes, nominal_runs, only_case, door_comparison,
+                      runner.run, measurement)
+    except StopCases:
+        pass
+    except (Exception, KeyboardInterrupt) as error:
+        runner.results.append({
+            'name': 'verifier_setup', 'status': 'BLOCKED', 'reason': repr(error),
+            'traceback': traceback.format_exc(),
+        })
+    return runner.finish()
 
-    def case(name, operation):
-        if only_case is not None and name != only_case:
-            return True
-        measurement.clear()
-        started = time.monotonic()
-        try:
-            observed = operation()
-            record = {'name': name, 'status': 'PASS', 'observations': observed}
-        except Exception as error:
-            record = {
-                'name': name,
-                'status': 'FAIL',
-                'reason': repr(error),
-                'traceback': traceback.format_exc(),
-            }
-            if measurement:
-                record['observations'] = dict(measurement)
-        record['elapsed_sec'] = time.monotonic() - started
-        results.append(record)
-        print(json.dumps(record), flush=True)
-        return record['status'] == 'PASS'
 
+def _verify_cases(probe, processes, nominal_runs, only_case, door_comparison, case, measurement):
+    """Exercise the declared M3 cases through the fail-fast recording harness."""
     assert probe.wait(lambda: probe.action.server_is_ready() and len(probe.samples) >= 8, 15)
     probe.pause(2.5)
     for node in (
@@ -543,6 +561,8 @@ def verify(probe, processes, nominal_runs, only_case=None, door_comparison=False
         invalid = sum(0.5 for t, m in probe.feedback if t >= start and m.eta_sec < 0)
         measurement['other_nominal_requirements'] = 'PASS'
         if door_comparison:
+            if source['status'] == 'BLOCKED':
+                raise Blocked(str(source))
             assert source['status'] == 'PASS', str(source)
         else:
             assert closed - opened >= 8.0
@@ -564,10 +584,10 @@ def verify(probe, processes, nominal_runs, only_case=None, door_comparison=False
     probe.parameters_count = 6
     if door_comparison:
         case('door_comparison_seed_304', lambda: nominal(4))
-        return results
+        return
     for index in range(0 if only_case else nominal_runs):
         if not case(f'nominal_docking_{index + 1:02}', lambda i=index: nominal(i)):
-            return results
+            return
 
     def arrival_during_boarding():
         # The preceding nominal goal leaves the bus stopped at B; no teleport is used.
@@ -613,7 +633,7 @@ def verify(probe, processes, nominal_runs, only_case=None, door_comparison=False
         return {'command_zero_latency_sec': probe.cancel_goal(handle, result)}
 
     if not case('cancel_during_approach', cancel):
-        return results
+        return
 
     def timeout():
         probe.reset(401)
@@ -848,9 +868,6 @@ def verify(probe, processes, nominal_runs, only_case=None, door_comparison=False
         }
 
     case('active_mission_reset', active_reset)
-    if only_case and not any(result['name'] == only_case for result in results):
-        raise ValueError(f'unknown M3 case: {only_case}')
-    return results
 
 
 def main():
@@ -896,12 +913,12 @@ def main():
             'include_bus:=true',
         ],
     }
-    rclpy.init()
-    probe = Probe(directory)
+    started = time.monotonic()
+    probe = None
     report = {
         'schema': 'smart-mobility-hub/m3-verification-v1',
         'status': 'FAIL',
-        'nominal_runs': args.nominal_runs,
+        'nominal_runs': 1 if args.door_comparison else args.nominal_runs,
         'only_case': args.only_case,
         'scope': 'door measurement comparison only' if args.door_comparison else 'M3 verifier',
         'full_milestone_acceptance': False if args.door_comparison else None,
@@ -910,6 +927,8 @@ def main():
         'clocks': 'monotonic latency; wall-backed ROS source stamps',
     }
     try:
+        rclpy.init()
+        probe = Probe(directory)
         for name, command in commands.items():
             log = (directory / (name + '.log')).open('w')
             logs.append(log)
@@ -925,42 +944,41 @@ def main():
             )
         report['cases'] = verify(
             probe, processes, args.nominal_runs, args.only_case, args.door_comparison)
-        report['status'] = (
-            'PASS'
-            if report['cases'] and all(c['status'] == 'PASS' for c in report['cases'])
-            else 'FAIL'
-        )
+        report['status'] = overall_status(report['cases'])
         report['scenario_acceptance'] = ('NOT RUN: comparison is not milestone acceptance'
                                         if args.door_comparison else
                                         'T05/T06 eligible only with ten nominal runs and '
-                                        'complete source-required fault evidence; other T rows NOT RUN')
+                                        'complete source-required fault evidence; '
+                                        'other T rows NOT RUN')
     except (Exception, KeyboardInterrupt) as error:
+        report['status'] = 'BLOCKED'
         report['error'] = repr(error)
         report['traceback'] = traceback.format_exc()
     finally:
-        for process in processes.values():
-            try:
-                os.killpg(process.pid, signal.SIGCONT)
-                os.killpg(process.pid, signal.SIGINT)
-            except ProcessLookupError:
-                pass
-        for process in processes.values():
-            try:
-                process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                os.killpg(process.pid, signal.SIGKILL)
-                process.wait(timeout=2)
-        probe.output.close()
+        try:
+            if probe is not None:
+                probe.destroy_node()
+        except Exception as error:
+            report['operator_cleanup_error'] = repr(error)
+            report['status'] = 'BLOCKED'
+        try:
+            stop_processes(processes.values())
+        except Exception as error:
+            report['node_cleanup_error'] = repr(error)
+            report['status'] = 'BLOCKED'
+        if probe is not None:
+            probe.output.close()
         for log in logs:
             log.close()
-        report['trace_sha256'] = hashlib.sha256(
-            (directory / 'trace.jsonl').read_bytes()
-        ).hexdigest()
+        if rclpy.ok():
+            rclpy.shutdown()
+        trace = directory / 'trace.jsonl'
+        if trace.exists():
+            report['trace_sha256'] = hashlib.sha256(trace.read_bytes()).hexdigest()
+        report['elapsed_sec'] = time.monotonic() - started
         Path(args.output).write_text(json.dumps(report, indent=2) + '\n')
-        probe.destroy_node()
-        rclpy.shutdown()
     print(json.dumps({'status': report['status'], 'output': args.output}), flush=True)
-    raise SystemExit(0 if report['status'] == 'PASS' else 1)
+    raise SystemExit({'PASS': 0, 'FAIL': 1, 'BLOCKED': 2}[report['status']])
 
 
 if __name__ == '__main__':

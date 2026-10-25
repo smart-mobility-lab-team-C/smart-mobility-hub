@@ -136,10 +136,13 @@ def test_physics_opening_and_protective_closure_are_measured(harness):
         'goal_start', 'physics', 'physics', 'goal_end']
 
 
-def test_cancellation_closes_early_without_nominal_success(harness):
-    """A cancellation close request remains a short interval and an interruption."""
-    observed = mission(harness, 7_900_000_000, nominal=False)
-    assert observed['duration_status'] == 'FAIL'
+@pytest.mark.parametrize('dwell_ns,expected', [
+    (7_900_000_000, 'FAIL'), (8_100_000_000, 'PASS'),
+])
+def test_cancellation_cannot_become_nominal_success(harness, dwell_ns, expected):
+    """An interrupted action stays blocked even when its measured duration passes."""
+    observed = mission(harness, dwell_ns, nominal=False)
+    assert observed['duration_status'] == expected
     assert observed['status'] == 'BLOCKED'
     assert 'interruption' in observed['reason']
 
@@ -175,6 +178,7 @@ def test_actual_reset_records_old_identity_and_blocks_acceptance(harness, open_f
     'missing_open', 'missing_close', 'missing_start', 'missing_end', 'sequence_gap',
     'wrong_run', 'wrong_goal', 'identity_mismatch', 'reversed_bounds', 'float_time',
     'out_of_order', 'duplicate', 'state_discontinuity', 'malformed', 'extra_interval',
+    'overlapping_bounds',
 ])
 def test_incomplete_or_uncertain_evidence_blocks_acceptance(harness, fault):
     """Corrupt complete evidence to ensure that loss or identity errors fail closed."""
@@ -205,5 +209,7 @@ def test_incomplete_or_uncertain_evidence_blocks_acceptance(harness, fault):
             record['before_ns'] = float(record['before_ns'])
         elif fault == 'state_discontinuity':
             record['previous_open'] = True
+        elif fault == 'overlapping_bounds':
+            record['before_ns'] = BASE - 1
         damaged[1]['reason'] = json.dumps(record)
     assert duration.assess_source(damaged, node._run_id, 'goal', True)['status'] == 'BLOCKED'

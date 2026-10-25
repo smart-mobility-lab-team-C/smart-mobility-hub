@@ -1,6 +1,6 @@
 # Door measurement validation — 2026-10-25
 
-Status: **BLOCKED before controls**. The incremental build failed because the
+Previous attempt: **BLOCKED before controls**. The incremental build failed because the
 reused workspace's generated interface setup references
 `/cache/install/smart_hub_interfaces`, but the attempted container invocation
 mounted the repository only at `/workspace`. No control tests, comparison
@@ -110,3 +110,35 @@ Passing the proposed controls would validate only their tested cases. One
 comparison cannot explain every historical failure, and one combined PASS
 cannot establish repeatability. All historical outcomes remain independently
 recorded.
+
+## Authorized resume with verified mounts
+
+The current user plan authorizes a fresh attempt from `98cbfb2`; the earlier
+BLOCKED attempt and its artifacts remain unchanged. Preparation is complete;
+runtime results for this resume are still pending.
+
+The host launcher is `python3 scripts/door_measurement.py
+ABSOLUTE_FRESH_RESULTS_DIRECTORY controls`. It pins the image by immutable ID,
+mounts the repository at `/workspace` and its cached workspace at `/cache`, and
+checks the package manifest, native interface imports, and unchanged prerequisite
+sources before incrementally building only `smart_hub_sim` and
+`smart_hub_control`. Each gate records its command, start/end times, elapsed time,
+exit status and artifact hashes. The run records the revision, worktree state,
+source manifest and patch. Failed and blocked stages retain their evidence;
+downstream stages stay NOT RUN.
+
+Only after every control passes may the same launcher run `comparison` against
+the same results directory and unchanged sources. It runs nominal index 4
+(seed 304, zero passengers) once, preserving the receipt assertion separately.
+The host gives the container 220 seconds to execute, reserves the final 20 seconds
+for cleanup inside a 240-second total bound, and never retries. M3 child cleanup
+uses shared deadlines; the case harness stops at the first FAIL or BLOCKED and
+lists all remaining cases as NOT RUN. The official duration gate is still the
+original receipt assertion until a passing comparison authorizes adoption.
+
+The new harness controls exercise BLOCKED propagation through the actual verifier
+wrapper, immediate stopping, failed-stage provenance, process-group timeout
+cleanup, and a shared child-cleanup deadline. Existing producer controls retain
+exact integer nanosecond boundaries, interlock rejection, physics/reset capture,
+and capture-under-lock/publication-afterward checks; added cases cover overlapping
+operation bounds and an interruption whose duration would otherwise pass.

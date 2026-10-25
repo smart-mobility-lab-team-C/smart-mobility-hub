@@ -95,8 +95,8 @@ The later official clean-build combined run passed build, interface/style,
 58 package tests and M2 (18/18), then failed M3 at nominal seed 304: observed
 door-open time was 7.973234 s against the 8.0 s threshold. It stopped on first
 failure; remaining M3 cases and M4 were NOT RUN. Prior same-seed runs measured
-8.201097 s and 8.118734 s. The cause is not proven; a control-timer/sample-time
-offset is the leading source-level explanation. No change or rerun followed.
+8.201097 s and 8.118734 s. The physical cause remains unproven. The earlier dwell-timing and margin
+recommendation is withdrawn; controller timing is unchanged.
 See the [combined result index](../evidence/m234-node-boundary-fix-20261025.json).
 
 ## Pending door measurement controls — 2026-10-25
