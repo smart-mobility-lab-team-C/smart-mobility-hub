@@ -428,8 +428,8 @@ ended with `SAFETY_INPUT_UNKNOWN:crossing_stale`. Crossing publications were
 visible in the verifier trace at that time; supervisor-local receipt timing is
 not available, so the stale-input cause remains unresolved. The run did not
 include the nominal M3 suite, M2 or M4 acceptance. No combined pipeline or retry
-was run. See the [attempt index](m3-node-boundary-fix-20261025.json) and
-hash-indexed ignored [raw evidence](runs/m3-node-boundary-fix-20261025/).
+was run. See the [attempt index](../evidence/m3-node-boundary-fix-20261025.json) and
+hash-indexed ignored [raw evidence](../evidence/runs/m3-node-boundary-fix-20261025/).
 
 Subsequent source review found a confirmed guard/release mismatch introduced by
 the working-tree guard enlargement: ownership is required through x=6.48 m,
@@ -449,7 +449,7 @@ ownership while occupied, and recovery by a new goal. The bus did not remain at
 x=6.247 m. This confirms the recorded release/wait deadlock is corrected. It
 does not establish that unrelated historical `crossing_stale` failures share
 that cause. The later full M2+M3+M4 pipeline outcome is recorded below. The updated
-[attempt index](m3-node-boundary-fix-20261025.json) records both attempts and
+[attempt index](../evidence/m3-node-boundary-fix-20261025.json) records both attempts and
 their hashes.
 
 ## Combined M2+M3+M4 attempt — 2026-10-25
@@ -463,5 +463,16 @@ cases and M4 were NOT RUN. Earlier same-seed runs measured 8.201097 s and
 observing the open sample, but this timing explanation is not proven. No code
 change or retry followed. The [result index](../evidence/m234-node-boundary-fix-20261025.json)
 records the pinned Jazzy environment, run identity and hashes; full output
-remains in ignored [raw artifacts](runs/m234-node-boundary-fix-20261025/).
+remains in ignored [raw artifacts](../evidence/runs/m234-node-boundary-fix-20261025/).
 The first complete PASS at `58f5afee` remains preserved independently.
+
+## Door measurement validation attempt — 2026-10-25
+
+The new transition producer, conservative evaluator, and controlled tests are
+implemented provisionally. Validation is **BLOCKED**: the incremental build
+failed on the cached workspace's missing `/cache/install/smart_hub_interfaces`
+mount. Controls, the seed-304 comparison, adoption, and clean combined acceptance
+are **NOT RUN**. No retry followed. The official receipt assertion and the
+historical 7.973234 s FAIL remain unchanged. See the
+[validation record](door-measurement.md) and
+[result index](../evidence/door-measurement-20261025.json).

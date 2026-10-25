@@ -98,3 +98,10 @@ failure; remaining M3 cases and M4 were NOT RUN. Prior same-seed runs measured
 8.201097 s and 8.118734 s. The cause is not proven; a control-timer/sample-time
 offset is the leading source-level explanation. No change or rerun followed.
 See the [combined result index](../evidence/m234-node-boundary-fix-20261025.json).
+
+## Pending door measurement controls — 2026-10-25
+
+Source duration evidence remains unvalidated. The incremental build prerequisite
+failed before controls; controls, seed-304 comparison, adoption, and clean
+M2+M3+M4 acceptance are NOT RUN for this attempt. No historical test status is
+changed. See [the stopped attempt](door-measurement.md).

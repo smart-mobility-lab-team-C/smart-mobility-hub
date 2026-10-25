@@ -32,6 +32,7 @@ from std_msgs.msg import Bool, String
 from std_srvs.srv import Trigger
 from tf2_ros import TransformBroadcaster
 
+from .door_evidence import DoorEvidence
 from .geometry import intersects_crossing
 from .passengers import PassengerQueue
 from .world import (
@@ -129,6 +130,7 @@ class ScenarioRunner(Node):
             raise ValueError('M2 baseline has no obstacle observation contract; keep disabled')
         self.world = World(seed=seed, obstacle_enabled=obstacle_enabled)
         self._lock = RLock()
+        self._door_evidence = DoorEvidence()
         self._run_id = str(uuid.uuid4())
         self._tick = 0
         self._commands = {
@@ -228,7 +230,35 @@ class ScenarioRunner(Node):
 
     def _goal_id(self, message):
         """Associate synthetic boarding with the active bus action only."""
-        self.goal_id = message.data
+        records = []
+        with self._lock:
+            if message.data == self.goal_id:
+                return
+            if self.goal_id:
+                records.append(self._capture_door('goal_end', lambda: None))
+            self.goal_id = message.data
+            if self.goal_id:
+                records.append(self._capture_door('goal_start', lambda: None))
+        for record in records:
+            self._publish_door_evidence(record)
+
+    def _capture_door(self, operation, mutate):
+        """Capture a World operation under the caller's existing simulator lock."""
+        return self._door_evidence.capture(
+            self.world, self._run_id, self.goal_id, operation, mutate)
+
+    def _publish_door_evidence(self, record):
+        """Publish evaluator evidence after releasing the simulator lock."""
+        if record is None:
+            return
+        event = HubEvent()
+        event.header.stamp = self._stamp()
+        event.header.frame_id = 'map'
+        event.run_id, event.scenario_id = record['run_id'], 'sim_evaluator'
+        event.entity_id, event.event = 'bus', 'DOOR_MEASURED'
+        event.correlation_id = record['goal_id']
+        event.reason = json.dumps(record, sort_keys=True)
+        self._boarding_pub.publish(event)
 
     def _passenger_tick(self, stamp):
         """Advance synthetic arrivals/boarding without exposing future schedules to control."""
@@ -331,7 +361,9 @@ class ScenarioRunner(Node):
     def _door_request(self, message: Bool) -> None:
         """Apply the bus door request; measured opening remains interlocked in World."""
         with self._lock:
-            self.world.door_request = bool(message.data)
+            record = self._capture_door(
+                'request', lambda: setattr(self.world, 'door_request', bool(message.data)))
+        self._publish_door_evidence(record)
 
     def _on_parking_state(self, message):
         """Receive owner-bearing state independently from unstamped barrier commands."""
@@ -628,10 +660,12 @@ class ScenarioRunner(Node):
             if self._path_needs_crossing(self.world.robot, next_robot, ROBOT_RADIUS):
                 if not self._crossing_allows('robot', now):
                     robot_command = (0.0, 0.0)
-            self.world.step(bus_command, robot_command, DT_SEC)
+            record = self._capture_door(
+                'physics', lambda: self.world.step(bus_command, robot_command, DT_SEC))
             self._tick += 1
             stamp = self._stamp()
             tick = self._tick
+        self._publish_door_evidence(record)
         self._passenger_tick(stamp)
         self._publish_odom_and_tf(stamp)
         if tick % 2 == 0:
@@ -687,7 +721,7 @@ class ScenarioRunner(Node):
                     'zero motion, and no stop latch'
                 )
                 return response
-            self.world.reset(int(request.seed))
+            record = self._capture_door('reset', lambda: self.world.reset(int(request.seed)))
             self.passengers = PassengerQueue(
                 int(request.seed), int(self.get_parameter('initial_passengers').value),
                 self.get_parameter_or('passenger_arrivals_sec', rclpy.Parameter(
@@ -702,11 +736,12 @@ class ScenarioRunner(Node):
             }
             self._run_id = str(uuid.uuid4())
             self._tick = 0
-            self._run_pub.publish(String(data=self._run_id))
             response.success = True
             response.run_id = self._run_id
             response.reason = 'seeded m2_baseline reset complete; command leases flushed'
-            return response
+        self._publish_door_evidence(record)
+        self._run_pub.publish(String(data=response.run_id))
+        return response
 
 
 def main(args=None) -> None:

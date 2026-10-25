@@ -1,0 +1,85 @@
+{
+  "schema": "smart-mobility-hub/door-measurement-validation-v1",
+  "run_id": "door-measurement-20261025",
+  "status": "BLOCKED",
+  "recorded_utc": "2026-10-25T03:17:48.294754+00:00",
+  "source_commit_at_attempt": "85ecece15da6d2500651b58b92acaea20af3e391",
+  "worktree_clean_at_attempt": false,
+  "inherited_work_preservation_commit": "25c358a2f2d80082d28d0a0a52af24aa972d0d16",
+  "source_manifest": "evidence/runs/door-measurement-20261025/controls-source-sha256.txt",
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--user",
+    "1000:1000",
+    "-e",
+    "HOME=/tmp",
+    "-v",
+    "/home/vboxuser/smart-mobility-hub:/workspace",
+    "-w",
+    "/workspace",
+    "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "bash",
+    "scripts/door_measurement_container.sh",
+    "/workspace/evidence/runs/door-measurement-20261025",
+    "controls"
+  ],
+  "exit_code": 1,
+  "automatic_retries": 0,
+  "environment": {
+    "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "package_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "package_manifest_matches_pinned_environment": true,
+    "cached_workspace": ".cache/m4-completion-v1"
+  },
+  "gates": {
+    "pre_attempt_python_compilation_and_diff_check": "PASS",
+    "incremental_build": {
+      "status": "FAIL",
+      "packages_completed": 0,
+      "failed_package": "smart_hub_sim",
+      "not_processed": [
+        "smart_hub_control"
+      ],
+      "colcon_summary_seconds": 0.43
+    },
+    "style": "NOT RUN",
+    "producer_and_verifier_controls": "NOT RUN",
+    "crossing_regression_tests": "NOT RUN",
+    "seed_304_comparison": "NOT RUN",
+    "adopt_source_duration_gate": "NOT RUN",
+    "official_clean_build_M2_M3_M4": "NOT RUN"
+  },
+  "blocker": {
+    "classification": "cached workspace mount setup failure",
+    "error": "The build time path \"/cache/install/smart_hub_interfaces\" does not exist.",
+    "reason": "Cached generated package.sh retains /cache prefix; this invocation mounted only /workspace.",
+    "next_review": "Restore original /cache mount alias in a separately reviewed fresh attempt; no retry performed."
+  },
+  "wall_runtime_seconds": null,
+  "wall_runtime_note": "Total wall runtime was not captured; colcon summary is not total runtime.",
+  "implementation_status": "provisional, unvalidated; official receipt gate unchanged",
+  "historical_result": {
+    "index": "evidence/m234-node-boundary-fix-20261025.json",
+    "sha256": "cb8b2391c1c22bfb524c5d1fa89acf96b62624d0655e159734de562beb21a884",
+    "duration_sec": 7.973234,
+    "status": "FAIL",
+    "original_method": "observer receipts",
+    "physical_cause": "unproven",
+    "earlier_dwell_start_and_margin_recommendation": "withdrawn; no controller timing change made"
+  },
+  "artifacts": {
+    "directory": "evidence/runs/door-measurement-20261025",
+    "sha256": {
+      "controls-package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+      "controls-source-sha256.txt": "94735d8c08ea62621096ff457a51d58897311fef66fd7ef39650843a9e6be089",
+      "controls.log": "a2ab34cf4063ff96deff44f4f622826bf17f5343256c9bde2b9064c296535e36",
+      "exit-code.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "inherited-status.txt": "76ccf3e4b57bbacc33833b5f3224a40b397a42de153f406bb318c2f7fac83d7f",
+      "inherited.patch": "d32e8a16f27bdefb8c96d53e2c6cd0f13e0e9a779ed4e7b6536ad21122607eca"
+    },
+    "manifest_sha256": "414e083fa2474b2ee570104755579e9807616f62dc04bce3389d84dec40df3d4"
+  },
+  "limits": "No runtime validation, comparison, acceptance, repeatability, or historical causal conclusion is established."
+}

@@ -17,6 +17,7 @@ import traceback
 
 from action_msgs.msg import GoalStatus
 from ament_index_python.packages import get_package_prefix
+from door_duration import assess_receipts, assess_source
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 import rclpy
@@ -408,13 +409,15 @@ class Probe(Node):
         return latency
 
 
-def verify(probe, processes, nominal_runs, only_case=None):
+def verify(probe, processes, nominal_runs, only_case=None, door_comparison=False):
     """Run nominal missions and fault cases, preserving failed cases individually."""
     results = []
+    measurement = {}
 
     def case(name, operation):
         if only_case is not None and name != only_case:
             return True
+        measurement.clear()
         started = time.monotonic()
         try:
             observed = operation()
@@ -426,6 +429,8 @@ def verify(probe, processes, nominal_runs, only_case=None):
                 'reason': repr(error),
                 'traceback': traceback.format_exc(),
             }
+            if measurement:
+                record['observations'] = dict(measurement)
         record['elapsed_sec'] = time.monotonic() - started
         results.append(record)
         print(json.dumps(record), flush=True)
@@ -464,6 +469,18 @@ def verify(probe, processes, nominal_runs, only_case=None):
         handle, result = probe.send()
         assert probe.wait(result.done, 180), 'mission did not terminate'
         terminal = result.result()
+        goal_id = bytes(handle.goal_id.uuid).hex()
+        # Event delivery can trail the action result; this wait is evaluator-only.
+        probe.wait(lambda: any(
+            m.event == 'DOOR_MEASURED' and m.run_id == run_id
+            and m.correlation_id == goal_id and json.loads(m.reason)['operation'] == 'goal_end'
+            for _, m in probe.history['event']), 1.0)
+        source = assess_source(
+            [message_to_ordereddict(m) for _, m in probe.history['event']],
+            run_id, goal_id,
+            terminal.status == GoalStatus.STATUS_SUCCEEDED and terminal.result.success)
+        measurement.update(run_id=run_id, goal_id=goal_id, seed=300 + index,
+                           source_door_assessment=source, other_nominal_requirements='NOT PASS')
         assert terminal.status == GoalStatus.STATUS_SUCCEEDED, str(terminal)
         bus = probe.bus()
         position = math.hypot(bus.pose.x - 8, bus.pose.y - 4)
@@ -512,7 +529,8 @@ def verify(probe, processes, nominal_runs, only_case=None):
         doors = [(t, m.data) for t, m in probe.history['door'] if t >= start]
         opened = min(t for t, value in doors if value)
         closed = min(t for t, value in doors if t > opened and not value)
-        assert closed - opened >= 8.0
+        receipt = assess_receipts(opened, closed, source)
+        measurement.update(receipt_assertion=receipt, measured_door_open_sec=closed - opened)
         sample = [
             (abs(m.distance_remaining_m - 5), t, m.eta_sec)
             for t, m in probe.feedback
@@ -523,7 +541,13 @@ def verify(probe, processes, nominal_runs, only_case=None):
         error = abs(eta - (docked - at))
         assert error <= 3.0, f'ETA error {error}'
         invalid = sum(0.5 for t, m in probe.feedback if t >= start and m.eta_sec < 0)
+        measurement['other_nominal_requirements'] = 'PASS'
+        if door_comparison:
+            assert source['status'] == 'PASS', str(source)
+        else:
+            assert closed - opened >= 8.0
         return {
+            **measurement,
             'run_id': run_id,
             'seed': 300 + index,
             'position_error_m': position,
@@ -531,13 +555,16 @@ def verify(probe, processes, nominal_runs, only_case=None):
             'eta_error_at_5m_sec': error,
             'eta_invalid_duration_sampled_sec': invalid,
             'boarding': boarding,
-            'goal_id': bytes(handle.goal_id.uuid).hex(),
+            'goal_id': goal_id,
             'minimum_agent_separation_m': min(separation),
             'measured_door_open_sec': closed - opened,
             'initial_passengers': count,
         }
 
     probe.parameters_count = 6
+    if door_comparison:
+        case('door_comparison_seed_304', lambda: nominal(4))
+        return results
     for index in range(0 if only_case else nominal_runs):
         if not case(f'nominal_docking_{index + 1:02}', lambda i=index: nominal(i)):
             return results
@@ -831,6 +858,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', required=True)
     parser.add_argument('--nominal-runs', type=int, default=10)
+    parser.add_argument('--door-comparison', action='store_true',
+                        help='one seed-304 comparison; retain receipt assertion separately')
     parser.add_argument(
         '--only-case',
         choices=(
@@ -839,6 +868,8 @@ def main():
         ),
     )
     args = parser.parse_args()
+    if args.door_comparison and args.only_case:
+        parser.error('--door-comparison cannot be combined with --only-case')
     directory = Path(args.output).resolve().parent
     if directory.exists():
         raise SystemExit('Evidence directory already exists; choose a unique run ID')
@@ -872,6 +903,8 @@ def main():
         'status': 'FAIL',
         'nominal_runs': args.nominal_runs,
         'only_case': args.only_case,
+        'scope': 'door measurement comparison only' if args.door_comparison else 'M3 verifier',
+        'full_milestone_acceptance': False if args.door_comparison else None,
         'cases': [],
         'commands': commands,
         'clocks': 'monotonic latency; wall-backed ROS source stamps',
@@ -890,17 +923,18 @@ def main():
                 stderr=subprocess.STDOUT,
                 start_new_session=True,
             )
-        report['cases'] = verify(probe, processes, args.nominal_runs, args.only_case)
+        report['cases'] = verify(
+            probe, processes, args.nominal_runs, args.only_case, args.door_comparison)
         report['status'] = (
             'PASS'
             if report['cases'] and all(c['status'] == 'PASS' for c in report['cases'])
             else 'FAIL'
         )
-        report['scenario_acceptance'] = (
-            'T05/T06 eligible only with ten nominal runs and '
-            'complete source-required fault evidence; other T rows NOT RUN'
-        )
-    except Exception as error:
+        report['scenario_acceptance'] = ('NOT RUN: comparison is not milestone acceptance'
+                                        if args.door_comparison else
+                                        'T05/T06 eligible only with ten nominal runs and '
+                                        'complete source-required fault evidence; other T rows NOT RUN')
+    except (Exception, KeyboardInterrupt) as error:
         report['error'] = repr(error)
         report['traceback'] = traceback.format_exc()
     finally:
