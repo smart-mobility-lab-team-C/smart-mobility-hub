@@ -155,3 +155,31 @@ This is on branch `feat/m6-robot-manager` and is **not accepted**.
 **Cause and next step:** this is attributed to VirtualBox-on-Hyper-V vCPU scheduling (see
 [vm-host-repair](vm-host-repair.md)). The next step is a predictable host: fewer vCPUs, native
 Linux or WSL2.
+
+### Update — 8 vCPUs (2026-10-25, 17:20)
+
+The VM was reduced from 18 to 8 vCPUs and the desktop locale was fixed. The effect:
+
+- The full 8-participant reset completed in 0.012–0.017 s. With 18 vCPUs it took 0.9–2.1 s.
+- Load average stayed below 1.1.
+
+The cause was VirtualBox vCPU over-allocation, not the reset logic. Keep this VM at 8 vCPUs for
+timing runs.
+
+Bug found and fixed (`1218e30`): at W the robot turned north (`copysign(pi/2, 0.0)`) and timed out.
+Heading is now chosen by the dominant axis. `bus.py` contains the same rule but never approaches a
+turn horizontally on its route, so it was left unchanged.
+
+`nominal_escort_01`, debug run on 8 vCPUs, **PASS**:
+
+| Measure | Value |
+|---|---|
+| Final error, max over 1 s | 0.04 m |
+| Final speed | 0 |
+| Crossing conflicts | 0 of 614 inside-C samples |
+| Feedback interval | p50 0.500 s, p95 0.503 s, max 0.522 s |
+| Mission time | 97 s |
+
+This is one run, not T13. The full `verify_m6.py` run (10 escorts, T14, T12, T11) was started; its
+result lands in `.cache/m6full/run1.json` and still needs recording. T12–T14 remain **NOT RUN**
+until that result is recorded.
