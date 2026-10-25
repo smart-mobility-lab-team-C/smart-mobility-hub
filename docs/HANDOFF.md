@@ -54,7 +54,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 | M6 verifier T11–T14 (and full 18/18 run) | PASS (1 run) | `evidence/m6-1218e30.json` | Route oracle 60 req, p95 9.6 ms. T12 NO_ROUTE. T13 10/10 escorts, 0.04 m error, 0 crossing conflicts. T14 all failure cases. |
 | M4 regression T07–T10 | PASS (1 run) | `evidence/m4-3da2614.json` | 9/9 at `3da2614`. |
 | M2 full suite | FAIL (stale) | last run at `038695b` | 17/18 on the old 18 vCPU VM. Needs rerun on 8 vCPUs. |
-| S1 passenger counting | FAIL | `evidence/s1-3da2614.json` | Counts 0/3/4/3 vs expected 0/3/5/4: one passenger track missed. |
+| S1 passenger counting (synthetic) | PASS (2 runs) | `evidence/s1-fix-run1.json`, `evidence/s1-fix-run2.json` | Counts 0/3/5/4, occlusion, crossing, freeze invalid by 31.2 s. Earlier FAIL (0/3/4/3) was a drawing-spacing bug, fixed. |
 | Congestion replan (robot) | NOT RUN | — | Not ROS-verified. Rule: at least 15% cheaper, at least 2 s, never in state C. |
 | metrics_logger | NOT RUN | — | Not ROS-verified. |
 | A9.3 fallback dispatch | NOT RUN | — | Not ROS-verified. |
@@ -63,7 +63,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 
 - No ROS integration test covers congestion replan, `metrics_logger`, or A9.3
   fallback dispatch.
-- The S1 missing track is not diagnosed.
+- S1 video-frame evaluation (A §8) is BLOCKED until annotated video exists.
 - M2 has no result on 8 vCPUs.
 - S2, S8 and S9 have no ROS test results.
 - No result has been repeated. Acceptance needs two clean repeat passes.
@@ -80,7 +80,7 @@ Priority order. Owners are to be assigned by the team.
 
 | # | Task | Owner |
 |---|---|---|
-| 1 | Debug the S1 missing track; run T01/T02 | TBD |
+| 1 | ~~Debug the S1 missing track~~ done (synthetic T01/T02 PASS ×2) | — |
 | 2 | Rerun M2 on 8 vCPUs | TBD |
 | 3 | S2 ROS tests T03/T04, including fallback | TBD |
 | 4 | S8 integration T15 (cars, timed schedule, paired predictive/reactive) | TBD |
