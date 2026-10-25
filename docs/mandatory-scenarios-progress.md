@@ -241,3 +241,17 @@ merged passengers 3 and 4.
 | Frozen acquisition stamp | detected |
 
 The A §8 ≥100-frame annotated video evaluation remains **BLOCKED**: there is no team video yet.
+
+### M2 PASS twice on 8 vCPUs — 2026-10-25 18:09
+
+`scripts/verify_m2.py` passed **18/18** in two separately recorded runs at `4867e82`
+([run 1](../evidence/m2-8vcpu-run1-4867e82.json), [run 2](../evidence/m2-8vcpu-run2-4867e82.json)).
+Load average stayed below 1.3.
+
+| Measure | Result | Limit |
+|---|---|---|
+| E-stop to zero command | 0.010–0.011 s | 0.20 s |
+| Adapter stop after supervisor kill | 0.45–0.50 s | 0.65 s |
+
+This meets the M2 requirement of two complete, separately recorded passes. The earlier 17/18 results
+came from the 18-vCPU VM configuration.

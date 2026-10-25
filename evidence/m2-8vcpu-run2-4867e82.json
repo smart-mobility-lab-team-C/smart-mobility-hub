@@ -1,0 +1,893 @@
+{
+  "cases": [
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 9.718999990582233e-06,
+      "name": "real_processes_and_services_ready",
+      "observations": {
+        "processes": {
+          "crossing_arbiter": null,
+          "safety_supervisor": null,
+          "scenario_runner": null
+        },
+        "ready": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 4.5259998842084315e-06,
+      "name": "simulator_observations_ready",
+      "observations": {
+        "observed_vehicle_ids": [
+          "bus",
+          "robot"
+        ],
+        "ready": true,
+        "truth_vehicle_ids": [
+          "bus",
+          "robot"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.40056172799995693,
+      "name": "startup_zero_motion",
+      "observations": {
+        "bus_zero": true,
+        "robot_zero": true,
+        "sample_count": 11
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 2.052974827000071,
+      "name": "crossing_exclusive_acquire_release",
+      "observations": {
+        "clear_release_granted": true,
+        "competing_grant_denied": true,
+        "first_token_granted": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 3.3028220090000104,
+      "name": "candidate_expiry_repetitions",
+      "observations": {
+        "latencies_sec": [
+          0.522522194999965,
+          0.5001942660001077,
+          0.4989363439999579,
+          0.4944366950003314,
+          0.5020020249999106
+        ],
+        "repetitions": 5,
+        "safe_movement": {
+          "bus_pose": [
+            1.0,
+            2.0
+          ],
+          "center_separation_m": 4.473926239892652,
+          "crossing_clearance_proven": true,
+          "robot_pose": [
+            3.004,
+            6.0
+          ]
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 6.183714545999919,
+      "name": "queue_staleness_unknown_and_stop",
+      "observations": {
+        "command_stopped": true,
+        "crossing_unknown": true,
+        "freeze_to_zero_sec": [
+          1.03921127600006,
+          1.0407642320001287,
+          1.0404157729999497,
+          1.0447249029998602,
+          1.042042584000228
+        ],
+        "repetitions": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 6.098555543999737,
+      "name": "frozen_queue_source_stamp",
+      "observations": {
+        "freeze_to_unknown_and_zero_sec": [
+          1.0648028239997984,
+          1.0634687360002317,
+          1.0629861710003752,
+          1.0626288089997615,
+          1.0640182639999693
+        ],
+        "live_receipts": true,
+        "repetitions": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.39961140900004466,
+      "name": "invalid_queue_denies_motion",
+      "observations": {
+        "crossing_unknown": true,
+        "valid_false_deny_motion": true,
+        "zero_command_after_input_sec": 0.36209702199994354
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.035774288999618875,
+      "name": "nonfinite_candidate_rejected",
+      "observations": {
+        "nan_candidate_rejected": true,
+        "zero_command_after_injection_sec": 0.03575651199980712
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.7513694760000362,
+      "name": "estop_latch_and_recovery_repetitions",
+      "observations": {
+        "latencies_sec": [
+          0.025778097000056732,
+          0.025613471000269783,
+          0.024615743000140355,
+          0.022595735999857425,
+          0.026121859999875596
+        ],
+        "repetitions": 5,
+        "simulated_velocity_stop_sec": [
+          0.05325772500009407,
+          0.050842014999943785,
+          0.0511428300001171,
+          0.05045885299978181,
+          0.050284986999940884
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 8.001141916000051,
+      "name": "clear_stop_rejects_stale_inputs",
+      "observations": {
+        "fresh_stationary_accepted": true,
+        "repetitions": 5,
+        "stale_reasons": [
+          "queue_stale",
+          "queue_stale",
+          "queue_stale",
+          "queue_stale",
+          "queue_stale"
+        ],
+        "stale_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 0.02388436899991575,
+      "name": "scenario_reset_acceptance",
+      "observations": {
+        "bus_pose": [
+          1.0,
+          2.0,
+          0.0
+        ],
+        "post_reset_world_restored": true,
+        "pre_reset_robot_speed_mps": 0.0,
+        "robot_pose": [
+          3.0,
+          6.0,
+          0.0
+        ],
+        "run_id": "96e690e4-71dc-4aa8-af96-d41b2f31aa5c",
+        "seed": 99,
+        "unknown_scenario_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.404917032999947,
+      "name": "scenario_reset_stale_rejection",
+      "observations": {
+        "reason": "/safety/reset_state:queue_stale",
+        "stale_reset_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.6443218650001654,
+      "name": "reset_missing_participant",
+      "observations": {
+        "recovery_run_id": "1972f937-18eb-49b0-b72b-94e79789672d",
+        "rejected": true,
+        "response_sec": 0.9028888690004351,
+        "safe_reset_recovered": true,
+        "simulator_restarted": true
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 1.3282000054459786e-05,
+      "name": "scenario_parameter_dump",
+      "observations": {
+        "all_dumps_nonempty": true,
+        "nodes": [
+          "/hub_coordinator",
+          "/safety_supervisor",
+          "/scenario_runner"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 6.87394274899998,
+      "name": "isolated_crossing_occupied_release_and_expiry",
+      "observations": {
+        "cases": [
+          {
+            "detail": "crossing service and state topic discovered",
+            "name": "arbiter_ready",
+            "status": "PASS"
+          },
+          {
+            "detail": "valid empty crossing observed",
+            "name": "fresh_observation",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED",
+            "name": "acquire_first_owner",
+            "status": "PASS"
+          },
+          {
+            "detail": "TOKEN_OR_CLEARANCE_REQUIRED",
+            "name": "release_rejected_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "UNSAFE_OR_UNKNOWN",
+            "name": "reset_rejected_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "expired_owner_not_reassigned_while_occupied",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED",
+            "name": "reassign_after_proven_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "RELEASED",
+            "name": "release_after_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "RESET",
+            "name": "reset_after_proven_clear",
+            "status": "PASS"
+          }
+        ],
+        "status": "PASS",
+        "stderr_tail": "",
+        "worker_domain_id": 149
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 11.032852627000011,
+      "name": "full_graph_physical_crossing_entry_and_expiry",
+      "observations": {
+        "cases": [
+          {
+            "detail": "simulator, safety, crossing, reset ready",
+            "name": "full_graph_ready",
+            "status": "PASS"
+          },
+          {
+            "detail": "both final commands zero",
+            "name": "initial_zero",
+            "status": "PASS"
+          },
+          {
+            "detail": "bus stopped with its full footprint before region C",
+            "name": "unowned_bus_stops_before_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "stopped bus leaves C available",
+            "name": "upstream_wait_is_clear",
+            "status": "PASS"
+          },
+          {
+            "detail": "ACQUIRED; attempts=1",
+            "name": "bus_acquires_before_entry",
+            "status": "PASS"
+          },
+          {
+            "detail": "evaluator pose confirms full bus footprint in C under ownership",
+            "name": "owned_bus_enters_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "competitor_denied_while_bus_inside",
+            "status": "PASS"
+          },
+          {
+            "detail": "owner retained in HOLD after lease expiry while footprint occupies C",
+            "name": "expired_lease_holds_occupied_crossing",
+            "status": "PASS"
+          },
+          {
+            "detail": "OCCUPIED",
+            "name": "no_transfer_after_lease_expiry",
+            "status": "PASS"
+          },
+          {
+            "detail": "RENEWED",
+            "name": "expired_owner_can_restore_heartbeat",
+            "status": "PASS"
+          },
+          {
+            "detail": "bus remains owner after matching-token renewal",
+            "name": "renewal_restores_only_same_owner",
+            "status": "PASS"
+          },
+          {
+            "detail": "/crossing/reset_state:UNSAFE_OR_UNKNOWN",
+            "name": "reset_rejected_while_occupied",
+            "status": "PASS"
+          }
+        ],
+        "entry_pose": [
+          4.219999999999998,
+          2.0
+        ],
+        "status": "PASS",
+        "stderr_tail": "",
+        "unowned_approach": {
+          "crossing_state": "CLEAR",
+          "crossing_valid": true,
+          "last_bus_command": [
+            0.0,
+            0.0
+          ],
+          "last_bus_speed_mps": 0.0,
+          "last_bus_x_m": 4.000000000000003,
+          "safety_latched": false,
+          "safety_reason": "clear"
+        },
+        "unowned_stop_x_m": 4.000000000000003,
+        "worker_domain_id": 150
+      },
+      "status": "PASS"
+    },
+    {
+      "detail": "acceptance satisfied",
+      "elapsed_sec": 5.063315338999928,
+      "name": "adapter_stops_after_supervisor_loss",
+      "observations": {
+        "evaluator_ground_truth_used": true,
+        "measured_stop_sec": [
+          0.49590545999990354,
+          0.4514647870000772,
+          0.44976838299999145,
+          0.4563641069998994,
+          0.45125041600022087
+        ],
+        "measurement": "signal to first received post-signal zero-speed truth sample; process reaping excluded; 0.65 s bound unchanged",
+        "repetitions": 5,
+        "supervisor_terminated_while_moving": true,
+        "trials": [
+          {
+            "process_reap_sec": 6.092100011301227e-05,
+            "signal_monotonic": 3602.732781664,
+            "source_cutoff_ros_sec": 1792919371.0125968,
+            "trial": 1,
+            "truth_samples": [
+              {
+                "received_monotonic": 3602.667359719,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.4570565
+              },
+              {
+                "received_monotonic": 3602.667716284,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.518119
+              },
+              {
+                "received_monotonic": 3602.667972911,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.5568745
+              },
+              {
+                "received_monotonic": 3602.668373196,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.6075733
+              },
+              {
+                "received_monotonic": 3602.668641836,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.656519
+              },
+              {
+                "received_monotonic": 3602.668893356,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.7128704
+              },
+              {
+                "received_monotonic": 3602.669331029,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.7567968
+              },
+              {
+                "received_monotonic": 3602.669651853,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.807323
+              },
+              {
+                "received_monotonic": 3602.669912624,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.8576348
+              },
+              {
+                "received_monotonic": 3602.670269471,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.906869
+              },
+              {
+                "received_monotonic": 3602.677528844,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919370.956329
+              },
+              {
+                "received_monotonic": 3602.732733318,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.0103855
+              },
+              {
+                "received_monotonic": 3602.799481664,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.0565681
+              },
+              {
+                "received_monotonic": 3602.836683381,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.113316
+              },
+              {
+                "received_monotonic": 3602.878882426,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.1578133
+              },
+              {
+                "received_monotonic": 3602.927220632,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.2061727
+              },
+              {
+                "received_monotonic": 3602.977956755,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.256801
+              },
+              {
+                "received_monotonic": 3603.029542341,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.308319
+              },
+              {
+                "received_monotonic": 3603.078451343,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.3572617
+              },
+              {
+                "received_monotonic": 3603.128697726,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.4066143
+              },
+              {
+                "received_monotonic": 3603.179292472,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919371.4581568
+              },
+              {
+                "received_monotonic": 3603.228687124,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919371.5072186
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.49590545999990354
+          },
+          {
+            "process_reap_sec": 4.763300012200489e-05,
+            "signal_monotonic": 3603.827280354,
+            "source_cutoff_ros_sec": 1792919372.1071103,
+            "trial": 2,
+            "truth_samples": [
+              {
+                "received_monotonic": 3603.636912539,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919371.9157066
+              },
+              {
+                "received_monotonic": 3603.67832361,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919371.9565363
+              },
+              {
+                "received_monotonic": 3603.728517042,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919372.0073674
+              },
+              {
+                "received_monotonic": 3603.778754804,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919372.0575595
+              },
+              {
+                "received_monotonic": 3603.827250224,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.1061234
+              },
+              {
+                "received_monotonic": 3603.878865088,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.1569614
+              },
+              {
+                "received_monotonic": 3603.927678652,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.2065086
+              },
+              {
+                "received_monotonic": 3603.985593519,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.2582333
+              },
+              {
+                "received_monotonic": 3604.028228775,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.307099
+              },
+              {
+                "received_monotonic": 3604.07799133,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.3565285
+              },
+              {
+                "received_monotonic": 3604.128769857,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.4072695
+              },
+              {
+                "received_monotonic": 3604.179768827,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.4579883
+              },
+              {
+                "received_monotonic": 3604.227412908,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919372.5063384
+              },
+              {
+                "received_monotonic": 3604.278745141,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919372.5569355
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.4514647870000772
+          },
+          {
+            "process_reap_sec": 5.096099994261749e-05,
+            "signal_monotonic": 3604.978734574,
+            "source_cutoff_ros_sec": 1792919373.2586231,
+            "trial": 3,
+            "truth_samples": [
+              {
+                "received_monotonic": 3604.780769172,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919373.059281
+              },
+              {
+                "received_monotonic": 3604.830531797,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919373.1092975
+              },
+              {
+                "received_monotonic": 3604.878819758,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919373.1571712
+              },
+              {
+                "received_monotonic": 3604.928208365,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919373.2069876
+              },
+              {
+                "received_monotonic": 3604.97870979,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.257011
+              },
+              {
+                "received_monotonic": 3605.028920146,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.3073153
+              },
+              {
+                "received_monotonic": 3605.078243527,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.35686
+              },
+              {
+                "received_monotonic": 3605.139026138,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.407734
+              },
+              {
+                "received_monotonic": 3605.178423387,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.4568377
+              },
+              {
+                "received_monotonic": 3605.228316693,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.5071883
+              },
+              {
+                "received_monotonic": 3605.278496493,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.5571268
+              },
+              {
+                "received_monotonic": 3605.328035681,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.606907
+              },
+              {
+                "received_monotonic": 3605.378572779,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919373.6565478
+              },
+              {
+                "received_monotonic": 3605.428502957,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919373.707351
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.44976838299999145
+          },
+          {
+            "process_reap_sec": 0.0008126699999593257,
+            "signal_monotonic": 3606.078289198,
+            "source_cutoff_ros_sec": 1792919374.3581295,
+            "trial": 4,
+            "truth_samples": [
+              {
+                "received_monotonic": 3605.878825934,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919374.1572785
+              },
+              {
+                "received_monotonic": 3605.927508842,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919374.2062252
+              },
+              {
+                "received_monotonic": 3605.979309993,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919374.2575746
+              },
+              {
+                "received_monotonic": 3606.02830612,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919374.3071544
+              },
+              {
+                "received_monotonic": 3606.078200222,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.3570685
+              },
+              {
+                "received_monotonic": 3606.128301971,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.4062989
+              },
+              {
+                "received_monotonic": 3606.178553753,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.4573088
+              },
+              {
+                "received_monotonic": 3606.238730952,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.5106242
+              },
+              {
+                "received_monotonic": 3606.278147562,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.5569735
+              },
+              {
+                "received_monotonic": 3606.327423554,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.6063359
+              },
+              {
+                "received_monotonic": 3606.378554988,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.6573448
+              },
+              {
+                "received_monotonic": 3606.42850253,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.707184
+              },
+              {
+                "received_monotonic": 3606.478369948,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919374.7567062
+              },
+              {
+                "received_monotonic": 3606.534653305,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919374.8132243
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.4563641069998994
+          },
+          {
+            "process_reap_sec": 5.4706999890186125e-05,
+            "signal_monotonic": 3607.278132515,
+            "source_cutoff_ros_sec": 1792919375.5580163,
+            "trial": 5,
+            "truth_samples": [
+              {
+                "received_monotonic": 3607.079016009,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919375.3577032
+              },
+              {
+                "received_monotonic": 3607.127814285,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919375.4064014
+              },
+              {
+                "received_monotonic": 3607.178694243,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919375.456677
+              },
+              {
+                "received_monotonic": 3607.228052518,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919375.5067735
+              },
+              {
+                "received_monotonic": 3607.27810656,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.5566862
+              },
+              {
+                "received_monotonic": 3607.328048745,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.6068294
+              },
+              {
+                "received_monotonic": 3607.379088007,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.6566896
+              },
+              {
+                "received_monotonic": 3607.42827045,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.7069154
+              },
+              {
+                "received_monotonic": 3607.479509586,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.75772
+              },
+              {
+                "received_monotonic": 3607.527699531,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.8064556
+              },
+              {
+                "received_monotonic": 3607.586309774,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.857593
+              },
+              {
+                "received_monotonic": 3607.629643704,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.9075227
+              },
+              {
+                "received_monotonic": 3607.679077802,
+                "robot_speed_mps": 0.10000000149011612,
+                "source_ros_sec": 1792919375.9574583
+              },
+              {
+                "received_monotonic": 3607.729382931,
+                "robot_speed_mps": 0.0,
+                "source_ros_sec": 1792919376.007666
+              }
+            ],
+            "zero_observed": true,
+            "zero_receipt_latency_sec": 0.45125041600022087
+          }
+        ]
+      },
+      "status": "PASS"
+    }
+  ],
+  "environment": {
+    "clock": "monotonic latency; ROS stamps for freshness",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "ros_distro": "jazzy",
+    "ros_domain_id": "76"
+  },
+  "parameter_dumps": {
+    "/hub_coordinator": {
+      "elapsed_sec": 0.0221129089995884,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"/hub_coordinator\": {\n    \"ros__parameters\": {\n      \"use_sim_time\": false,\n      \"start_type_description_service\": true,\n      \"crossing_clear_sec\": 2.0,\n      \"crossing_lease_sec\": 1.0,\n      \"queue_confidence_min\": 0.5,\n      \"dispatch_high\": 6.0,\n      \"dispatch_low\": 4.0,\n      \"dispatch_policy\": \"predictive\"\n    }\n  }\n}\n",
+      "transport": "native asynchronous ROS parameter services"
+    },
+    "/safety_supervisor": {
+      "elapsed_sec": 0.0036427110003387497,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"/safety_supervisor\": {\n    \"ros__parameters\": {\n      \"use_sim_time\": false,\n      \"start_type_description_service\": true,\n      \"queue_confidence_min\": 0.5,\n      \"command_timeout_sec\": 0.5,\n      \"robot_speed_limit\": 0.25,\n      \"bus_speed_limit\": 0.4,\n      \"angular_speed_limit\": 1.0,\n      \"future_tolerance_sec\": 0.0\n    }\n  }\n}\n",
+      "transport": "native asynchronous ROS parameter services"
+    },
+    "/scenario_runner": {
+      "elapsed_sec": 0.005071371000212821,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"/scenario_runner\": {\n    \"ros__parameters\": {\n      \"use_sim_time\": false,\n      \"start_type_description_service\": true,\n      \"seed\": 17,\n      \"m3_mode\": false,\n      \"m4_mode\": false,\n      \"m6_mode\": false,\n      \"reset_bus\": true,\n      \"occupied_slots\": [\n        \"P1\"\n      ],\n      \"invalid_slots\": [\n        \"\"\n      ],\n      \"publish_parking\": true,\n      \"freeze_parking\": false,\n      \"publish_vehicles\": true,\n      \"freeze_vehicles\": false,\n      \"entry_vehicle_id\": \"\",\n      \"passage_occupied\": false,\n      \"publish_entrance\": true,\n      \"publish_barrier_status\": true,\n      \"initial_passengers\": 6,\n      \"passenger_arrivals_sec\": [],\n      \"pedestrian_present\": false,\n      \"s1_counting_script\": false,\n      \"camera_silent\": false,\n      \"camera_frozen\": false,\n      \"occluded_passenger_indices\": [\n        0\n      ],\n      \"occlude_passengers\": false,\n      \"publish_queue\": true,\n      \"publish_bus_odom\": true,\n      \"publish_robot_odom\": true,\n      \"obstacle_enabled\": false,\n      \"command_timeout_sec\": 0.5,\n      \"robot_speed_limit\": 0.25,\n      \"bus_speed_limit\": 0.4,\n      \"angular_speed_limit\": 1.0,\n      \"future_tolerance_sec\": 0.0,\n      \"reset_deadline_sec\": 0.9\n    }\n  }\n}\n",
+      "transport": "native asynchronous ROS parameter services"
+    }
+  },
+  "process_log_tails": {
+    "crossing_arbiter.log": "Traceback (most recent call last):\n  File \"/workspace/.cache/m2fix-install/smart_hub_control/lib/smart_hub_control/crossing_arbiter\", line 33, in <module>\n    sys.exit(load_entry_point('smart-hub-control', 'console_scripts', 'crossing_arbiter')())\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/.cache/m2fix-build/smart_hub_control/smart_hub_control/crossing.py\", line 347, in main\n    rclpy.spin(node)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py\", line 247, in spin\n    executor.spin_once()\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 926, in spin_once\n    self._spin_once_impl(timeout_sec)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 907, in _spin_once_impl\n    handler, entity, node = self.wait_for_ready_callbacks(\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 877, in wait_for_ready_callbacks\n    return next(self._cb_iter)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 757, in _wait_for_ready_callbacks\n    wait_set = _rclpy.WaitSet(\n               ^^^^^^^^^^^^^^^\nrclpy._rclpy_pybind11.RCLError: failed to initialize wait set: the given context is not valid, either rcl_init() was not called or rcl_shutdown() was called., at ./src/rcl/wait.c:130\n",
+    "crossing_arbiter_restart.log": "",
+    "safety_supervisor.log": "",
+    "safety_supervisor_restart_1.log": "",
+    "safety_supervisor_restart_2.log": "",
+    "safety_supervisor_restart_3.log": "",
+    "safety_supervisor_restart_4.log": "Traceback (most recent call last):\n  File \"/workspace/.cache/m2fix-install/smart_hub_safety/lib/smart_hub_safety/safety_supervisor\", line 33, in <module>\n    sys.exit(load_entry_point('smart-hub-safety', 'console_scripts', 'safety_supervisor')())\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/.cache/m2fix-build/smart_hub_safety/smart_hub_safety/supervisor.py\", line 525, in main\n    rclpy.spin(node)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py\", line 247, in spin\n    executor.spin_once()\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 926, in spin_once\n    self._spin_once_impl(timeout_sec)\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 907, in _spin_once_impl\n    handler, entity, node = self.wait_for_ready_callbacks(\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 877, in wait_for_ready_callbacks\n    return next(self._cb_iter)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py\", line 757, in _wait_for_ready_callbacks\n    wait_set = _rclpy.WaitSet(\n               ^^^^^^^^^^^^^^^\nrclpy._rclpy_pybind11.RCLError: failed to initialize wait set: the given context is not valid, either rcl_init() was not called or rcl_shutdown() was called., at ./src/rcl/wait.c:130\n",
+    "scenario_runner.log": "\", \"participants\": [[\"/safety/reset_state\"], [\"/crossing/reset_state\"], [\"/sim/reset_world\"], [\"/safety/finish_reset\"]], \"phase\": \"start\", \"seed\": 99}\n{\"elapsed_sec\": 0.00014342700023917132, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 99}\n{\"elapsed_sec\": 0.0020900509998682537, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"safe_state_acknowledged\", \"seed\": 99, \"service_sec\": 0.001945599000009679, \"success\": true}\n{\"elapsed_sec\": 0.0021487170001819322, \"event\": \"scenario_reset_request\", \"phase\": \"/crossing/reset_state\", \"seed\": 99}\n{\"elapsed_sec\": 0.004123205000269081, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/crossing/reset_state\", \"reason\": \"RESET\", \"seed\": 99, \"service_sec\": 0.001973857999928441, \"success\": true}\n{\"elapsed_sec\": 0.0041722070000105305, \"event\": \"scenario_reset_request\", \"phase\": \"/sim/reset_world\", \"seed\": 99}\n{\"elapsed_sec\": 0.0044659280001724255, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/sim/reset_world\", \"reason\": \"seeded m2_baseline reset complete; command leases flushed\", \"seed\": 99, \"service_sec\": 0.0002936229998340423, \"success\": true}\n{\"elapsed_sec\": 0.00450945500006128, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/finish_reset\", \"seed\": 99}\n{\"elapsed_sec\": 0.005703578000066045, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/finish_reset\", \"reason\": \"reset_complete_waiting_for_new_candidates\", \"seed\": 99, \"service_sec\": 0.0011935600000470004, \"success\": true}\n{\"elapsed_sec\": 0.005749045999891678, \"event\": \"scenario_reset_complete\", \"phase\": \"/safety/finish_reset\", \"reason\": \"ALL_M2_PARTICIPANTS_ACKNOWLEDGED\", \"seed\": 99}\n{\"elapsed_sec\": 2.3329999748966657e-05, \"event\": \"scenario_reset_start\", \"participants\": [[\"/safety/reset_state\"], [\"/crossing/reset_state\"], [\"/sim/reset_world\"], [\"/safety/finish_reset\"]], \"phase\": \"start\", \"seed\": 100}\n{\"elapsed_sec\": 0.0012271919999875536, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 100}\n{\"elapsed_sec\": 0.0025906129999384575, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"queue_stale\", \"seed\": 100, \"service_sec\": 0.0013631010001518007, \"success\": false}\n{\"elapsed_sec\": 0.0026366299998699105, \"event\": \"scenario_reset_rejected\", \"phase\": \"/safety/reset_state\", \"reason\": \"/safety/reset_state:queue_stale\", \"seed\": 100}\n{\"elapsed_sec\": 2.8890000066894572e-05, \"event\": \"scenario_reset_start\", \"participants\": [[\"/safety/reset_state\"], [\"/crossing/reset_state\"], [\"/sim/reset_world\"], [\"/safety/finish_reset\"]], \"phase\": \"start\", \"seed\": 101}\n{\"elapsed_sec\": 0.00028865100011898903, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 101}\n{\"elapsed_sec\": 0.0035764420003943087, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"safe_state_acknowledged\", \"seed\": 101, \"service_sec\": 0.0032867869999790855, \"success\": true}\n{\"elapsed_sec\": 0.0036324000002423418, \"event\": \"scenario_reset_request\", \"phase\": \"/crossing/reset_state\", \"seed\": 101}\n{\"elapsed_sec\": 0.9009278060002543, \"event\": \"scenario_reset_failed\", \"phase\": \"/crossing/reset_state\", \"reason\": \"RESET_DEADLINE\", \"seed\": 101}\n{\"elapsed_sec\": 3.3551999877090566e-05, \"event\": \"scenario_reset_start\", \"participants\": [[\"/safety/reset_state\"], [\"/crossing/reset_state\"], [\"/sim/reset_world\"], [\"/safety/finish_reset\"]], \"phase\": \"start\", \"seed\": 102}\n{\"elapsed_sec\": 0.0001452329997846391, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/reset_state\", \"seed\": 102}\n{\"elapsed_sec\": 0.0020406789999469765, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/reset_state\", \"reason\": \"safe_state_acknowledged\", \"seed\": 102, \"service_sec\": 0.0018944420003208506, \"success\": true}\n{\"elapsed_sec\": 0.0020959039998160733, \"event\": \"scenario_reset_request\", \"phase\": \"/crossing/reset_state\", \"seed\": 102}\n{\"elapsed_sec\": 0.0039888539999992645, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/crossing/reset_state\", \"reason\": \"RESET\", \"seed\": 102, \"service_sec\": 0.0018921149999187037, \"success\": true}\n{\"elapsed_sec\": 0.004022054999950342, \"event\": \"scenario_reset_request\", \"phase\": \"/sim/reset_world\", \"seed\": 102}\n{\"elapsed_sec\": 0.004189614000097208, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/sim/reset_world\", \"reason\": \"seeded m2_baseline reset complete; command leases flushed\", \"seed\": 102, \"service_sec\": 0.00016745999982958892, \"success\": true}\n{\"elapsed_sec\": 0.004201590999855398, \"event\": \"scenario_reset_request\", \"phase\": \"/safety/finish_reset\", \"seed\": 102}\n{\"elapsed_sec\": 0.005588257999988855, \"event\": \"scenario_reset_acknowledgement\", \"phase\": \"/safety/finish_reset\", \"reason\": \"reset_complete_waiting_for_new_candidates\", \"seed\": 102, \"service_sec\": 0.001385688000027585, \"success\": true}\n{\"elapsed_sec\": 0.005617474999780825, \"event\": \"scenario_reset_complete\", \"phase\": \"/safety/finish_reset\", \"reason\": \"ALL_M2_PARTICIPANTS_ACKNOWLEDGED\", \"seed\": 102}\n"
+  },
+  "schema": "smart-mobility-hub/m2-verification-v1",
+  "status": "PASS"
+}
