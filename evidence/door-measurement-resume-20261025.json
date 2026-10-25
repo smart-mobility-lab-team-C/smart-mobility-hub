@@ -1,0 +1,238 @@
+{
+  "schema": "smart-mobility-hub/door-measurement-resume-v1",
+  "run_id": "door-measurement-resume-20261025",
+  "status": "FAIL",
+  "recorded_utc": "2026-10-25T03:31:48.598645+00:00",
+  "source_revision": "2c9ad87bdda3509954a0021773356a8e076280d4",
+  "worktree_clean_at_attempt": true,
+  "resume_from_revision": "98cbfb2",
+  "automatic_retries": 0,
+  "previous_attempt": {
+    "index": "evidence/door-measurement-20261025.json",
+    "status": "BLOCKED",
+    "unchanged": true,
+    "sha256": "e1414617c6a5bd5daf0e04fd119463813dc6338ff4e976e92fd2f6d43162d5be"
+  },
+  "command": [
+    "python3",
+    "scripts/door_measurement.py",
+    "/home/vboxuser/smart-mobility-hub/evidence/runs/door-measurement-resume-20261025",
+    "controls"
+  ],
+  "container_command": [
+    "docker",
+    "run",
+    "--rm",
+    "--init",
+    "--name",
+    "smh-door-432109",
+    "--user",
+    "1000:1000",
+    "-e",
+    "HOME=/tmp",
+    "-e",
+    "ROS_DOMAIN_ID=73",
+    "-e",
+    "ROS_LOCALHOST_ONLY=1",
+    "--mount",
+    "type=bind,src=/home/vboxuser/smart-mobility-hub,dst=/workspace",
+    "--mount",
+    "type=bind,src=/home/vboxuser/smart-mobility-hub/.cache/m4-completion-v1,dst=/cache",
+    "-w",
+    "/workspace",
+    "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "bash",
+    "scripts/door_measurement_container.sh",
+    "/workspace/evidence/runs/door-measurement-resume-20261025",
+    "controls"
+  ],
+  "started_utc": "2026-10-25T03:30:30.814425+00:00",
+  "ended_utc": "2026-10-25T03:30:52.031638+00:00",
+  "total_timestamp_elapsed_sec": 21.217213,
+  "host_execution_elapsed_sec": 21.1491857580113,
+  "exit_code": 1,
+  "environment": {
+    "image_id": "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+    "package_manifest_sha256": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+    "package_manifest_matches": true,
+    "repo_mount": "/workspace",
+    "cache_mount": "/cache",
+    "cached_workspace": ".cache/m4-completion-v1",
+    "container_user": "1000:1000",
+    "native_interface_imports": "PASS"
+  },
+  "host_gates": [
+    {
+      "name": "host_preflight",
+      "status": "PASS",
+      "command": [
+        "docker",
+        "image",
+        "inspect",
+        "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b"
+      ],
+      "cwd": "/home/vboxuser/smart-mobility-hub",
+      "started_utc": "2026-10-25T03:30:30.882470+00:00",
+      "exit_code": 0,
+      "ended_utc": "2026-10-25T03:30:33.523527+00:00",
+      "elapsed_sec": 2.6359421069937525
+    },
+    {
+      "name": "container",
+      "status": "FAIL",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--init",
+        "--name",
+        "smh-door-432109",
+        "--user",
+        "1000:1000",
+        "-e",
+        "HOME=/tmp",
+        "-e",
+        "ROS_DOMAIN_ID=73",
+        "-e",
+        "ROS_LOCALHOST_ONLY=1",
+        "--mount",
+        "type=bind,src=/home/vboxuser/smart-mobility-hub,dst=/workspace",
+        "--mount",
+        "type=bind,src=/home/vboxuser/smart-mobility-hub/.cache/m4-completion-v1,dst=/cache",
+        "-w",
+        "/workspace",
+        "sha256:f1c8db36f4874670d2125e3e40be69491da12273b28d4effb4f4d3c8b98a839b",
+        "bash",
+        "scripts/door_measurement_container.sh",
+        "/workspace/evidence/runs/door-measurement-resume-20261025",
+        "controls"
+      ],
+      "cwd": "/home/vboxuser/smart-mobility-hub",
+      "started_utc": "2026-10-25T03:30:33.532123+00:00",
+      "exit_code": 1,
+      "ended_utc": "2026-10-25T03:30:52.030272+00:00",
+      "elapsed_sec": 18.484518059005495
+    }
+  ],
+  "gates": [
+    {
+      "name": "mounts_and_dependencies",
+      "status": "PASS",
+      "command": [
+        "/usr/bin/python3",
+        "/workspace/scripts/door_measurement.py",
+        "/workspace/evidence/runs/door-measurement-resume-20261025",
+        "preflight",
+        "--inside"
+      ],
+      "cwd": "/workspace",
+      "started_utc": "2026-10-25T03:30:41.700946+00:00",
+      "exit_code": 0,
+      "ended_utc": "2026-10-25T03:30:44.170362+00:00",
+      "elapsed_sec": 2.451346875008312
+    },
+    {
+      "name": "incremental_build",
+      "status": "FAIL",
+      "command": [
+        "colcon",
+        "build",
+        "--packages-select",
+        "smart_hub_sim",
+        "smart_hub_control",
+        "--event-handlers",
+        "console_direct+"
+      ],
+      "cwd": "/cache",
+      "started_utc": "2026-10-25T03:30:44.190407+00:00",
+      "exit_code": 1,
+      "ended_utc": "2026-10-25T03:30:48.427665+00:00",
+      "elapsed_sec": 4.232619153990527
+    },
+    {
+      "name": "flake8",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "pep257",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "producer_and_evaluator_controls",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "harness_controls",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "world_and_routing_regressions",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "seed_304_comparison",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "adopt_source_duration_gate",
+      "status": "NOT RUN"
+    },
+    {
+      "name": "official_clean_build_M2_M3_M4",
+      "status": "NOT RUN"
+    }
+  ],
+  "failure": {
+    "classification": "cached installation metadata permissions",
+    "failed_package": "smart_hub_sim",
+    "packages_completed": 0,
+    "not_processed": [
+      "smart_hub_control"
+    ],
+    "colcon_summary_seconds": 3.53,
+    "error": "Permission denied replacing smart_hub_sim-0.1.0-py3.12.egg-info/PKG-INFO",
+    "observed_owner": "root:root",
+    "directory_mode": "0755",
+    "file_mode": "0644",
+    "partial_install": "Python files copied before metadata failure; cache is not validated.",
+    "permission_changes": false,
+    "next_review": "Resolve cached package metadata ownership or use a user-owned cache in a separately authorized attempt; do not rerun this stopped attempt."
+  },
+  "implementation_status": "Prepared but unvalidated; official receipt gate unchanged",
+  "historical_result": {
+    "index": "evidence/m234-node-boundary-fix-20261025.json",
+    "sha256": "cb8b2391c1c22bfb524c5d1fa89acf96b62624d0655e159734de562beb21a884",
+    "duration_sec": 7.973234,
+    "status": "FAIL",
+    "physical_cause": "unproven",
+    "earlier_dwell_timing_and_margin_recommendation": "withdrawn; no timing change made"
+  },
+  "artifacts": {
+    "directory": "evidence/runs/door-measurement-resume-20261025",
+    "manifest_sha256": "27c0db1e00dcb1806994a37577ca6a8e6a1f50d949f62bc6200f562524b4b273",
+    "sha256": {
+      "artifact-sha256.txt": "27c0db1e00dcb1806994a37577ca6a8e6a1f50d949f62bc6200f562524b4b273",
+      "attempt.json": "22076762310f12a292cb994bcf4b7b8a188b59e16bc5fdb93cfd7ba606bf3c2e",
+      "cache-permissions.txt": "a255a84c57517154e1c2b218ee5e0704c7304819683bd6ed51a1dace09dd47b0",
+      "containers-after-attempt.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "controls/artifact-sha256.txt": "c0233feeda9cfdba2bc6269402c9999b4af6ae40fc6da64c2ca76d7d6401e1b6",
+      "controls/colcon-log/events.log": "4ee3a87016cf91926b935a275ac2426ab31ac4063e3c347524071b490b58a80b",
+      "controls/colcon-log/logger_all.log": "1bd40e25f221a243a703a6e5a526a1bcb3447c1ea0e4c1584b5aa8284c3c3313",
+      "controls/colcon-log/smart_hub_sim/command.log": "8345671034ff3e1a43145775810c71c30487940dc39a5630e600867dde57c9f7",
+      "controls/colcon-log/smart_hub_sim/stderr.log": "44c021914c30a6bbb115a438c09b157f54f477ed0b67f2df265f624d3a64529f",
+      "controls/colcon-log/smart_hub_sim/stdout.log": "9618e00e2e7298c879efce9f203c26f57870e1de51366d1e78fa27094f154eca",
+      "controls/colcon-log/smart_hub_sim/stdout_stderr.log": "becf5c15feb7ad70597182730adf4c883896820dd0035521c640198fe5490dd3",
+      "controls/colcon-log/smart_hub_sim/streams.log": "133b5535da0ffa9e9acd01e2f2297fe079da77de6c40d01f94aa8e9ff0353836",
+      "controls/container.log": "8d77104f96e7ab6d0b8f1c65c6307c2fa9c3f1cf355f8aeb261dfb305269e4f3",
+      "controls/gates.json": "6b3c8d42b56f8509d46c06f19027f729b1025f5fae4abacdb8d0348349b42b0d",
+      "controls/host-gates.json": "74fdb3b9e5f46205c8773b8132543a946d84300d0762e0f9e1285ea1be7884c2",
+      "controls/host_preflight.log": "ca4ed8f105844e51bbd16209d223cfc5188a48709c298a72a5e726f6222acf44",
+      "controls/incremental_build.log": "9bde3374b2b7a32b87df585f661aeac06273a8c746ecf48c7da59e88f5b178e6",
+      "controls/mounts_and_dependencies.log": "1444b8abb0d95fa85724fd51e34326240adc0109ed2c1aacd0044ea6f3094020",
+      "controls/package-versions.tsv": "437ad4c24291a444fb81f3ae26ae2cd93f59bdf4907e610e2fc46aa64d092259",
+      "source-sha256.txt": "afb34d0422274a56e6ca9c1e54e5ceee78b2468b092c8835a1a917dd4a75ba2e",
+      "source.patch": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "limits": "No producer/evaluator or harness tests ran. No comparison, adoption, milestone acceptance, repeatability or historical causal conclusion established."
+}

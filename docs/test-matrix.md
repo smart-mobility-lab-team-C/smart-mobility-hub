@@ -99,9 +99,13 @@ failure; remaining M3 cases and M4 were NOT RUN. Prior same-seed runs measured
 recommendation is withdrawn; controller timing is unchanged.
 See the [combined result index](../evidence/m234-node-boundary-fix-20261025.json).
 
-## Pending door measurement controls — 2026-10-25
+## Stopped door measurement controls — 2026-10-25
 
-Source duration evidence remains unvalidated. The incremental build prerequisite
-failed before controls; controls, seed-304 comparison, adoption, and clean
-M2+M3+M4 acceptance are NOT RUN for this attempt. No historical test status is
-changed. See [the stopped attempt](door-measurement.md).
+Source duration evidence remains unvalidated. The original incremental build
+failed on the missing cache mount. A user-authorized fresh attempt at `2c9ad87`
+passed mount/dependency/import checks, then failed the simulator build on
+root-owned cached package metadata. Style, producer/evaluator and harness
+controls, world/routing regressions, seed-304 comparison, adoption, and clean
+M2+M3+M4 acceptance are NOT RUN for the resume. No retry followed and no historical
+test status changed. See [both stopped attempts](door-measurement.md) and the
+[resume index](../evidence/door-measurement-resume-20261025.json).

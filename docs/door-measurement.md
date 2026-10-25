@@ -1,5 +1,11 @@
 # Door measurement validation — 2026-10-25
 
+Latest resume: **FAIL at incremental build** after verified mounts, pinned
+package manifest, native interface imports and prerequisite source checks passed.
+Cached simulator package metadata is root-owned and cannot be replaced by the
+non-root build user. All later gates are NOT RUN. See the
+[resume result](../evidence/door-measurement-resume-20261025.json) and details below.
+
 Previous attempt: **BLOCKED before controls**. The incremental build failed because the
 reused workspace's generated interface setup references
 `/cache/install/smart_hub_interfaces`, but the attempted container invocation
@@ -114,8 +120,9 @@ recorded.
 ## Authorized resume with verified mounts
 
 The current user plan authorizes a fresh attempt from `98cbfb2`; the earlier
-BLOCKED attempt and its artifacts remain unchanged. Preparation is complete;
-runtime results for this resume are still pending.
+BLOCKED attempt and its artifacts remain unchanged. The fresh attempt at clean
+revision `2c9ad87bdda3509954a0021773356a8e076280d4` stopped at its first new
+failed gate. No retry or permission modification followed.
 
 The host launcher is `python3 scripts/door_measurement.py
 ABSOLUTE_FRESH_RESULTS_DIRECTORY controls`. It pins the image by immutable ID,
@@ -142,3 +149,46 @@ cleanup, and a shared child-cleanup deadline. Existing producer controls retain
 exact integer nanosecond boundaries, interlock rejection, physics/reset capture,
 and capture-under-lock/publication-afterward checks; added cases cover overlapping
 operation bounds and an interruption whose duration would otherwise pass.
+
+### Resume outcome
+
+Executed once:
+
+```sh
+python3 scripts/door_measurement.py \
+  /home/vboxuser/smart-mobility-hub/evidence/runs/door-measurement-resume-20261025 \
+  controls
+```
+
+| Gate | Observed outcome |
+|---|---|
+| Pinned image, `/workspace` and `/cache` mounts | PASS |
+| Package manifest, native interface imports, unchanged prerequisites | PASS |
+| Incremental `smart_hub_sim` / `smart_hub_control` build | FAIL; zero completed, control package not processed |
+| Style, producer/evaluator controls, harness controls, world/routing regressions | NOT RUN |
+| Seed-304 comparison | NOT RUN |
+| Source gate adoption and clean M2+M3+M4 acceptance | NOT RUN |
+
+The build failed while replacing
+`/cache/install/smart_hub_sim/lib/python3.12/site-packages/smart_hub_sim-0.1.0-py3.12.egg-info/PKG-INFO`.
+Read-only inspection found its metadata directory owned by `root:root` with
+mode 0755 and its file owned by `root:root` with mode 0644. The container ran
+as `1000:1000`. The build copied Python files before failing, so the reused
+installation must be treated as partially updated and unvalidated.
+
+The attempt's timestamp span was **21.217213 s**; the host execution interval was
+21.149186 s, including 18.484518 s for the container. The build command lasted
+4.232619 s; colcon reported 3.53 s. Its exit code was 1. Commands, stage-specific
+UTC timestamps, source revision/hashes, exact dependencies, logs, colcon output,
+permission observations, and artifact hashes are retained in the
+[resume result index](../evidence/door-measurement-resume-20261025.json) and ignored
+raw directory `evidence/runs/door-measurement-resume-20261025/`. No container
+remained running after the attempt.
+
+The launcher and M3 harness changes are committed but their style and runtime
+controls remain unvalidated because the build prerequisite failed. The original
+receipt duration gate is unchanged; no official pipeline adoption occurred.
+A future attempt requires separate authorization and a user-writable cached
+installation (or an approved ownership repair), with the same ordered gates and
+fresh evidence. This stopped attempt supplies no duration, milestone acceptance,
+repeatability, or historical causal conclusion.

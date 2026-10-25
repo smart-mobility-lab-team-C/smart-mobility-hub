@@ -476,3 +476,18 @@ are **NOT RUN**. No retry followed. The official receipt assertion and the
 historical 7.973234 s FAIL remain unchanged. See the
 [validation record](door-measurement.md) and
 [result index](../evidence/door-measurement-20261025.json).
+
+
+## Door measurement resume — 2026-10-25
+
+The user-authorized fresh attempt from `98cbfb2` ran at clean revision `2c9ad87`.
+The pinned image, both mount aliases, package manifest, native interface imports,
+and prerequisite source checks passed. The incremental simulator build then
+**FAIL**ed on root-owned cached package metadata; zero packages completed and
+`smart_hub_control` was not processed. The timestamp span was 21.217213 s.
+Style, producer/evaluator controls, harness tests, world/routing regressions,
+comparison, adoption and clean acceptance are **NOT RUN**. No retry or permission
+change followed. See the [resume index](../evidence/door-measurement-resume-20261025.json)
+and [validation record](door-measurement.md). The previous BLOCKED attempt and
+historical 7.973234 s FAIL are unchanged. The historical physical cause remains
+unproven and the earlier dwell-timing/margin recommendation remains withdrawn.
