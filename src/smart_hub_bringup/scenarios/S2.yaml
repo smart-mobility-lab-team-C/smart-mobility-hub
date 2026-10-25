@@ -1,0 +1,88 @@
+# JSON-formatted YAML 1.2, like map_m1.yaml.
+{
+  "scenario_id": "S2",
+  "source": "A §9 p15",
+  "title": "30 s demand forecast and dispatch",
+  "graph": "integrated",
+  "nodes": [
+    {
+      "package": "smart_hub_sim",
+      "executable": "scenario_runner",
+      "parameters": {
+        "m3_mode": true,
+        "m4_mode": true,
+        "m6_mode": true,
+        "publish_queue": false
+      }
+    },
+    {
+      "package": "smart_hub_perception",
+      "executable": "passenger_detector",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_prediction",
+      "executable": "demand_predictor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_safety",
+      "executable": "safety_supervisor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "crossing_arbiter",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "route_planner",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "robot_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "bus_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "parking_manager",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_control",
+      "executable": "traffic_monitor",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_bringup",
+      "executable": "dashboard_marker_publisher",
+      "parameters": {}
+    },
+    {
+      "package": "smart_hub_bringup",
+      "executable": "metrics_logger",
+      "parameters": {
+        "scenario_id": "S2"
+      }
+    }
+  ],
+  "stimulus_schedule": [
+    "rising-demand episode",
+    "steady queue",
+    "noisy sequence around 6",
+    "feed gap after warm-up"
+  ],
+  "acceptance_tests": [
+    "T03",
+    "T04"
+  ],
+  "verifier": "NOT IMPLEMENTED: ROS T03/T04 verifier",
+  "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
+}

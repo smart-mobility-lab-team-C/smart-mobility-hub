@@ -1,5 +1,7 @@
 # M3 observation-gap diagnostic
 
+> Historical diagnostic record. Current status is in the [README](../README.md) and [compliance register](compliance.md).
+
 The retained local M3 failure has a roughly 17-second gap across odometry,
 safety, commands, queue, crossing and feedback. Both source and receipt clocks
 advance. This establishes missing observations, not a confirmed host-suspension

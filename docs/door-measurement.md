@@ -1,5 +1,7 @@
 # Door measurement validation — 2026-10-25
 
+> Historical diagnostic record. Current status is in the [README](../README.md) and [compliance register](compliance.md).
+
 ## Fresh validation and source gate adoption
 
 The fresh attempt `door-validation-20261025T035302Z` started from clean

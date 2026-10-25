@@ -7,3 +7,6 @@ install/
 log/
 evidence/m1-local/
 evidence/m1-ci/
+
+# Course source PDFs: keep local authorized copies only (not for public redistribution)
+docs/*.pdf

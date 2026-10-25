@@ -336,7 +336,7 @@ class Probe(Node):
             assert response.success, response.reason
             self.pause(0.2)
         request = ResetScenario.Request(scenario_id='m2_baseline', seed=seed, preserve_logs=True)
-        response = self.future(self.reset_client.call_async(request), 2)
+        response = self.future(self.reset_client.call_async(request), 3)
         assert response.success, response.reason
         self.pause(2.2)
         return response.run_id

@@ -1,20 +1,24 @@
-# Proposed architecture
+# Architecture
 
-Design target; no nodes have been implemented in this repository.
+Implemented in part. Ten of the 13 assignment nodes (A §4 pp5–6) exist. `robot_manager`
+and `metrics_logger` are missing, and the actuator-bridge role runs inside
+`scenario_runner`. See the [node table in the compliance register](compliance.md#required-nodes-a-4-pp56-41-p6-h-51-p11).
+The diagrams below are the design. Acceptance status lives in the [test matrix](test-matrix.md).
 
 ## Development environment
 
 ```mermaid
 flowchart TD
-  W["Windows host"] --> L["WSL2 · Ubuntu 24.04"]
-  L --> C["Codex CLI"]
-  L --> R["ROS 2 Jazzy"]
-  L --> G["Local Git checkout"]
-  C --> G
-  G --> B["Build and test"]
-  R --> B
-  B --> E["Evidence"]
+  H["VirtualBox VM · Ubuntu 22.04 host"] --> D["Docker · Ubuntu 24.04 + ROS 2 Jazzy (smh-* images)"]
+  H --> G["Local Git checkout"]
+  G --> D
+  D --> B["colcon build/test + real-node verifiers"]
+  B --> E["Evidence (evidence/, docs/)"]
+  W["Teammates: Windows → WSL2 · Ubuntu 24.04"] -.-> G
 ```
+
+All local acceptance runs use the container ([M0](m0.md)). The WSL path in
+[setup](setup.md) is the documented teammate alternative and has not been executed.
 
 ## Runtime control and observations
 
@@ -39,7 +43,7 @@ flowchart TD
 
 Safety is the only final velocity publisher. Ground truth supports evaluation, never perception or planning decisions. Crossing grants are constrained by observed clearance, pedestrians, freshness, and ownership; lease expiry does not prove the crossing is empty.
 
-## Proposed package boundaries
+## Package boundaries
 
 | Package | Responsibility |
 |---|---|
@@ -52,7 +56,7 @@ Safety is the only final velocity publisher. Ground truth supports evaluation, n
 | smart_hub_bringup | Launch, config, scenario runner, logging |
 | smart_hub_tests | Unit, ROS integration, scenario and fault evaluation |
 
-Package grouping is a proposal; node responsibilities and published contracts remain authoritative.
+This multi-package split deviates from the single `smart_hub` package that A §19.1 p26 recommends. The node responsibilities and published contracts are what A grades.
 
 ## Mission lifecycle
 
@@ -87,7 +91,7 @@ flowchart TD
   FAIL --> REPORT
 ```
 
-## M1 package skeletons
+## M1 package skeletons (historical, 2026-10-22)
 
 All eight proposed package boundaries now exist under `src/`. Interfaces use
 ament_cmake/rosidl; the other seven use ament_python with declared dependencies

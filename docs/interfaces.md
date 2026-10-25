@@ -34,7 +34,7 @@ Custom types use smart_hub_interfaces. R = reliable/volatile; number = keep-last
 | /parking/reserve_slot | ReserveParking | parking_manager |
 | /parking/release_slot | ReleaseParking | parking_manager |
 | /route/compute | ComputeRoute | route_planner |
-| /crossing/request | RequestCrossing | hub_coordinator |
+| /crossing/request | RequestCrossing | hub_coordinator (node name; executable `crossing_arbiter`) |
 | /scenario/reset | ResetScenario | scenario_runner |
 | /safety/clear_stop | ClearSafetyStop | safety_supervisor |
 | /bus/dock | DockBus action | bus_manager |
@@ -136,16 +136,19 @@ clear/reset require exact zero for both simulated agents.
 Internal `/safety/reset_state`, `/safety/finish_reset`, `/crossing/reset_state`
 and `/sim/reset_world` use `ResetScenario`. The `scenario_runner` node owns the
 public `/scenario/reset` and awaits launched participants under one monotonic
-one-second deadline. No mission servers participate until their milestone implements
+deadline: 0.9 s since `038695b` (D09), so that a failure reaches the client inside its 1 s
+timeout (A §7.1 p10). No mission servers participate until their milestone implements
 the corresponding cancellation/acknowledgement behavior. Measured door/barrier
 status heartbeat is 10 Hz in this simulator, with a 0.5 s local watchdog for door
 safety; this is a declared M2 choice where the assignment specifies no rate.
-Evaluator-only `/sim/evaluator/ground_truth` is `VehicleStateArray`, 10 Hz R10 in
-`map`; it is excluded from all control subscriptions.
+Evaluator-only `/sim/evaluator/ground_truth` is `VehicleStateArray`, R10 in
+`map`. It is published at 20 Hz (every simulator step) since `038695b` (D10), and was 10 Hz
+before that. It is excluded from all control subscriptions.
 
 The former `reset_coordinator` node was removed from M2–M4 launches when
 public ownership was restored to `scenario_runner` on the mandatory-scenarios
-branch. Fresh real-node regression is required before acceptance.
+branch. The fresh real-node regression at `038695b` is FAIL (17/18); see
+[progress](mandatory-scenarios-progress.md).
 
 ## M3 runtime additions
 
@@ -159,8 +162,8 @@ M3 synthetic bringup opts into simulator-owned `/hub/queue` (5 Hz R10) and a
 labelled fixture-owned `/traffic/edges` (2 Hz R10). Neither implements perception
 or traffic monitoring. Internal bay/goal/run/arrival/reset endpoints, ownership,
 QoS, watchdogs and invalid-value conventions are documented in M3. Public reset
-remains `/scenario/reset`, owned by scenario_runner; M3 adds explicit bus
-prepare/finish acknowledgements within the existing total 1 s deadline.
+remains `/scenario/reset`, owned by scenario_runner. M3 adds explicit bus
+prepare/finish acknowledgements within the existing total reset deadline (0.9 s since D09).
 
 The bus process uses internal `bus_observations` solely to receive the existing
 bus input topics and TF on a dedicated single-thread executor. The mission node

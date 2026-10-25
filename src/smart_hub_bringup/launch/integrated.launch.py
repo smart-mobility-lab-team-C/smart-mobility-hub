@@ -12,7 +12,8 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('seed', default_value='17'),
         Node(package='smart_hub_sim', executable='scenario_runner', output='screen',
-             parameters=[{'m3_mode': True, 'm4_mode': True, 'publish_queue': False,
+             parameters=[{'m3_mode': True, 'm4_mode': True, 'm6_mode': True,
+                          'publish_queue': False,
                           'seed': ParameterValue(LaunchConfiguration('seed'),
                                                  value_type=int)}]),
         Node(package='smart_hub_perception', executable='passenger_detector',
@@ -24,6 +25,8 @@ def generate_launch_description():
         Node(package='smart_hub_control', executable='crossing_arbiter',
              output='screen'),
         Node(package='smart_hub_control', executable='route_planner',
+             output='screen'),
+        Node(package='smart_hub_control', executable='robot_manager',
              output='screen'),
         Node(package='smart_hub_control', executable='bus_manager',
              output='screen'),

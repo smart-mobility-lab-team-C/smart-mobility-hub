@@ -12,9 +12,12 @@ setup(
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', glob('launch/*.py')),
+        ('share/' + package_name + '/scenarios', glob('scenarios/*.yaml')),
+        ('share/' + package_name + '/rviz', glob('rviz/*.rviz')),
     ],
     entry_points={'console_scripts': [
         'dashboard_marker_publisher = smart_hub_bringup.markers:main',
+        'metrics_logger = smart_hub_bringup.metrics:main',
     ]},
     install_requires=['setuptools'],
     tests_require=['pytest'],

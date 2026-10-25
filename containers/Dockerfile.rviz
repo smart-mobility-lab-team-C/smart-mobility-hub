@@ -1,0 +1,5 @@
+# Adds RViz to the local verification image for demonstration recordings only.
+FROM smh-m4-local
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends ros-jazzy-rviz2 \
+    && rm -rf /var/lib/apt/lists/*

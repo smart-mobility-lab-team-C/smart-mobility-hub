@@ -402,21 +402,27 @@ class SafetySupervisor(Node):
         self._bus_pub.publish(commands['bus'] or Twist())
 
         motion = commands['robot'] is not None or commands['bus'] is not None
+        # The reset hold already forces zero output, so report it ahead of input reasons.
         reported_reason = (self._latch_reason if self._latched else
-                           reason or ('reset_in_progress' if self._reset_hold else 'clear'))
+                           'reset_in_progress' if self._reset_hold else
+                           reason or 'clear')
         state_signature = (self._latched, motion, reported_reason)
         if self._tick_count % 2 == 0:
-            state = SafetyState()
-            state.header.stamp = self.get_clock().now().to_msg()
-            state.header.frame_id = 'map'
-            state.stop_latched = self._latched
-            state.motion_permitted = motion and not self._latched
-            state.reason = reported_reason
-            self._safety_pub.publish(state)
+            self._publish_state(motion, reported_reason)
         if state_signature != self._last_state:
             if self._last_state is not None:
                 self._publish_event('safety_state_changed', reported_reason)
             self._last_state = state_signature
+
+    def _publish_state(self, motion, reason):
+        """Publish one SafetyState sample with the current ROS timestamp."""
+        state = SafetyState()
+        state.header.stamp = self.get_clock().now().to_msg()
+        state.header.frame_id = 'map'
+        state.stop_latched = self._latched
+        state.motion_permitted = motion and not self._latched
+        state.reason = reason
+        self._safety_pub.publish(state)
 
     def _safe_for_recovery(self):
         """Require fresh affirmative inputs and exact measured zero motion."""
@@ -478,6 +484,9 @@ class SafetySupervisor(Node):
         if response.success:
             self._candidate = {'robot': None, 'bus': None}
             self._reset_hold = True
+            self._robot_pub.publish(Twist())
+            self._bus_pub.publish(Twist())
+            self._publish_state(False, 'reset_in_progress')
         return response
 
     def _finish_reset_cb(self, request, response):

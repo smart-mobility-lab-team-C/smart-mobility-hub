@@ -16,6 +16,21 @@ At most 10 files total; each file at most 1 GB. Use less than 1,000,000,000 byte
 
 Suggested 12–18 pages excluding appendices: requirements, M1 map, architecture, exact interfaces, state machines, algorithms, data split, safety, T01–T18 measured results, limitations, reproduction and individual contributions.
 
+## Assignment §24.1 p33 package contents (inside the uploads above)
+
+- **Source snapshot:** Python packages, interface definitions, launch files, parameters,
+  map, scenario files, tests, dependency versions, license notices (e.g. the NanoDet
+  Apache-2.0 file) and the commit hash.
+- **Evidence directory:** annotated videos, representative rosbags, full metric CSVs,
+  training/evaluation scripts, model artifact, and enough input data to reproduce the
+  results (or lawful download instructions; N forbids external links, so include the
+  data directly).
+- **Individual defense:** each student explains one publisher/subscriber path, one
+  service or action lifecycle, and one failed test they corrected.
+- **Rubric (A §24.2):** a failed test stays in the report with its diagnosis.
+
+Current gaps against these items are listed in the [compliance register](compliance.md).
+
 ## Proposed 25-minute video
 
 | Minutes | Content |
@@ -25,7 +40,7 @@ Suggested 12–18 pages excluding appendices: requirements, M1 map, architecture
 | 13–21 | Integrated S1–S9 demos |
 | 21–25 | Results, failures, limitations, contributions |
 
-The handbook's shorter demo can be embedded; the latest announcement governs total duration.
+The 8-minute demonstration structure in A §24.1 p33 and H §7.3 p16 can be embedded. N governs total duration.
 
 ## Release gates
 
