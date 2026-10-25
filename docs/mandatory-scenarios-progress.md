@@ -123,3 +123,35 @@ Next steps:
 
 M2 repeatability, M3 and M4 remain NOT RUN on this revision. See the
 [compliance register](compliance.md) for every unimplemented assignment item.
+
+## M6 robot_manager work in progress — 2026-10-25
+
+This is on branch `feat/m6-robot-manager` and is **not accepted**.
+
+**Added**
+- `robot_manager` (`smart_hub_control/robot.py`) serves `/robot/navigate_to`, `/robot/escort` and
+  `/robot/confirm_ready` (A §7.2, §14). It implements the escort state machine, readiness accepted
+  only in WAIT_READY with a 20 s timeout, arrival within 0.20 m held 1 s, crossing token handling,
+  replanning on a blocked or stale edge, NO_ROUTE, stale-odometry and planner-loss aborts, and
+  reset hooks.
+- Simulator: an `m6_mode` parameter and a test-only `publish_robot_odom` fault switch.
+- `m6.launch.py`, and `robot_manager` added to the integrated launch.
+- `scripts/verify_m6.py` covers T11–T14 and supports `--case NAME`.
+
+**Changed**
+- The reset workflow now runs independent participants concurrently: robot+bus prepare,
+  parking+traffic, and bus+robot finish. It calls `/sim/reset_world` in-process.
+- New parameter `reset_deadline_sec` ([D11](decisions.md)): 0.9 s for the M2 graph, 2.0 s with mission
+  managers. Verifier reset clients now wait 3 s.
+
+**Checks**
+- `colcon test`: 92 tests, 0 failures. `check_docs` and `git diff --check` pass.
+- T11 debug run PASS: 60 requests over 20 configurations, all matching the oracle, p95 0.066 s. This
+  ran before the reachable-node fix.
+- Every case that starts with a scenario reset fails on the dev VM. Single reset hops took
+  0.11–0.57 s at load 3–11, and the bus finish-reset check timed out. T12–T14 therefore remain
+  **NOT RUN**.
+
+**Cause and next step:** this is attributed to VirtualBox-on-Hyper-V vCPU scheduling (see
+[vm-host-repair](vm-host-repair.md)). The next step is a predictable host: fewer vCPUs, native
+Linux or WSL2.

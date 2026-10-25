@@ -155,7 +155,7 @@ def parking_cases(probe, results):
     assert clear.success, clear.reason
     probe.pause(.3)
     response = probe.future(probe.reset.call_async(ResetScenario.Request(
-        scenario_id='m2_baseline', seed=17, preserve_logs=True)))
+        scenario_id='m2_baseline', seed=17, preserve_logs=True)), 3)
     assert (response.success and
             response.reason == 'ALL_M4_PARTICIPANTS_ACKNOWLEDGED'), str(response)
     assert probe.wait(lambda: probe.slots().get('P2') and

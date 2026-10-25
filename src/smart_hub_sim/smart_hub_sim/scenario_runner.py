@@ -75,6 +75,7 @@ class ScenarioRunner(ResetWorkflow, Node):
         self.declare_parameter('seed', 17)
         self.declare_parameter('m3_mode', False)
         self.declare_parameter('m4_mode', False)
+        self.declare_parameter('m6_mode', False)
         self.m4_mode = bool(self.get_parameter('m4_mode').value)
         self.declare_parameter('occupied_slots', ['P1'])
         self.declare_parameter('invalid_slots', [''])
@@ -104,6 +105,8 @@ class ScenarioRunner(ResetWorkflow, Node):
         self._frozen_image = None
         self.declare_parameter('publish_queue', True)
         self.declare_parameter('publish_bus_odom', True)
+        # Test-only fault injection for the S9/T14 robot odometry gap.
+        self.declare_parameter('publish_robot_odom', True)
         self.m3_mode = bool(self.get_parameter('m3_mode').value)
         self.s1_script = bool(self.get_parameter('s1_counting_script').value)
         if self.s1_script and not self.m3_mode:
@@ -207,7 +210,8 @@ class ScenarioRunner(ResetWorkflow, Node):
             ResetScenario, '/sim/reset_world', self._reset_scenario,
             callback_group=MutuallyExclusiveCallbackGroup(),
         )
-        self.configure_reset(include_bus=self.m3_mode, include_m4=self.m4_mode)
+        self.configure_reset(include_bus=self.m3_mode, include_m4=self.m4_mode,
+                             include_robot=bool(self.get_parameter('m6_mode').value))
         self._queue_pub = (self.create_publisher(QueueState, '/hub/queue', _qos(10))
                            if self.m3_mode else None)
         self._boarding_pub = self.create_publisher(HubEvent, '/hub/events', _qos(100))
@@ -685,7 +689,8 @@ class ScenarioRunner(ResetWorkflow, Node):
         bus_odom, bus_transforms = self._agent_odometry_and_transforms(
             self.world.bus, 'bus', (1.0, 2.0), stamp
         )
-        self._odom_pub.publish(robot_odom)
+        if self.get_parameter('publish_robot_odom').value:
+            self._odom_pub.publish(robot_odom)
         if self.get_parameter('publish_bus_odom').value:
             self._bus_odom_pub.publish(bus_odom)
         self._tf.sendTransform([*robot_transforms, *bus_transforms])

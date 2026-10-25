@@ -1,8 +1,10 @@
 """Public scenario reset workflow owned by the simulator node."""
 
 import json
+import math
 import time
 
+from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.qos import DurabilityPolicy, QoSProfile
 from rclpy.task import Future
@@ -13,10 +15,19 @@ from smart_hub_interfaces.srv import ResetScenario
 class ResetWorkflow:
     """Coordinate participant acknowledgements under one monotonic deadline."""
 
-    def configure_reset(self, include_bus=False, include_m4=False):
+    def configure_reset(self, include_bus=False, include_m4=False, include_robot=False):
         """Register the public service and internal participant clients."""
         self.include_bus = include_bus
         self.include_m4 = include_m4
+        # Design choice D11: 0.9 s keeps M2 inside the 1 s client timeout (A 7.1); the
+        # assignment fixes no reset deadline, and mission graphs need ~1.2 s on the dev VM.
+        default = 2.0 if include_bus or include_robot else 0.9
+        self.declare_parameter('reset_deadline_sec', default,
+                               ParameterDescriptor(read_only=True))
+        self._reset_deadline_sec = float(self.get_parameter('reset_deadline_sec').value)
+        if not math.isfinite(self._reset_deadline_sec) or not (
+                0.0 < self._reset_deadline_sec <= 2.0):
+            raise ValueError('reset_deadline_sec must be in (0, 2.0]')
         self.busy = False
         self._reset_crossing = None
         self._reset_safety = None
@@ -30,18 +41,24 @@ class ResetWorkflow:
                                  callback_group=self._reset_group)
         self.create_subscription(SafetyState, '/hub/safety', self._reset_on_safety, qos,
                                  callback_group=self._reset_group)
-        endpoints = ('/safety/reset_state', '/crossing/reset_state',
-                     '/sim/reset_world', '/safety/finish_reset')
-        if include_bus:
-            endpoints = ('/bus/prepare_reset', *endpoints[:-1],
-                         '/bus/finish_reset', endpoints[-1])
+        # Ordered stages; endpoints within one stage are independent and run concurrently.
+        stages = [['/safety/reset_state'], ['/crossing/reset_state'], ['/sim/reset_world'],
+                  ['/safety/finish_reset']]
+        prepare = [name for name, enabled in (('/robot/prepare_reset', include_robot),
+                                              ('/bus/prepare_reset', include_bus)) if enabled]
+        finish = [name for name, enabled in (('/bus/finish_reset', include_bus),
+                                             ('/robot/finish_reset', include_robot)) if enabled]
         if include_m4:
-            index = endpoints.index('/sim/reset_world')
-            endpoints = (*endpoints[:index], '/parking/reset_state',
-                         '/traffic/reset_state', *endpoints[index:])
-        self._participants = [
-            self.create_client(ResetScenario, endpoint, callback_group=self._reset_group)
-            for endpoint in endpoints]
+            stages.insert(2, ['/parking/reset_state', '/traffic/reset_state'])
+        if finish:
+            stages.insert(-1, finish)
+        if prepare:
+            stages.insert(0, prepare)
+        self._stages = [
+            [self.create_client(ResetScenario, endpoint, callback_group=self._reset_group)
+             for endpoint in stage]
+            for stage in stages]
+        self._participants = [client for stage in self._stages for client in stage]
         self.create_service(ResetScenario, '/scenario/reset', self.reset,
                             callback_group=self._reset_group)
 
@@ -76,10 +93,8 @@ class ResetWorkflow:
                 return response
             self.busy = True
         started = time.monotonic()
-        # Leave response margin inside the 1 s client timeout (assignment section 7.1).
-        deadline = started + 0.9
-        future = None
-        active_client = None
+        deadline = started + self._reset_deadline_sec
+        pending = []
         phase = 'start'
 
         def trace(event, **fields):
@@ -92,60 +107,69 @@ class ResetWorkflow:
             }, sort_keys=True), flush=True)
 
         def expire():
-            if future is not None and not future.done() and time.monotonic() >= deadline:
-                if active_client is not None:
-                    active_client.remove_pending_request(future)
-                future.set_exception(TimeoutError('RESET_DEADLINE'))
+            if time.monotonic() < deadline:
+                return
+            for client, future in pending:
+                if not future.done():
+                    if client is not None:
+                        client.remove_pending_request(future)
+                    future.set_exception(TimeoutError('RESET_DEADLINE'))
+
+        async def observe(waiter_name, observed_phase):
+            nonlocal phase
+            future = Future(executor=self.executor)
+            setattr(self, waiter_name, future)
+            pending.append((None, future))
+            phase = observed_phase
+            trace('wait_for_observation')
+            await future
+            trace('observation_received')
+            setattr(self, waiter_name, None)
 
         timer = self.create_timer(0.02, expire, callback_group=self._reset_group)
-        trace('start', participants=[client.srv_name for client in self._participants])
+        trace('start', participants=[[c.srv_name for c in stage] for stage in self._stages])
         try:
-            for client in self._participants:
-                phase = client.srv_name
+            for stage in self._stages:
+                phase = '+'.join(client.srv_name for client in stage)
                 if time.monotonic() >= deadline:
                     raise TimeoutError('RESET_DEADLINE')
                 requested_at = time.monotonic()
-                active_client = client
                 trace('request')
-                future = client.call_async(request)
-                acknowledgement = await future
-                trace('acknowledgement', success=acknowledgement.success,
-                      reason=acknowledgement.reason,
-                      service_sec=time.monotonic() - requested_at)
+                calls = [(client, None if client.srv_name == '/sim/reset_world'
+                          else client.call_async(request)) for client in stage]
+                pending[:] = [call for call in calls if call[1] is not None]
+                for client, future in calls:
+                    if future is None:
+                        # This node owns the world reset; call its handler without a DDS hop.
+                        acknowledgement = self._reset_scenario(
+                            request, ResetScenario.Response())
+                    else:
+                        acknowledgement = await future
+                    phase = client.srv_name
+                    trace('acknowledgement', success=acknowledgement.success,
+                          reason=acknowledgement.reason,
+                          service_sec=time.monotonic() - requested_at)
+                    if not acknowledgement.success:
+                        response.reason = client.srv_name + ':' + acknowledgement.reason
+                        trace('rejected', reason=response.reason)
+                        return response
+                    if acknowledgement.run_id:
+                        response.run_id = acknowledgement.run_id
                 if time.monotonic() >= deadline:
                     raise TimeoutError('RESET_DEADLINE')
-                if not acknowledgement.success:
-                    response.reason = client.srv_name + ':' + acknowledgement.reason
-                    trace('rejected', reason=response.reason)
-                    return response
-                if client.srv_name == '/safety/reset_state':
+                names = {client.srv_name for client in stage}
+                if '/safety/reset_state' in names:
                     snapshot = self._reset_safety
                     if not (snapshot and snapshot[1] >= requested_at and
                             not snapshot[0].stop_latched and
                             snapshot[0].reason == 'reset_in_progress'):
-                        active_client = None
-                        future = Future(executor=self.executor)
-                        self._hold_waiter = future
-                        phase = '/hub/safety:reset_hold'
-                        trace('wait_for_observation')
-                        await future
-                        trace('observation_received')
-                        self._hold_waiter = None
-                if client.srv_name == '/crossing/reset_state':
+                        await observe('_hold_waiter', '/hub/safety:reset_hold')
+                if '/crossing/reset_state' in names:
                     snapshot = self._reset_crossing
                     if not (snapshot and snapshot[1] >= requested_at and
                             snapshot[0].valid and not snapshot[0].owner_id and
                             snapshot[0].state == 'CLEAR'):
-                        active_client = None
-                        future = Future(executor=self.executor)
-                        self._clear_waiter = future
-                        phase = '/crossing/state:clear'
-                        trace('wait_for_observation')
-                        await future
-                        trace('observation_received')
-                        self._clear_waiter = None
-                if acknowledgement.run_id:
-                    response.run_id = acknowledgement.run_id
+                        await observe('_clear_waiter', '/crossing/state:clear')
             response.success = True
             response.reason = ('ALL_M4_PARTICIPANTS_ACKNOWLEDGED' if self.include_m4 else
                                'ALL_M3_PARTICIPANTS_ACKNOWLEDGED' if self.include_bus else
@@ -155,6 +179,9 @@ class ResetWorkflow:
             response.reason = str(error)
             trace('failed', reason=response.reason)
         finally:
+            for client, future in pending:
+                if client is not None and not future.done():
+                    client.remove_pending_request(future)
             self._hold_waiter = None
             self._clear_waiter = None
             self.destroy_timer(timer)

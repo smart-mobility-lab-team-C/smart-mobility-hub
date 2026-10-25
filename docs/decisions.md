@@ -12,6 +12,7 @@
 | D08 | Course PDFs kept as local ignored copies, not tracked | A/H are course material in a public repository | Untracked 2026-10-25; still present in pushed history of `be224bb` until an approved rewrite |
 | D09 | Public reset uses an internal 0.9 s deadline | A §7.1 p10 sets a 1 s client timeout; a failure must reach the client before it | Adopted 2026-10-25 (`038695b`); M2 still FAIL |
 | D10 | Evaluator-only ground truth published every 20 Hz simulator step | Finer stop-time measurement; topic has no assignment rate; `/hub/vehicles` stays 10 Hz | Adopted 2026-10-25 (`038695b`) |
+| D11 | `reset_deadline_sec` parameter: 0.9 s for the M2 graph, 2.0 s when bus/robot mission managers participate (max 2.0 s) | A sets no reset deadline; 0.9 s derived from the generic 1 s client timeout (A §7.1 p10). The 8-participant M6 handshake measured 0.83 s through four of six stages on the dev VM (prepare 0.38, safety 0.24, crossing 0.11, world 0.09 s) | User decision 2026-10-25; verifier reset clients wait 3 s |
 
 ## Needed before implementation freeze
 
