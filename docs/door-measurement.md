@@ -16,7 +16,8 @@ integer-nanosecond assessment passed. The separate receipt duration was
 requirements passed. This comparison is one targeted case, not M3 acceptance
 or repeatability evidence. Raw commands, timestamps, logs, manifests and
 artifact hashes are retained under
-`evidence/runs/door-validation-20261025T035302Z/`.
+`evidence/runs/door-validation-20261025T035302Z/` and indexed in the
+[completion record](../evidence/door-validation-completion-20261025.json).
 
 Because all controls and the comparison passed, the official nominal M3 door
 duration assertion now uses the source assessment. The evaluator requires a
@@ -27,6 +28,21 @@ with the disagreement flag. Dwell, safety timing, and public ROS interfaces
 remain unchanged. The clean combined runner now records every gate, including
 explicit evaluator and harness controls, before M2, M3 and M4. The combined
 run outcome is recorded separately from this targeted comparison.
+
+The candidate commit is `67caa06cacf7fa291de0ca3c4c2288b7653772d9`.
+The one pinned-image clean M2+M3+M4 run from a separate clean linked worktree
+stopped at its first unsuccessful gate, **M2 FAIL**, after 288.773 s of host
+runtime (254.086 s inside the runner). Smoke, M1, style, operator controls,
+the fresh eight-package build, 843 installed-artifact fingerprints, interface
+checks, package tests, evaluator controls and harness controls all passed.
+M2 passed 16 of 18 cases. `simulator_observations_ready` failed with
+`no odometry/observation/evaluator output`; the adapter stop after supervisor
+loss was observed at 0.678119 s against its 0.65 s limit. These observations
+do not establish a cause. M3 and M4 are **NOT RUN**. The exact gate commands,
+timestamps, dependency manifest, source revision, installed hashes, M2 report
+and logs are in the completion record and ignored raw run directory
+`evidence/runs/combined-m234-source-gate-20261025T0400Z/`. No combined
+acceptance or repeatability claim follows from this stopped run.
 
 The historical 7.973234 s receipt result remains FAIL with unproven physical
 cause. One comparison or combined PASS does not establish repeatability. A

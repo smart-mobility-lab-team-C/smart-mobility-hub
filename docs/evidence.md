@@ -491,3 +491,18 @@ change followed. See the [resume index](../evidence/door-measurement-resume-2026
 and [validation record](door-measurement.md). The previous BLOCKED attempt and
 historical 7.973234 s FAIL are unchanged. The historical physical cause remains
 unproven and the earlier dwell-timing/margin recommendation remains withdrawn.
+
+## Fresh door validation and stopped combined run — 2026-10-25
+
+At clean `d00b23e`, all seven ordered door controls passed and one seed-304,
+zero-passenger comparison passed with conservative source bounds
+8.125094930–8.125098802 s. Receipt time was separately retained at
+8.091999096 s. Candidate `67caa06` adopted the source gate. Its one pinned
+clean-build M2+M3+M4 run passed build, package tests, evaluator controls and
+harness controls, then stopped at M2 FAIL (16/18) after 288.773 s. M3 and M4
+are NOT RUN. The failed M2 cases were simulator observations readiness and a
+0.678119 s adapter stop against a 0.65 s limit. See the
+[completion index](../evidence/door-validation-completion-20261025.json) for
+commands, UTC times, dependencies, installed hashes, gate statuses and raw
+artifact manifests. Earlier attempts and the historical 7.973234 s receipt
+FAIL retain their original status. Repeatability is unestablished.

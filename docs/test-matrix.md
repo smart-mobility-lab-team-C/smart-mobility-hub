@@ -19,6 +19,8 @@ separately retained 8.091999096 s receipt duration. The official nominal M3
 gate now uses conservative source bounds; incomplete or threshold-crossing
 evidence is BLOCKED. The historical 7.973234 s receipt failure remains
 unchanged. See [door measurement validation](door-measurement.md#fresh-validation-and-source-gate-adoption).
+The candidate's one clean combined run stopped at M2 (16/18, FAIL); M3 and M4
+were NOT RUN. See the [completion record](../evidence/door-validation-completion-20261025.json).
 
 | ID | Area | Stimulus / repetitions | Acceptance | Status |
 |---|---|---|---|---|
