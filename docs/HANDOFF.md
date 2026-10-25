@@ -53,7 +53,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 |---|---|---|---|
 | M6 verifier T11–T14 (and full 18/18 run) | PASS (1 run) | `evidence/m6-1218e30.json` | Route oracle 60 req, p95 9.6 ms. T12 NO_ROUTE. T13 10/10 escorts, 0.04 m error, 0 crossing conflicts. T14 all failure cases. |
 | M4 regression T07–T10 | PASS (1 run) | `evidence/m4-3da2614.json` | 9/9 at `3da2614`. |
-| M2 full suite | FAIL (stale) | last run at `038695b` | 17/18 on the old 18 vCPU VM. Needs rerun on 8 vCPUs. |
+| M2 safety/reset | PASS (2 runs) | `evidence/m2-8vcpu-run1-*.json`, `evidence/m2-8vcpu-run2-*.json` | 18/18 twice on 8 vCPUs; E-stop 0.010 s, adapter stop 0.45–0.50 s. |
 | S1 passenger counting (synthetic) | PASS (2 runs) | `evidence/s1-fix-run1.json`, `evidence/s1-fix-run2.json` | Counts 0/3/5/4, occlusion, crossing, freeze invalid by 31.2 s. Earlier FAIL (0/3/4/3) was a drawing-spacing bug, fixed. |
 | Congestion replan (robot) | NOT RUN | — | Not ROS-verified. Rule: at least 15% cheaper, at least 2 s, never in state C. |
 | metrics_logger | NOT RUN | — | Not ROS-verified. |
