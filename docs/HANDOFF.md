@@ -69,7 +69,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 
 | Area | Status | Evidence | Notes |
 |---|---|---|---|
-| M6 verifier T11–T14 (and full 18/18 run) | PASS (1 run) | `evidence/m6-1218e30.json` | Route oracle 60 req, p95 9.6 ms. T12 NO_ROUTE. T13 10/10 escorts, 0.04 m error, 0 crossing conflicts. T14 all failure cases. |
+| M6 verifier T11–T14 (and full 18/18 run) | PASS (2 runs) | `evidence/m6-1218e30.json`, `evidence/m6-regress-f101b60.json` | Second run 2026-10-27 at `f101b60` (after the S2 coordinator change): 18/18. Route oracle 60 req, p95 9.6 ms. T12 NO_ROUTE. T13 10/10 escorts, 0.04 m error, 0 crossing conflicts. T14 all failure cases. |
 | M4 regression T07–T10 | PASS (1 run) | `evidence/m4-3da2614.json` | 9/9 at `3da2614`. |
 | M2 safety/reset | PASS (2 runs) | `evidence/m2-8vcpu-run1-*.json`, `evidence/m2-8vcpu-run2-*.json` | 18/18 twice on 8 vCPUs; E-stop 0.010 s, adapter stop 0.45–0.50 s. |
 | M3 bus docking (S3) | PASS (2 runs) | `evidence/m3-8vcpu-run1-18e56eb.json`, `evidence/m3-8vcpu-run2-18e56eb.json` | 24/24 twice on 8 vCPUs (2026-10-27). The first attempt failed `action_timeout` (`evidence/m3-8vcpu-fail-5a7814c.json`). The A9.3 fallback dispatch reserved the bus ahead of the verifier's goal. `verify_m3.py` now starts the coordinator with automatic dispatch out of reach, which `docs/m3.md` puts outside M3. Product code is unchanged. |
