@@ -13,7 +13,7 @@ from rclpy.node import Node
 from smart_hub_interfaces.msg import DemandPrediction, HubEvent, QueueState
 from std_msgs.msg import String
 
-from .model import features
+from .model import FEATURE_SPAN, features, predict
 
 
 class DemandPredictor(Node):
@@ -24,21 +24,27 @@ class DemandPredictor(Node):
         super().__init__('demand_predictor')
         self.declare_parameter('prediction_horizon_sec', 30)
         self.declare_parameter('queue_confidence_min', 0.5)
+        # A section 9.4: the persistence baseline must remain selectable if the model is worse.
+        self.declare_parameter('forecast_model', 'ridge')
         horizon = int(self.get_parameter('prediction_horizon_sec').value)
         self.confidence_min = float(self.get_parameter('queue_confidence_min').value)
+        self.forecast_model = str(self.get_parameter('forecast_model').value)
         if horizon != 30 or not math.isfinite(self.confidence_min) or not (
-                0 <= self.confidence_min <= 1):
+                0 <= self.confidence_min <= 1) or self.forecast_model not in (
+                'ridge', 'persistence'):
             raise ValueError('invalid demand forecast parameters')
         path = Path(get_package_share_directory('smart_hub_prediction')) / 'models/ridge.json'
         raw = path.read_bytes()
         self.model = json.loads(raw)
-        if self.model['horizon_sec'] != horizon or self.model['history_sec'] != 60:
+        if (self.model['horizon_sec'] != horizon or self.model['history_sec'] != 60 or
+                self.model.get('feature_span_sec') != FEATURE_SPAN):
             raise ValueError('model horizon/history mismatch')
-        self.model_id = 'ridge-' + hashlib.sha256(raw).hexdigest()[:16]
-        self.started = time.monotonic()
+        self.model_id = ('ridge-' + hashlib.sha256(raw).hexdigest()[:16]
+                         if self.forecast_model == 'ridge' else 'persistence')
         self.queue = None
         self.samples = deque(maxlen=61)
         self.events = deque()
+        self.inference_ms = deque(maxlen=600)
         self.run_id = ''
         self.publisher = self.create_publisher(DemandPrediction, '/hub/demand', 10)
         self.create_subscription(QueueState, '/hub/queue', self.on_queue, 10)
@@ -52,7 +58,6 @@ class DemandPredictor(Node):
         """Reset model history on a new seeded run."""
         if message.data != self.run_id:
             self.run_id = message.data
-            self.started = time.monotonic()
             self.queue = None
             self.samples.clear()
             self.events.clear()
@@ -100,17 +105,29 @@ class DemandPredictor(Node):
         exits = sum(second_start < at <= now and kind == 'TRACK_EXIT'
                     for at, kind in self.events)
         self.samples.append((int(queue.count), entries, exits))
-        if len(self.samples) < 61:
+        if len(self.samples) < FEATURE_SPAN:
             self.publisher.publish(message)
             return
+        started = time.perf_counter()
         counts, arrivals, departures = zip(*self.samples)
-        values = features(counts, arrivals, departures, now - self.started)
-        forecast = sum(coefficient * value for coefficient, value in
-                       zip(self.model['coefficients'], values))
-        message.predicted_count = float(max(0.0, forecast))
+        if self.forecast_model == 'ridge':
+            forecast = predict(self.model['coefficients'],
+                               features(counts, arrivals, departures))
+        else:
+            forecast = float(counts[-1])
+        self.inference_ms.append((time.perf_counter() - started) * 1000.0)
+        message.predicted_count = float(forecast)
         message.baseline_count = float(queue.count)
         message.valid = True
         self.publisher.publish(message)
+        if len(self.inference_ms) % 30 == 0:
+            ordered = sorted(self.inference_ms)
+            self.get_logger().info(json.dumps({
+                'event': 'inference_latency', 'clock': 'perf_counter',
+                'model_id': self.model_id, 'samples': len(ordered),
+                'p50_ms': ordered[len(ordered) // 2],
+                'p95_ms': ordered[int(0.95 * (len(ordered) - 1))],
+                'max_ms': ordered[-1]}))
 
 
 def main(args=None):

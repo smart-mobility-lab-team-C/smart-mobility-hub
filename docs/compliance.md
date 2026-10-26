@@ -30,7 +30,7 @@ Historical PASS results stay historical. They don't certify later commits.
 |---|---|---|
 | scenario_runner | `smart_hub_sim` `scenario_runner` | Implemented. It owns the public `/scenario/reset`, world, private truth and seeded events. |
 | passenger_detector | `smart_hub_perception` `passenger_detector` | Implemented: synthetic tracks, homography and debounced tracker. T01–T02 NOT RUN. |
-| demand_predictor | `smart_hub_prediction` `demand_predictor` | Implemented: persistence plus ridge model. ROS T03–T04 NOT RUN. |
+| demand_predictor | `smart_hub_prediction` `demand_predictor` | Implemented: ridge model on the A §9.2 features, persistence selectable (`forecast_model`). T03–T04 PASS ×2 (2026-10-27). |
 | bus_manager | `smart_hub_control` `bus_manager` | Implemented. T05 historical PASS, then FAIL on repeat. |
 | parking_manager | `smart_hub_control` `parking_manager` | Implemented. T07–T08 PASS once at `58f5afee`. |
 | traffic_monitor | `smart_hub_control` `traffic_monitor` | Implemented. T09–T10 PASS once at `58f5afee`. |
@@ -56,7 +56,7 @@ Historical PASS results stay historical. They don't certify later commits.
 | A §7.2 p12 | DockBus, EscortPassenger, NavigateTo actions with 2 Hz feedback and terminal semantics | DockBus implemented. **NOT IMPLEMENTED**: EscortPassenger and NavigateTo servers (robot_manager). |
 | A §7.3 p13; H §5.4 p12 | No blocking loops; async futures; callback groups; locked shared state | Followed in implemented nodes. Callback-group isolation in `scenario_runner` was added 2026-10-25. |
 | A §8 p14 (S1) | Tracking, foot-point counting, 4-point homography, 0.4 s debounce, 0.5 s occlusion, 1 s freeze invalidation, 40 s script, **≥100 annotated video frames, MAE ≤1** | Implemented (synthetic path plus NanoDet backend). T01–T02 NOT RUN in ROS. Video evaluation **BLOCKED** on annotated video. |
-| A §9 p15 (S2) | ≥30 six-minute episodes split 60/20/20 by episode; ridge vs persistence; p95 <100 ms; dispatch hysteresis; fallback; reactive vs predictive comparison | Offline training: 30 episodes split 18/6/6, test MAE 3.3334 vs persistence 9.8413 (`src/smart_hub_prediction/models/ridge.json`). That is offline fixture evidence only. T03 (ROS, latency) and T04 NOT RUN. The reactive/predictive waiting-time comparison is NOT RUN. H §4.2 p7–8 also asks for one documented case where the model performs worse: NOT DONE. |
+| A §9 p15 (S2) | ≥30 six-minute episodes split 60/20/20 by episode; ridge vs persistence; p95 <100 ms; dispatch hysteresis; fallback; reactive vs predictive comparison | Retrained 2026-10-27 (D12): 50 episodes split 30/10/10, held-out MAE 2.456 vs persistence 2.801. The model is worse on test seeds 3003 and 3009 (H §4.2 p7–8). T03 and T04 PASS ×2 in ROS (`evidence/s2-run1-b806ec6.json`, `evidence/s2-run2-b806ec6.json`); inference p95 0.036 ms. The reactive/predictive waiting-time comparison is NOT RUN (S8/T15). |
 | A §10 p16 (S3) | DockBus state machine, crossing acquire/renew/release, door interlock, 10/10, ETA | T05 historical PASS, then repeat FAIL. T06 PASS. See [test matrix](test-matrix.md). |
 | A §11 p17 (S4) | Atomic idempotent reservations, expiry, barrier interlock, 20 pairs, p95 <250 ms | T07–T08 PASS once at `58f5afee`. Not repeated. |
 | A §12 p18 (S5) | Edge speed and density, CONGESTED/BLOCKED/UNKNOWN timing, ten free-flow runs | T09–T10 PASS once at `58f5afee`. Not repeated. |

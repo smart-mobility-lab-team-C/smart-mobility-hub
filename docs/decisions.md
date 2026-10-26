@@ -13,6 +13,9 @@
 | D09 | Public reset uses an internal 0.9 s deadline | A §7.1 p10 sets a 1 s client timeout; a failure must reach the client before it | Adopted 2026-10-25 (`038695b`); M2 still FAIL |
 | D10 | Evaluator-only ground truth published every 20 Hz simulator step | Finer stop-time measurement; topic has no assignment rate; `/hub/vehicles` stays 10 Hz | Adopted 2026-10-25 (`038695b`) |
 | D11 | `reset_deadline_sec` parameter: 0.9 s for the M2 graph, 2.0 s when bus/robot mission managers participate (max 2.0 s) | A sets no reset deadline; 0.9 s derived from the generic 1 s client timeout (A §7.1 p10). The 8-participant M6 handshake measured 0.83 s through four of six stages on the dev VM (prepare 0.38, safety 0.24, crossing 0.11, world 0.09 s) | User decision 2026-10-25; verifier reset clients wait 3 s |
+| D12 | Retrain the S2 forecaster on the A §9.2 feature vector with no elapsed-time input; episodes randomise arrival rates, rushes and boardings; 50 episodes split 30/10/10 | The previous model used time since episode start, and every episode shared a fixed timetable. That let it learn the schedule, which A §9.2 p15 forbids as an online input | User decision 2026-10-27 (retrain to spec); held-out MAE 2.46 vs persistence 2.80 |
+| D13 | `demand_predictor` parameter `forecast_model` (`ridge` default, `persistence`) | A §9.4 p15: a worse model must stay visible and the baseline must be selectable safely | Adopted 2026-10-27 |
+| D14 | The coordinator queues every received forecast and counts each one once, in order, on its 1 Hz dispatch tick | The 1 Hz timer and 1 Hz forecasts drift, so counting ticks could double-count a forecast or drop the low value in a 7, 7, 5, 7 sequence. A §9.3 requires three consecutive valid predictions | Adopted 2026-10-27; T04 verified with probe-published forecasts |
 
 ## Needed before implementation freeze
 
