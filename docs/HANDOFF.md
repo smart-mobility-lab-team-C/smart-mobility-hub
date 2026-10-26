@@ -72,6 +72,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 | M6 verifier T11–T14 (and full 18/18 run) | PASS (1 run) | `evidence/m6-1218e30.json` | Route oracle 60 req, p95 9.6 ms. T12 NO_ROUTE. T13 10/10 escorts, 0.04 m error, 0 crossing conflicts. T14 all failure cases. |
 | M4 regression T07–T10 | PASS (1 run) | `evidence/m4-3da2614.json` | 9/9 at `3da2614`. |
 | M2 safety/reset | PASS (2 runs) | `evidence/m2-8vcpu-run1-*.json`, `evidence/m2-8vcpu-run2-*.json` | 18/18 twice on 8 vCPUs; E-stop 0.010 s, adapter stop 0.45–0.50 s. |
+| M3 bus docking (S3) | PASS (2 runs) | `evidence/m3-8vcpu-run1-18e56eb.json`, `evidence/m3-8vcpu-run2-18e56eb.json` | 24/24 twice on 8 vCPUs (2026-10-27). The first attempt failed `action_timeout` (`evidence/m3-8vcpu-fail-5a7814c.json`). The A9.3 fallback dispatch reserved the bus ahead of the verifier's goal. `verify_m3.py` now starts the coordinator with automatic dispatch out of reach, which `docs/m3.md` puts outside M3. Product code is unchanged. |
 | S1 passenger counting (synthetic) | PASS (2 runs) | `evidence/s1-fix-run1.json`, `evidence/s1-fix-run2.json` | Counts 0/3/5/4, occlusion, crossing, freeze invalid by 31.2 s. Earlier FAIL (0/3/4/3) was a drawing-spacing bug, fixed. |
 | Congestion replan (robot) | NOT RUN | — | Not ROS-verified. Rule: at least 15% cheaper, at least 2 s, never in state C. |
 | metrics_logger | NOT RUN | — | Not ROS-verified. |
@@ -83,7 +84,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 - No ROS integration test covers congestion replan, `metrics_logger`, or A9.3
   fallback dispatch.
 - S1 video-frame evaluation (A §8) is BLOCKED until annotated video exists.
-- M2 passed twice on 8 vCPUs; M3 has not been rerun on 8 vCPUs.
+- M2 and M3 each passed twice on 8 vCPUs. M4 and M6 have one pass each.
 - S2, S8 and S9 have no ROS test results.
 - No result has been repeated. Acceptance needs two clean repeat passes.
 - An intermittent `door_stale` safety hold ended one `nominal_escort_01` run
@@ -106,7 +107,7 @@ Priority order. Owners are to be assigned by the team.
 | # | Task | Owner |
 |---|---|---|
 | 1 | ~~Debug the S1 missing track~~ done (synthetic T01/T02 PASS ×2) | — |
-| 2 | ~~Rerun M2 on 8 vCPUs~~ done (18/18 ×2); rerun M3 on 8 vCPUs | TBD |
+| 2 | ~~Rerun M2 and M3 on 8 vCPUs~~ done (M2 18/18 ×2, M3 24/24 ×2) | — |
 | 3 | S2 ROS tests T03/T04, including fallback | TBD |
 | 4 | S8 integration T15 (cars, timed schedule, paired predictive/reactive) | TBD |
 | 5 | S9 fault suite T16–T18, five phase-varied repetitions | TBD |
