@@ -1,0 +1,5 @@
+# Adds a virtual display and encoder to the RViz image for offline demo rendering only.
+FROM smh-rviz
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends xvfb ffmpeg xterm fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
