@@ -1,0 +1,1239 @@
+{
+  "schema": "smart-mobility-hub/m3-verification-v1",
+  "status": "PASS",
+  "nominal_runs": 10,
+  "only_case": null,
+  "scope": "M3 verifier",
+  "full_milestone_acceptance": null,
+  "cases": [
+    {
+      "name": "nominal_docking_01",
+      "status": "PASS",
+      "observations": {
+        "run_id": "dd5aa3de-8648-4e03-9f38-b276469af96e",
+        "goal_id": "2eb837f3938c4e8abf44c7ffb7cd7987",
+        "seed": 300,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "dd5aa3de-8648-4e03-9f38-b276469af96e",
+          "goal_id": "2eb837f3938c4e8abf44c7ffb7cd7987",
+          "minimum_ns": 8022660411,
+          "maximum_ns": 8022662873,
+          "records": [
+            {
+              "after_ns": 5785941399959,
+              "before_ns": 5785941399730,
+              "door_open": false,
+              "goal_id": "2eb837f3938c4e8abf44c7ffb7cd7987",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "dd5aa3de-8648-4e03-9f38-b276469af96e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 2
+            },
+            {
+              "after_ns": 5844001701832,
+              "before_ns": 5844001700138,
+              "door_open": true,
+              "goal_id": "2eb837f3938c4e8abf44c7ffb7cd7987",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "dd5aa3de-8648-4e03-9f38-b276469af96e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 3
+            },
+            {
+              "after_ns": 5852024363011,
+              "before_ns": 5852024362243,
+              "door_open": false,
+              "goal_id": "2eb837f3938c4e8abf44c7ffb7cd7987",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "dd5aa3de-8648-4e03-9f38-b276469af96e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 4
+            },
+            {
+              "after_ns": 5852171108356,
+              "before_ns": 5852171108090,
+              "door_open": false,
+              "goal_id": "2eb837f3938c4e8abf44c7ffb7cd7987",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "dd5aa3de-8648-4e03-9f38-b276469af96e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 5
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.109503378999761,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.109503378999761,
+        "position_error_m": 0.044999998296399134,
+        "yaw_error_rad": 9.919012814797378e-10,
+        "eta_error_at_5m_sec": 0.4236798430001727,
+        "eta_invalid_duration_sampled_sec": 35.5,
+        "boarding": [],
+        "minimum_agent_separation_m": 2.00000000623555,
+        "initial_passengers": 0
+      },
+      "elapsed_sec": 70.96642625000004
+    },
+    {
+      "name": "nominal_docking_02",
+      "status": "PASS",
+      "observations": {
+        "run_id": "b869b134-3ead-45c8-85df-94174a8b02a3",
+        "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+        "seed": 301,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "b869b134-3ead-45c8-85df-94174a8b02a3",
+          "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+          "minimum_ns": 8102576266,
+          "maximum_ns": 8102578096,
+          "records": [
+            {
+              "after_ns": 5856624364880,
+              "before_ns": 5856624364669,
+              "door_open": false,
+              "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "b869b134-3ead-45c8-85df-94174a8b02a3",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 7
+            },
+            {
+              "after_ns": 5914870218642,
+              "before_ns": 5914870217892,
+              "door_open": true,
+              "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "b869b134-3ead-45c8-85df-94174a8b02a3",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 8
+            },
+            {
+              "after_ns": 5922972795988,
+              "before_ns": 5922972794908,
+              "door_open": false,
+              "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "b869b134-3ead-45c8-85df-94174a8b02a3",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 9
+            },
+            {
+              "after_ns": 5923072352531,
+              "before_ns": 5923072352308,
+              "door_open": false,
+              "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "b869b134-3ead-45c8-85df-94174a8b02a3",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 10
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.099322295000093,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.099322295000093,
+        "position_error_m": 0.04499999819550311,
+        "yaw_error_rad": 7.143311776317127e-10,
+        "eta_error_at_5m_sec": 0.4413489895296152,
+        "eta_invalid_duration_sampled_sec": 36.0,
+        "boarding": [
+          {
+            "boarding_sec": 62.5,
+            "entry_sec": 0.0,
+            "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+            "passenger_id": "301-p0000",
+            "slot": 1
+          },
+          {
+            "boarding_sec": 64.5,
+            "entry_sec": 0.0,
+            "goal_id": "fc9ae543746249b8a34d1b8e5965df02",
+            "passenger_id": "301-p0001",
+            "slot": 2
+          }
+        ],
+        "minimum_agent_separation_m": 2.000000007550909,
+        "initial_passengers": 2
+      },
+      "elapsed_sec": 70.902482083
+    },
+    {
+      "name": "nominal_docking_03",
+      "status": "PASS",
+      "observations": {
+        "run_id": "0b0bd005-8e0f-43e0-9ced-a8c39f4c1bed",
+        "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+        "seed": 302,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "0b0bd005-8e0f-43e0-9ced-a8c39f4c1bed",
+          "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+          "minimum_ns": 8087105894,
+          "maximum_ns": 8087107792,
+          "records": [
+            {
+              "after_ns": 5927553883694,
+              "before_ns": 5927553883490,
+              "door_open": false,
+              "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "0b0bd005-8e0f-43e0-9ced-a8c39f4c1bed",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 12
+            },
+            {
+              "after_ns": 5985834093113,
+              "before_ns": 5985834092252,
+              "door_open": true,
+              "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "0b0bd005-8e0f-43e0-9ced-a8c39f4c1bed",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 13
+            },
+            {
+              "after_ns": 5993921200044,
+              "before_ns": 5993921199007,
+              "door_open": false,
+              "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "0b0bd005-8e0f-43e0-9ced-a8c39f4c1bed",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 14
+            },
+            {
+              "after_ns": 5993977237433,
+              "before_ns": 5993977237222,
+              "door_open": false,
+              "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "0b0bd005-8e0f-43e0-9ced-a8c39f4c1bed",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 15
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.101568647000022,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.101568647000022,
+        "position_error_m": 0.04499999823542571,
+        "yaw_error_rad": 8.25958990243757e-10,
+        "eta_error_at_5m_sec": 0.5119794960000945,
+        "eta_invalid_duration_sampled_sec": 36.0,
+        "boarding": [
+          {
+            "boarding_sec": 62.400000000000006,
+            "entry_sec": 0.0,
+            "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+            "passenger_id": "302-p0000",
+            "slot": 1
+          },
+          {
+            "boarding_sec": 64.4,
+            "entry_sec": 0.0,
+            "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+            "passenger_id": "302-p0001",
+            "slot": 2
+          },
+          {
+            "boarding_sec": 66.4,
+            "entry_sec": 0.0,
+            "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+            "passenger_id": "302-p0002",
+            "slot": 3
+          },
+          {
+            "boarding_sec": 68.4,
+            "entry_sec": 0.0,
+            "goal_id": "a7c5654c5a9f448ba183f171e6876380",
+            "passenger_id": "302-p0003",
+            "slot": 4
+          }
+        ],
+        "minimum_agent_separation_m": 2.0000000061991106,
+        "initial_passengers": 4
+      },
+      "elapsed_sec": 70.90581793299953
+    },
+    {
+      "name": "nominal_docking_04",
+      "status": "PASS",
+      "observations": {
+        "run_id": "e5287667-96c2-4ba8-b834-b17ea2d9a15c",
+        "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+        "seed": 303,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "e5287667-96c2-4ba8-b834-b17ea2d9a15c",
+          "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+          "minimum_ns": 8100795168,
+          "maximum_ns": 8100797068,
+          "records": [
+            {
+              "after_ns": 5998424368556,
+              "before_ns": 5998424368327,
+              "door_open": false,
+              "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "e5287667-96c2-4ba8-b834-b17ea2d9a15c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 17
+            },
+            {
+              "after_ns": 6056671667572,
+              "before_ns": 6056671666686,
+              "door_open": true,
+              "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "e5287667-96c2-4ba8-b834-b17ea2d9a15c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 18
+            },
+            {
+              "after_ns": 6064772463754,
+              "before_ns": 6064772462740,
+              "door_open": false,
+              "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "e5287667-96c2-4ba8-b834-b17ea2d9a15c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 19
+            },
+            {
+              "after_ns": 6064871164595,
+              "before_ns": 6064871164400,
+              "door_open": false,
+              "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "e5287667-96c2-4ba8-b834-b17ea2d9a15c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 20
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.149880693999876,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.149880693999876,
+        "position_error_m": 0.04999999832286941,
+        "yaw_error_rad": 9.225763800394581e-10,
+        "eta_error_at_5m_sec": 0.4811950375305969,
+        "eta_invalid_duration_sampled_sec": 35.5,
+        "boarding": [
+          {
+            "boarding_sec": 62.5,
+            "entry_sec": 0.0,
+            "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+            "passenger_id": "303-p0000",
+            "slot": 1
+          },
+          {
+            "boarding_sec": 64.5,
+            "entry_sec": 0.0,
+            "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+            "passenger_id": "303-p0001",
+            "slot": 2
+          },
+          {
+            "boarding_sec": 66.5,
+            "entry_sec": 0.0,
+            "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+            "passenger_id": "303-p0002",
+            "slot": 3
+          },
+          {
+            "boarding_sec": 68.5,
+            "entry_sec": 0.0,
+            "goal_id": "62e1d7ef6bda427f83bd6890ef32836e",
+            "passenger_id": "303-p0003",
+            "slot": 4
+          }
+        ],
+        "minimum_agent_separation_m": 2.0000000060691794,
+        "initial_passengers": 6
+      },
+      "elapsed_sec": 70.89450714599934
+    },
+    {
+      "name": "nominal_docking_05",
+      "status": "PASS",
+      "observations": {
+        "run_id": "dc768fae-813a-46bd-97fe-dcff4af0e59c",
+        "goal_id": "c963d4c061ad48e6be64621e0b55e2c0",
+        "seed": 304,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "dc768fae-813a-46bd-97fe-dcff4af0e59c",
+          "goal_id": "c963d4c061ad48e6be64621e0b55e2c0",
+          "minimum_ns": 8151715900,
+          "maximum_ns": 8151718054,
+          "records": [
+            {
+              "after_ns": 6069331868779,
+              "before_ns": 6069331868240,
+              "door_open": false,
+              "goal_id": "c963d4c061ad48e6be64621e0b55e2c0",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "dc768fae-813a-46bd-97fe-dcff4af0e59c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 22
+            },
+            {
+              "after_ns": 6127522736287,
+              "before_ns": 6127522735135,
+              "door_open": true,
+              "goal_id": "c963d4c061ad48e6be64621e0b55e2c0",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "dc768fae-813a-46bd-97fe-dcff4af0e59c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 23
+            },
+            {
+              "after_ns": 6135674453189,
+              "before_ns": 6135674452187,
+              "door_open": false,
+              "goal_id": "c963d4c061ad48e6be64621e0b55e2c0",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "dc768fae-813a-46bd-97fe-dcff4af0e59c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 24
+            },
+            {
+              "after_ns": 6135821825222,
+              "before_ns": 6135821824974,
+              "door_open": false,
+              "goal_id": "c963d4c061ad48e6be64621e0b55e2c0",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "dc768fae-813a-46bd-97fe-dcff4af0e59c",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 25
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.213754139999764,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.213754139999764,
+        "position_error_m": 0.049999998254257744,
+        "yaw_error_rad": 8.345147915263088e-10,
+        "eta_error_at_5m_sec": 0.4507053620000079,
+        "eta_invalid_duration_sampled_sec": 35.5,
+        "boarding": [],
+        "minimum_agent_separation_m": 2.000000007880359,
+        "initial_passengers": 0
+      },
+      "elapsed_sec": 70.95203193899943
+    },
+    {
+      "name": "nominal_docking_06",
+      "status": "PASS",
+      "observations": {
+        "run_id": "80f3eef4-d31e-4cce-bfdf-f6f611685766",
+        "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+        "seed": 305,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "80f3eef4-d31e-4cce-bfdf-f6f611685766",
+          "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+          "minimum_ns": 8149192606,
+          "maximum_ns": 8149194574,
+          "records": [
+            {
+              "after_ns": 6140343575054,
+              "before_ns": 6140343574831,
+              "door_open": false,
+              "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "80f3eef4-d31e-4cce-bfdf-f6f611685766",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 27
+            },
+            {
+              "after_ns": 6198424717643,
+              "before_ns": 6198424716680,
+              "door_open": true,
+              "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "80f3eef4-d31e-4cce-bfdf-f6f611685766",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 28
+            },
+            {
+              "after_ns": 6206573911254,
+              "before_ns": 6206573910249,
+              "door_open": false,
+              "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "80f3eef4-d31e-4cce-bfdf-f6f611685766",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 29
+            },
+            {
+              "after_ns": 6206674178200,
+              "before_ns": 6206674177962,
+              "door_open": false,
+              "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "80f3eef4-d31e-4cce-bfdf-f6f611685766",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 30
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.121080310999787,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.121080310999787,
+        "position_error_m": 0.044999998056568805,
+        "yaw_error_rad": 8.284418365083624e-10,
+        "eta_error_at_5m_sec": 0.45833165053045377,
+        "eta_invalid_duration_sampled_sec": 35.5,
+        "boarding": [
+          {
+            "boarding_sec": 62.35,
+            "entry_sec": 0.0,
+            "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+            "passenger_id": "305-p0000",
+            "slot": 1
+          },
+          {
+            "boarding_sec": 64.35000000000001,
+            "entry_sec": 0.0,
+            "goal_id": "03deb1b0ebcc4993a0426db7c107c8b5",
+            "passenger_id": "305-p0001",
+            "slot": 2
+          }
+        ],
+        "minimum_agent_separation_m": 2.0000000065575483,
+        "initial_passengers": 2
+      },
+      "elapsed_sec": 70.85184764199948
+    },
+    {
+      "name": "nominal_docking_07",
+      "status": "PASS",
+      "observations": {
+        "run_id": "fdab6fd4-601a-4e94-9861-cfc4a0fd78c0",
+        "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+        "seed": 306,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "fdab6fd4-601a-4e94-9861-cfc4a0fd78c0",
+          "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+          "minimum_ns": 8096929532,
+          "maximum_ns": 8096931925,
+          "records": [
+            {
+              "after_ns": 6211126251666,
+              "before_ns": 6211126251365,
+              "door_open": false,
+              "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "fdab6fd4-601a-4e94-9861-cfc4a0fd78c0",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 32
+            },
+            {
+              "after_ns": 6269324102840,
+              "before_ns": 6269324101556,
+              "door_open": true,
+              "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "fdab6fd4-601a-4e94-9861-cfc4a0fd78c0",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 33
+            },
+            {
+              "after_ns": 6277421033481,
+              "before_ns": 6277421032372,
+              "door_open": false,
+              "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "fdab6fd4-601a-4e94-9861-cfc4a0fd78c0",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 34
+            },
+            {
+              "after_ns": 6277472325399,
+              "before_ns": 6277472325177,
+              "door_open": false,
+              "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "fdab6fd4-601a-4e94-9861-cfc4a0fd78c0",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 35
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.101697477000016,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.101697477000016,
+        "position_error_m": 0.04499999816892421,
+        "yaw_error_rad": 9.838659098811883e-10,
+        "eta_error_at_5m_sec": 0.5507744170599835,
+        "eta_invalid_duration_sampled_sec": 36.0,
+        "boarding": [
+          {
+            "boarding_sec": 62.5,
+            "entry_sec": 0.0,
+            "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+            "passenger_id": "306-p0000",
+            "slot": 1
+          },
+          {
+            "boarding_sec": 64.5,
+            "entry_sec": 0.0,
+            "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+            "passenger_id": "306-p0001",
+            "slot": 2
+          },
+          {
+            "boarding_sec": 66.5,
+            "entry_sec": 0.0,
+            "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+            "passenger_id": "306-p0002",
+            "slot": 3
+          },
+          {
+            "boarding_sec": 68.5,
+            "entry_sec": 0.0,
+            "goal_id": "b1aa4aff2e31482aa248ee54b33ed052",
+            "passenger_id": "306-p0003",
+            "slot": 4
+          }
+        ],
+        "minimum_agent_separation_m": 2.0000000061011853,
+        "initial_passengers": 4
+      },
+      "elapsed_sec": 70.79840392300048
+    },
+    {
+      "name": "nominal_docking_08",
+      "status": "PASS",
+      "observations": {
+        "run_id": "fc8fcce1-f1f6-4e74-a037-3575ee4c969e",
+        "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+        "seed": 307,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "fc8fcce1-f1f6-4e74-a037-3575ee4c969e",
+          "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+          "minimum_ns": 8148235091,
+          "maximum_ns": 8148237017,
+          "records": [
+            {
+              "after_ns": 6281926442746,
+              "before_ns": 6281926442515,
+              "door_open": false,
+              "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "fc8fcce1-f1f6-4e74-a037-3575ee4c969e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 37
+            },
+            {
+              "after_ns": 6340223803007,
+              "before_ns": 6340223802104,
+              "door_open": true,
+              "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "fc8fcce1-f1f6-4e74-a037-3575ee4c969e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 38
+            },
+            {
+              "after_ns": 6348372039121,
+              "before_ns": 6348372038098,
+              "door_open": false,
+              "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "fc8fcce1-f1f6-4e74-a037-3575ee4c969e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 39
+            },
+            {
+              "after_ns": 6348522873942,
+              "before_ns": 6348522873354,
+              "door_open": false,
+              "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "fc8fcce1-f1f6-4e74-a037-3575ee4c969e",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 40
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.207754379000107,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.207754379000107,
+        "position_error_m": 0.0499999980117166,
+        "yaw_error_rad": 8.014444530337861e-10,
+        "eta_error_at_5m_sec": 0.540213756529738,
+        "eta_invalid_duration_sampled_sec": 36.0,
+        "boarding": [
+          {
+            "boarding_sec": 62.6,
+            "entry_sec": 0.0,
+            "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+            "passenger_id": "307-p0000",
+            "slot": 1
+          },
+          {
+            "boarding_sec": 64.60000000000001,
+            "entry_sec": 0.0,
+            "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+            "passenger_id": "307-p0001",
+            "slot": 2
+          },
+          {
+            "boarding_sec": 66.60000000000001,
+            "entry_sec": 0.0,
+            "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+            "passenger_id": "307-p0002",
+            "slot": 3
+          },
+          {
+            "boarding_sec": 68.60000000000001,
+            "entry_sec": 0.0,
+            "goal_id": "e43cae304ec2496695b5e8dbb3192a21",
+            "passenger_id": "307-p0003",
+            "slot": 4
+          }
+        ],
+        "minimum_agent_separation_m": 2.0000000069884534,
+        "initial_passengers": 6
+      },
+      "elapsed_sec": 71.05174070399971
+    },
+    {
+      "name": "nominal_docking_09",
+      "status": "PASS",
+      "observations": {
+        "run_id": "01f7a938-2b5d-4bd5-97e5-f653f4f5fe72",
+        "goal_id": "485e315385a748b2ae05789796bda97c",
+        "seed": 308,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "01f7a938-2b5d-4bd5-97e5-f653f4f5fe72",
+          "goal_id": "485e315385a748b2ae05789796bda97c",
+          "minimum_ns": 8147997442,
+          "maximum_ns": 8147999024,
+          "records": [
+            {
+              "after_ns": 6353040600939,
+              "before_ns": 6353040600738,
+              "door_open": false,
+              "goal_id": "485e315385a748b2ae05789796bda97c",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "01f7a938-2b5d-4bd5-97e5-f653f4f5fe72",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 42
+            },
+            {
+              "after_ns": 6411022647882,
+              "before_ns": 6411022647118,
+              "door_open": true,
+              "goal_id": "485e315385a748b2ae05789796bda97c",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "01f7a938-2b5d-4bd5-97e5-f653f4f5fe72",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 43
+            },
+            {
+              "after_ns": 6419170646142,
+              "before_ns": 6419170645324,
+              "door_open": false,
+              "goal_id": "485e315385a748b2ae05789796bda97c",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "01f7a938-2b5d-4bd5-97e5-f653f4f5fe72",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 44
+            },
+            {
+              "after_ns": 6419321715833,
+              "before_ns": 6419321715608,
+              "door_open": false,
+              "goal_id": "485e315385a748b2ae05789796bda97c",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "01f7a938-2b5d-4bd5-97e5-f653f4f5fe72",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 45
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.14075090300048,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.14075090300048,
+        "position_error_m": 0.04999999806019161,
+        "yaw_error_rad": 8.555167599328311e-10,
+        "eta_error_at_5m_sec": 0.45144591799999034,
+        "eta_invalid_duration_sampled_sec": 35.5,
+        "boarding": [],
+        "minimum_agent_separation_m": 2.0000000074291298,
+        "initial_passengers": 0
+      },
+      "elapsed_sec": 70.79900254400036
+    },
+    {
+      "name": "nominal_docking_10",
+      "status": "PASS",
+      "observations": {
+        "run_id": "6e85a02f-707a-4d77-8e41-956b31455cbe",
+        "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+        "seed": 309,
+        "source_door_assessment": {
+          "status": "PASS",
+          "duration_status": "PASS",
+          "run_id": "6e85a02f-707a-4d77-8e41-956b31455cbe",
+          "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+          "minimum_ns": 8044645576,
+          "maximum_ns": 8044647585,
+          "records": [
+            {
+              "after_ns": 6423826690060,
+              "before_ns": 6423826689839,
+              "door_open": false,
+              "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+              "operation": "goal_start",
+              "previous_open": false,
+              "run_id": "6e85a02f-707a-4d77-8e41-956b31455cbe",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 47
+            },
+            {
+              "after_ns": 6482076394301,
+              "before_ns": 6482076393386,
+              "door_open": true,
+              "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+              "operation": "request",
+              "previous_open": false,
+              "run_id": "6e85a02f-707a-4d77-8e41-956b31455cbe",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 48
+            },
+            {
+              "after_ns": 6490121040971,
+              "before_ns": 6490121039877,
+              "door_open": false,
+              "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+              "operation": "request",
+              "previous_open": true,
+              "run_id": "6e85a02f-707a-4d77-8e41-956b31455cbe",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 49
+            },
+            {
+              "after_ns": 6490221616771,
+              "before_ns": 6490221616516,
+              "door_open": false,
+              "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+              "operation": "goal_end",
+              "previous_open": false,
+              "run_id": "6e85a02f-707a-4d77-8e41-956b31455cbe",
+              "schema": "smart-mobility-hub/door-evidence-v1",
+              "sequence": 50
+            }
+          ],
+          "reason": "conservative source bounds against eight seconds"
+        },
+        "other_nominal_requirements": "PASS",
+        "receipt_assertion": {
+          "status": "PASS",
+          "duration_sec": 8.100827727999786,
+          "assertion": "closed - opened >= 8.0",
+          "disagrees_with_source": false
+        },
+        "measured_door_open_sec": 8.100827727999786,
+        "position_error_m": 0.0449999981035775,
+        "yaw_error_rad": 6.932721043389749e-10,
+        "eta_error_at_5m_sec": 0.45464150593943486,
+        "eta_invalid_duration_sampled_sec": 35.5,
+        "boarding": [
+          {
+            "boarding_sec": 62.5,
+            "entry_sec": 0.0,
+            "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+            "passenger_id": "309-p0000",
+            "slot": 1
+          },
+          {
+            "boarding_sec": 64.5,
+            "entry_sec": 0.0,
+            "goal_id": "e387c8ba792d45d98928dbf0889c30ee",
+            "passenger_id": "309-p0001",
+            "slot": 2
+          }
+        ],
+        "minimum_agent_separation_m": 2.0000000070454855,
+        "initial_passengers": 2
+      },
+      "elapsed_sec": 70.90145449699958
+    },
+    {
+      "name": "arrival_during_boarding_and_interruption",
+      "status": "PASS",
+      "observations": {
+        "arrival_id": "309-p0002",
+        "boarding": {
+          "boarding_sec": 73.9,
+          "entry_sec": 72.2,
+          "goal_id": "47ccc59be3934b83925315af46cb707e",
+          "passenger_id": "309-p0002",
+          "slot": 2
+        },
+        "cancel_zero_sec": 0.053219460000036634,
+        "door_closed_after_interruption": true,
+        "pre_goal_readiness": {
+          "door_closed": true,
+          "bus_stopped": true,
+          "supervisor_clear": true,
+          "observations": {
+            "door": {
+              "age_sec": 0.059,
+              "message": {
+                "data": false
+              }
+            },
+            "truth": {
+              "age_sec": 0.009,
+              "message": {
+                "header": {
+                  "stamp": {
+                    "sec": 1793042928,
+                    "nanosec": 272253529
+                  },
+                  "frame_id": "map"
+                },
+                "vehicles": [
+                  {
+                    "vehicle_id": "bus",
+                    "kind": "bus",
+                    "pose": {
+                      "x": 7.955000001896423,
+                      "y": 3.999999996389701,
+                      "theta": 6.932721043389749e-10
+                    },
+                    "speed_mps": 0.0,
+                    "edge_id": "B-Cn",
+                    "valid": true
+                  },
+                  {
+                    "vehicle_id": "robot",
+                    "kind": "robot",
+                    "pose": {
+                      "x": 3.0,
+                      "y": 6.0,
+                      "theta": 0.0
+                    },
+                    "speed_mps": 0.0,
+                    "edge_id": "R-W",
+                    "valid": true
+                  }
+                ]
+              }
+            },
+            "safety": {
+              "age_sec": 0.0,
+              "message": {
+                "header": {
+                  "stamp": {
+                    "sec": 1793042928,
+                    "nanosec": 282413385
+                  },
+                  "frame_id": "map"
+                },
+                "stop_latched": false,
+                "motion_permitted": true,
+                "reason": "clear"
+              }
+            }
+          }
+        }
+      },
+      "elapsed_sec": 5.745858773000691
+    },
+    {
+      "name": "cancel_during_approach",
+      "status": "PASS",
+      "observations": {
+        "command_zero_latency_sec": 0.00755024099998991
+      },
+      "elapsed_sec": 14.642615781999666
+    },
+    {
+      "name": "action_timeout",
+      "status": "PASS",
+      "observations": {
+        "reason": "TIMEOUT"
+      },
+      "elapsed_sec": 5.153088099999877
+    },
+    {
+      "name": "blocked_bay_wait",
+      "status": "PASS",
+      "observations": {
+        "wait_observed": true,
+        "invalid_eta": true,
+        "cancel_zero_sec": 0.025566091999280616
+      },
+      "elapsed_sec": 6.196627285999966
+    },
+    {
+      "name": "planner_timeout_retries_and_late_reply",
+      "status": "PASS",
+      "observations": {
+        "attempts": 3,
+        "reason": "PLANNER_UNAVAILABLE",
+        "late_reply_motion": false
+      },
+      "elapsed_sec": 8.962148915999933
+    },
+    {
+      "name": "no_route",
+      "status": "PASS",
+      "observations": {
+        "reason": "NO_ROUTE",
+        "unreachable_goal_rejected": true
+      },
+      "elapsed_sec": 5.0994086760001665
+    },
+    {
+      "name": "frozen_edge_source_stamp",
+      "status": "PASS",
+      "observations": {
+        "reason": "NO_ROUTE"
+      },
+      "elapsed_sec": 6.196625035000579
+    },
+    {
+      "name": "stale_bus_pose",
+      "status": "PASS",
+      "observations": {
+        "reason": "STALE_POSE:STOP_UNCONFIRMED"
+      },
+      "elapsed_sec": 17.602403040000354
+    },
+    {
+      "name": "estop_aborts_and_latches",
+      "status": "PASS",
+      "observations": {
+        "reason": "SAFETY_STOP",
+        "false_does_not_clear": true
+      },
+      "elapsed_sec": 15.16883974800021
+    },
+    {
+      "name": "pedestrian_before_crossing_entry",
+      "status": "PASS",
+      "observations": {
+        "reason": "SAFETY_STOP",
+        "entry_inhibited": true
+      },
+      "elapsed_sec": 15.020538599999782
+    },
+    {
+      "name": "active_route_missing_feed",
+      "status": "PASS",
+      "observations": {
+        "reason": "ROUTE_INVALID_OR_STALE"
+      },
+      "elapsed_sec": 15.548892745999183
+    },
+    {
+      "name": "busy_goal_rejection",
+      "status": "PASS",
+      "observations": {
+        "second_goal_rejected": true
+      },
+      "elapsed_sec": 4.5050126300002376
+    },
+    {
+      "name": "crossing_denial_renewal_loss_and_explicit_recovery",
+      "status": "PASS",
+      "observations": {
+        "denials": [
+          "ACQUIRE:OWNER_EXISTS",
+          "ACQUIRE:OWNER_EXISTS",
+          "ACQUIRE:OWNER_EXISTS",
+          "ACQUIRE:OWNER_EXISTS",
+          "ACQUIRE:OWNER_EXISTS",
+          "ACQUIRE:OWNER_EXISTS"
+        ],
+        "renewal_loss_stopped": true,
+        "occupied_owner_retained": true,
+        "explicit_new_goal_recovered": true
+      },
+      "elapsed_sec": 74.89689978500064
+    },
+    {
+      "name": "active_mission_reset",
+      "status": "PASS",
+      "observations": {
+        "reason": "ALL_M3_PARTICIPANTS_ACKNOWLEDGED",
+        "action_reason": "SCENARIO_RESET",
+        "run_id": "ac95560e-6361-41c4-a374-bd88afcb4490"
+      },
+      "elapsed_sec": 5.00777129800008
+    }
+  ],
+  "commands": {
+    "scenario_runner": [
+      "smart_hub_sim",
+      "scenario_runner",
+      "--ros-args",
+      "-p",
+      "m3_mode:=true"
+    ],
+    "safety_supervisor": [
+      "smart_hub_safety",
+      "safety_supervisor"
+    ],
+    "crossing_arbiter": [
+      "smart_hub_control",
+      "crossing_arbiter",
+      "--ros-args",
+      "-p",
+      "dispatch_high:=1000000.0"
+    ],
+    "route_planner": [
+      "smart_hub_control",
+      "route_planner"
+    ],
+    "bus_manager": [
+      "smart_hub_control",
+      "bus_manager"
+    ],
+    "m3_synthetic_roads": [
+      "smart_hub_control",
+      "m3_synthetic_roads"
+    ]
+  },
+  "clocks": "monotonic latency; wall-backed ROS source stamps",
+  "actual_commands": {
+    "scenario_runner": [
+      "/workspace/.cache/m2fix-install/smart_hub_sim/lib/smart_hub_sim/scenario_runner",
+      "--ros-args",
+      "-p",
+      "m3_mode:=true"
+    ],
+    "safety_supervisor": [
+      "/workspace/.cache/m2fix-install/smart_hub_safety/lib/smart_hub_safety/safety_supervisor"
+    ],
+    "crossing_arbiter": [
+      "/workspace/.cache/m2fix-install/smart_hub_control/lib/smart_hub_control/crossing_arbiter",
+      "--ros-args",
+      "-p",
+      "dispatch_high:=1000000.0"
+    ],
+    "route_planner": [
+      "/workspace/.cache/m2fix-install/smart_hub_control/lib/smart_hub_control/route_planner"
+    ],
+    "bus_manager": [
+      "/workspace/.cache/m2fix-install/smart_hub_control/lib/smart_hub_control/bus_manager"
+    ],
+    "m3_synthetic_roads": [
+      "/workspace/.cache/m2fix-install/smart_hub_control/lib/smart_hub_control/m3_synthetic_roads"
+    ]
+  },
+  "scenario_acceptance": "T05/T06 eligible only with ten nominal runs and complete source-required fault evidence; other T rows NOT RUN",
+  "trace_sha256": "acbc415a3cc0c1096d099210061180a0de922b6b822c28a63c768852b9ce6843",
+  "elapsed_sec": 914.6660031379997
+}

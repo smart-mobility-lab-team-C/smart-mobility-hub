@@ -899,7 +899,10 @@ def main():
             'm3_mode:=true',
         ],
         'safety_supervisor': ['smart_hub_safety', 'safety_supervisor'],
-        'crossing_arbiter': ['smart_hub_control', 'crossing_arbiter'],
+        # Automatic dispatch is outside M3 (docs/m3.md); an unreachable threshold keeps the
+        # A9.3 queue fallback from reserving the bus ahead of the probe's goals.
+        'crossing_arbiter': ['smart_hub_control', 'crossing_arbiter',
+                             '--ros-args', '-p', 'dispatch_high:=1000000.0'],
         'route_planner': ['smart_hub_control', 'route_planner'],
         'bus_manager': ['smart_hub_control', 'bus_manager'],
         'm3_synthetic_roads': ['smart_hub_control', 'm3_synthetic_roads'],
