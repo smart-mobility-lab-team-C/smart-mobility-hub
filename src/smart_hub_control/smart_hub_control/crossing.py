@@ -53,6 +53,8 @@ class CrossingArbiter(Node):
         self.dispatch_low_samples = 0
         self.dispatch_escalated = False
         self.dispatch_outstanding = False
+        self.dispatch_goal_id = ''
+        self.pending_demand = []
         self.last_dispatch = float('-inf')
         self.dispatch_mode = 'NONE'
         self.vehicles = None
@@ -84,6 +86,7 @@ class CrossingArbiter(Node):
     def on_demand(self, msg):
         """Preserve forecast receipt time for dispatch eligibility."""
         self.demand = (msg, time.monotonic())
+        self.pending_demand = (self.pending_demand + [self.demand])[-10:]
 
     def on_bus_arrival(self, msg):
         """Track independently observed bus availability."""
@@ -109,37 +112,14 @@ class CrossingArbiter(Node):
         event.reason = reason
         self.events.publish(event)
 
-    def dispatch_tick(self):
-        """Require sustained valid demand, availability and a thirty-second cooldown."""
-        queue_fresh = (self._dispatch_fresh(self.queue, 0.5) and
-                       self.queue[0].valid and
-                       self.queue[0].confidence >= self.confidence_min)
-        demand_fresh = (self._dispatch_fresh(self.demand, 1.5) and
-                        self.demand[0].valid and
-                        self.demand[0].horizon_sec == 30 and
-                        math.isfinite(self.demand[0].predicted_count))
-        decision = 'PREDICTIVE'
-        if self.dispatch_policy == 'predictive':
-            if demand_fresh:
-                value = self.demand[0].predicted_count
-            elif queue_fresh:
-                # A section 9.3 step 5: documented observed-queue fallback, marked FALLBACK.
-                if self.dispatch_mode != 'FALLBACK':
-                    self.dispatch_high_samples = self.dispatch_low_samples = 0
-                decision = 'FALLBACK'
-                value = self.queue[0].count
-            else:
-                self.dispatch_high_samples = self.dispatch_low_samples = 0
-                self.dispatch_mode = 'NONE'
-                return
-            if decision != self.dispatch_mode and self.dispatch_mode == 'FALLBACK':
-                self.dispatch_high_samples = self.dispatch_low_samples = 0
-            self.dispatch_mode = decision
-        else:
-            if not queue_fresh:
-                self.dispatch_high_samples = self.dispatch_low_samples = 0
-                return
-            value = self.queue[0].count
+    def _forecast_usable(self, sample):
+        """Return whether one received forecast is valid, current and finite."""
+        message = sample[0]
+        return (self._dispatch_fresh(sample, 1.5) and message.valid and
+                message.horizon_sec == 30 and math.isfinite(message.predicted_count))
+
+    def _count(self, value):
+        """Advance the consecutive high and low counters by one sample."""
         self.dispatch_high_samples = (self.dispatch_high_samples + 1
                                       if value >= self.dispatch_high else 0)
         self.dispatch_low_samples = (self.dispatch_low_samples + 1
@@ -147,6 +127,47 @@ class CrossingArbiter(Node):
         if self.dispatch_low_samples >= 5 and self.dispatch_escalated:
             self.dispatch_escalated = False
             self._dispatch_event('DISPATCH_ESCALATION_CLEARED', f'value={value}')
+
+    def dispatch_tick(self):
+        """Require sustained valid demand, availability and a thirty-second cooldown."""
+        queue_fresh = (self._dispatch_fresh(self.queue, 0.5) and
+                       self.queue[0].valid and
+                       self.queue[0].confidence >= self.confidence_min)
+        demand_fresh = self.demand is not None and self._forecast_usable(self.demand)
+        decision = 'PREDICTIVE'
+        if self.dispatch_policy == 'predictive':
+            # Every forecast received since the last tick counts once, in order: the 1 Hz
+            # timer and 1 Hz forecasts drift, so one tick may see none and the next two.
+            pending, self.pending_demand = self.pending_demand, []
+            if demand_fresh:
+                if not pending:
+                    return
+                if self.dispatch_mode != 'PREDICTIVE':
+                    self.dispatch_high_samples = self.dispatch_low_samples = 0
+                self.dispatch_mode = 'PREDICTIVE'
+                for sample in pending:
+                    if self._forecast_usable(sample):
+                        value = sample[0].predicted_count
+                        self._count(value)
+                    else:
+                        self.dispatch_high_samples = self.dispatch_low_samples = 0
+            elif queue_fresh:
+                # A section 9.3 step 5: documented observed-queue fallback, marked FALLBACK.
+                if self.dispatch_mode != 'FALLBACK':
+                    self.dispatch_high_samples = self.dispatch_low_samples = 0
+                self.dispatch_mode = decision = 'FALLBACK'
+                value = self.queue[0].count
+                self._count(value)
+            else:
+                self.dispatch_high_samples = self.dispatch_low_samples = 0
+                self.dispatch_mode = 'NONE'
+                return
+        else:
+            if not queue_fresh:
+                self.dispatch_high_samples = self.dispatch_low_samples = 0
+                return
+            value = self.queue[0].count
+            self._count(value)
         if self.dispatch_high_samples < 3 or self.dispatch_escalated:
             return
         if self.dispatch_outstanding or time.monotonic() - self.last_dispatch < 30.0:
@@ -172,6 +193,8 @@ class CrossingArbiter(Node):
                 self.dispatch_outstanding = False
                 self._dispatch_event('BUS_DISPATCH_REJECTED', 'goal rejected')
                 return
+            self.dispatch_goal_id = bytes(handle.goal_id.uuid).hex()
+            self._dispatch_event('BUS_DISPATCH_ACCEPTED', f'goal_id={self.dispatch_goal_id}')
             handle.get_result_async().add_done_callback(self._dispatch_result)
         except Exception as error:
             self.dispatch_outstanding = False
@@ -183,7 +206,8 @@ class CrossingArbiter(Node):
         try:
             result = future.result().result
             self._dispatch_event('BUS_DISPATCH_RESULT',
-                                 f'success={result.success};reason={result.reason}')
+                                 f'success={result.success};reason={result.reason};'
+                                 f'goal_id={self.dispatch_goal_id}')
         except Exception as error:
             self._dispatch_event('BUS_DISPATCH_FAILED', repr(error))
 

@@ -5,7 +5,8 @@ import time
 
 import rclpy
 from rclpy.node import Node
-from smart_hub_interfaces.msg import CrossingState, QueueState, VehicleStateArray
+from smart_hub_interfaces.msg import (
+    CrossingState, DemandPrediction, QueueState, VehicleStateArray)
 from visualization_msgs.msg import Marker, MarkerArray
 
 
@@ -15,12 +16,14 @@ class DashboardMarkers(Node):
     def __init__(self):
         """Subscribe to public state and create the documented marker owner."""
         super().__init__('dashboard_marker_publisher')
-        self.vehicles = self.queue = self.crossing = None
+        self.vehicles = self.queue = self.crossing = self.demand = None
         self.publisher = self.create_publisher(MarkerArray, '/hub/markers', 10)
         self.create_subscription(VehicleStateArray, '/hub/vehicles',
                                  lambda msg: self._receive('vehicles', msg), 10)
         self.create_subscription(QueueState, '/hub/queue',
                                  lambda msg: self._receive('queue', msg), 10)
+        self.create_subscription(DemandPrediction, '/hub/demand',
+                                 lambda msg: self._receive('demand', msg), 10)
         qos = rclpy.qos.QoSProfile(
             depth=1, durability=rclpy.qos.DurabilityPolicy.TRANSIENT_LOCAL)
         self.create_subscription(CrossingState, '/crossing/state',
@@ -79,6 +82,15 @@ class DashboardMarkers(Node):
             output.markers.append(self._marker(
                 100, Marker.TEXT_VIEW_FACING, 4.0, 6.8, 0.35,
                 (0.0, 0.0, 0.0, 1.0), 'Queue: ' + label))
+        # A section 9.3 step 1: say so explicitly when no valid forecast is available.
+        demand = self.demand[0] if self._fresh(self.demand, 1.5) else None
+        if (demand is not None and demand.valid and demand.horizon_sec == 30 and
+                math.isfinite(demand.predicted_count)):
+            forecast = f'Forecast 30 s: {demand.predicted_count:.1f}'
+        else:
+            forecast = 'Prediction unavailable'
+        output.markers.append(self._marker(
+            102, Marker.TEXT_VIEW_FACING, 4.0, 6.3, 0.3, (0.0, 0.0, 0.0, 1.0), forecast))
         if self._fresh(self.crossing, 0.5):
             crossing = self.crossing[0]
             color = ((0.8, 0.1, 0.1, 0.4) if crossing.owner_id or
