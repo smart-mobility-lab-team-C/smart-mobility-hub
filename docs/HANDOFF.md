@@ -76,7 +76,7 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 | Congestion replan (robot) | NOT RUN | — | Not ROS-verified. Rule: at least 15% cheaper, at least 2 s, never in state C. |
 | metrics_logger | NOT RUN | — | Not ROS-verified. |
 | A9.3 fallback dispatch | NOT RUN | — | Not ROS-verified. |
-| Demo footage, six M6 cases (2026-10-27) | 6 PASS, 1 FAIL | `.cache/demo/` (local, not committed) | Single `verify_m6.py --case` runs while recording a bag. Five cases PASS on the first try. `nominal_escort_01` FAILED once with `SAFETY_INPUT_UNKNOWN:door_stale` at 106 s (door input older than 0.5 s), then PASSED on the next run. Cause not investigated. |
+| Demo footage, six M6 cases (2026-10-27) | 6 PASS, 1 FAIL | `.cache/demo/` (local, not committed) | Single `verify_m6.py --case` runs while recording a bag. Five cases PASS on the first try. `nominal_escort_01` FAILED once with `SAFETY_INPUT_UNKNOWN:door_stale` at 106 s (door input older than 0.5 s), then PASSED on the next run. The failed run's probe trace shows the simulator, safety supervisor and crossing arbiter all stopped publishing for 0.45–0.5 s, 0.65 s before the stop. Their own header stamps gap equally. Five smaller stalls (0.27–0.41 s) came earlier in that run. The other six runs had none over 0.25 s. This points to a VM-wide pause, not a code fault. |
 
 ## What is not verified
 
@@ -87,8 +87,11 @@ Each status reflects a single run unless noted. Nothing has been repeated yet.
 - S2, S8 and S9 have no ROS test results.
 - No result has been repeated. Acceptance needs two clean repeat passes.
 - An intermittent `door_stale` safety hold ended one `nominal_escort_01` run
-  (2026-10-27, demo recording). It has not been reproduced or diagnosed, and
-  bag-recording load has not been ruled out.
+  (2026-10-27, demo recording). The trace points to VM-wide pauses of up to
+  0.5 s, not a code fault. Six other runs with the same bag recording had no
+  such pauses. The trigger for the pauses on the host is unknown. A failed
+  timing run should be checked for simultaneous stamp gaps before the code is
+  blamed, and rerun on an idle host.
 - The annotated S1 video (at least 100 frames) has not been produced.
 - The 20–30 minute team video has not been recorded.
 - The report is not committed. It is in the leader's Downloads folder
