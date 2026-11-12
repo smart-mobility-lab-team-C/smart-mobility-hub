@@ -87,6 +87,6 @@
   "acceptance_tests": [
     "T15"
   ],
-  "verifier": "NOT IMPLEMENTED: S8 scheduler/verifier",
+  "verifier": "python3 scripts/verify_s8.py --output <run>/s8.json (T15: ten seeds x reactive/predictive)",
   "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
 }

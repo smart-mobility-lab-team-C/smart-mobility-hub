@@ -15,6 +15,7 @@ from smart_hub_interfaces.msg import (
 )
 from smart_hub_interfaces.srv import RequestCrossing, ResetScenario
 from smart_hub_sim.geometry import intersects_crossing, swept_clear
+from smart_hub_sim.observations import RADIUS, vehicle_snapshot
 from smart_hub_sim.world import POSE_NOISE_BOUND_M
 
 
@@ -163,17 +164,23 @@ class CrossingArbiter(Node):
                 self.dispatch_mode = 'NONE'
                 return
         else:
+            decision = 'REACTIVE'
             if not queue_fresh:
                 self.dispatch_high_samples = self.dispatch_low_samples = 0
                 return
             value = self.queue[0].count
             self._count(value)
-        if self.dispatch_high_samples < 3 or self.dispatch_escalated:
+        # D18: while demand stays high, a new request is allowed after each 30 s cooldown
+        # (A section 9.3 step 3), still with at most one outstanding goal. Escalation and
+        # its step 4 clearing are kept and logged; they no longer block re-requests.
+        if self.dispatch_high_samples < 3:
             return
         if self.dispatch_outstanding or time.monotonic() - self.last_dispatch < 30.0:
             return
         if (not self._dispatch_fresh(self.bus_arrival, 1.0) or
-                self.bus_arrival[0].state not in ('IDLE', 'COMPLETE') or
+                # D15: SAFE_STOP is the bus's stopped state after an aborted mission; the
+                # bus manager still rejects any unsafe goal itself.
+                self.bus_arrival[0].state not in ('IDLE', 'COMPLETE', 'SAFE_STOP') or
                 self.bus_arrival[0].door_open or
                 not self.bus_action.server_is_ready()):
             return
@@ -191,6 +198,7 @@ class CrossingArbiter(Node):
             handle = future.result()
             if not handle.accepted:
                 self.dispatch_outstanding = False
+                self.dispatch_escalated = False   # D15: retry after the 30 s cooldown
                 self._dispatch_event('BUS_DISPATCH_REJECTED', 'goal rejected')
                 return
             self.dispatch_goal_id = bytes(handle.goal_id.uuid).hex()
@@ -205,10 +213,16 @@ class CrossingArbiter(Node):
         self.dispatch_outstanding = False
         try:
             result = future.result().result
+            if not result.success:
+                # D15: a failed mission boarded nobody, so A section 9.3 step 4 alone would
+                # never clear escalation while demand stays high. Re-arm; the 30 s request
+                # cooldown and the single-outstanding-goal guard still bound retries.
+                self.dispatch_escalated = False
             self._dispatch_event('BUS_DISPATCH_RESULT',
                                  f'success={result.success};reason={result.reason};'
                                  f'goal_id={self.dispatch_goal_id}')
         except Exception as error:
+            self.dispatch_escalated = False
             self._dispatch_event('BUS_DISPATCH_FAILED', repr(error))
 
     def on_vehicles(self, msg):
@@ -237,26 +251,20 @@ class CrossingArbiter(Node):
         stamp = self.vehicles[0].header.stamp
         age = self.get_clock().now().nanoseconds * 1e-9 - (
             stamp.sec + stamp.nanosec * 1e-9)
-        seen = set()
+        by_id = vehicle_snapshot(self.vehicles[0].vehicles)
+        if by_id is None:
+            return False, queue.crossing_occupied, True
         occupied = False
-        for vehicle in self.vehicles[0].vehicles:
-            values = (vehicle.pose.x, vehicle.pose.y, vehicle.pose.theta, vehicle.speed_mps)
-            if (not vehicle.valid or not all(math.isfinite(v) for v in values) or
-                    vehicle.vehicle_id in seen or vehicle.kind not in ('bus', 'robot') or
-                    (vehicle.vehicle_id in ('bus', 'robot') and
-                     vehicle.kind != vehicle.vehicle_id)):
-                return False, queue.crossing_occupied, True
-            seen.add(vehicle.vehicle_id)
-            radius = 0.2 if vehicle.kind == 'robot' else 0.3
+        for vehicle in by_id.values():
+            radius = RADIUS[vehicle.kind]
             position = (vehicle.pose.x, vehicle.pose.y)
             if not swept_clear(position, position, radius, (), ()):
                 return False, queue.crossing_occupied, True
+            # Cars move at most 0.35 m/s and obstacles are static (map_m1.yaml limits).
+            speed = {'robot': 0.25, 'bus': 0.4, 'car': 0.35}.get(vehicle.kind, 0.0)
             occupied |= intersects_crossing(
                 vehicle.pose.x, vehicle.pose.y,
-                radius + math.sqrt(2.0) * POSE_NOISE_BOUND_M +
-                max(0.0, age) * (0.25 if vehicle.kind == 'robot' else 0.4))
-        if not {'bus', 'robot'}.issubset(seen):
-            return False, queue.crossing_occupied, True
+                radius + math.sqrt(2.0) * POSE_NOISE_BOUND_M + max(0.0, age) * speed)
         return True, queue.crossing_occupied, occupied
 
     def refresh(self):

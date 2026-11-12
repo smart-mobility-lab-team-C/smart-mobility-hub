@@ -56,6 +56,6 @@
     "T17",
     "T18"
   ],
-  "verifier": "python3 scripts/verify_m2.py --output <run>/m2.json (prerequisite probes only)",
+  "verifier": "python3 scripts/verify_s9.py --output <run>/s9.json (T16-T18: six faults x five mission phases)",
   "note": "Stimuli are applied by the verifier; launching alone does not prove acceptance."
 }

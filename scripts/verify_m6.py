@@ -174,7 +174,8 @@ class Probe(Node):
         self.params('scenario_runner', publish_robot_odom=True, publish_bus_odom=True,
                     publish_queue=True, pedestrian_present=False)
         self.params('m3_synthetic_roads', blocked_edges=[''], publish_edges=True,
-                    freeze_edges=False, bay_clear=True, density_ratio=0.0)
+                    freeze_edges=False, bay_clear=True, density_ratio=0.0,
+                    congested_edges=[''])
         self.pause(2.2)
         if self.samples.get('safety') and self.samples['safety'].stop_latched:
             response = self.future(self.clear_client.call_async(ClearSafetyStop.Request(
@@ -312,7 +313,7 @@ def verify(probe, config, nominal_runs, only_case):
     names = ([f'nominal_escort_{i + 1:02}' for i in range(nominal_runs)]
              + ['busy_and_duplicate_rejection', 'readiness_timeout', 'cancel_while_moving',
                 'unreachable_destination', 'frozen_robot_odometry', 'blocked_edge_detour',
-                'no_route_then_restore', 'route_oracle_20_seeds'])
+                'no_route_then_restore', 'congestion_replan', 'route_oracle_20_seeds'])
     if only_case:
         names = [only_case]
     measurement = {}
@@ -517,6 +518,45 @@ def _cases(probe, config, nominal_runs, case, measurement):
         assert moving_candidates == 0 and not moved, 'motion resumed without a new goal'
         return observed
     case('no_route_then_restore', no_route)
+
+    def congestion():
+        # Robot congestion replan (A section 13.2 p19): at most once per 2 s, only if the
+        # alternative is at least 15% cheaper, and never while in C.
+        probe.reset(638)
+        started = time.monotonic()
+        handle, result, _ = probe.send('escort')
+        assert probe.wait_phase('WAIT_READY', started, 30)
+        assert probe.confirm().success
+        assert probe.wait(lambda: 3.2 < probe.vehicle('robot').pose.x < 4.5, 40)
+        probe.params('m3_synthetic_roads', congested_edges=['Cs-J'])
+        congested = time.monotonic()
+        terminal = probe.future(result, 300)
+        replans = [(t, json.loads(m.reason)) for t, m in probe.robot_events(congested)
+                   if m.event == 'REPLAN']
+        routes = [json.loads(m.reason)['nodes'] for t, m in probe.robot_events(started)
+                  if m.event == 'ROUTE']
+        replan_poses = []
+        for t, _ in replans:
+            sample = next((m for tt, m in probe.history['truth'] if tt >= t), None)
+            robot = next(v for v in sample.vehicles if v.vehicle_id == 'robot')
+            replan_poses.append((robot.pose.x, robot.pose.y))
+        probe.params('m3_synthetic_roads', congested_edges=[''])
+        observed = {'replans': [r for _, r in replans], 'routes': routes,
+                    'replan_poses': replan_poses, 'status': terminal.status,
+                    'reason': terminal.result.reason}
+        measurement.update(observed)
+        assert terminal.status == GoalStatus.STATUS_SUCCEEDED, terminal.result.reason
+        congestion = [r for _, r in replans if r.get('reason') == 'CONGESTION']
+        assert congestion, 'no congestion replan'
+        for r in congestion:
+            assert r['new_cost'] <= (1 - 0.15) * r['old_cost'], r
+        times = [t for t, r in replans if r.get('reason') == 'CONGESTION']
+        assert all(b - a >= 2.0 for a, b in zip(times, times[1:])), 'replan cooldown < 2 s'
+        assert all(not intersects_crossing(x, y, 0.2) for x, y in replan_poses), \
+            'replanned inside C'
+        assert any('B' in route for route in routes[1:]), 'route did not change via B'
+        return observed
+    case('congestion_replan', congestion)
 
     def route_oracle():
         probe.operator_heartbeat.set_state(False)

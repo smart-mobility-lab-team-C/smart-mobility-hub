@@ -6,6 +6,7 @@
   <maintainer email="maintainers@example.invalid">Smart Mobility Hub team</maintainer>
   <license>LicenseRef-Proprietary</license>
   <buildtool_depend>ament_python</buildtool_depend>
+  <exec_depend>ament_index_python</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>rcl_interfaces</exec_depend>
   <exec_depend>smart_hub_interfaces</exec_depend>

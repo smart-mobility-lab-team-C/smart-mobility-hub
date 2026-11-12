@@ -26,11 +26,12 @@ from smart_hub_interfaces.msg import (
 )
 from smart_hub_interfaces.srv import ComputeRoute, RequestCrossing, ResetScenario
 from smart_hub_sim.geometry import CROSSING, intersects_crossing, segment_distance
+from smart_hub_sim.observations import vehicle_snapshot
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from tf2_ros import Buffer, TransformException, TransformListener
 
-from .bus import route_needs_crossing, route_waypoints, synchronized, wrap
+from .bus import route_needs_crossing, route_waypoints, synchronized, turn_ahead, wrap
 from .routing import fresh, load_map, shortest_path, valid_edges
 
 ROBOT_ODOM_FRESHNESS_SEC = 1.0
@@ -689,10 +690,7 @@ class RobotManager(Node):
             return 'SAFETY_STOP'
         if pose is None:
             return 'STALE_ODOMETRY'
-        if vehicles is None or {v.vehicle_id for v in vehicles.vehicles} != {'bus', 'robot'} \
-                or any(not v.valid or v.kind != v.vehicle_id or not all(
-                    math.isfinite(x) for x in (v.pose.x, v.pose.y, v.pose.theta, v.speed_mps))
-                    for v in vehicles.vehicles):
+        if vehicles is None or vehicle_snapshot(vehicles.vehicles) is None:
             return 'INVALID_VEHICLE_OBSERVATION'
         if safety.reason not in MOTION_SAFETY_REASONS + ('reset_in_progress',):
             return 'SAFETY_INPUT_UNKNOWN:' + safety.reason
@@ -764,7 +762,9 @@ class RobotManager(Node):
         target = self.targets[0]
         distance = math.dist(pose[:2], target)
         final = len(self.targets) == 1
-        if distance <= (0.05 if final or self.mid_edge_waypoint else 1e-8):
+        loose = final or (self.mid_edge_waypoint and not turn_ahead(
+            pose, target, self.targets[1]))
+        if distance <= (0.05 if loose else 1e-8):
             if not final:
                 self.targets.pop(0)
                 self.mid_edge_waypoint = False

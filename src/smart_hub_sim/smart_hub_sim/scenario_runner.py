@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import json
 import math
+from pathlib import Path
 from threading import RLock
 import time
 from typing import Optional, Tuple
 import uuid
 
+from ament_index_python.packages import get_package_share_directory
 from geometry_msgs.msg import TransformStamped, Twist
 from nav_msgs.msg import Odometry
 from rcl_interfaces.msg import SetParametersResult
@@ -34,6 +36,7 @@ from std_msgs.msg import Bool, String
 from std_srvs.srv import Trigger
 from tf2_ros import TransformBroadcaster
 
+from .cars import parse_cars, ScriptedCar
 from .door_evidence import DoorEvidence
 from .geometry import intersects_crossing
 from .passengers import PassengerQueue
@@ -124,6 +127,14 @@ class ScenarioRunner(ResetWorkflow, Node):
         self.goal_id = ''
         self.add_on_set_parameters_callback(self._validate_m3_parameters)
         self.declare_parameter('obstacle_enabled', False)
+        # S8 fixtures (A section 15.1 p21), runtime-settable by the verifier: scripted cars
+        # on car edges outside C, and obstacle O on the lower road Cs-J.
+        self._map = json.loads((Path(get_package_share_directory('smart_hub_sim')) /
+                                'config' / 'map_m1.yaml').read_text())
+        self._cars = {}
+        self._cars_text = ''
+        self.declare_parameter('synthetic_cars', '')
+        self.declare_parameter('obstruction_active', False)
         self.declare_parameter('command_timeout_sec', 0.5)
         self.declare_parameter('robot_speed_limit', 0.25)
         self.declare_parameter('bus_speed_limit', 0.4)
@@ -243,6 +254,11 @@ class ScenarioRunner(ResetWorkflow, Node):
             if parameter.name in ('occupied_slots', 'invalid_slots') and not (
                     set(parameter.value) <= {'P1', 'P2', 'P3', ''}):
                 return SetParametersResult(successful=False, reason='unknown parking slot')
+            if parameter.name == 'synthetic_cars':
+                try:
+                    parse_cars(parameter.value, self._map)
+                except (ValueError, TypeError, AttributeError, KeyError) as error:
+                    return SetParametersResult(successful=False, reason=str(error))
             if parameter.name in ('m3_mode', 'm4_mode', 's1_counting_script'):
                 return SetParametersResult(successful=False,
                                            reason='scenario mode is startup only')
@@ -528,6 +544,8 @@ class ScenarioRunner(ResetWorkflow, Node):
             truth.vehicles.append(
                 self._vehicle_record(vehicle_id, kind, state, noisy=False)
             )
+        observations.vehicles.extend(self._extra_records(noisy=True))
+        truth.vehicles.extend(self._extra_records(noisy=False))
         if self.m4_mode and self.get_parameter('freeze_vehicles').value:
             if self._frozen_vehicles is None:
                 self._frozen_vehicles = observations
@@ -547,6 +565,7 @@ class ScenarioRunner(ResetWorkflow, Node):
             truth.vehicles.append(
                 self._vehicle_record(vehicle_id, kind, state, noisy=False)
             )
+        truth.vehicles.extend(self._extra_records(noisy=False))
         self._truth_pub.publish(truth)
 
     def _publish_parking(self, stamp) -> None:
@@ -752,6 +771,9 @@ class ScenarioRunner(ResetWorkflow, Node):
             if self._path_needs_crossing(self.world.robot, next_robot, ROBOT_RADIUS):
                 if not self._crossing_allows('robot', now):
                     robot_command = (0.0, 0.0)
+            self.world.obstacle_enabled = bool(
+                self.get_parameter('obstruction_active').value)
+            self._step_cars()
             record = self._capture_door(
                 'physics', lambda: self.world.step(bus_command, robot_command, DT_SEC))
             self._tick += 1
@@ -769,6 +791,40 @@ class ScenarioRunner(ResetWorkflow, Node):
             self._publish_truth(stamp)
         if tick % 4 == 0:
             self._publish_parking(stamp)
+
+    def _step_cars(self) -> None:
+        """Apply the latest validated car script, keeping existing cars' progress."""
+        text = str(self.get_parameter('synthetic_cars').value)
+        if text != self._cars_text:
+            declared = parse_cars(text, self._map)
+            self._cars = {ident: self._cars.get(ident) or ScriptedCar(*spec)
+                          for ident, spec in declared.items()}
+            self._cars_text = text
+        for car in self._cars.values():
+            car.step(DT_SEC)
+
+    def _extra_records(self, noisy: bool):
+        """Cars and the obstruction, as observed (noisy) or evaluator truth records."""
+        with self._lock:
+            return self._extra_records_locked(noisy)
+
+    def _extra_records_locked(self, noisy: bool):
+        records = []
+        for ident, car in sorted(self._cars.items()):
+            state = AgentState(car.x, car.y, car.yaw, car.linear_x, 0.0)
+            record = VehicleState()
+            record.vehicle_id, record.kind = ident, 'car'
+            x, y, yaw = self.world.noisy_pose(state) if noisy else (car.x, car.y, car.yaw)
+            record.pose.x, record.pose.y, record.pose.theta = x, y, yaw
+            record.speed_mps = car.linear_x
+            record.edge_id, record.valid = car.edge_id, True
+            records.append(record)
+        if self.world.obstacle_enabled:
+            x, y, _ = self.world.obstacles[0]
+            record = VehicleState(vehicle_id='O', kind='obstacle', edge_id='Cs-J', valid=True)
+            record.pose.x, record.pose.y = x, y
+            records.append(record)
+        return records
 
     def _reset_scenario(self, request, response):
         """Reset only the declared baseline when safety heartbeat and zero hold."""
@@ -825,6 +881,7 @@ class ScenarioRunner(ResetWorkflow, Node):
                             [])).value)
             self.passengers = PassengerQueue(int(request.seed), initial, arrivals)
             self._s1_departed = False
+            self._cars, self._cars_text = {}, ''
             self.goal_id = ''
             self._parking_state = None
             self._parking_received = 0.0

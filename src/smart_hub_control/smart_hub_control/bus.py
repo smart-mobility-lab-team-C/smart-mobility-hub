@@ -27,6 +27,7 @@ from smart_hub_interfaces.msg import (
 )
 from smart_hub_interfaces.srv import ComputeRoute, RequestCrossing, ResetScenario
 from smart_hub_sim.geometry import CROSSING, intersects_crossing, segment_distance
+from smart_hub_sim.observations import vehicle_snapshot
 from std_msgs.msg import Bool, String
 from tf2_ros import Buffer, TransformException, TransformListener
 
@@ -67,10 +68,21 @@ def route_waypoints(config, route, pose):
         if abs((b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0])) > 1e-9:
             waypoints.append(b)
     waypoints.append(nodes[-1])
-    approach_start = math.dist(pose[:2], nodes[0]) > 0.05
+    offset = math.dist(pose[:2], nodes[0])
+    # Within 5 cm of the start node the start can be skipped, but only when the pose is
+    # already on the first segment. A stop just short of a turn node (S8: latched 0.2 mm
+    # before N on A-N) would otherwise steer off the edge, which the simulator refuses.
+    off_first_segment = len(nodes) > 1 and segment_distance(
+        pose[0], pose[1], *nodes[0], *nodes[1]) > 1e-6
+    approach_start = offset > 0.05 or (offset > 1e-9 and off_first_segment)
     if not approach_start and len(waypoints) > 1:
         waypoints = waypoints[1:]
     return waypoints, approach_start
+
+
+def turn_ahead(pose, target, following):
+    """Whether moving from target to following leaves the line the pose is on."""
+    return segment_distance(pose[0], pose[1], *target, *following) > 1e-6
 
 
 def route_needs_crossing(points):
@@ -740,18 +752,7 @@ class BusManager(Node):
             self.begin_stop('SAFETY_STOP')
         elif pose is None or vehicles is None:
             self.begin_stop('STALE_POSE')
-        elif (
-            len(vehicles.vehicles) != 2
-            or {v.vehicle_id for v in vehicles.vehicles} != {'bus', 'robot'}
-            or any(
-                not v.valid
-                or v.kind != v.vehicle_id
-                or not all(
-                    math.isfinite(x) for x in (v.pose.x, v.pose.y, v.pose.theta, v.speed_mps)
-                )
-                for v in vehicles.vehicles
-            )
-        ):
+        elif vehicle_snapshot(vehicles.vehicles) is None:
             self.begin_stop('INVALID_VEHICLE_OBSERVATION')
         elif door is None:
             self.begin_stop('STALE_DOOR')
@@ -804,6 +805,8 @@ class BusManager(Node):
         distance = math.dist(pose[:2], target)
         final = len(self.targets) == 1
         threshold = 0.05 if final or self.mid_edge_waypoint else 1e-8
+        if not final and turn_ahead(pose, target, self.targets[1]):
+            threshold = 1e-8   # reach a turn node exactly; the next edge starts there
         if distance <= threshold:
             if not final:
                 self.targets.pop(0)

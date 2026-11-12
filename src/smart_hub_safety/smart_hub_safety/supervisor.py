@@ -26,6 +26,7 @@ from smart_hub_sim.geometry import (
     swept_clear,
     swept_segments_clear,
 )
+from smart_hub_sim.observations import other_circles, vehicle_snapshot
 from std_msgs.msg import Bool
 
 from .validation import (
@@ -172,22 +173,15 @@ class SafetySupervisor(Node):
             return reason, None
         if vehicles.header.frame_id != 'map':
             return 'vehicles_bad_frame', None
-        by_id = {}
-        for item in vehicles.vehicles:
-            if (not item.vehicle_id or item.vehicle_id in by_id or
-                    item.kind not in ('robot', 'bus', 'car') or
-                    not finite_vehicle(item)):
-                return 'vehicles_invalid', None
-            by_id[item.vehicle_id] = item
-        if set(by_id) != {'robot', 'bus'}:
-            return 'vehicles_unsupported_in_m2', None
-        if any(agent not in by_id or by_id[agent].kind != agent
-               for agent in ('robot', 'bus')):
+        # Exactly one bus and one robot, plus uniquely named cars/obstacles (A section 15.1).
+        by_id = vehicle_snapshot(vehicles.vehicles)
+        if by_id is None or not all(finite_vehicle(item) for item in by_id.values()):
             return 'vehicles_invalid', None
+        others = other_circles(by_id)
         for agent, radius in (('robot', 0.2), ('bus', 0.3)):
             pose = by_id[agent].pose
             position = (float(pose.x), float(pose.y))
-            if not swept_clear(position, position, radius, (), ()):
+            if not swept_clear(position, position, radius, others, ()):
                 return 'swept_hazard', None
         robot_pose, bus_pose = by_id['robot'].pose, by_id['bus'].pose
         if not swept_segments_clear(
@@ -341,7 +335,8 @@ class SafetySupervisor(Node):
         other_midpoint = ((other_start[0] + other_end[0]) * 0.5,
                           (other_start[1] + other_end[1]) * 0.5)
         other_point = (*other_midpoint, other_radius)
-        if not swept_clear((x, y), end, radius, (), (other_point,), clearance=0.2):
+        if not swept_clear((x, y), end, radius, other_circles(vehicles), (other_point,),
+                           clearance=0.2):
             return None, 'swept_hazard'
         if not swept_segments_clear(start, end, radius, other_start, other_end,
                                     other_radius, clearance=0.2):
