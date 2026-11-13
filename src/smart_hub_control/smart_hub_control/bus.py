@@ -790,7 +790,9 @@ class BusManager(Node):
         while len(self.route) > 1:
             a, b = (self.config['nodes'][n] for n in self.route[:2])
             progress = sum((pose[i] - a[i]) * (b[i] - a[i]) for i in (0, 1))
-            if progress < math.dist(a, b) ** 2 - 1e-7:
+            # A node is passed once reached within the 1e-6 m edge tolerance, matching
+            # the turn-node arrival rule (otherwise the passed node stays route[0]).
+            if progress < math.dist(a, b) ** 2 - 1e-7 and math.dist(pose[:2], b) > 1e-6:
                 break
             self.route.pop(0)
         if not self.route_valid():

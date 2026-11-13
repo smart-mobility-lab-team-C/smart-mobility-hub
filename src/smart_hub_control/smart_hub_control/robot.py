@@ -750,8 +750,11 @@ class RobotManager(Node):
                 return
         while len(self.route) > 1:
             a, b = (self.config['nodes'][n] for n in self.route[:2])
+            # Passed once reached within the 1e-6 m edge tolerance, matching the
+            # turn-node arrival rule; otherwise route[0] stays behind the robot and the
+            # congestion check at the next node never runs.
             if sum((pose[i] - a[i]) * (b[i] - a[i]) for i in (0, 1)) \
-                    < math.dist(a, b) ** 2 - 1e-7:
+                    < math.dist(a, b) ** 2 - 1e-7 and math.dist(pose[:2], b) > 1e-6:
                 break
             self.route.pop(0)
         if not self.route_valid():
