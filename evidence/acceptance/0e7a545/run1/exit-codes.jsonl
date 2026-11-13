@@ -1,0 +1,6 @@
+{"verifier": "m2", "exit_code": 0, "seconds": 58}
+{"verifier": "m3", "exit_code": 1, "seconds": 0}
+{"verifier": "m4", "exit_code": 1, "seconds": 0}
+{"verifier": "m6", "exit_code": 0, "seconds": 1766}
+{"verifier": "s1", "exit_code": 1, "seconds": 43}
+{"verifier": "s2", "exit_code": 0, "seconds": 411}

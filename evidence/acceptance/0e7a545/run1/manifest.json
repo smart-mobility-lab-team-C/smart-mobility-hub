@@ -1,0 +1,19 @@
+{
+  "schema": "smart-mobility-hub/acceptance-manifest-v1",
+  "run": "run1",
+  "commit": "0e7a5451154c06e6fd4d74ff44818221d7a4cfc8",
+  "started_unix": 1794581682.1361072,
+  "host_cpus": 8,
+  "load_average": [
+    0.55224609375,
+    0.8642578125,
+    1.16357421875
+  ],
+  "kernel": "7.0.0-42-generic",
+  "python": "3.12.3",
+  "ros_distro": "jazzy",
+  "rmw": "default",
+  "ros_domain_id": "84",
+  "environment": "native Ubuntu 24.04 + ROS 2 Jazzy (/opt/ros/jazzy), colcon symlink install in .cache/install",
+  "model_sha256": "502126d322fa1a082785eacb63b284092eaf2ebd3a3448c6d27b1a72f5b140b6"
+}

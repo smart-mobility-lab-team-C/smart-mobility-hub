@@ -1,0 +1,3910 @@
+{
+  "acquisition_stamp_frozen": false,
+  "command": [
+    "ros2",
+    "launch",
+    "smart_hub_bringup",
+    "s1_counting.launch.py"
+  ],
+  "counts": [
+    {
+      "expected": 0,
+      "interval": [
+        1.0,
+        4.5
+      ],
+      "pass": true,
+      "samples": 17
+    },
+    {
+      "expected": 3,
+      "interval": [
+        6.0,
+        9.5
+      ],
+      "pass": false,
+      "samples": 17
+    },
+    {
+      "expected": 5,
+      "interval": [
+        11.0,
+        14.5
+      ],
+      "pass": false,
+      "samples": 17
+    },
+    {
+      "expected": 4,
+      "interval": [
+        16.0,
+        19.5
+      ],
+      "pass": false,
+      "samples": 17
+    }
+  ],
+  "crossing_occupied": false,
+  "crossing_states": [
+    {
+      "elapsed_sec": 0.03467523299877939,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.13414028599981975,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.23373698999967019,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.33407445499869937,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.4338916619999509,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.5339429969990306,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.633784369998466,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.734035714998754,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.8345728559997951,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 0.9339474150001479,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.034087580999767,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.1339919719994214,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.2339893909993407,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.3340285839985881,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.4337768119985412,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.5336473229999683,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.6338333329986199,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.7336912379996647,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.8339280569998664,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 1.9342059579994384,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.0346139220000623,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.134464028998991,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.233757894999144,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.333808264000254,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.435135713998534,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.533713077998982,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.63470523199976,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.7344996579995495,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.835078643000088,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 2.9341832939990127,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.0337598400001298,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.1339806460000545,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.2356563809989893,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.334038946999499,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.433822472999964,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.5336875449993386,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.6338436959995306,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.7344019079991995,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.833805324999048,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 3.9341550190001726,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.033860873998492,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.133778691999396,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.2350879320001695,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.334611425998446,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.435072690999732,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.534589318998769,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.634031099998538,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.733927418999883,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.833808116,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 4.933617786999093,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.033708273000229,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.133764751999479,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.2338172949985164,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.334375966000152,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.433945046999725,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.533808906999184,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.634351896000226,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.73372476700024,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.834643199999846,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 5.9340597209993575,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.033813594998719,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.133923042998504,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.2346126880001975,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.3345975859992905,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.434084415999678,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.534103116999177,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.63511611299873,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.734708410998792,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.8338785500000085,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 6.934456373999637,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.0337844459991175,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.1345354079985555,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.23373483999967,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.3335986959991715,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.435066949999964,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.533920107000085,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.633903477999411,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.734000962998834,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.8338473069998145,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 7.934870051998587,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.033797271998992,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.133921654000005,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.23509007299981,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.33375273799902,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.433978798999306,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.535228845999882,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.635153583998544,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.734499618998598,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.834101379999993,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 8.934002803000112,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.034018770998955,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.134844755999438,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.234020329999112,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.334095334999802,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.434124888999577,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.533723521999491,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.634034040998813,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.73368727900015,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.835191381000186,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 9.934140001998458,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.033707087999574,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.133860691999871,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.233871223999813,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.334041786998569,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.435782966998886,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.533678421999866,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.63394597899969,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.733706883000195,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.83486710499892,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 10.934222283998679,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.034946501999002,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.134005501999127,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.235617280999577,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.334131453999362,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.43446202099949,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.533757909999622,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.633799466999335,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.733890872999837,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.833990986999197,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 11.933973138999136,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.033848020999358,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.13368373999947,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.234034977000192,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.33395013900008,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.434220872999504,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.53452878600001,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.635383940998508,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.733933417999651,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.83393374699881,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 12.934020163998866,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.034101490999092,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.133701978998943,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.233874833998925,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.3339767389989,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.434079975999339,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.534372849999272,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.634852552999291,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.73387655499937,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.833892915999968,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 13.934388331999799,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.033900764999999,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.134427068998775,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.23506106899913,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.334050688999923,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.434168807998503,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.53458083499936,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.635153973998968,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.734012511999026,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.834875454000212,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 14.934463523999511,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.034592148998854,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.133958327998698,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.23393352599851,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.3341327119997,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.433895686999676,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.534074373999829,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.635031538999101,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.733723186000134,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.835257912998713,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 15.933993384998757,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.034034188000078,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.135182643000007,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.234039446999304,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.33399228399867,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.434231034998447,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.53372789399873,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.63400439399993,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.734085393998612,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.835647613999754,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 16.93418357599876,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.03385888699995,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.134179153999867,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.234033834,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.33398760899945,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.434181137999985,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.535543088999475,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.634531791998597,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.735030425999867,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.833866854998632,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 17.934614746998705,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.033900815999004,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.133674646000145,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.234856648999994,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.333946239999932,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.433858575999693,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.534436216999893,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.634855690999757,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.733907783998802,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.83382545099994,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 18.9339137199986,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.033967886998653,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.134372075999636,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.233802187998663,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.33396937499856,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.433784679999007,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.53427117799947,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.633934353998484,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.734543820999534,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.834247249998953,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 19.934707446000175,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.033834717998616,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.134019303999594,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.23377916499885,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.33426143199904,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.434144924000066,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.533982950999416,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.63511990599909,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.734389884999473,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.834694528999535,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 20.93441322199942,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.03381088899914,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.13456282199877,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.23427994099984,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.333631818999493,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.433797137999136,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.533908411000084,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.63389473799907,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.73391508199893,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.83461179999904,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 21.93392677999873,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.03400759899887,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.13391259799937,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.23396634099845,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.334055559000262,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.43461631699938,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.53390547500021,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.634041900999364,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.73361962599847,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.833969597999385,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 22.93458905299849,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.034941493999213,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.1347348649997,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.235106808999262,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.334716235998712,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.43460684099955,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.533838139999716,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.634358149000036,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.734731667998858,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.833821530999558,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 23.934285848999934,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.03391382799964,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.133769240999754,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.233887079999477,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.335612947999834,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.43502037199869,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.53502713799935,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.635277035999025,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.733990753999024,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.833920889999717,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 24.93408443899898,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.033819423999375,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.13387408000017,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.234156140999403,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.334181230999093,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.434141972998987,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.53379065899935,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.63388498799941,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.733732169999712,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.834011191000172,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 25.9337562719993,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.034800847999577,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.13398138899902,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.2339415309998,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.333969231000083,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.433810097998503,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.53407473199877,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.635460910998518,
+      "pedestrian_present": true,
+      "state": "OCCUPIED",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.734341224999298,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.83380500199928,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 26.933919862998664,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.033823152998593,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.133665227000165,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.23380566800006,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.334564056998715,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.43381932400007,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.533836840999356,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.634212916998877,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.734011343998645,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.834049551000135,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 27.933762724998815,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.033862668999063,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.134522430998913,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.235410421999404,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.334974131999843,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.43397272099901,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.53394028599905,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.633735389999856,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.733674742999938,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.83375563499976,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 28.934591256000203,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.035204648998842,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.133881990999726,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.23378135599887,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.33363691500017,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.43535808100023,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.53462308899907,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.634823058999245,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.734033427999748,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.83467658799964,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 29.934189124000113,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.033831060998637,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.133904128999347,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.23375366399887,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.334038969000176,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.433922084999722,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.534903664000012,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.635069097999803,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.73400874700019,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.835161383000013,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 30.93396996499905,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.034305151999433,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.134439329998713,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.23464533799961,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.334569085000112,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.43399151399899,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.53403099999923,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.633881771000233,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.73395628199978,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.83476871899984,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 31.933899841998937,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.03494569199938,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.13442167499852,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.23426542800007,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.333625622999534,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.4338823399994,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.53495959199972,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.63391805199899,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.73408593899876,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.83389747899855,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 32.93405872599942,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 33.03377825499956,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 33.13369308899928,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 33.23394252399885,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 33.33459791799942,
+      "pedestrian_present": false,
+      "state": "CLEAR",
+      "valid": true
+    },
+    {
+      "elapsed_sec": 33.43463665699892,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 33.53396161299861,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 33.634900603999995,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 33.73441862799882,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 33.833879863999755,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 33.93362497099952,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.03382973099906,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.133652806998725,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.233915456999966,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.334041018999415,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.43370130199946,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.5338968369997,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.633831007999106,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.73438625899871,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.83463585099889,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 34.93362570999852,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.03386674699868,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.13412980799876,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.23381835699911,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.33383639800013,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.43399415699969,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.53457243899902,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.63370207600019,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.733616693998556,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.83374100799847,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 35.93367081699944,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.034794449999026,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.13442020899856,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.23440871599996,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.33364257899848,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.43377645699911,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.53444812699854,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.633775113999945,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.73452755699873,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.835145396998996,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 36.934688550998544,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.03401306900014,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.13365817199883,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.23386201899848,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.33360974399875,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.433871172999716,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.53484461299922,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.63383511199936,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.73354766599914,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.83445660899997,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 37.93461991000004,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.03388261699911,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.13364537399866,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.2349954729998,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.33360594899932,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.4340985559993,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.53442237499985,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.63461503899998,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.73402863099909,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.83462453299944,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 38.93506077599886,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.03390768600002,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.133607148998635,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.23439945899918,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.33413879499858,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.43394335799894,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.53369656199902,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.635618311000144,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.73397926599864,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.83394167699953,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 39.933644448999985,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 40.0338082039998,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 40.13412661499933,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 40.23424923299899,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 40.33463041499999,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    },
+    {
+      "elapsed_sec": 40.433884828999,
+      "pedestrian_present": false,
+      "state": "UNKNOWN",
+      "valid": false
+    }
+  ],
+  "ended_utc": "2026-11-13T15:25:49.211280+00:00",
+  "invalid_by_31_2_sec": false,
+  "log": "/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/0e7a545/run1/s1.launch.log",
+  "ros_domain_id": "84",
+  "run_id": "6a94e134-1866-48aa-a1df-448bd6a50284",
+  "samples": [
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 0.12771067899848276,
+      "source_stamp_ns": 1794583508761228858,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 0.3274659829985467,
+      "source_stamp_ns": 1794583508902068214,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 0.5277077039991127,
+      "source_stamp_ns": 1794583509196070268,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 0.7280883439998433,
+      "source_stamp_ns": 1794583509380015060,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 0.9275811269999394,
+      "source_stamp_ns": 1794583509563698320,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 1.1273750099990139,
+      "source_stamp_ns": 1794583509694039805,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 1.3285264299993287,
+      "source_stamp_ns": 1794583509982562427,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 1.5275924519992259,
+      "source_stamp_ns": 1794583510161618418,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 1.7275822589999734,
+      "source_stamp_ns": 1794583510335400191,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 1.9287557030002063,
+      "source_stamp_ns": 1794583510516009055,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 2.129418638998686,
+      "source_stamp_ns": 1794583510712312865,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 2.3276936909987853,
+      "source_stamp_ns": 1794583510971831454,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 2.5275025390001247,
+      "source_stamp_ns": 1794583511161946091,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 2.7291815190001216,
+      "source_stamp_ns": 1794583511362640699,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 2.9276116490000277,
+      "source_stamp_ns": 1794583511568034450,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 3.127502169998479,
+      "source_stamp_ns": 1794583511713340736,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 3.327611373999389,
+      "source_stamp_ns": 1794583511912832787,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 3.527551567998671,
+      "source_stamp_ns": 1794583512160783469,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 3.7279224550002255,
+      "source_stamp_ns": 1794583512398943683,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 3.9280141849994834,
+      "source_stamp_ns": 1794583512577389133,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 4.127539346000049,
+      "source_stamp_ns": 1794583512577389133,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 4.329152786998748,
+      "source_stamp_ns": 1794583512961619961,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 4.5280627779993665,
+      "source_stamp_ns": 1794583513177234201,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 4.727497000998483,
+      "source_stamp_ns": 1794583513311626992,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 4.927479101999779,
+      "source_stamp_ns": 1794583513515548957,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 5.127609768998809,
+      "source_stamp_ns": 1794583513761753951,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 5.328296719999344,
+      "source_stamp_ns": 1794583513984134562,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 5.527477888999783,
+      "source_stamp_ns": 1794583514110478353,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 5.727486284999031,
+      "source_stamp_ns": 1794583514310730557,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 5.927496328999041,
+      "source_stamp_ns": 1794583514481529810,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 6.127455222998833,
+      "source_stamp_ns": 1794583514609503507,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 6.328743727999608,
+      "source_stamp_ns": 1794583514960569066,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 6.527414797999882,
+      "source_stamp_ns": 1794583515062413204,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 6.728355463999833,
+      "source_stamp_ns": 1794583515377261475,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 6.928154089999225,
+      "source_stamp_ns": 1794583515588945483,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 7.128453059998719,
+      "source_stamp_ns": 1794583515766392457,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 7.327445777998946,
+      "source_stamp_ns": 1794583515877399636,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 7.528028602999257,
+      "source_stamp_ns": 1794583516113303427,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 7.728231490998951,
+      "source_stamp_ns": 1794583516333857976,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 7.931898848999481,
+      "source_stamp_ns": 1794583516561795886,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 8.127530062000005,
+      "source_stamp_ns": 1794583516715584869,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 8.327467228999012,
+      "source_stamp_ns": 1794583516913010397,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 8.529722658999162,
+      "source_stamp_ns": 1794583517110849899,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 8.729149863998828,
+      "source_stamp_ns": 1794583517313004796,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 8.928010591998827,
+      "source_stamp_ns": 1794583517510818643,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 9.128919278999092,
+      "source_stamp_ns": 1794583517710682170,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 9.329163492999214,
+      "source_stamp_ns": 1794583517910792316,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 9.5276037120002,
+      "source_stamp_ns": 1794583518111457753,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 9.727556452999124,
+      "source_stamp_ns": 1794583518334011949,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 9.927995059999375,
+      "source_stamp_ns": 1794583518512849897,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 10.127971152998725,
+      "source_stamp_ns": 1794583518711132846,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 10.328224687998954,
+      "source_stamp_ns": 1794583518915815850,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 10.527645420999761,
+      "source_stamp_ns": 1794583519112604962,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 10.727492751999307,
+      "source_stamp_ns": 1794583519220735535,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 10.92918199399901,
+      "source_stamp_ns": 1794583519512769464,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 11.127540109999245,
+      "source_stamp_ns": 1794583519712503133,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 11.32752538999921,
+      "source_stamp_ns": 1794583519913213401,
+      "valid": true
+    },
+    {
+      "count": 3,
+      "crossing_occupied": false,
+      "elapsed_sec": 11.527685525999914,
+      "source_stamp_ns": 1794583520110752640,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 11.727479660999961,
+      "source_stamp_ns": 1794583520315847221,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 11.927521103998515,
+      "source_stamp_ns": 1794583520516052877,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 12.12759848099995,
+      "source_stamp_ns": 1794583520716670085,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 12.32744267399903,
+      "source_stamp_ns": 1794583520911151304,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 12.529194052000094,
+      "source_stamp_ns": 1794583521111289987,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 12.727458522998859,
+      "source_stamp_ns": 1794583521312706308,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 12.927422520999244,
+      "source_stamp_ns": 1794583521410492472,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 13.127493770000001,
+      "source_stamp_ns": 1794583521762300568,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 13.327541349999592,
+      "source_stamp_ns": 1794583521960792368,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 13.529463470998962,
+      "source_stamp_ns": 1794583522161033718,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 13.727683409999372,
+      "source_stamp_ns": 1794583522367532487,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 13.928968209000232,
+      "source_stamp_ns": 1794583522561116884,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 14.129157056999247,
+      "source_stamp_ns": 1794583522760777212,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 14.328229216998807,
+      "source_stamp_ns": 1794583522962699788,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 14.529707083000176,
+      "source_stamp_ns": 1794583523162069386,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 14.727486048999708,
+      "source_stamp_ns": 1794583523361604032,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 14.92817041499984,
+      "source_stamp_ns": 1794583523561393361,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 15.127465341000061,
+      "source_stamp_ns": 1794583523763051131,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 15.330177416999504,
+      "source_stamp_ns": 1794583523961399711,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 15.527925369999139,
+      "source_stamp_ns": 1794583524116085506,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 15.72762498100019,
+      "source_stamp_ns": 1794583524313042461,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 15.927546326000083,
+      "source_stamp_ns": 1794583524513505470,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 16.129432160998476,
+      "source_stamp_ns": 1794583524711155446,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 16.327507492000223,
+      "source_stamp_ns": 1794583524911087504,
+      "valid": true
+    },
+    {
+      "count": 5,
+      "crossing_occupied": false,
+      "elapsed_sec": 16.527482448000228,
+      "source_stamp_ns": 1794583525110814636,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 16.727481869000258,
+      "source_stamp_ns": 1794583525315937643,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 16.930064340998797,
+      "source_stamp_ns": 1794583525512989082,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 17.12796597599845,
+      "source_stamp_ns": 1794583525777464223,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 17.327549427998747,
+      "source_stamp_ns": 1794583525915932297,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 17.528167917000246,
+      "source_stamp_ns": 1794583526111133166,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 17.72917457099902,
+      "source_stamp_ns": 1794583526312524659,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 17.92913477699949,
+      "source_stamp_ns": 1794583526561300401,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 18.1275842799987,
+      "source_stamp_ns": 1794583526718551514,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 18.327528290999908,
+      "source_stamp_ns": 1794583526913079329,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 18.528516495000076,
+      "source_stamp_ns": 1794583527133603156,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 18.72761891099981,
+      "source_stamp_ns": 1794583527313470305,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 18.927551222999682,
+      "source_stamp_ns": 1794583527577453814,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 19.128858688998662,
+      "source_stamp_ns": 1794583527769523286,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 19.32839595599944,
+      "source_stamp_ns": 1794583527915791615,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 19.52794461799931,
+      "source_stamp_ns": 1794583528189155887,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 19.729377955998643,
+      "source_stamp_ns": 1794583528361078580,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 19.9284846999999,
+      "source_stamp_ns": 1794583528562275975,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 20.127448186000038,
+      "source_stamp_ns": 1794583528562275975,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 20.329000456998983,
+      "source_stamp_ns": 1794583528932515408,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 20.527392144998885,
+      "source_stamp_ns": 1794583529115678058,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 20.728900910999073,
+      "source_stamp_ns": 1794583529312682346,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 20.928723702998468,
+      "source_stamp_ns": 1794583529512789756,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 21.131168492998768,
+      "source_stamp_ns": 1794583529762981475,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 21.327473755998653,
+      "source_stamp_ns": 1794583529962644885,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 21.527732828999433,
+      "source_stamp_ns": 1794583530115781964,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 21.72757926399936,
+      "source_stamp_ns": 1794583530368639279,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 21.927568904999134,
+      "source_stamp_ns": 1794583530561066111,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 22.127507162000256,
+      "source_stamp_ns": 1794583530782190573,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 22.32784000599895,
+      "source_stamp_ns": 1794583530961134006,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 22.527454653998575,
+      "source_stamp_ns": 1794583531071547628,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 22.727419748998727,
+      "source_stamp_ns": 1794583531311603841,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 22.92833511199933,
+      "source_stamp_ns": 1794583531577526662,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 23.12919467699976,
+      "source_stamp_ns": 1794583531762402250,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 23.329020037999726,
+      "source_stamp_ns": 1794583531962055250,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 23.53192290199877,
+      "source_stamp_ns": 1794583532162219502,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 23.72851493499911,
+      "source_stamp_ns": 1794583532369450236,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 23.929299677998642,
+      "source_stamp_ns": 1794583532516066928,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 24.12755291599933,
+      "source_stamp_ns": 1794583532715739031,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 24.33022285699917,
+      "source_stamp_ns": 1794583532915719335,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 24.529959407000206,
+      "source_stamp_ns": 1794583533113318649,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 24.727430911998454,
+      "source_stamp_ns": 1794583533313499243,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 24.927881511999658,
+      "source_stamp_ns": 1794583533583850290,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 25.127365565998844,
+      "source_stamp_ns": 1794583533583850290,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 25.327943583999513,
+      "source_stamp_ns": 1794583533986541897,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 25.527461257999676,
+      "source_stamp_ns": 1794583534073175937,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 25.72746128200015,
+      "source_stamp_ns": 1794583534262126686,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 25.92752832699989,
+      "source_stamp_ns": 1794583534510787428,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 26.12801099799981,
+      "source_stamp_ns": 1794583534712048095,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 26.327478098999563,
+      "source_stamp_ns": 1794583534810914492,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": true,
+      "elapsed_sec": 26.528835934999734,
+      "source_stamp_ns": 1794583535116513416,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 26.729162998999527,
+      "source_stamp_ns": 1794583535312832890,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 26.927610146000006,
+      "source_stamp_ns": 1794583535561375580,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 27.127433038000163,
+      "source_stamp_ns": 1794583535661457471,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 27.328937622998637,
+      "source_stamp_ns": 1794583535915512267,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 27.528417960998922,
+      "source_stamp_ns": 1794583536115779659,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 27.728668443998686,
+      "source_stamp_ns": 1794583536310951333,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 27.92749002599885,
+      "source_stamp_ns": 1794583536511376228,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 28.129213837999487,
+      "source_stamp_ns": 1794583536715624490,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 28.32922438300011,
+      "source_stamp_ns": 1794583536912711338,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 28.527521767999133,
+      "source_stamp_ns": 1794583537111288266,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 28.72756573100014,
+      "source_stamp_ns": 1794583537315480493,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 28.92961004099925,
+      "source_stamp_ns": 1794583537515846125,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 29.127680485999008,
+      "source_stamp_ns": 1794583537712641278,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 29.32754803900025,
+      "source_stamp_ns": 1794583537915745854,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 29.52918970599967,
+      "source_stamp_ns": 1794583538112594859,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 29.7274616779996,
+      "source_stamp_ns": 1794583538312812860,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 29.92913411599875,
+      "source_stamp_ns": 1794583538512661793,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 30.12827438000022,
+      "source_stamp_ns": 1794583538738629053,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 30.327526954999485,
+      "source_stamp_ns": 1794583538961021889,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 30.5299083409991,
+      "source_stamp_ns": 1794583539160938765,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 30.72748596800011,
+      "source_stamp_ns": 1794583539360813241,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 30.927632224000263,
+      "source_stamp_ns": 1794583539562763925,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 31.129038691999085,
+      "source_stamp_ns": 1794583539762600066,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 31.328785369998513,
+      "source_stamp_ns": 1794583539962149791,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 31.527939302999584,
+      "source_stamp_ns": 1794583540063005753,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 31.727404200999445,
+      "source_stamp_ns": 1794583540377345544,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 31.92904862799878,
+      "source_stamp_ns": 1794583540560743854,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 32.127691914000025,
+      "source_stamp_ns": 1794583540761912371,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 32.327497340000264,
+      "source_stamp_ns": 1794583540960996809,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 32.527652151999064,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": true
+    },
+    {
+      "count": 4,
+      "crossing_occupied": false,
+      "elapsed_sec": 32.72821336099878,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 32.927465623999524,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 33.127457508999214,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 33.32906185499996,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": true
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 33.52745231299923,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 33.72922295599892,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 33.927496227999654,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 34.127482246998625,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 34.327778262999345,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 34.52742443399984,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 34.729148439999335,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 34.927560879999874,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 35.128440217999014,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 35.32833917199969,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 35.529270340999574,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 35.72774687099991,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 35.927482617998976,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 36.13206321599864,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 36.3273908379997,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 36.52832452399889,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 36.72960615000011,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 36.93003747699913,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 37.12744471099904,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 37.32752499699927,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 37.52943047199915,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 37.72753513299904,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 37.9292577010001,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 38.12753513899952,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 38.32754021799883,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 38.528897022999445,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 38.727606540000124,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 38.92966443499972,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 39.12754027899973,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 39.32792182599951,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 39.52756307500022,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 39.72754541299946,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 39.92754372499985,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 40.128037938999114,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 40.32989213200017,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    },
+    {
+      "count": 0,
+      "crossing_occupied": false,
+      "elapsed_sec": 40.52893808399858,
+      "source_stamp_ns": 1794583541061934625,
+      "valid": false
+    }
+  ],
+  "started_utc": "2026-11-13T15:25:07.032559+00:00",
+  "status": "FAIL"
+}

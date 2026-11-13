@@ -1,0 +1,13 @@
+{
+  "schema": "smart-mobility-hub/m4-verification-v1",
+  "status": "FAIL",
+  "cases": [],
+  "seed": 17,
+  "model": null,
+  "configuration": "map_m1.yaml; m4.launch.py defaults",
+  "clocks": "monotonic latency; wall-backed ROS source timestamps",
+  "error": "AssertionError('no_active_latch')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/scripts/verify_m4.py\", line 476, in main\n    parking_cases(probe, report['cases'])\n  File \"/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/scripts/verify_m4.py\", line 155, in parking_cases\n    assert clear.success, clear.reason\n           ^^^^^^^^^^^^^\nAssertionError: no_active_latch\n",
+  "trace_sha256": "15523a513a828d9c329afdbc2e6607447066bcdef8fff51323a577a407300556",
+  "revision_evidence": "../commit.txt and ../source-sha256.txt from container runner"
+}

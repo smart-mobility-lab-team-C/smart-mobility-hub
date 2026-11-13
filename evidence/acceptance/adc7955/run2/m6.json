@@ -1,0 +1,1632 @@
+{
+  "schema": "smart-mobility-hub/m6-verification-v1",
+  "status": "PASS",
+  "nominal_runs": 10,
+  "only_case": null,
+  "cases": [
+    {
+      "name": "nominal_escort_01",
+      "status": "PASS",
+      "observations": {
+        "seed": 601,
+        "request_id": "m6-0001",
+        "duration_sec": 111.50376607399812,
+        "final_error_max_over_1s_m": 0.04000056071477277,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.959999084472656,
+        "feedback_count": 223,
+        "feedback_interval_p50_sec": 0.5001234304982063,
+        "feedback_interval_p95_sec": 0.5032148359969142,
+        "feedback_interval_max_sec": 0.5062799770021229,
+        "crossing_inside_samples": 969,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.256549987755201
+      },
+      "elapsed_sec": 117.11878658299975
+    },
+    {
+      "name": "nominal_escort_02",
+      "status": "PASS",
+      "observations": {
+        "seed": 602,
+        "request_id": "m6-0002",
+        "duration_sec": 91.80925690400181,
+        "final_error_max_over_1s_m": 0.045000645041609895,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.954998970031738,
+        "feedback_count": 183,
+        "feedback_interval_p50_sec": 0.4999508879991481,
+        "feedback_interval_p95_sec": 0.5023780550036463,
+        "feedback_interval_max_sec": 0.504888313000265,
+        "crossing_inside_samples": 581,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.040151991106853
+      },
+      "elapsed_sec": 97.37539460700646
+    },
+    {
+      "name": "nominal_escort_03",
+      "status": "PASS",
+      "observations": {
+        "seed": 603,
+        "request_id": "m6-0003",
+        "duration_sec": 92.20294537500013,
+        "final_error_max_over_1s_m": 0.045000563172319215,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.954998970031738,
+        "feedback_count": 184,
+        "feedback_interval_p50_sec": 0.49990595399867743,
+        "feedback_interval_p95_sec": 0.5025537019973854,
+        "feedback_interval_max_sec": 0.5032884510001168,
+        "crossing_inside_samples": 582,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.1612541672279635
+      },
+      "elapsed_sec": 97.79062427199824
+    },
+    {
+      "name": "nominal_escort_04",
+      "status": "PASS",
+      "observations": {
+        "seed": 604,
+        "request_id": "m6-0004",
+        "duration_sec": 92.12932440499571,
+        "final_error_max_over_1s_m": 0.04750057050322132,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.952498435974121,
+        "feedback_count": 184,
+        "feedback_interval_p50_sec": 0.49999266599479597,
+        "feedback_interval_p95_sec": 0.502319441002328,
+        "feedback_interval_max_sec": 0.5029445730033331,
+        "crossing_inside_samples": 583,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.0201535420065913
+      },
+      "elapsed_sec": 97.60725792999438
+    },
+    {
+      "name": "nominal_escort_05",
+      "status": "PASS",
+      "observations": {
+        "seed": 605,
+        "request_id": "m6-0005",
+        "duration_sec": 99.63037242899736,
+        "final_error_max_over_1s_m": 0.04000077704614395,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.95999813079834,
+        "feedback_count": 199,
+        "feedback_interval_p50_sec": 0.5000787354983913,
+        "feedback_interval_p95_sec": 0.5024664220036357,
+        "feedback_interval_max_sec": 0.5037312530039344,
+        "crossing_inside_samples": 734,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.0632015955375067
+      },
+      "elapsed_sec": 105.11067408300005
+    },
+    {
+      "name": "nominal_escort_06",
+      "status": "PASS",
+      "observations": {
+        "seed": 606,
+        "request_id": "m6-0006",
+        "duration_sec": 92.10437392900349,
+        "final_error_max_over_1s_m": 0.04000063600315833,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.959999084472656,
+        "feedback_count": 184,
+        "feedback_interval_p50_sec": 0.5000190049977391,
+        "feedback_interval_p95_sec": 0.5026000479992945,
+        "feedback_interval_max_sec": 0.5036240120025468,
+        "crossing_inside_samples": 583,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.0545120873828613
+      },
+      "elapsed_sec": 97.79084893599793
+    },
+    {
+      "name": "nominal_escort_07",
+      "status": "PASS",
+      "observations": {
+        "seed": 607,
+        "request_id": "m6-0007",
+        "duration_sec": 91.93428573299752,
+        "final_error_max_over_1s_m": 0.040000626503863025,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.959999084472656,
+        "feedback_count": 184,
+        "feedback_interval_p50_sec": 0.49992807600210654,
+        "feedback_interval_p95_sec": 0.503005912003573,
+        "feedback_interval_max_sec": 0.503962770999351,
+        "crossing_inside_samples": 582,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.0895023025008643
+      },
+      "elapsed_sec": 97.58988887599844
+    },
+    {
+      "name": "nominal_escort_08",
+      "status": "PASS",
+      "observations": {
+        "seed": 608,
+        "request_id": "m6-0008",
+        "duration_sec": 92.0515283709974,
+        "final_error_max_over_1s_m": 0.04000072465922383,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.959999084472656,
+        "feedback_count": 184,
+        "feedback_interval_p50_sec": 0.5000718029987183,
+        "feedback_interval_p95_sec": 0.5021660140046151,
+        "feedback_interval_max_sec": 0.5036248770047678,
+        "crossing_inside_samples": 581,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 1.9948185815362725
+      },
+      "elapsed_sec": 97.55206950199499
+    },
+    {
+      "name": "nominal_escort_09",
+      "status": "PASS",
+      "observations": {
+        "seed": 609,
+        "request_id": "m6-0009",
+        "duration_sec": 92.1233129070024,
+        "final_error_max_over_1s_m": 0.03500071638115205,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.964999198913574,
+        "feedback_count": 185,
+        "feedback_interval_p50_sec": 0.49996500900306273,
+        "feedback_interval_p95_sec": 0.5023469239968108,
+        "feedback_interval_max_sec": 0.5029406430039671,
+        "crossing_inside_samples": 583,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.0032211430152564
+      },
+      "elapsed_sec": 97.66306193199853
+    },
+    {
+      "name": "nominal_escort_10",
+      "status": "PASS",
+      "observations": {
+        "seed": 610,
+        "request_id": "m6-0010",
+        "duration_sec": 92.15152719799516,
+        "final_error_max_over_1s_m": 0.040000639685018026,
+        "final_speed_mps": 0.0,
+        "travelled_m": 10.959999084472656,
+        "feedback_count": 184,
+        "feedback_interval_p50_sec": 0.49986018300114665,
+        "feedback_interval_p95_sec": 0.5023414199968101,
+        "feedback_interval_max_sec": 0.5030068759951973,
+        "crossing_inside_samples": 582,
+        "crossing_conflicts": 0,
+        "min_robot_bus_separation_m": 2.161254116447412
+      },
+      "elapsed_sec": 97.73783597599686
+    },
+    {
+      "name": "busy_and_duplicate_rejection",
+      "status": "PASS",
+      "observations": {
+        "idle_ready_message": "NOT_WAITING_FOR_READY:IDLE",
+        "busy_rejected": true,
+        "duplicate_rejected": true,
+        "cleanup_status": "CANCELED"
+      },
+      "elapsed_sec": 4.619208232004894
+    },
+    {
+      "name": "readiness_timeout",
+      "status": "PASS",
+      "observations": {
+        "wait_to_abort_sec": 20.10278664100042,
+        "max_displacement_m": 0.0,
+        "reason": "READINESS_TIMEOUT"
+      },
+      "elapsed_sec": 25.8063381220054
+    },
+    {
+      "name": "cancel_while_moving",
+      "status": "PASS",
+      "observations": {
+        "request_to_accept_sec": 0.006811507999373134,
+        "accept_to_zero_command_sec": 0.01934148999862373,
+        "accept_to_observed_truth_zero_sec": 0.09647768000286305,
+        "status": 5,
+        "reason": "CANCELED"
+      },
+      "elapsed_sec": 5.8410340400005225
+    },
+    {
+      "name": "unreachable_destination",
+      "status": "PASS",
+      "observations": {
+        "car_only_destination_rejected": true,
+        "unknown_node_rejected": true,
+        "nonpositive_duration_rejected": true
+      },
+      "elapsed_sec": 4.6739596640036325
+    },
+    {
+      "name": "frozen_robot_odometry",
+      "status": "PASS",
+      "observations": {
+        "freeze_to_result_sec": 3.0785405460046604,
+        "freeze_to_truth_zero_sec": 1.02817548999883,
+        "reason": "STALE_ODOMETRY:STOP_UNCONFIRMED",
+        "status": 6
+      },
+      "elapsed_sec": 8.922802423003304
+    },
+    {
+      "name": "blocked_edge_detour",
+      "status": "PASS",
+      "observations": {
+        "routes": [
+          [
+            "R",
+            "W",
+            "Cn",
+            "Cs",
+            "J",
+            "D"
+          ],
+          [
+            "R",
+            "W",
+            "Cn",
+            "B",
+            "U",
+            "E",
+            "J",
+            "D"
+          ]
+        ],
+        "samples_on_blocked_edge_after_block": 0,
+        "crossing_conflicts": 0,
+        "status": 4,
+        "reason": "ARRIVED",
+        "replans": 1
+      },
+      "elapsed_sec": 169.1168410859973
+    },
+    {
+      "name": "no_route_then_restore",
+      "status": "PASS",
+      "observations": {
+        "car_reason": "NO_ROUTE",
+        "mission_reason": "NO_ROUTE",
+        "nonzero_candidates_after_abort": 0,
+        "moved_after_restore": false
+      },
+      "elapsed_sec": 13.857624001997465
+    },
+    {
+      "name": "congestion_replan",
+      "status": "PASS",
+      "observations": {
+        "replans": [
+          {
+            "reason": "CONGESTION",
+            "old_cost": 68.0,
+            "new_cost": 52.0
+          }
+        ],
+        "routes": [
+          [
+            "R",
+            "W",
+            "Cn",
+            "Cs",
+            "J",
+            "D"
+          ],
+          [
+            "W",
+            "Cn",
+            "B",
+            "U",
+            "E",
+            "J",
+            "D"
+          ]
+        ],
+        "replan_poses": [
+          [
+            4.999999164591421,
+            6.0
+          ]
+        ],
+        "status": 4,
+        "reason": "ARRIVED"
+      },
+      "elapsed_sec": 141.48586433600576
+    },
+    {
+      "name": "route_oracle_20_seeds",
+      "status": "PASS",
+      "observations": {
+        "requests": 60,
+        "configurations": 20,
+        "routes_found": 48,
+        "latency_p50_sec": 0.0015183909963525366,
+        "latency_p95_sec": 0.0030759719957131892,
+        "latency_max_sec": 0.0036746269979630597,
+        "records": [
+          {
+            "seed": 0,
+            "agent": "bus",
+            "start": "Cn",
+            "goal": "Cs",
+            "blocked": [
+              "Cs-J",
+              "B-U",
+              "R-W"
+            ],
+            "excluded": [],
+            "density": 0.011,
+            "success": true,
+            "cost": 25.549999237060547,
+            "oracle_cost": 25.549999997019768,
+            "path": [
+              "Cn",
+              "N",
+              "A",
+              "Cs"
+            ]
+          },
+          {
+            "seed": 0,
+            "agent": "bus",
+            "start": "E",
+            "goal": "A",
+            "blocked": [
+              "Cs-J",
+              "B-U",
+              "R-W"
+            ],
+            "excluded": [
+              "P3-U"
+            ],
+            "density": 0.011,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 0,
+            "agent": "car",
+            "start": "N",
+            "goal": "Cs",
+            "blocked": [
+              "Cs-J",
+              "B-U",
+              "R-W"
+            ],
+            "excluded": [
+              "Cn-N"
+            ],
+            "density": 0.011,
+            "success": true,
+            "cost": 17.520000457763672,
+            "oracle_cost": 17.51999999795641,
+            "path": [
+              "N",
+              "A",
+              "Cs"
+            ]
+          },
+          {
+            "seed": 1,
+            "agent": "car",
+            "start": "P3",
+            "goal": "Cn",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.436,
+            "success": true,
+            "cost": 45.46285629272461,
+            "oracle_cost": 45.46285663332257,
+            "path": [
+              "P3",
+              "U",
+              "B",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 1,
+            "agent": "robot",
+            "start": "D",
+            "goal": "Cn",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.436,
+            "success": true,
+            "cost": 52.41600036621094,
+            "oracle_cost": 52.41599941253662,
+            "path": [
+              "D",
+              "J",
+              "Cs",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 1,
+            "agent": "car",
+            "start": "Cs",
+            "goal": "A",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.436,
+            "success": true,
+            "cost": 21.394285202026367,
+            "oracle_cost": 21.394285474504745,
+            "path": [
+              "Cs",
+              "A"
+            ]
+          },
+          {
+            "seed": 2,
+            "agent": "bus",
+            "start": "J",
+            "goal": "A",
+            "blocked": [
+              "Cn-N",
+              "Cn-Cs",
+              "P1-P2"
+            ],
+            "excluded": [
+              "P1-P2"
+            ],
+            "density": 0.719,
+            "success": true,
+            "cost": 48.7599983215332,
+            "oracle_cost": 48.75999927520752,
+            "path": [
+              "J",
+              "Cs",
+              "A"
+            ]
+          },
+          {
+            "seed": 2,
+            "agent": "car",
+            "start": "B",
+            "goal": "U",
+            "blocked": [
+              "Cn-N",
+              "Cn-Cs",
+              "P1-P2"
+            ],
+            "excluded": [],
+            "density": 0.719,
+            "success": true,
+            "cost": 20.89714241027832,
+            "oracle_cost": 20.897142546517507,
+            "path": [
+              "B",
+              "U"
+            ]
+          },
+          {
+            "seed": 2,
+            "agent": "bus",
+            "start": "Cn",
+            "goal": "N",
+            "blocked": [
+              "Cn-N",
+              "Cn-Cs",
+              "P1-P2"
+            ],
+            "excluded": [
+              "Cn-Cs"
+            ],
+            "density": 0.719,
+            "success": true,
+            "cost": 121.9000015258789,
+            "oracle_cost": 121.8999981880188,
+            "path": [
+              "Cn",
+              "B",
+              "U",
+              "E",
+              "J",
+              "Cs",
+              "A",
+              "N"
+            ]
+          },
+          {
+            "seed": 3,
+            "agent": "robot",
+            "start": "B",
+            "goal": "E",
+            "blocked": [
+              "A-Cs"
+            ],
+            "excluded": [
+              "P1-P2"
+            ],
+            "density": 0.341,
+            "success": true,
+            "cost": 33.63999938964844,
+            "oracle_cost": 33.63999962806702,
+            "path": [
+              "B",
+              "U",
+              "E"
+            ]
+          },
+          {
+            "seed": 3,
+            "agent": "car",
+            "start": "N",
+            "goal": "U",
+            "blocked": [
+              "A-Cs"
+            ],
+            "excluded": [],
+            "density": 0.341,
+            "success": true,
+            "cost": 48.05714416503906,
+            "oracle_cost": 48.05714232581002,
+            "path": [
+              "N",
+              "Cn",
+              "B",
+              "U"
+            ]
+          },
+          {
+            "seed": 3,
+            "agent": "car",
+            "start": "A",
+            "goal": "U",
+            "blocked": [
+              "A-Cs"
+            ],
+            "excluded": [],
+            "density": 0.341,
+            "success": true,
+            "cost": 57.66857147216797,
+            "oracle_cost": 57.668570790972026,
+            "path": [
+              "A",
+              "N",
+              "Cn",
+              "B",
+              "U"
+            ]
+          },
+          {
+            "seed": 4,
+            "agent": "car",
+            "start": "A",
+            "goal": "E",
+            "blocked": [
+              "Cn-W"
+            ],
+            "excluded": [
+              "E-U"
+            ],
+            "density": 0.45,
+            "success": true,
+            "cost": 54.28571319580078,
+            "oracle_cost": 54.28571360451834,
+            "path": [
+              "A",
+              "Cs",
+              "J",
+              "E"
+            ]
+          },
+          {
+            "seed": 4,
+            "agent": "car",
+            "start": "P2",
+            "goal": "Cs",
+            "blocked": [
+              "Cn-W"
+            ],
+            "excluded": [
+              "D-J"
+            ],
+            "density": 0.45,
+            "success": true,
+            "cost": 65.14285278320312,
+            "oracle_cost": 65.14285632542202,
+            "path": [
+              "P2",
+              "P3",
+              "U",
+              "E",
+              "J",
+              "Cs"
+            ]
+          },
+          {
+            "seed": 4,
+            "agent": "robot",
+            "start": "J",
+            "goal": "B",
+            "blocked": [
+              "Cn-W"
+            ],
+            "excluded": [
+              "A-N"
+            ],
+            "density": 0.45,
+            "success": true,
+            "cost": 53.20000076293945,
+            "oracle_cost": 53.19999933242798,
+            "path": [
+              "J",
+              "E",
+              "U",
+              "B"
+            ]
+          },
+          {
+            "seed": 5,
+            "agent": "car",
+            "start": "P1",
+            "goal": "Cn",
+            "blocked": [
+              "Cn-W",
+              "Cs-J"
+            ],
+            "excluded": [],
+            "density": 0.847,
+            "success": true,
+            "cost": 88.51714324951172,
+            "oracle_cost": 88.51714304515295,
+            "path": [
+              "P1",
+              "P2",
+              "P3",
+              "U",
+              "B",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 5,
+            "agent": "car",
+            "start": "P3",
+            "goal": "Cn",
+            "blocked": [
+              "Cn-W",
+              "Cs-J"
+            ],
+            "excluded": [
+              "B-Cn"
+            ],
+            "density": 0.847,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 5,
+            "agent": "car",
+            "start": "P2",
+            "goal": "Cn",
+            "blocked": [
+              "Cn-W",
+              "Cs-J"
+            ],
+            "excluded": [],
+            "density": 0.847,
+            "success": true,
+            "cost": 76.97142791748047,
+            "oracle_cost": 76.9714287349156,
+            "path": [
+              "P2",
+              "P3",
+              "U",
+              "B",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 6,
+            "agent": "car",
+            "start": "P2",
+            "goal": "A",
+            "blocked": [
+              "E-U"
+            ],
+            "excluded": [],
+            "density": 0.871,
+            "success": true,
+            "cost": 125.34857177734375,
+            "oracle_cost": 125.34857068743025,
+            "path": [
+              "P2",
+              "P3",
+              "U",
+              "B",
+              "Cn",
+              "N",
+              "A"
+            ]
+          },
+          {
+            "seed": 6,
+            "agent": "bus",
+            "start": "U",
+            "goal": "Cs",
+            "blocked": [
+              "E-U"
+            ],
+            "excluded": [],
+            "density": 0.871,
+            "success": true,
+            "cost": 109.68000030517578,
+            "oracle_cost": 109.67999935150146,
+            "path": [
+              "U",
+              "B",
+              "Cn",
+              "N",
+              "A",
+              "Cs"
+            ]
+          },
+          {
+            "seed": 6,
+            "agent": "robot",
+            "start": "J",
+            "goal": "Cn",
+            "blocked": [
+              "E-U"
+            ],
+            "excluded": [
+              "D-J"
+            ],
+            "density": 0.871,
+            "success": true,
+            "cost": 65.80799865722656,
+            "oracle_cost": 65.80799961090088,
+            "path": [
+              "J",
+              "Cs",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 7,
+            "agent": "robot",
+            "start": "J",
+            "goal": "W",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.596,
+            "success": true,
+            "cost": 70.14399719238281,
+            "oracle_cost": 70.14400100708008,
+            "path": [
+              "J",
+              "Cs",
+              "Cn",
+              "W"
+            ]
+          },
+          {
+            "seed": 7,
+            "agent": "bus",
+            "start": "U",
+            "goal": "N",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.596,
+            "success": true,
+            "cost": 54.79999923706055,
+            "oracle_cost": 54.80000078678131,
+            "path": [
+              "U",
+              "B",
+              "Cn",
+              "N"
+            ]
+          },
+          {
+            "seed": 7,
+            "agent": "car",
+            "start": "U",
+            "goal": "A",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.596,
+            "success": true,
+            "cost": 75.15428924560547,
+            "oracle_cost": 75.15428679330009,
+            "path": [
+              "U",
+              "E",
+              "J",
+              "Cs",
+              "A"
+            ]
+          },
+          {
+            "seed": 8,
+            "agent": "car",
+            "start": "N",
+            "goal": "Cs",
+            "blocked": [
+              "D-J",
+              "B-Cn",
+              "Cs-J",
+              "Cn-N"
+            ],
+            "excluded": [
+              "Cn-Cs"
+            ],
+            "density": 0.219,
+            "success": true,
+            "cost": 24.65142822265625,
+            "oracle_cost": 24.65142846107483,
+            "path": [
+              "N",
+              "A",
+              "Cs"
+            ]
+          },
+          {
+            "seed": 8,
+            "agent": "car",
+            "start": "U",
+            "goal": "A",
+            "blocked": [
+              "D-J",
+              "B-Cn",
+              "Cs-J",
+              "Cn-N"
+            ],
+            "excluded": [],
+            "density": 0.219,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 8,
+            "agent": "car",
+            "start": "A",
+            "goal": "E",
+            "blocked": [
+              "D-J",
+              "B-Cn",
+              "Cs-J",
+              "Cn-N"
+            ],
+            "excluded": [],
+            "density": 0.219,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 9,
+            "agent": "robot",
+            "start": "E",
+            "goal": "D",
+            "blocked": [
+              "A-Cs"
+            ],
+            "excluded": [],
+            "density": 0.278,
+            "success": true,
+            "cost": 18.672000885009766,
+            "oracle_cost": 18.67199993133545,
+            "path": [
+              "E",
+              "J",
+              "D"
+            ]
+          },
+          {
+            "seed": 9,
+            "agent": "robot",
+            "start": "W",
+            "goal": "E",
+            "blocked": [
+              "A-Cs"
+            ],
+            "excluded": [
+              "A-Cs"
+            ],
+            "density": 0.278,
+            "success": true,
+            "cost": 62.23999786376953,
+            "oracle_cost": 62.239999771118164,
+            "path": [
+              "W",
+              "Cn",
+              "B",
+              "U",
+              "E"
+            ]
+          },
+          {
+            "seed": 9,
+            "agent": "robot",
+            "start": "E",
+            "goal": "U",
+            "blocked": [
+              "A-Cs"
+            ],
+            "excluded": [
+              "Cn-N"
+            ],
+            "density": 0.278,
+            "success": true,
+            "cost": 12.447999954223633,
+            "oracle_cost": 12.447999954223633,
+            "path": [
+              "E",
+              "U"
+            ]
+          },
+          {
+            "seed": 10,
+            "agent": "bus",
+            "start": "B",
+            "goal": "U",
+            "blocked": [
+              "E-U",
+              "E-J",
+              "Cs-J",
+              "P1-P2"
+            ],
+            "excluded": [],
+            "density": 0.151,
+            "success": true,
+            "cost": 9.765000343322754,
+            "oracle_cost": 9.764999896287918,
+            "path": [
+              "B",
+              "U"
+            ]
+          },
+          {
+            "seed": 10,
+            "agent": "bus",
+            "start": "J",
+            "goal": "Cs",
+            "blocked": [
+              "E-U",
+              "E-J",
+              "Cs-J",
+              "P1-P2"
+            ],
+            "excluded": [
+              "E-U"
+            ],
+            "density": 0.151,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 10,
+            "agent": "bus",
+            "start": "E",
+            "goal": "J",
+            "blocked": [
+              "E-U",
+              "E-J",
+              "Cs-J",
+              "P1-P2"
+            ],
+            "excluded": [],
+            "density": 0.151,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 11,
+            "agent": "car",
+            "start": "E",
+            "goal": "J",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.157,
+            "success": true,
+            "cost": 7.508571624755859,
+            "oracle_cost": 7.508571488516671,
+            "path": [
+              "E",
+              "J"
+            ]
+          },
+          {
+            "seed": 11,
+            "agent": "bus",
+            "start": "Cn",
+            "goal": "A",
+            "blocked": [],
+            "excluded": [
+              "Cn-N"
+            ],
+            "density": 0.157,
+            "success": true,
+            "cost": 59.130001068115234,
+            "oracle_cost": 59.13000047206879,
+            "path": [
+              "Cn",
+              "B",
+              "U",
+              "E",
+              "J",
+              "Cs",
+              "A"
+            ]
+          },
+          {
+            "seed": 11,
+            "agent": "car",
+            "start": "P3",
+            "goal": "E",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.157,
+            "success": true,
+            "cost": 16.894285202026367,
+            "oracle_cost": 16.89428584916251,
+            "path": [
+              "P3",
+              "U",
+              "E"
+            ]
+          },
+          {
+            "seed": 12,
+            "agent": "bus",
+            "start": "J",
+            "goal": "Cn",
+            "blocked": [
+              "B-Cn",
+              "Cn-N",
+              "Cn-W"
+            ],
+            "excluded": [],
+            "density": 0.56,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 12,
+            "agent": "car",
+            "start": "A",
+            "goal": "P1",
+            "blocked": [
+              "B-Cn",
+              "Cn-N",
+              "Cn-W"
+            ],
+            "excluded": [],
+            "density": 0.56,
+            "success": true,
+            "cost": 106.0,
+            "oracle_cost": 106.00000023841858,
+            "path": [
+              "A",
+              "Cs",
+              "J",
+              "E",
+              "U",
+              "P3",
+              "P2",
+              "P1"
+            ]
+          },
+          {
+            "seed": 12,
+            "agent": "bus",
+            "start": "N",
+            "goal": "A",
+            "blocked": [
+              "B-Cn",
+              "Cn-N",
+              "Cn-W"
+            ],
+            "excluded": [
+              "Cn-N"
+            ],
+            "density": 0.56,
+            "success": true,
+            "cost": 10.600000381469727,
+            "oracle_cost": 10.600000023841858,
+            "path": [
+              "N",
+              "A"
+            ]
+          },
+          {
+            "seed": 13,
+            "agent": "bus",
+            "start": "J",
+            "goal": "E",
+            "blocked": [
+              "Cn-N",
+              "B-U",
+              "Cn-Cs",
+              "B-Cn"
+            ],
+            "excluded": [
+              "P1-P2"
+            ],
+            "density": 0.794,
+            "success": true,
+            "cost": 12.940000534057617,
+            "oracle_cost": 12.940000295639038,
+            "path": [
+              "J",
+              "E"
+            ]
+          },
+          {
+            "seed": 13,
+            "agent": "robot",
+            "start": "E",
+            "goal": "U",
+            "blocked": [
+              "Cn-N",
+              "B-U",
+              "Cn-Cs",
+              "B-Cn"
+            ],
+            "excluded": [
+              "A-N"
+            ],
+            "density": 0.794,
+            "success": true,
+            "cost": 20.70400047302246,
+            "oracle_cost": 20.70400047302246,
+            "path": [
+              "E",
+              "U"
+            ]
+          },
+          {
+            "seed": 13,
+            "agent": "car",
+            "start": "N",
+            "goal": "E",
+            "blocked": [
+              "Cn-N",
+              "B-U",
+              "Cn-Cs",
+              "B-Cn"
+            ],
+            "excluded": [],
+            "density": 0.794,
+            "success": true,
+            "cost": 88.73143005371094,
+            "oracle_cost": 88.73143059866769,
+            "path": [
+              "N",
+              "A",
+              "Cs",
+              "J",
+              "E"
+            ]
+          },
+          {
+            "seed": 14,
+            "agent": "bus",
+            "start": "Cs",
+            "goal": "N",
+            "blocked": [
+              "E-J"
+            ],
+            "excluded": [],
+            "density": 0.208,
+            "success": true,
+            "cost": 21.239999771118164,
+            "oracle_cost": 21.240000128746033,
+            "path": [
+              "Cs",
+              "A",
+              "N"
+            ]
+          },
+          {
+            "seed": 14,
+            "agent": "car",
+            "start": "J",
+            "goal": "Cn",
+            "blocked": [
+              "E-J"
+            ],
+            "excluded": [],
+            "density": 0.208,
+            "success": true,
+            "cost": 56.63999938964844,
+            "oracle_cost": 56.64000034332276,
+            "path": [
+              "J",
+              "Cs",
+              "A",
+              "N",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 14,
+            "agent": "bus",
+            "start": "Cn",
+            "goal": "J",
+            "blocked": [
+              "E-J"
+            ],
+            "excluded": [],
+            "density": 0.208,
+            "success": true,
+            "cost": 49.560001373291016,
+            "oracle_cost": 49.56000030040741,
+            "path": [
+              "Cn",
+              "N",
+              "A",
+              "Cs",
+              "J"
+            ]
+          },
+          {
+            "seed": 15,
+            "agent": "car",
+            "start": "N",
+            "goal": "B",
+            "blocked": [
+              "E-J",
+              "Cn-N"
+            ],
+            "excluded": [
+              "Cn-N"
+            ],
+            "density": 0.136,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 15,
+            "agent": "bus",
+            "start": "B",
+            "goal": "A",
+            "blocked": [
+              "E-J",
+              "Cn-N"
+            ],
+            "excluded": [
+              "Cn-W"
+            ],
+            "density": 0.136,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 15,
+            "agent": "robot",
+            "start": "B",
+            "goal": "J",
+            "blocked": [
+              "E-J",
+              "Cn-N"
+            ],
+            "excluded": [],
+            "density": 0.136,
+            "success": true,
+            "cost": 45.79199981689453,
+            "oracle_cost": 45.79200053215027,
+            "path": [
+              "B",
+              "Cn",
+              "Cs",
+              "J"
+            ]
+          },
+          {
+            "seed": 16,
+            "agent": "robot",
+            "start": "R",
+            "goal": "Cs",
+            "blocked": [],
+            "excluded": [],
+            "density": 0.134,
+            "success": true,
+            "cost": 30.43199920654297,
+            "oracle_cost": 30.432000160217285,
+            "path": [
+              "R",
+              "W",
+              "Cn",
+              "Cs"
+            ]
+          },
+          {
+            "seed": 16,
+            "agent": "car",
+            "start": "Cn",
+            "goal": "J",
+            "blocked": [],
+            "excluded": [
+              "P1-P2"
+            ],
+            "density": 0.134,
+            "success": true,
+            "cost": 36.228572845458984,
+            "oracle_cost": 36.228571619306294,
+            "path": [
+              "Cn",
+              "B",
+              "U",
+              "E",
+              "J"
+            ]
+          },
+          {
+            "seed": 16,
+            "agent": "bus",
+            "start": "E",
+            "goal": "A",
+            "blocked": [],
+            "excluded": [
+              "Cn-Cs"
+            ],
+            "density": 0.134,
+            "success": true,
+            "cost": 31.700000762939453,
+            "oracle_cost": 31.700000166893005,
+            "path": [
+              "E",
+              "J",
+              "Cs",
+              "A"
+            ]
+          },
+          {
+            "seed": 17,
+            "agent": "robot",
+            "start": "U",
+            "goal": "B",
+            "blocked": [
+              "R-W",
+              "D-J",
+              "Cn-Cs",
+              "E-J"
+            ],
+            "excluded": [
+              "Cs-J"
+            ],
+            "density": 0.417,
+            "success": true,
+            "cost": 22.007999420166016,
+            "oracle_cost": 22.007999897003174,
+            "path": [
+              "U",
+              "B"
+            ]
+          },
+          {
+            "seed": 17,
+            "agent": "bus",
+            "start": "N",
+            "goal": "Cn",
+            "blocked": [
+              "R-W",
+              "D-J",
+              "Cn-Cs",
+              "E-J"
+            ],
+            "excluded": [],
+            "density": 0.417,
+            "success": true,
+            "cost": 18.34000015258789,
+            "oracle_cost": 18.33999991416931,
+            "path": [
+              "N",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 17,
+            "agent": "car",
+            "start": "J",
+            "goal": "P2",
+            "blocked": [
+              "R-W",
+              "D-J",
+              "Cn-Cs",
+              "E-J"
+            ],
+            "excluded": [
+              "A-N"
+            ],
+            "density": 0.417,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 18,
+            "agent": "car",
+            "start": "A",
+            "goal": "Cn",
+            "blocked": [
+              "E-U",
+              "P1-P2"
+            ],
+            "excluded": [
+              "B-U"
+            ],
+            "density": 0.531,
+            "success": true,
+            "cost": 35.34857177734375,
+            "oracle_cost": 35.348572049822124,
+            "path": [
+              "A",
+              "N",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 18,
+            "agent": "bus",
+            "start": "Cs",
+            "goal": "Cn",
+            "blocked": [
+              "E-U",
+              "P1-P2"
+            ],
+            "excluded": [
+              "P3-U"
+            ],
+            "density": 0.531,
+            "success": true,
+            "cost": 51.54999923706055,
+            "oracle_cost": 51.5500009059906,
+            "path": [
+              "Cs",
+              "A",
+              "N",
+              "Cn"
+            ]
+          },
+          {
+            "seed": 18,
+            "agent": "car",
+            "start": "P2",
+            "goal": "B",
+            "blocked": [
+              "E-U",
+              "P1-P2"
+            ],
+            "excluded": [
+              "P3-U"
+            ],
+            "density": 0.531,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          },
+          {
+            "seed": 19,
+            "agent": "robot",
+            "start": "B",
+            "goal": "E",
+            "blocked": [
+              "R-W"
+            ],
+            "excluded": [],
+            "density": 0.568,
+            "success": true,
+            "cost": 42.720001220703125,
+            "oracle_cost": 42.72000074386597,
+            "path": [
+              "B",
+              "U",
+              "E"
+            ]
+          },
+          {
+            "seed": 19,
+            "agent": "robot",
+            "start": "E",
+            "goal": "D",
+            "blocked": [
+              "R-W"
+            ],
+            "excluded": [],
+            "density": 0.568,
+            "success": true,
+            "cost": 25.631999969482422,
+            "oracle_cost": 25.63200044631958,
+            "path": [
+              "E",
+              "J",
+              "D"
+            ]
+          },
+          {
+            "seed": 19,
+            "agent": "robot",
+            "start": "W",
+            "goal": "R",
+            "blocked": [
+              "R-W"
+            ],
+            "excluded": [
+              "B-U"
+            ],
+            "density": 0.568,
+            "success": false,
+            "cost": 0.0,
+            "oracle_cost": null,
+            "path": []
+          }
+        ]
+      },
+      "elapsed_sec": 11.908199835001142
+    }
+  ],
+  "commands": {
+    "scenario_runner": [
+      "smart_hub_sim",
+      "scenario_runner",
+      "--ros-args",
+      "-p",
+      "m3_mode:=true",
+      "-p",
+      "m6_mode:=true"
+    ],
+    "safety_supervisor": [
+      "smart_hub_safety",
+      "safety_supervisor"
+    ],
+    "crossing_arbiter": [
+      "smart_hub_control",
+      "crossing_arbiter"
+    ],
+    "route_planner": [
+      "smart_hub_control",
+      "route_planner"
+    ],
+    "bus_manager": [
+      "smart_hub_control",
+      "bus_manager"
+    ],
+    "robot_manager": [
+      "smart_hub_control",
+      "robot_manager"
+    ],
+    "m3_synthetic_roads": [
+      "smart_hub_control",
+      "m3_synthetic_roads"
+    ]
+  },
+  "clocks": "monotonic latency; wall-backed ROS stamps",
+  "obstacle_model": "logical: blocked edge via synthetic road fixture",
+  "trace_sha256": "489c4a7d81227bebc69481ae20d31e64a19ddd3d31af2ea6a8d0cf60e61d50dd",
+  "elapsed_sec": 1399.128782089996
+}
