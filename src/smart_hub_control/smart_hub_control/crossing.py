@@ -315,6 +315,19 @@ class CrossingArbiter(Node):
                 response.reason = 'QUEUE_FULL'
                 return response
             self.waiters[request.requester_id] = now
+            if (request.requester_id == self.owner and self._lease_lost and valid and
+                    not pedestrian):
+                # D21: the held owner's controller restarted and lost its token. The
+                # crossing is never reassigned to another agent while occupied (A
+                # section 15.2); the same agent gets a new token so it can leave C.
+                self.token = uuid.uuid4().hex
+                self.expiry = now + self.lease_sec
+                self._lease_lost = False
+                del self.waiters[self.owner]
+                response.granted, response.token = True, self.token
+                response.reason = 'REACQUIRED_OWN_HOLD'
+                self.tick()
+                return response
             if not valid:
                 response.reason = 'UNKNOWN'
             elif pedestrian or occupied:

@@ -804,9 +804,9 @@ class BusManager(Node):
         target = self.targets[0]
         distance = math.dist(pose[:2], target)
         final = len(self.targets) == 1
-        threshold = 0.05 if final or self.mid_edge_waypoint else 1e-8
-        if not final and turn_ahead(pose, target, self.targets[1]):
-            threshold = 1e-8   # reach a turn node exactly; the next edge starts there
+        # Reached when on the next segment within the simulator's 1e-6 m edge tolerance;
+        # otherwise a turn node must be reached exactly (S8: 0.2 mm short of N on A-N).
+        threshold = 0.05 if final or not turn_ahead(pose, target, self.targets[1]) else 1e-8
         if distance <= threshold:
             if not final:
                 self.targets.pop(0)

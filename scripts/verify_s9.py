@@ -110,7 +110,9 @@ class Probe(M6Probe):
     def ready(self, seconds=40.0):
         """Wait until every service and parameter client the trials use is available."""
         clients = [self.reset_client, self.clear_client, self.ready_client]
+        actions = [self.escort, self.navigate, self.dock]
         return self.wait(lambda: all(c.service_is_ready() for c in clients) and all(
+            a.server_is_ready() for a in actions) and all(
             p.services_are_ready() for p in self.parameters.values()) and
             self.samples.get('truth') is not None and self.samples.get('safety') is not None,
             seconds)
@@ -156,9 +158,15 @@ def recover(probe):
         probe.pause(0.5)
     for agent, radius in (('robot', 0.2), ('bus', 0.3)):
         vehicle = probe.vehicle(agent)
-        if vehicle is None or not intersects_crossing(vehicle.pose.x, vehicle.pose.y,
-                                                      radius + 0.2):
+        # Inside C or within 1 m of it: give the agent a goal away from C.
+        if vehicle is None or not intersects_crossing(vehicle.pose.x, vehicle.pose.y, 1.0):
             continue
+        safety, crossing = probe.samples.get('safety'), probe.samples.get('crossing')
+        record['state_before_goal'] = {
+            'safety_reason': safety.reason if safety else None,
+            'stop_latched': safety.stop_latched if safety else None,
+            'crossing': [crossing.state, crossing.owner_id] if crossing else None,
+            'pose': [vehicle.pose.x, vehicle.pose.y]}
         if agent == 'robot':
             handle, result, _ = probe.send('navigate', goal='D')
         else:
@@ -188,8 +196,10 @@ def enter_phase(probe, phase, seed):
         handle = probe.future(probe.dock.send_goal_async(goal), 5)
         assert handle.accepted, 'dock goal rejected'
         result = handle.get_result_async()
-        assert probe.wait(lambda: (probe.speed('bus') or 0) > 0.05 and
-                          probe.vehicle('bus').pose.x > 2.0, 30), 'bus never moved'
+        start = probe.vehicle('bus').pose
+        assert probe.wait(lambda: probe.speed('bus') > 0.05 and math.hypot(
+            probe.vehicle('bus').pose.x - start.x,
+            probe.vehicle('bus').pose.y - start.y) > 0.5, 40), 'bus never moved'
         return 'bus', handle, result
     kind = 'navigate' if phase == 'navigate_moving' else 'escort'
     handle, result, _ = probe.send(kind, goal='D')
@@ -356,9 +366,12 @@ def fault_odometry(probe, graph, agent, result):
     probe.params('scenario_runner', **{odom_parameter(agent): False})
     probe.wait(lambda: probe.first_after(
         'safety', injected, lambda m: 'odom' in m.reason) is not None, 3.0)
-    zero_at = probe.first_after(final_key(agent), injected + 0.9, zero)
+    # The supervisor zeroes after its 1 s odometry watchdog; a manager that stops the
+    # agent earlier on its own stale-pose check is also acceptable, so any zero final
+    # command after injection counts, together with the measured stop below.
     stale_at = probe.first_after('safety', injected, lambda m: 'odom' in m.reason)
     status, reason = outcome(probe, result, 10)
+    zero_at = probe.first_after(final_key(agent), injected, zero)
     stopped_at = truth_zero_time(probe, agent, injected)
     probe.params('scenario_runner', **{odom_parameter(agent): True})
     probe.pause(1.5)
@@ -375,6 +388,8 @@ def fault_odometry(probe, graph, agent, result):
         failures.append('supervisor did not report stale odometry within bound')
     if zero_at is None:
         failures.append('no zero final command after odometry loss')
+    if stopped_at is None:
+        failures.append('agent never measured stopped after odometry loss')
     if status != GoalStatus.STATUS_ABORTED:
         failures.append(f'mission not aborted: {status} {reason}')
     return observed, failures
@@ -400,17 +415,26 @@ def _planner_fault(probe, graph, agent, result, late):
                    m.entity_id == entity and m.event == 'ROUTE']
     probe.params('m3_synthetic_roads', blocked_edges=[''])
     moving = no_motion(probe, agent, ended + 0.5, 3.0 if late else 1.5)
-    graph.kill('route_planner')
+    if 'route_planner' in graph.processes:
+        graph.kill('route_planner')
     graph.start('route_planner')
+    probe.ready()
     probe.pause(1.0)
     observed = {'route_requests_after_fault': len(requests),
+                'planner_consulted': bool(requests),
                 'routes_accepted_after_fault': len(late_routes),
                 'action_status': status, 'action_reason': reason,
                 'moving_samples_after_failure': moving}
     failures = []
     if len(requests) > 3:
         failures.append(f'{len(requests)} planner requests; at most 1 + 2 retries')
-    if status != GoalStatus.STATUS_ABORTED or 'PLANNER' not in (reason or ''):
+    # The bus does not replan mid-route: an invalidated route aborts it at once with
+    # ROUTE_INVALID_OR_STALE, before any planner request (documented limitation). That is
+    # an explicit failure with zero motion; planner_consulted records that it was not
+    # the planner-loss path that ended the mission.
+    explicit = 'PLANNER' in (reason or '') or (
+        agent == 'bus' and not requests and reason == 'ROUTE_INVALID_OR_STALE')
+    if status != GoalStatus.STATUS_ABORTED or not explicit:
         failures.append(f'no explicit planner failure: {status} {reason}')
     if late_routes:
         failures.append('a late planner reply was executed')

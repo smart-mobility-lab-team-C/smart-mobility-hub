@@ -168,3 +168,10 @@ def test_stop_just_short_of_a_turn_node_keeps_that_node():
     waypoints, approach_start = route_waypoints(config, ['N', 'Cn', 'B'], (1.01, 4.0, 0.0))
     assert not approach_start
     assert waypoints[0] == (8.0, 4.0)
+
+
+def test_turn_node_reached_once_on_the_next_segment():
+    """S8 regression: 2e-7 m from Cs on both axes is on Cs-J within tolerance."""
+    from smart_hub_control.bus import turn_ahead
+    assert not turn_ahead((4.9999998, 2.00000013), (5.0, 2.0), (9.0, 2.0))
+    assert turn_ahead((1.0, 3.999791), (1.0, 4.0), (5.0, 4.0))

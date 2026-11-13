@@ -631,8 +631,12 @@ class RobotManager(Node):
                 return
             idle = self.goal is None or self.stop_reason or not route_needs_crossing(
                 [pose[:2], *self.targets])
+            # A stopped robot without a crossing route releases once its footprint plus
+            # margin (0.45 m, as for `inside`) is clear of C, like the bus. The larger
+            # approach guard applies only to motion; using it here let an aborted robot
+            # parked beside C hold the token forever (found by verify_s9, D20).
             cleared = crossing_exit_clear(pose, self.p['robot_speed_limit']) or (
-                idle and not intersects_crossing(pose[0], pose[1], guard))
+                idle and not inside)
             operation = 'RELEASE' if cleared else 'RENEW'
             if operation == 'RENEW' and now - self.last_renewed < self.p['crossing_renew_sec']:
                 return
@@ -762,8 +766,10 @@ class RobotManager(Node):
         target = self.targets[0]
         distance = math.dist(pose[:2], target)
         final = len(self.targets) == 1
-        loose = final or (self.mid_edge_waypoint and not turn_ahead(
-            pose, target, self.targets[1]))
+        # A turn node is reached when the pose already lies on the next segment within
+        # the simulator's 1e-6 m edge tolerance (or within 1e-8 m of the node). Requiring
+        # 1e-8 m alone made the robot ping-pong between axes 2e-7 m from Cs (S8).
+        loose = final or not turn_ahead(pose, target, self.targets[1])
         if distance <= (0.05 if loose else 1e-8):
             if not final:
                 self.targets.pop(0)
