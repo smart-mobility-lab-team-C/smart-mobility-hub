@@ -11,7 +11,8 @@ set -u
 run=${1:?usage: run_acceptance.sh <run-name>}
 root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$root"
-if [ -n "$(git status --porcelain)" ]; then
+# Earlier acceptance output is evidence, not source: ignore it in the cleanliness check.
+if [ -n "$(git status --porcelain -- . ':!evidence/acceptance')" ]; then
   echo "refusing: worktree is not clean; acceptance evidence must name one commit" >&2
   exit 2
 fi
@@ -26,10 +27,13 @@ mkdir -p "$raw" "$out"
 # Use the system Python that ROS Jazzy was built for, not a user environment.
 export PATH=/usr/bin:/bin
 export ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-84}
+# ROS setup scripts read unset variables, so relax -u while sourcing them.
+set +u
 # shellcheck disable=SC1091
 source /opt/ros/jazzy/setup.bash
 # shellcheck disable=SC1091
 source "$root/.cache/install/setup.bash"
+set -u
 
 python3 - "$out/manifest.json" "$commit" "$run" <<'EOF'
 import hashlib, json, os, platform, subprocess, sys, time
