@@ -148,6 +148,11 @@ def parking_cases(probe, results):
                       and probe.reset.service_is_ready(), 15)
     assert probe.wait(lambda: len(probe.slots()) == 3 and
                       probe.slots()['P2'].state == 'FREE', 8)
+    # The operator heartbeat starts asserted. Release it only after the supervisor has
+    # reported the resulting latch: a supervisor that starts late may otherwise never
+    # see the asserted E-stop and leave nothing to clear (run2 at adc7955).
+    assert probe.wait(lambda: probe.latest('safety') is not None and
+                      probe.latest('safety').stop_latched, 15), 'startup E-stop never latched'
     probe.estop = False
     probe.pause(2.2)
     clear = probe.future(probe.clear.call_async(ClearSafetyStop.Request(

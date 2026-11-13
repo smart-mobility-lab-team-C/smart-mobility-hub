@@ -337,8 +337,22 @@ def run_episode(probe, seed, schedule):
 
     # 90 s: lower-road obstruction.
     probe.until(OBSTRUCTION[0])
-    probe.params(obstruction_active=True)
-    act('obstruction_on')
+    # A new obstruction appears on free road, not on top of a vehicle: insert O only
+    # when no ground-truth footprint is within its radius plus clearance, waiting at
+    # most until 115 s. (run2 at adc7955 inserted O 0.56 m from a stopped bus, which the
+    # collision check then counted, although nothing had moved.)
+    def o_clear():
+        truth = probe.samples.get('truth')
+        return truth is not None and all(
+            math.hypot(v.pose.x - 7.0, v.pose.y - 2.0) > 0.35 + RADIUS.get(v.kind, 0.3) + 0.2
+            for v in truth.vehicles if v.kind != 'obstacle')
+    inserted = probe.wait(o_clear, OBSTRUCTION[1] - 5.0 - probe.now())
+    if inserted:
+        probe.params(obstruction_active=True)
+    obs['obstruction'] = {'inserted': inserted, 't': probe.now(),
+                          'deferred_sec': probe.now() - OBSTRUCTION[0]}
+    act('obstruction_on' if inserted else 'obstruction_skipped_occupied',
+        deferred_sec=obs['obstruction']['deferred_sec'])
     # A new escort only if the first one ended; the latch never restarts it by itself.
     if escort['future'].done():
         probe.wait(lambda: False, 1.0)
@@ -348,6 +362,11 @@ def run_episode(probe, seed, schedule):
     # 120 s: remove obstruction; no spontaneous restart is checked in evaluation.
     probe.params(obstruction_active=False)
     act('obstruction_off')
+    # A rejected escort (for example while a hazard latch was active) is an explicit
+    # outcome; the operator asks once more after the road is clear.
+    if not escort['accepted']:
+        probe.wait(lambda: False, 1.0)
+        escort = send_escort(probe, obs, f's8-{seed}-escort-3')
     retry_ready_until(probe, obs, escort, 180.0)
 
     # 180-300 s: missions finish, cars leave, reservations are released.
@@ -379,7 +398,8 @@ def run_episode(probe, seed, schedule):
     for item in obs['escorts']:
         result = item['future'].result() if item['future'].done() else None
         item['status'] = result.status if result else None
-        item['reason'] = result.result.reason if result else 'NO_TERMINAL_RESULT'
+        item['reason'] = (result.result.reason if result else
+                          'REJECTED' if not item['accepted'] else 'NO_TERMINAL_RESULT')
         item['success'] = bool(result and result.status == GoalStatus.STATUS_SUCCEEDED)
         item['end_mono'] = item.get('end_mono') or time.monotonic()
     obs['end_mono'] = time.monotonic()
@@ -699,6 +719,7 @@ def episode(root, seed, policy):
                       checks=checks, run_id=obs['run_id'], actions=obs['actions'],
                       reservations=obs['reservations'], clears=obs['clears'],
                       ready=obs.get('ready', []),
+                      obstruction=obs.get('obstruction'),
                       reset_attempts=getattr(probe, 'reset_attempts', None),
                       escorts=[{k: v for k, v in e.items() if k not in ('handle', 'future')}
                                for e in obs['escorts']])
