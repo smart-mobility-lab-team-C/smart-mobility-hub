@@ -70,6 +70,7 @@ class ScenarioRunner(ResetWorkflow, Node):
     """Run deterministic physics and publish ROS observations at contract rates."""
 
     SAFETY_TTL_SEC = 0.5
+    MAX_CATCH_UP_STEPS = 10
     CROSSING_TTL_SEC = 0.5
 
     def __init__(self) -> None:
@@ -164,6 +165,7 @@ class ScenarioRunner(ResetWorkflow, Node):
         self._door_evidence = DoorEvidence()
         self._run_id = str(uuid.uuid4())
         self._tick = 0
+        self._sim_epoch = time.monotonic()
         self._commands = {
             'bus': ((0.0, 0.0), time.monotonic()),
             'robot': ((0.0, 0.0), time.monotonic()),
@@ -754,8 +756,35 @@ class ScenarioRunner(ResetWorkflow, Node):
             self._barrier_pub.publish(barrier)
 
     def _step(self) -> None:
-        """Advance physics and emit each configured topic at its target rate."""
+        """Run every fixed step now due, keeping simulation time on the monotonic clock."""
+        # D22: a delayed callback runs the missed 0.05 s steps (at most
+        # MAX_CATCH_UP_STEPS), so simulated time no longer falls behind wall time. A
+        # longer stall is dropped and logged rather than replayed in a burst.
         now = time.monotonic()
+        last = getattr(self, '_last_step_start', None)
+        self._last_step_start = now
+        if last is not None and now - last > 0.2:
+            self.get_logger().warning(f'step callback started {now - last:.3f} s after the last')
+        with self._lock:
+            waited = time.monotonic() - now
+            if waited > 0.1:
+                self.get_logger().warning(f'step waited {waited:.3f} s for the simulator lock')
+            due = int((now - self._sim_epoch) / DT_SEC) - self._tick
+            if due > self.MAX_CATCH_UP_STEPS:
+                self.get_logger().warning(
+                    f'simulator stalled {due * DT_SEC:.2f} s; dropping '
+                    f'{due - self.MAX_CATCH_UP_STEPS} steps')
+                self._sim_epoch += (due - self.MAX_CATCH_UP_STEPS) * DT_SEC
+                due = self.MAX_CATCH_UP_STEPS
+        for _ in range(due):
+            began = time.monotonic()
+            self._physics_step(now)
+            if time.monotonic() - began > 0.1:
+                self.get_logger().warning(
+                    f'physics step took {time.monotonic() - began:.3f} s')
+
+    def _physics_step(self, now) -> None:
+        """Run one fixed 0.05 s step and its publications."""
         with self._lock:
             bus_command = self._active_command('bus', now)
             robot_command = self._active_command('robot', now)
@@ -893,6 +922,7 @@ class ScenarioRunner(ResetWorkflow, Node):
             }
             self._run_id = str(uuid.uuid4())
             self._tick = 0
+            self._sim_epoch = time.monotonic()
             response.success = True
             response.run_id = self._run_id
             response.reason = 'seeded m2_baseline reset complete; command leases flushed'
@@ -905,7 +935,7 @@ def main(args=None) -> None:
     """Run the M2 scenario node until interrupted."""
     rclpy.init(args=args)
     node = ScenarioRunner()
-    executor = MultiThreadedExecutor(num_threads=4)
+    executor = MultiThreadedExecutor(num_threads=8)
     executor.add_node(node)
     try:
         executor.spin()

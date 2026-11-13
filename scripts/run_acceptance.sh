@@ -57,10 +57,13 @@ status=0
 cd "$root/scripts"
 for name in m2 m3 m4 m6 s1 s2 s8 s9; do
   started=$(date +%s)
-  python3 "verify_$name.py" --output "$raw/$name.json" > "$raw/$name.log" 2>&1
+  # Each verifier gets its own directory; M3 and M4 create theirs and refuse an
+  # existing one, the others write into an existing parent.
+  case $name in m3|m4) ;; *) mkdir -p "$raw/$name" ;; esac
+  python3 "verify_$name.py" --output "$raw/$name/$name.json" > "$raw/$name.log" 2>&1
   code=$?
   [ $code -ne 0 ] && status=1
-  cp "$raw/$name.json" "$out/$name.json" 2>/dev/null || echo "{\"status\": \"BLOCKED\", \"error\": \"no report\"}" > "$out/$name.json"
+  cp "$raw/$name/$name.json" "$out/$name.json" 2>/dev/null || echo "{\"status\": \"BLOCKED\", \"error\": \"no report\"}" > "$out/$name.json"
   echo "{\"verifier\": \"$name\", \"exit_code\": $code, \"seconds\": $(( $(date +%s) - started ))}" | tee -a "$out/exit-codes.jsonl"
 done
 exit $status
