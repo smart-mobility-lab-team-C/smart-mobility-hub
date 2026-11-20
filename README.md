@@ -5,18 +5,22 @@ Engineering Lab assignment. Grading follows the assignment PDF. The implementati
 handbook is guidance only; see [requirements](docs/requirements.md) for how the two
 relate.
 
-## Current status (2026-10-25)
+## Current status (2026-11-12)
 
-| Area | State |
-|---|---|
-| Interfaces, map, packages (M1) | PASS: 23 interfaces, M1 map ([m1](docs/m1.md)) |
-| Simulator, safety, crossing, reset (M2) | **FAIL on this branch**: 17/18 at `038695b` ([progress](docs/mandatory-scenarios-progress.md)). Last full PASS was 18/18 at `58f5afee`, historical. |
-| Bus docking S3 (M3) | T05 historical PASS, then FAIL on repeat; T06 PASS ([test matrix](docs/test-matrix.md)) |
-| Parking S4, congestion S5 (M4) | T07–T10 PASS once at `58f5afee`; not repeated |
-| Perception S1, prediction S2 | Implemented. ROS acceptance NOT RUN. The video evaluation is blocked until annotated video exists. |
-| Routing S6 | Planner implemented; T11–T12 NOT RUN |
-| Robot escort S7, integration S8 | **NOT IMPLEMENTED** (`robot_manager` missing) |
-| Safety/fault suite S9 | Supervisor and watchdogs implemented; T16–T18 NOT RUN |
+Each row names its evidence. Runs were on different commits; one frozen revision with
+two clean full runs is still open (see [HANDOFF](docs/HANDOFF.md)).
+
+| Area | State | Evidence |
+|---|---|---|
+| Interfaces, map, packages (M1) | PASS: 23 interfaces, M1 map ([m1](docs/m1.md)) | `docs/contracts/m1-fields.json` |
+| Simulator, safety, crossing, reset (M2) | PASS 18/18, twice on 8 vCPUs (`4867e82`). Earlier FAILs kept | `evidence/m2-8vcpu-run{1,2}-4867e82.json` |
+| Bus docking S3 (M3, T05–T06) | PASS 24/24, twice on 8 vCPUs (`18e56eb`). First attempt FAIL kept | `evidence/m3-8vcpu-run{1,2}-18e56eb.json` |
+| Parking S4, congestion S5 (M4, T07–T10) | PASS 9/9 once (`3da2614`) | `evidence/m4-3da2614.json` |
+| Perception S1 (T01–T02, synthetic) | PASS twice. Annotated-video evaluation BLOCKED until footage exists | `evidence/s1-fix-run{1,2}.json` |
+| Prediction and dispatch S2 (T03–T04) | PASS 16/16 twice (`b806ec6`), including observed-queue fallback dispatch | `evidence/s2-run{1,2}-b806ec6.json` |
+| Routing S6, robot escort S7 (M6, T11–T14) | PASS 18/18 twice (`1218e30`, `f101b60`) | `evidence/m6-1218e30.json`, `evidence/m6-regress-f101b60.json` |
+| Integration S8 (T15) | Verifier `scripts/verify_s8.py` implemented 2026-11-12; ten-seed paired run in progress | — |
+| Safety/fault suite S9 (T16–T18) | Verifier `scripts/verify_s9.py` implemented 2026-11-12 (six faults × five mission phases); not yet run | — |
 
 The [compliance register](docs/compliance.md) maps every assignment section to its
 implementation status, gap and evidence. Implemented, built, executed and verified are

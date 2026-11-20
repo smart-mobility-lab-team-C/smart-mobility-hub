@@ -1,0 +1,124 @@
+{
+  "schema": "smart-mobility-hub/s10-verification-v1",
+  "scenario": "S10 parking request retry after lost acknowledgement (team scenario)",
+  "graph": "ros2 launch smart_hub_bringup m4.launch.py seed:=17",
+  "status": "PASS",
+  "checks": {
+    "first_request_succeeded": true,
+    "retry_same_reservation_id": true,
+    "retry_same_slot": true,
+    "exactly_one_slot_reserved_for_C1": true,
+    "available_dropped_by_exactly_one": true,
+    "new_request_id_refused_no_second_space": true
+  },
+  "steps": [
+    {
+      "t": 1.831,
+      "step": "parking ready",
+      "slots": {
+        "P1": "OCCUPIED",
+        "P2": "FREE",
+        "P3": "FREE"
+      },
+      "available": 2
+    },
+    {
+      "t": 1.834,
+      "step": "1. C1 sends reservation request s10-C1-req-001"
+    },
+    {
+      "t": 1.834,
+      "step": "   reply arrives but the client DISCARDS it (lost acknowledgement)",
+      "hidden_reply": {
+        "success": true,
+        "slot": "P3",
+        "reservation_id": "347437daf4424523a055bad3ad327457",
+        "reason": "RESERVED"
+      }
+    },
+    {
+      "t": 1.835,
+      "step": "2. C1 retries the identical request (same request ID)",
+      "reply": {
+        "success": true,
+        "slot": "P3",
+        "reservation_id": "347437daf4424523a055bad3ad327457",
+        "reason": "RESERVED"
+      }
+    },
+    {
+      "t": 1.836,
+      "step": "3. control: C1 asks again with a NEW request ID",
+      "reply": {
+        "success": false,
+        "slot": "",
+        "reason": "VEHICLE_ALREADY_RESERVED"
+      }
+    },
+    {
+      "t": 3.343,
+      "step": "4. /parking/state after the retry",
+      "slots": {
+        "P1": [
+          "OCCUPIED",
+          "",
+          ""
+        ],
+        "P2": [
+          "FREE",
+          "",
+          ""
+        ],
+        "P3": [
+          "RESERVED",
+          "C1",
+          "347437daf4424523a055bad3ad327457"
+        ]
+      },
+      "available": 1
+    }
+  ],
+  "parking_state_after": {
+    "header": {
+      "stamp": {
+        "sec": 1794880225,
+        "nanosec": 53252652
+      },
+      "frame_id": "map"
+    },
+    "slots": [
+      {
+        "slot_id": "P1",
+        "state": "OCCUPIED",
+        "vehicle_id": "",
+        "reservation_id": "",
+        "expires_at": {
+          "sec": 0,
+          "nanosec": 0
+        }
+      },
+      {
+        "slot_id": "P2",
+        "state": "FREE",
+        "vehicle_id": "",
+        "reservation_id": "",
+        "expires_at": {
+          "sec": 0,
+          "nanosec": 0
+        }
+      },
+      {
+        "slot_id": "P3",
+        "state": "RESERVED",
+        "vehicle_id": "C1",
+        "reservation_id": "347437daf4424523a055bad3ad327457",
+        "expires_at": {
+          "sec": 1794880283,
+          "nanosec": 997334718
+        }
+      }
+    ],
+    "available_count": 1
+  },
+  "elapsed_sec": 3.67
+}

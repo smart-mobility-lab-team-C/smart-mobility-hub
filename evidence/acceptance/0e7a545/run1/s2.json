@@ -1,0 +1,376 @@
+{
+  "schema": "smart-mobility-hub/s2-verification-v1",
+  "status": "PASS",
+  "only_case": null,
+  "cases": [
+    {
+      "name": "t03_offline_held_out",
+      "status": "PASS",
+      "observations": {
+        "model_sha256": "502126d322fa1a082785eacb63b284092eaf2ebd3a3448c6d27b1a72f5b140b6",
+        "episodes": {
+          "train": 30,
+          "validation": 10,
+          "test": 10
+        },
+        "penalty": 0.01,
+        "features": [
+          "intercept",
+          "q_t",
+          "q_t-9",
+          "q_t-8",
+          "q_t-7",
+          "q_t-6",
+          "q_t-5",
+          "q_t-4",
+          "q_t-3",
+          "q_t-2",
+          "q_t-1",
+          "q_t-0",
+          "q_t - q_t-10",
+          "entries_t-29:t",
+          "exits_t-29:t"
+        ],
+        "validation": {
+          "model": {
+            "mae": 2.2612927201865953,
+            "rmse": 3.033554325622148
+          },
+          "persistence": {
+            "mae": 2.409634551495017,
+            "rmse": 3.193483814023784
+          },
+          "samples": 3010
+        },
+        "test": {
+          "model": {
+            "mae": 2.455672639125376,
+            "rmse": 3.2714535381477448
+          },
+          "persistence": {
+            "mae": 2.801328903654485,
+            "rmse": 3.732055626951159
+          },
+          "samples": 3010
+        },
+        "model_no_worse_than_persistence": true,
+        "inference_ms": {
+          "clock": "perf_counter",
+          "samples": 3010,
+          "p50": 0.0008429997251369059,
+          "p95": 0.0009189989214064553,
+          "max": 0.004793999323737808
+        }
+      },
+      "elapsed_sec": 0.016652862999762874
+    },
+    {
+      "name": "t03_warmup_then_valid_at_1hz",
+      "status": "PASS",
+      "observations": {
+        "first_valid_sec": 30.97855118699954,
+        "median_interval_sec": 0.9999793229999341,
+        "invalid_during_warmup": 30,
+        "steady5_online": 4.000423431396484,
+        "steady5_offline": 4.000423591391989
+      },
+      "elapsed_sec": 37.29931932200088
+    },
+    {
+      "name": "t03_rising_demand",
+      "status": "PASS",
+      "observations": {
+        "forecasts": [
+          [
+            1.0,
+            5.0,
+            4.0
+          ],
+          [
+            2.0,
+            5.0,
+            4.0
+          ],
+          [
+            3.0,
+            5.0,
+            4.0
+          ],
+          [
+            4.0,
+            6.0,
+            5.38
+          ],
+          [
+            5.0,
+            6.0,
+            5.37
+          ],
+          [
+            6.0,
+            6.0,
+            5.38
+          ],
+          [
+            7.0,
+            7.0,
+            6.75
+          ],
+          [
+            8.0,
+            7.0,
+            6.74
+          ],
+          [
+            9.0,
+            7.0,
+            6.74
+          ],
+          [
+            10.0,
+            8.0,
+            8.11
+          ],
+          [
+            11.0,
+            8.0,
+            8.09
+          ],
+          [
+            12.0,
+            8.0,
+            8.08
+          ],
+          [
+            13.0,
+            9.0,
+            9.45
+          ],
+          [
+            14.0,
+            9.0,
+            9.41
+          ],
+          [
+            15.0,
+            9.0,
+            9.4
+          ],
+          [
+            16.0,
+            10.0,
+            10.77
+          ],
+          [
+            17.0,
+            10.0,
+            10.72
+          ],
+          [
+            18.0,
+            10.0,
+            10.71
+          ],
+          [
+            19.0,
+            11.0,
+            12.09
+          ],
+          [
+            20.0,
+            11.0,
+            12.04
+          ],
+          [
+            21.0,
+            11.0,
+            12.03
+          ],
+          [
+            22.0,
+            12.0,
+            13.41
+          ],
+          [
+            23.0,
+            12.0,
+            13.36
+          ]
+        ]
+      },
+      "elapsed_sec": 23.126801713000532
+    },
+    {
+      "name": "t03_noisy_around_threshold",
+      "status": "PASS",
+      "observations": {
+        "forecasts": [
+          7.38,
+          8.25,
+          9.01,
+          8.17,
+          7.4,
+          8.28,
+          9.06,
+          8.29,
+          7.49,
+          8.33,
+          8.78,
+          7.94,
+          7.09,
+          7.41,
+          8.26,
+          7.41,
+          6.04,
+          6.89,
+          7.73,
+          6.36
+        ],
+        "at_or_above_6": 20
+      },
+      "elapsed_sec": 20.28117486500014
+    },
+    {
+      "name": "t03_feed_gap_after_warmup",
+      "status": "PASS",
+      "observations": {
+        "invalid_after_gap_sec": 0.5490257810015464,
+        "valid_again_after_sec": 30.99980574700021
+      },
+      "elapsed_sec": 38.54946291200031
+    },
+    {
+      "name": "t03_invalid_queue_input",
+      "status": "PASS",
+      "observations": {
+        "valid_false": "invalid",
+        "low_confidence": "invalid"
+      },
+      "elapsed_sec": 8.000050566000937
+    },
+    {
+      "name": "t03_inference_latency_in_node",
+      "status": "PASS",
+      "observations": {
+        "event": "inference_latency",
+        "clock": "perf_counter",
+        "model_id": "ridge-502126d322fa1a08",
+        "samples": 30,
+        "p50_ms": 0.0707199997123098,
+        "p95_ms": 0.1009679999697255,
+        "max_ms": 0.12968100054422393,
+        "source_age_p95_sec": 0.0732412338256836,
+        "receipt_age_p95_sec": 0.07148908500130347,
+        "rejected_events": {
+          "old_run": 0,
+          "duplicate": 0,
+          "future": 0,
+          "late": 0,
+          "late_shifted": 0
+        }
+      },
+      "elapsed_sec": 0.0008491039989166893
+    },
+    {
+      "name": "t03_persistence_selectable",
+      "status": "PASS",
+      "observations": {
+        "valid_forecasts": 5,
+        "model_id": "persistence"
+      },
+      "elapsed_sec": 36.47459337700093
+    },
+    {
+      "name": "t04_three_consecutive_required",
+      "status": "PASS",
+      "observations": {
+        "dispatch_after_third_high_sec": 0.2335940480006684,
+        "reason": "value=7.0;decision=PREDICTIVE"
+      },
+      "elapsed_sec": 22.250194913000087
+    },
+    {
+      "name": "t04_one_outstanding_goal_and_escalation",
+      "status": "PASS",
+      "observations": {
+        "goal_id": "b4118e0a73cd4194a42745fced545df8",
+        "goals": 1
+      },
+      "elapsed_sec": 37.99971444400035
+    },
+    {
+      "name": "t04_cooldown_30s",
+      "status": "PASS",
+      "observations": {
+        "seconds_between_dispatches": 29.999736036001195
+      },
+      "elapsed_sec": 36.479984899000556
+    },
+    {
+      "name": "t04_invalid_forecast_never_dispatches",
+      "status": "PASS",
+      "observations": {
+        "invalid_forecasts_published": 32,
+        "dispatches": 0
+      },
+      "elapsed_sec": 36.02448963899951
+    },
+    {
+      "name": "t04_feed_gap_resets_count",
+      "status": "PASS",
+      "observations": {
+        "dispatch_after_gap_reset": true
+      },
+      "elapsed_sec": 18.49505527600013
+    },
+    {
+      "name": "t04_bus_unavailable",
+      "status": "PASS",
+      "observations": {
+        "dispatches_while_unavailable": {
+          "approaching": 0,
+          "door_open": 0,
+          "stale_arrival": 0
+        },
+        "dispatch_when_available": true
+      },
+      "elapsed_sec": 21.99985055599973
+    },
+    {
+      "name": "t04_fallback_observed_queue",
+      "status": "PASS",
+      "observations": {
+        "reason": "value=7;decision=FALLBACK"
+      },
+      "elapsed_sec": 19.4834390420001
+    },
+    {
+      "name": "t04_end_to_end_predictive_dispatch",
+      "status": "PASS",
+      "observations": {
+        "reason": "value=6.490636348724365;decision=PREDICTIVE",
+        "queue_at_dispatch": 8,
+        "last_forecasts": [
+          6.53,
+          6.5,
+          6.49
+        ]
+      },
+      "elapsed_sec": 53.865493755998614
+    }
+  ],
+  "commands": {
+    "predictor": [
+      "smart_hub_prediction",
+      "demand_predictor"
+    ],
+    "coordinator": [
+      "smart_hub_control",
+      "crossing_arbiter"
+    ]
+  },
+  "clocks": "monotonic observer times; wall-backed ROS stamps for freshness",
+  "harness": "T04 probe publishes forecasts/queue/bus availability and serves /bus/dock; t04_end_to_end uses the real predictor",
+  "trace_sha256": "d20874a4cdbe1418554e9036260229252a2d71c7099cc6242a48d8dd3f583b55",
+  "elapsed_sec": 410.6124505629996
+}

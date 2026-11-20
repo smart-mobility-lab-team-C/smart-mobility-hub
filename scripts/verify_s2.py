@@ -134,13 +134,21 @@ class Probe(Node):
         self.trace('scripted_forecast', value=value, valid=valid, horizon=horizon, age=age)
 
     def track_entry(self):
-        """Publish one observed queue entry as the perception pipeline would."""
-        self.event_pub.publish(HubEvent(scenario_id='perception', entity_id='probe',
-                                        event='TRACK_ENTRY'))
+        """Publish one observed queue entry as the perception pipeline would.
+
+        Like passenger_detector: current run ID, a unique track identity and the
+        acquisition stamp, so the predictor's dedup and source-time binning apply.
+        """
+        self.track_counter = getattr(self, 'track_counter', 0) + 1
+        event = HubEvent(scenario_id='perception', entity_id=f'probe-{self.track_counter}',
+                         event='TRACK_ENTRY', run_id=getattr(self, 'run_id', ''))
+        event.header.stamp, event.header.frame_id = self._stamp(), 'map'
+        self.event_pub.publish(event)
 
     def new_run(self):
         """Reset predictor history through the documented run-id topic."""
-        self.run_pub.publish(String(data=str(uuid.uuid4())))
+        self.run_id = str(uuid.uuid4())
+        self.run_pub.publish(String(data=self.run_id))
         self.forecasts.clear()
 
     def complete(self, goal_id, success=True):
@@ -470,7 +478,9 @@ def _cases(probe, nodes, case, measurement):
         cleared = [t for t, e, _ in probe.events if t >= since and
                    e == 'DISPATCH_ESCALATION_CLEARED']
         assert not cleared, 'escalation cleared after only four low forecasts'
-        assert len([g for g in probe.goals if g[0] >= since]) == 1, 'redispatch while escalated'
+        # D18: re-requests are allowed while escalated, but only after the 30 s cooldown.
+        assert time.monotonic() - first[0][0] < 30.0, 'case too slow to test the cooldown'
+        assert len([g for g in probe.goals if g[0] >= since]) == 1, 'redispatch inside cooldown'
         probe.play([LOW] * 6)
         assert probe.wait(lambda: any(e == 'DISPATCH_ESCALATION_CLEARED'
                                       for t, e, _ in probe.events if t >= since), 3)

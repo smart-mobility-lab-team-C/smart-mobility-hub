@@ -1,0 +1,892 @@
+{
+  "schema": "smart-mobility-hub/s9-verification-v1",
+  "tests": [
+    "T16",
+    "T17",
+    "T18"
+  ],
+  "source": "A section 16 pp22-23",
+  "commit": "adc7955164179097320493b53c953897ef28c311",
+  "worktree_dirty": true,
+  "phases": [
+    "navigate_moving",
+    "escort_after_crossing",
+    "escort_in_crossing",
+    "escort_replanning",
+    "bus_approach"
+  ],
+  "faults": [
+    "t16_estop_latch",
+    "t17_kill_controller",
+    "t17_kill_supervisor",
+    "t17_odometry_gap",
+    "t18_planner_absent",
+    "t18_planner_late"
+  ],
+  "trials": [
+    {
+      "fault": "t16_estop_latch",
+      "phase": "navigate_moving",
+      "seed": 901,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "zero_command_latency_sec": 0.09157006000168622,
+        "latch_observed_latency_sec": null,
+        "measured_stop_latency_sec": 0.10037814400129719,
+        "latched_after_false": true,
+        "moving_samples_after_false": 0,
+        "unsafe_reset": {
+          "success": false,
+          "reason": "odom_stale"
+        },
+        "safe_reset": {
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        "moving_samples_after_clear": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 16.066642929996306
+    },
+    {
+      "fault": "t16_estop_latch",
+      "phase": "escort_after_crossing",
+      "seed": 902,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "zero_command_latency_sec": 0.14227157200366491,
+        "latch_observed_latency_sec": null,
+        "measured_stop_latency_sec": 0.17410384400136536,
+        "latched_after_false": true,
+        "moving_samples_after_false": 0,
+        "unsafe_reset": {
+          "success": false,
+          "reason": "odom_stale"
+        },
+        "safe_reset": {
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        "moving_samples_after_clear": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 73.00053003899666
+    },
+    {
+      "fault": "t16_estop_latch",
+      "phase": "escort_in_crossing",
+      "seed": 903,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "zero_command_latency_sec": 0.06586935000086669,
+        "latch_observed_latency_sec": null,
+        "measured_stop_latency_sec": 0.07428309499664465,
+        "latched_after_false": true,
+        "moving_samples_after_false": 0,
+        "unsafe_reset": {
+          "success": false,
+          "reason": "odom_stale"
+        },
+        "safe_reset": {
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        "moving_samples_after_clear": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 41.98856451600295
+    },
+    {
+      "fault": "t16_estop_latch",
+      "phase": "escort_replanning",
+      "seed": 904,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "zero_command_latency_sec": 0.09674312199786073,
+        "latch_observed_latency_sec": null,
+        "measured_stop_latency_sec": 0.09599609499855433,
+        "latched_after_false": true,
+        "moving_samples_after_false": 0,
+        "unsafe_reset": {
+          "success": false,
+          "reason": "odom_stale"
+        },
+        "safe_reset": {
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        "moving_samples_after_clear": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP"
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 904,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:OWNED:robot')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "clear",
+            "stop_latched": false,
+            "crossing": [
+              "OWNED",
+              "robot"
+            ],
+            "pose": [
+              4.999999073890634,
+              4.949999999999985
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 112.01063138800237
+    },
+    {
+      "fault": "t16_estop_latch",
+      "phase": "bus_approach",
+      "seed": 905,
+      "status": "PASS",
+      "agent": "bus",
+      "observations": {
+        "zero_command_latency_sec": 0.08977920899633318,
+        "latch_observed_latency_sec": 0.08822299899475183,
+        "measured_stop_latency_sec": 0.0965255379996961,
+        "latched_after_false": true,
+        "moving_samples_after_false": 0,
+        "unsafe_reset": {
+          "success": false,
+          "reason": "bus_odom_stale"
+        },
+        "safe_reset": {
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        "moving_samples_after_clear": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 25.500347840999893
+    },
+    {
+      "fault": "t17_kill_controller",
+      "phase": "navigate_moving",
+      "seed": 906,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "robot_manager",
+        "zero_command_latency_sec": 0.5236577090036008,
+        "measured_stop_latency_sec": 0.5325787770052557,
+        "safety_reasons_after_kill": [
+          "candidate_stale",
+          "clear"
+        ],
+        "moving_samples_after_bound": 0,
+        "action_status": "server killed (no result expected)"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 9.16626265100058
+    },
+    {
+      "fault": "t17_kill_controller",
+      "phase": "escort_after_crossing",
+      "seed": 907,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "robot_manager",
+        "zero_command_latency_sec": 0.47244685100304196,
+        "measured_stop_latency_sec": 0.4807029300063732,
+        "safety_reasons_after_kill": [
+          "candidate_stale",
+          "clear"
+        ],
+        "moving_samples_after_bound": 0,
+        "action_status": "server killed (no result expected)"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 109.49442500700388
+    },
+    {
+      "fault": "t17_kill_controller",
+      "phase": "escort_in_crossing",
+      "seed": 908,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "robot_manager",
+        "zero_command_latency_sec": 0.47431699000298977,
+        "measured_stop_latency_sec": 0.4824190869985614,
+        "safety_reasons_after_kill": [
+          "candidate_stale",
+          "clear"
+        ],
+        "moving_samples_after_bound": 0,
+        "action_status": "server killed (no result expected)"
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 908,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:OWNED:bus')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "clear",
+            "stop_latched": false,
+            "crossing": [
+              "OWNED",
+              "bus"
+            ],
+            "pose": [
+              6.1249992629261065,
+              2.000000594874718
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 108.34905855200486
+    },
+    {
+      "fault": "t17_kill_controller",
+      "phase": "escort_replanning",
+      "seed": 909,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "robot_manager",
+        "zero_command_latency_sec": 0.024207369002397172,
+        "measured_stop_latency_sec": 0.03365735199622577,
+        "safety_reasons_after_kill": [
+          "candidate_stale",
+          "clear"
+        ],
+        "moving_samples_after_bound": 0,
+        "action_status": "server killed (no result expected)"
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 909,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:HOLD:robot')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "crossing_not_owned",
+            "stop_latched": false,
+            "crossing": [
+              "HOLD",
+              "robot"
+            ],
+            "pose": [
+              4.9999990693869645,
+              4.8374999999999835
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 105.9999806640044
+    },
+    {
+      "fault": "t17_kill_controller",
+      "phase": "bus_approach",
+      "seed": 910,
+      "status": "PASS",
+      "agent": "bus",
+      "observations": {
+        "killed": "bus_manager",
+        "zero_command_latency_sec": 0.4928197650006041,
+        "measured_stop_latency_sec": 0.4996711800049525,
+        "safety_reasons_after_kill": [
+          "candidate_stale",
+          "clear"
+        ],
+        "moving_samples_after_bound": 0,
+        "action_status": "server killed (no result expected)"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 18.951714142000128
+    },
+    {
+      "fault": "t17_kill_supervisor",
+      "phase": "navigate_moving",
+      "seed": 911,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "safety_supervisor",
+        "measured_stop_latency_sec": 0.4535319479982718,
+        "moving_samples_after_bound": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 11.205263764000847
+    },
+    {
+      "fault": "t17_kill_supervisor",
+      "phase": "escort_after_crossing",
+      "seed": 912,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "safety_supervisor",
+        "measured_stop_latency_sec": 0.47879476199886994,
+        "moving_samples_after_bound": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 89.20152391400188
+    },
+    {
+      "fault": "t17_kill_supervisor",
+      "phase": "escort_in_crossing",
+      "seed": 913,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "safety_supervisor",
+        "measured_stop_latency_sec": 0.4539403009985108,
+        "moving_samples_after_bound": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 38.01982132400008
+    },
+    {
+      "fault": "t17_kill_supervisor",
+      "phase": "escort_replanning",
+      "seed": 914,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "killed": "safety_supervisor",
+        "measured_stop_latency_sec": 0.5101259029979701,
+        "moving_samples_after_bound": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 914,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:OWNED:robot')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "clear",
+            "stop_latched": false,
+            "crossing": [
+              "OWNED",
+              "robot"
+            ],
+            "pose": [
+              4.999999065239771,
+              4.849999999999984
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 104.11731575400336
+    },
+    {
+      "fault": "t17_kill_supervisor",
+      "phase": "bus_approach",
+      "seed": 915,
+      "status": "PASS",
+      "agent": "bus",
+      "observations": {
+        "killed": "safety_supervisor",
+        "measured_stop_latency_sec": 0.44712644800165435,
+        "moving_samples_after_bound": 0,
+        "action_status": 6,
+        "action_reason": "SAFETY_STOP:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 20.827725569004542
+    },
+    {
+      "fault": "t17_odometry_gap",
+      "phase": "navigate_moving",
+      "seed": 916,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "stale_reason_latency_sec": 1.095869972006767,
+        "zero_command_latency_sec": 1.0434417550059152,
+        "measured_stop_latency_sec": 1.1434409020002931,
+        "safety_reason": "odom_stale",
+        "action_status": 6,
+        "action_reason": "STALE_ODOMETRY:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 11.268892065003456
+    },
+    {
+      "fault": "t17_odometry_gap",
+      "phase": "escort_after_crossing",
+      "seed": 917,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "stale_reason_latency_sec": 1.050958225998329,
+        "zero_command_latency_sec": 1.0426032440009294,
+        "measured_stop_latency_sec": 1.1028797889957787,
+        "safety_reason": "odom_stale",
+        "action_status": 6,
+        "action_reason": "STALE_ODOMETRY:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 65.72078676399542
+    },
+    {
+      "fault": "t17_odometry_gap",
+      "phase": "escort_in_crossing",
+      "seed": 918,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "stale_reason_latency_sec": 1.0291199020066415,
+        "zero_command_latency_sec": 1.0234836880044895,
+        "measured_stop_latency_sec": 1.0748636810021708,
+        "safety_reason": "odom_stale",
+        "action_status": 6,
+        "action_reason": "STALE_ODOMETRY:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 36.44923126800131
+    },
+    {
+      "fault": "t17_odometry_gap",
+      "phase": "escort_replanning",
+      "seed": 919,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "stale_reason_latency_sec": 1.0905070289954892,
+        "zero_command_latency_sec": 0.033599583999603055,
+        "measured_stop_latency_sec": 0.1016169149952475,
+        "safety_reason": "odom_stale",
+        "action_status": 6,
+        "action_reason": "STALE_ODOMETRY:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 919,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:OWNED:robot')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "clear",
+            "stop_latched": false,
+            "crossing": [
+              "OWNED",
+              "robot"
+            ],
+            "pose": [
+              4.999999133932153,
+              4.687499999999981
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 109.6988077030037
+    },
+    {
+      "fault": "t17_odometry_gap",
+      "phase": "bus_approach",
+      "seed": 920,
+      "status": "PASS",
+      "agent": "bus",
+      "observations": {
+        "stale_reason_latency_sec": 1.0264221489996999,
+        "zero_command_latency_sec": 1.0251638269983232,
+        "measured_stop_latency_sec": 1.040966970998852,
+        "safety_reason": "bus_odom_stale",
+        "action_status": 6,
+        "action_reason": "STALE_POSE:STOP_UNCONFIRMED"
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 19.900994345000072
+    },
+    {
+      "fault": "t18_planner_absent",
+      "phase": "navigate_moving",
+      "seed": 921,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 13.534977120994881
+    },
+    {
+      "fault": "t18_planner_absent",
+      "phase": "escort_after_crossing",
+      "seed": 922,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 68.0002290850025
+    },
+    {
+      "fault": "t18_planner_absent",
+      "phase": "escort_in_crossing",
+      "seed": 923,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 923,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:OWNED:bus')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "clear",
+            "stop_latched": false,
+            "crossing": [
+              "CLEAR",
+              ""
+            ],
+            "pose": [
+              6.062499433089154,
+              2.0000006701842494
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 106.66039821699815
+    },
+    {
+      "fault": "t18_planner_absent",
+      "phase": "escort_replanning",
+      "seed": 924,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 924,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:OWNED:robot')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "clear",
+            "stop_latched": false,
+            "crossing": [
+              "OWNED",
+              "robot"
+            ],
+            "pose": [
+              4.999999035979901,
+              4.824999999999983
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 104.94953004399576
+    },
+    {
+      "fault": "t18_planner_absent",
+      "phase": "bus_approach",
+      "seed": 925,
+      "status": "PASS",
+      "agent": "bus",
+      "observations": {
+        "route_requests_after_fault": 0,
+        "planner_consulted": false,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "ROUTE_INVALID_OR_STALE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 18.55850234800164
+    },
+    {
+      "fault": "t18_planner_late",
+      "phase": "navigate_moving",
+      "seed": 926,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 16.389383103
+    },
+    {
+      "fault": "t18_planner_late",
+      "phase": "escort_after_crossing",
+      "seed": 927,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 70.54472369799623
+    },
+    {
+      "fault": "t18_planner_late",
+      "phase": "escort_in_crossing",
+      "seed": 928,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 41.00070135900023
+    },
+    {
+      "fault": "t18_planner_late",
+      "phase": "escort_replanning",
+      "seed": 929,
+      "status": "PASS",
+      "agent": "robot",
+      "observations": {
+        "route_requests_after_fault": 3,
+        "planner_consulted": true,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "PLANNER_UNAVAILABLE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [
+        {
+          "seed": 929,
+          "reset_error": "AssertionError('CROSSING_NOT_CLEAR:OWNED:robot')",
+          "actions": [
+            {
+              "moved_out_of_c": "robot",
+              "accepted": true,
+              "left_c": true
+            }
+          ],
+          "state_before_goal": {
+            "safety_reason": "clear",
+            "stop_latched": false,
+            "crossing": [
+              "OWNED",
+              "robot"
+            ],
+            "pose": [
+              4.999999265798694,
+              4.637499999999981
+            ]
+          }
+        }
+      ],
+      "elapsed_sec": 85.8973058010015
+    },
+    {
+      "fault": "t18_planner_late",
+      "phase": "bus_approach",
+      "seed": 930,
+      "status": "PASS",
+      "agent": "bus",
+      "observations": {
+        "route_requests_after_fault": 0,
+        "planner_consulted": false,
+        "routes_accepted_after_fault": 0,
+        "action_status": 6,
+        "action_reason": "ROUTE_INVALID_OR_STALE",
+        "moving_samples_after_failure": 0
+      },
+      "failures": [],
+      "recoveries_before": [],
+      "elapsed_sec": 21.166285106999567
+    }
+  ],
+  "latency_note": "zero-command latency measured from probe injection; an upper bound on latency after supervisor receipt",
+  "bounds_sec": {
+    "estop_zero": 0.2,
+    "candidate_watchdog": 0.65,
+    "odometry_watchdog": 1.25,
+    "adapter_expiry": 0.65
+  },
+  "nodes": {
+    "scenario_runner": [
+      "smart_hub_sim",
+      "scenario_runner",
+      "--ros-args",
+      "-p",
+      "m3_mode:=true",
+      "-p",
+      "m6_mode:=true"
+    ],
+    "safety_supervisor": [
+      "smart_hub_safety",
+      "safety_supervisor"
+    ],
+    "crossing_arbiter": [
+      "smart_hub_control",
+      "crossing_arbiter"
+    ],
+    "route_planner": [
+      "smart_hub_control",
+      "route_planner"
+    ],
+    "bus_manager": [
+      "smart_hub_control",
+      "bus_manager"
+    ],
+    "robot_manager": [
+      "smart_hub_control",
+      "robot_manager"
+    ],
+    "m3_synthetic_roads": [
+      "smart_hub_control",
+      "m3_synthetic_roads"
+    ]
+  },
+  "host_cpus": 8,
+  "status": "PASS",
+  "trace_sha256": "6878826743d642b0e172ea72d0351807ea003d668aca20593c772e838c71f717",
+  "summary": {
+    "t16_estop_latch": {
+      "pass": 5,
+      "trials": 5
+    },
+    "t17_kill_controller": {
+      "pass": 5,
+      "trials": 5
+    },
+    "t17_kill_supervisor": {
+      "pass": 5,
+      "trials": 5
+    },
+    "t17_odometry_gap": {
+      "pass": 5,
+      "trials": 5
+    },
+    "t18_planner_absent": {
+      "pass": 5,
+      "trials": 5
+    },
+    "t18_planner_late": {
+      "pass": 5,
+      "trials": 5
+    }
+  },
+  "elapsed_sec": 1678.2346605229977
+}

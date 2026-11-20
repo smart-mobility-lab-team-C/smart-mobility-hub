@@ -22,6 +22,8 @@ class SyntheticRoads(Node):
         self.declare_parameter('publish_edges', True)
         self.declare_parameter('freeze_edges', False)
         self.declare_parameter('density_ratio', 0.0)
+        # Edges reported fully dense (density 1.0) for the congestion-replan check.
+        self.declare_parameter('congested_edges', [''])
         self.config = load_map()
         self.add_on_set_parameters_callback(self.validate_parameters)
         self.edges = self.create_publisher(EdgeStateArray, '/traffic/edges', 10)
@@ -33,7 +35,8 @@ class SyntheticRoads(Node):
         """Accept only bounded synthetic states; fault switches explicitly model loss."""
         known = {edge['id'] for edge in self.config['edges']} | {''}
         for parameter in parameters:
-            if parameter.name == 'blocked_edges' and not set(parameter.value) <= known:
+            if parameter.name in ('blocked_edges', 'congested_edges') and not (
+                    set(parameter.value) <= known):
                 return SetParametersResult(successful=False, reason='unknown edge')
             if parameter.name == 'density_ratio' and not (
                 math.isfinite(parameter.value) and 0 <= parameter.value <= 1
@@ -58,12 +61,13 @@ class SyntheticRoads(Node):
         msg.header.frame_id = 'map'
         blocked = self.get_parameter('blocked_edges').value
         density = float(self.get_parameter('density_ratio').value)
+        congested = self.get_parameter('congested_edges').value
         for edge in self.config['edges']:
             msg.edges.append(
                 EdgeState(
                     edge_id=edge['id'],
                     mean_speed_mps=0.4,
-                    density_ratio=density,
+                    density_ratio=1.0 if edge['id'] in congested else density,
                     blocked=edge['id'] in blocked,
                     valid=math.isfinite(density) and 0 <= density <= 1,
                 )

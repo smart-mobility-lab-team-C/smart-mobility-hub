@@ -26,11 +26,12 @@ from smart_hub_interfaces.msg import (
 )
 from smart_hub_interfaces.srv import ComputeRoute, RequestCrossing, ResetScenario
 from smart_hub_sim.geometry import CROSSING, intersects_crossing, segment_distance
+from smart_hub_sim.observations import vehicle_snapshot
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from tf2_ros import Buffer, TransformException, TransformListener
 
-from .bus import route_needs_crossing, route_waypoints, synchronized, wrap
+from .bus import route_needs_crossing, route_waypoints, synchronized, turn_ahead, wrap
 from .routing import fresh, load_map, shortest_path, valid_edges
 
 ROBOT_ODOM_FRESHNESS_SEC = 1.0
@@ -630,8 +631,12 @@ class RobotManager(Node):
                 return
             idle = self.goal is None or self.stop_reason or not route_needs_crossing(
                 [pose[:2], *self.targets])
+            # A stopped robot without a crossing route releases once its footprint plus
+            # margin (0.45 m, as for `inside`) is clear of C, like the bus. The larger
+            # approach guard applies only to motion; using it here let an aborted robot
+            # parked beside C hold the token forever (found by verify_s9, D20).
             cleared = crossing_exit_clear(pose, self.p['robot_speed_limit']) or (
-                idle and not intersects_crossing(pose[0], pose[1], guard))
+                idle and not inside)
             operation = 'RELEASE' if cleared else 'RENEW'
             if operation == 'RENEW' and now - self.last_renewed < self.p['crossing_renew_sec']:
                 return
@@ -689,10 +694,7 @@ class RobotManager(Node):
             return 'SAFETY_STOP'
         if pose is None:
             return 'STALE_ODOMETRY'
-        if vehicles is None or {v.vehicle_id for v in vehicles.vehicles} != {'bus', 'robot'} \
-                or any(not v.valid or v.kind != v.vehicle_id or not all(
-                    math.isfinite(x) for x in (v.pose.x, v.pose.y, v.pose.theta, v.speed_mps))
-                    for v in vehicles.vehicles):
+        if vehicles is None or vehicle_snapshot(vehicles.vehicles) is None:
             return 'INVALID_VEHICLE_OBSERVATION'
         if safety.reason not in MOTION_SAFETY_REASONS + ('reset_in_progress',):
             return 'SAFETY_INPUT_UNKNOWN:' + safety.reason
@@ -748,8 +750,11 @@ class RobotManager(Node):
                 return
         while len(self.route) > 1:
             a, b = (self.config['nodes'][n] for n in self.route[:2])
+            # Passed once reached within the 1e-6 m edge tolerance, matching the
+            # turn-node arrival rule; otherwise route[0] stays behind the robot and the
+            # congestion check at the next node never runs.
             if sum((pose[i] - a[i]) * (b[i] - a[i]) for i in (0, 1)) \
-                    < math.dist(a, b) ** 2 - 1e-7:
+                    < math.dist(a, b) ** 2 - 1e-7 and math.dist(pose[:2], b) > 1e-6:
                 break
             self.route.pop(0)
         if not self.route_valid():
@@ -764,7 +769,11 @@ class RobotManager(Node):
         target = self.targets[0]
         distance = math.dist(pose[:2], target)
         final = len(self.targets) == 1
-        if distance <= (0.05 if final or self.mid_edge_waypoint else 1e-8):
+        # A turn node is reached when the pose already lies on the next segment within
+        # the simulator's 1e-6 m edge tolerance (or within 1e-8 m of the node). Requiring
+        # 1e-8 m alone made the robot ping-pong between axes 2e-7 m from Cs (S8).
+        loose = final or not turn_ahead(pose, target, self.targets[1])
+        if distance <= (0.05 if loose else 1e-8):
             if not final:
                 self.targets.pop(0)
                 self.mid_edge_waypoint = False

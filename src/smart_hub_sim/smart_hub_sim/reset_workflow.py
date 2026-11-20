@@ -91,6 +91,19 @@ class ResetWorkflow:
             if not all(client.service_is_ready() for client in self._participants):
                 response.reason = 'PARTICIPANT_UNAVAILABLE'
                 return response
+            # D19: refuse before any participant enters its reset hold when the latest
+            # fresh crossing state shows an owner or occupancy. Otherwise a refusal at
+            # the crossing stage would leave safety, bus and robot held, and nothing
+            # could leave C so that a later reset could succeed. A stale or missing
+            # snapshot still goes through the stages, which name the missing participant.
+            crossing = self._reset_crossing
+            if (crossing is not None and time.monotonic() - crossing[1] <= 0.5 and
+                    crossing[0].valid and (crossing[0].owner_id or
+                                           crossing[0].state != 'CLEAR')):
+                response.reason = ('CROSSING_NOT_CLEAR:' + crossing[0].state +
+                                   (':' + crossing[0].owner_id if crossing[0].owner_id
+                                    else ''))
+                return response
             self.busy = True
         started = time.monotonic()
         deadline = started + self._reset_deadline_sec

@@ -155,3 +155,23 @@ def test_crossing_cost_and_unavailable_edges():
     path, delayed, _ = shortest_path(config, states, 'A', 'E', 'car', crossing=crossing)
     assert delayed > baseline
     assert shortest_path(config, states, 'A', 'E', 'car', crossing=None)[2] == 'NO_ROUTE'
+
+
+def test_stop_just_short_of_a_turn_node_keeps_that_node():
+    """S8 regression: stopped 0.2 mm before N on A-N, a route N-Cn-B must first reach N."""
+    config = load_map()
+    waypoints, approach_start = route_waypoints(config, ['N', 'Cn', 'B'],
+                                                (1.0, 3.999791, 0.0))
+    assert approach_start
+    assert waypoints[0] == (1.0, 4.0)
+    # Already on the first segment: the start node may still be skipped.
+    waypoints, approach_start = route_waypoints(config, ['N', 'Cn', 'B'], (1.01, 4.0, 0.0))
+    assert not approach_start
+    assert waypoints[0] == (8.0, 4.0)
+
+
+def test_turn_node_reached_once_on_the_next_segment():
+    """S8 regression: 2e-7 m from Cs on both axes is on Cs-J within tolerance."""
+    from smart_hub_control.bus import turn_ahead
+    assert not turn_ahead((4.9999998, 2.00000013), (5.0, 2.0), (9.0, 2.0))
+    assert turn_ahead((1.0, 3.999791), (1.0, 4.0), (5.0, 4.0))

@@ -1,0 +1,6265 @@
+{
+  "schema": "smart-mobility-hub/s8-verification-v1",
+  "test": "T15",
+  "source": "A section 15 p21",
+  "commit": "adc7955164179097320493b53c953897ef28c311",
+  "worktree_dirty": true,
+  "seeds": [
+    801,
+    802,
+    803,
+    804,
+    805,
+    806,
+    807,
+    808,
+    809,
+    810
+  ],
+  "policies": [
+    "reactive",
+    "predictive"
+  ],
+  "episodes": [
+    {
+      "seed": 801,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        18.154,
+        57.685,
+        59.899,
+        59.943,
+        64.813,
+        95.322,
+        122.21,
+        146.272,
+        149.952,
+        154.401,
+        165.844,
+        204.955,
+        221.805
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=801",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[18.154,57.685,59.899,59.943,64.813,95.322,122.210,146.272,149.952,154.401,165.844,204.955,221.805]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=801",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed801-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 88.69000000000001,
+        "wait_served_p95_sec": 134.20000000000002,
+        "wait_served_mean_sec": 90.92908333333334,
+        "wait_including_censored_mean_sec": 93.23633333333333,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 9,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=ee0f52d41da34243ade42fe9df453f5a",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=044d236529f4426b8aeb4c7c6ef03b01",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=56d534f387014a28bb09b660b7251ef2",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=289d65686564472faf02b6484958f1e5"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.104707261998556,
+          "C1": 12.887386549999064
+        },
+        "car_travel_mean_sec": 14.99604690599881,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.59755636200134,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 62.73188406600093,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 92.73209480299556,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 149.73193820400047,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 207.73319370999525,
+            "reason": "value=6;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "85e1fd3e-eee7-45d6-832c-84085ef11e6c",
+      "actions": [
+        {
+          "t": 65.0050995979982,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "48c31159b8ad4dcf85e3b5f52ebc606a",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "65134fd0770f4408b4383edacb7df1c4",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.00664771100128,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.00511465100135,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.73719947199424,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.00396262999857,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01600360399607,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.00445156199567,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.00327302899677,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "48c31159b8ad4dcf85e3b5f52ebc606a",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "65134fd0770f4408b4383edacb7df1c4",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.73719022699515,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 34892.169732653
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.0082650589975,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.40582765599538,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-801-escort-1",
+          "sent_t": 70.00791505399684,
+          "sent_mono": 34874.440454344,
+          "accepted": true,
+          "end_mono": 34885.028119292,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-801-escort-2",
+          "sent_t": 91.00548164499924,
+          "sent_mono": 34895.438020556,
+          "accepted": true,
+          "end_mono": 35023.026929928,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "37dcc81718cd4329f0dc3efa09907dac6dea90f195251f2904b2996aed346582",
+      "elapsed_sec": 305.65412573100184
+    },
+    {
+      "seed": 801,
+      "policy": "predictive",
+      "status": "FAIL",
+      "schedule": [
+        18.154,
+        57.685,
+        59.899,
+        59.943,
+        64.813,
+        95.322,
+        122.21,
+        146.272,
+        149.952,
+        154.401,
+        165.844,
+        204.955,
+        221.805
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=801",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[18.154,57.685,59.899,59.943,64.813,95.322,122.210,146.272,149.952,154.401,165.844,204.955,221.805]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=801",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed801-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 600,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 0,
+        "completion_rate": 0.0,
+        "wait_served_p50_sec": null,
+        "wait_served_p95_sec": null,
+        "wait_served_mean_sec": null,
+        "wait_including_censored_mean_sec": 198.583,
+        "right_censored_passengers": 15,
+        "queue_peak_observed": 15,
+        "bus_dispatches": 8,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=5adc1880dc104f18a04c85b2fa9df5b5"
+        ],
+        "bus_missions_succeeded": 0,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 0,
+        "robot_results": [
+          "SAFETY_STOP",
+          "NO_TERMINAL_RESULT"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.143852146997233,
+          "C1": 12.874689761003538
+        },
+        "car_travel_mean_sec": 15.009270954000385,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.407787789001304,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [
+          {
+            "t": 90.0656356690015,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.1170668449995,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.16307045300346,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.2127973280003,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.26405892299954,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.32052994200058,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.365336794006,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.41612299900589,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.46167040100408,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.51742349900451,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.56404327400378,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.61702255900309,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.71351168600086,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.71418643600191,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.76239499499934,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.81596653900488,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.86212603000604,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.91464201400231,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 90.96518394000304,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          },
+          {
+            "t": 91.01514568300627,
+            "pair": [
+              "bus",
+              "O"
+            ]
+          }
+        ],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 64.12941049400251,
+            "reason": "value=6.528177261352539;decision=PREDICTIVE"
+          },
+          {
+            "t": 95.1281816020055,
+            "reason": "value=6.931640625;decision=PREDICTIVE"
+          },
+          {
+            "t": 126.12837256900093,
+            "reason": "value=8.285064697265625;decision=PREDICTIVE"
+          },
+          {
+            "t": 156.12852555100108,
+            "reason": "value=11.25986385345459;decision=PREDICTIVE"
+          },
+          {
+            "t": 186.12943414500478,
+            "reason": "value=10.873059272766113;decision=PREDICTIVE"
+          },
+          {
+            "t": 217.13016025099932,
+            "reason": "value=11.666668891906738;decision=PREDICTIVE"
+          },
+          {
+            "t": 248.1282224930037,
+            "reason": "value=12.460277557373047;decision=PREDICTIVE"
+          },
+          {
+            "t": 278.13006361700536,
+            "reason": "value=11.936514854431152;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [
+        "escort without terminal result"
+      ],
+      "run_id": "8e557880-e3f9-4c3c-8d9c-dbb117f42e4f",
+      "actions": [
+        {
+          "t": 65.02244049400178,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "4614201fcb514ada9dae24d7de9e6b81",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "d151e8619712417a998fe94804cd2767",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01839209600439,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01813982300519,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.95073460500134,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01639806599997,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01950833300361,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01092463399982,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01199454100424,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "4614201fcb514ada9dae24d7de9e6b81",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "d151e8619712417a998fe94804cd2767",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.95072732400149,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 35201.033500327
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01470974200492,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-801-escort-1",
+          "sent_t": 70.01847065200127,
+          "sent_mono": 35183.101242129,
+          "accepted": true,
+          "end_mono": 35193.828485957,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-801-escort-2",
+          "sent_t": 91.02959747400018,
+          "sent_mono": 35204.112368338,
+          "accepted": false,
+          "end_mono": 35204.112376198,
+          "status": null,
+          "reason": "NO_TERMINAL_RESULT",
+          "success": false
+        }
+      ],
+      "trace_sha256": "9849569ea0014961b8795ab7f1f88c1c4135116884283e3d1110adc1494a959b",
+      "elapsed_sec": 308.76658454800054
+    },
+    {
+      "seed": 802,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        31.459,
+        54.959,
+        56.983,
+        57.095,
+        60.81,
+        116.499,
+        126.031,
+        154.221,
+        160.055,
+        166.28,
+        168.154,
+        218.004,
+        226.898
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=802",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[31.459,54.959,56.983,57.095,60.810,116.499,126.031,154.221,160.055,166.280,168.154,218.004,226.898]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=802",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed802-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 116.14100000000002,
+        "wait_served_p95_sec": 167.10000000000002,
+        "wait_served_mean_sec": 109.40066666666668,
+        "wait_including_censored_mean_sec": 106.65013333333334,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 11,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=e982fb200c1d4c2bb9ab577af8f5038f",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=e026df2af7d449579e2397a008bcdf8c",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=6daa089130784b93a7b1f8dafb250e25",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=82cdee42c824429fb17cbe2d2f462bd4"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.151247073998093,
+          "C1": 12.86997143500048
+        },
+        "car_travel_mean_sec": 15.010609254499286,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.621006084998953,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 60.46800421700027,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 90.46999567699822,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 172.4693654329967,
+            "reason": "value=9;decision=REACTIVE"
+          },
+          {
+            "t": 221.46876483399683,
+            "reason": "value=6;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "ac6c40f1-59a2-43a2-ae78-cc157c632872",
+      "actions": [
+        {
+          "t": 65.02289134799503,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "283e01a723ac4ae9bec0d91ac8774a3c",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "e41d4b5d69544c84acd2db7b74adaa2c",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01459664199501,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01553747799335,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.77018362999661,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01698271199712,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.03715089899924,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.0128894419977,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01206121399446,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "283e01a723ac4ae9bec0d91ac8774a3c",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "e41d4b5d69544c84acd2db7b74adaa2c",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.77017849999538,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 35509.505692873
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01357121099863,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.42813056599698,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-802-escort-1",
+          "sent_t": 70.01501706300041,
+          "sent_mono": 35491.750530585,
+          "accepted": true,
+          "end_mono": 35502.350257916,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-802-escort-2",
+          "sent_t": 91.02887859199836,
+          "sent_mono": 35512.764392197,
+          "accepted": true,
+          "end_mono": 35640.398143681,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "844d9d1c1ecb4be884d8aa917f48d35b2934a1aae8f003fcc6dc32acc397d49d",
+      "elapsed_sec": 308.6622499150035
+    },
+    {
+      "seed": 802,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        31.459,
+        54.959,
+        56.983,
+        57.095,
+        60.81,
+        116.499,
+        126.031,
+        154.221,
+        160.055,
+        166.28,
+        168.154,
+        218.004,
+        226.898
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=802",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[31.459,54.959,56.983,57.095,60.810,116.499,126.031,154.221,160.055,166.280,168.154,218.004,226.898]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=802",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed802-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 118.09100000000001,
+        "wait_served_p95_sec": 169.05,
+        "wait_served_mean_sec": 113.584,
+        "wait_including_censored_mean_sec": 109.9968,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 12,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=e21c98ce98b7497c9bd697020392d3af",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=007fbc190bb441bab278652d281712a3",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=5ddbefff33e04dbca3c801bdb999fa51",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=50505fa21e8f4c1b8f6dc8073f2dc6c0"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.157068975000584,
+          "C1": 12.894987252002466
+        },
+        "car_travel_mean_sec": 15.026028113501525,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.930301434003923,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 60.71666822000407,
+            "reason": "value=7.063117027282715;decision=PREDICTIVE"
+          },
+          {
+            "t": 91.71443484700285,
+            "reason": "value=6.931640625;decision=PREDICTIVE"
+          },
+          {
+            "t": 173.7164561630052,
+            "reason": "value=10.89179801940918;decision=PREDICTIVE"
+          },
+          {
+            "t": 230.7172854620003,
+            "reason": "value=6.697845935821533;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "79a7e066-1a24-4b31-8ff5-0624b7aefbe5",
+      "actions": [
+        {
+          "t": 65.00740379500348,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "53be63f4cace4f20b61ee3ed6262dfdb",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "2c14adfc780548e4b5df745423e5ba66",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.0066247950017,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01965695900435,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.93318062500475,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.0133369690011,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.0145700320063,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.00115091200132,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.00383651800075,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "53be63f4cace4f20b61ee3ed6262dfdb",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "2c14adfc780548e4b5df745423e5ba66",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.9331752490034,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 35817.529156926
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.00654493800539,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.91869777300599,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-802-escort-1",
+          "sent_t": 70.00343618600164,
+          "sent_mono": 35799.599417024,
+          "accepted": true,
+          "end_mono": 35810.359481452,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-802-escort-2",
+          "sent_t": 91.01571819100354,
+          "sent_mono": 35820.611699016,
+          "accepted": true,
+          "end_mono": 35952.85858465,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "7d5320bedc3426c923aaabf62a1d63fe1e2af92c798f93c6959e56138d238ec5",
+      "elapsed_sec": 307.806103076
+    },
+    {
+      "seed": 803,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        18.275,
+        55.937,
+        58.509,
+        59.813,
+        67.705,
+        99.61,
+        114.09,
+        140.356,
+        141.796,
+        144.301,
+        144.493,
+        191.256,
+        197.152
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=803",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[18.275,55.937,58.509,59.813,67.705,99.610,114.090,140.356,141.796,144.301,144.493,191.256,197.152]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=803",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed803-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 82.94500000000001,
+        "wait_served_p95_sec": 133.5,
+        "wait_served_mean_sec": 86.56733333333334,
+        "wait_including_censored_mean_sec": 93.72713333333334,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 9,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=093ab7e7375f420b96e191a0e64c77cd",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=e2ba9dbe281e471ba30aa1e7596881a7",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=1c4b48fcc50540248a2451c445980186",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=eb96ffcbf17540c3979062a85de6da2a"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.116758245996607,
+          "C1": 12.903101135001634
+        },
+        "car_travel_mean_sec": 15.00992969049912,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 31.115643882003496,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 62.39717808300338,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 92.39798524400248,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 143.399217872,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 194.39416947700374,
+            "reason": "value=6;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "4b0aabf9-490b-4307-9567-9a864c12a0b7",
+      "actions": [
+        {
+          "t": 65.02530287599802,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "f2e2885e68a54c4990c8ee947308d450",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "894bb02b284544d4804cd9ab20f49597",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.02097672899981,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.02190989300288,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.79959076100204,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.02118677800172,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.03658767000161,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01664175000042,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01435923700046,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "f2e2885e68a54c4990c8ee947308d450",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "894bb02b284544d4804cd9ab20f49597",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.7995880180024,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 36127.072862517
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01754447499843,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.29879611799697,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-803-escort-1",
+          "sent_t": 70.0168882959988,
+          "sent_mono": 36109.290162406,
+          "accepted": true,
+          "end_mono": 36119.971721809,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-803-escort-2",
+          "sent_t": 91.04275791499822,
+          "sent_mono": 36130.316032014,
+          "accepted": true,
+          "end_mono": 36257.822073898,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "f13c9047e09130b41d2b5531996c8bca240d3e8836b471911b60897b39dbaba5",
+      "elapsed_sec": 309.60124889000144
+    },
+    {
+      "seed": 803,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        18.275,
+        55.937,
+        58.509,
+        59.813,
+        67.705,
+        99.61,
+        114.09,
+        140.356,
+        141.796,
+        144.301,
+        144.493,
+        191.256,
+        197.152
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=803",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[18.275,55.937,58.509,59.813,67.705,99.610,114.090,140.356,141.796,144.301,144.493,191.256,197.152]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=803",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed803-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 116.545,
+        "wait_served_p95_sec": 171.75,
+        "wait_served_mean_sec": 115.06733333333334,
+        "wait_including_censored_mean_sec": 116.52713333333334,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 13,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=d590c8a29b0e46039bcc3416cdd0a9e6",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=55e01de5968c4591971866283e932d40",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=c06934bdcc3247b9b1e9cf894f1ea5bb",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=91d9fa6f78ff421da7407b793aa33cd4"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.130125401999976,
+          "C1": 12.861650403996464
+        },
+        "car_travel_mean_sec": 14.99588790299822,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.58033022699965,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 63.08964992999972,
+            "reason": "value=6.5306077003479;decision=PREDICTIVE"
+          },
+          {
+            "t": 94.08948051899642,
+            "reason": "value=6.931640625;decision=PREDICTIVE"
+          },
+          {
+            "t": 177.09030805799557,
+            "reason": "value=8.146891593933105;decision=PREDICTIVE"
+          },
+          {
+            "t": 208.08700921399577,
+            "reason": "value=7.843286514282227;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "ce073870-a0fb-4ab3-aa1e-539954b7834a",
+      "actions": [
+        {
+          "t": 65.0182152769994,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "4eaf42677fe043faba25f11e68b2901e",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "7e9f0a3609ff48c5ab9d2a242e1fae96",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.0208524089976,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01628533800249,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.80234981599642,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.02291510500072,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.04701764199854,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01569141200162,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01862946800247,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "4eaf42677fe043faba25f11e68b2901e",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "7e9f0a3609ff48c5ab9d2a242e1fae96",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.80234085799748,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 36435.015063099
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.00726314599888,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.35278576699784,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-803-escort-1",
+          "sent_t": 70.00554259899945,
+          "sent_mono": 36417.21826349,
+          "accepted": true,
+          "end_mono": 36427.860158632,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-803-escort-2",
+          "sent_t": 91.02924775699648,
+          "sent_mono": 36438.24196869,
+          "accepted": true,
+          "end_mono": 36565.659366432,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "fe0e1aafef548381d524b89a243052a4f496f3d10cad688ecdc284f075c5544c",
+      "elapsed_sec": 308.0454305770036
+    },
+    {
+      "seed": 804,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        29.366,
+        53.025,
+        59.365,
+        65.364,
+        67.336,
+        121.043,
+        123.45,
+        151.154,
+        158.046,
+        162.889,
+        164.982,
+        208.077,
+        223.746
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=804",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[29.366,53.025,59.365,65.364,67.336,121.043,123.450,151.154,158.046,162.889,164.982,208.077,223.746]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=804",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed804-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 154.48600000000002,
+        "wait_served_p95_sec": 210.35000000000002,
+        "wait_served_mean_sec": 145.44683333333333,
+        "wait_including_censored_mean_sec": 136.57046666666668,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 13,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=6a676096edd344dfa9b39fa876c98ba0",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=a26efdd0b58b42bd81c4a1df11b8dc72",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=76d2ecc908594b70bebd2a177c8bce44",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=bb6be6bdeee243aa9ad9aac8cafee401"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.126750931995048,
+          "C1": 12.854619129000639
+        },
+        "car_travel_mean_sec": 14.990685030497843,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 33.65041888799897
+        },
+        "first_valid_forecast_sec": 30.403759635002643,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 68.70174619000318,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 99.7023640280022,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 214.7014749230002,
+            "reason": "value=11;decision=REACTIVE"
+          },
+          {
+            "t": 245.70211365199793,
+            "reason": "value=7;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "e0362f11-3bc2-4fae-93e9-94f5f119d0bd",
+      "actions": [
+        {
+          "t": 65.00764696599799,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "4b1fe5049ef9492399ec6fe676fda598",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "2c324933abd342688a0b3c25b8507b34",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.00538515500375,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.0060069789979,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.90603010100313,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01173108399962,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.0059824830023,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.00157884600048,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.00088257800235,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "4b1fe5049ef9492399ec6fe676fda598",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "2c324933abd342688a0b3c25b8507b34",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.90602236200357,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 36740.829204185
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.00441920699814,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.34963174199947,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-804-escort-1",
+          "sent_t": 70.00401068000065,
+          "sent_mono": 36722.927191273,
+          "accepted": true,
+          "end_mono": 36733.706979025,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-804-escort-2",
+          "sent_t": 91.03014883900323,
+          "sent_mono": 36743.953329528,
+          "accepted": true,
+          "end_mono": 36871.506933271,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "d87f0ea450ff1a2b6814e3850d713884acdd6e8724ba8bee4be509a30e32e8aa",
+      "elapsed_sec": 305.5972328450007
+    },
+    {
+      "seed": 804,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        29.366,
+        53.025,
+        59.365,
+        65.364,
+        67.336,
+        121.043,
+        123.45,
+        151.154,
+        158.046,
+        162.889,
+        164.982,
+        208.077,
+        223.746
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=804",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[29.366,53.025,59.365,65.364,67.336,121.043,123.450,151.154,158.046,162.889,164.982,208.077,223.746]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=804",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed804-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 7,
+        "completion_rate": 0.4666666666666667,
+        "wait_served_p50_sec": 143.175,
+        "wait_served_p95_sec": 192.20000000000002,
+        "wait_served_mean_sec": 157.89200000000002,
+        "wait_including_censored_mean_sec": 146.1238,
+        "right_censored_passengers": 8,
+        "queue_peak_observed": 13,
+        "bus_dispatches": 6,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=509914608e504afc94e9a9bfdd54f332",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=d5cfb67b31ed4ec3a85facdc09e1e010",
+          "success=False;reason=SAFETY_STOP;goal_id=abb160a865ef49819bbb9a3b50dba243"
+        ],
+        "bus_missions_succeeded": 1,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 0,
+        "robot_results": [
+          "SAFETY_STOP",
+          "SAFETY_STOP"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.15247217599972,
+          "C1": 12.896741847005615
+        },
+        "car_travel_mean_sec": 15.024607011502667,
+        "crossing_wait_sec": {
+          "robot": 24.00077767000039,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.56815275099507,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 69.13257329599583,
+            "reason": "value=7.829583644866943;decision=PREDICTIVE"
+          },
+          {
+            "t": 100.13476123599685,
+            "reason": "value=6.4078779220581055;decision=PREDICTIVE"
+          },
+          {
+            "t": 197.1311072529934,
+            "reason": "value=8.704639434814453;decision=PREDICTIVE"
+          },
+          {
+            "t": 228.13379427199834,
+            "reason": "value=8.377372741699219;decision=PREDICTIVE"
+          },
+          {
+            "t": 259.1345980229962,
+            "reason": "value=6.381250858306885;decision=PREDICTIVE"
+          },
+          {
+            "t": 290.1325807729954,
+            "reason": "value=6.381250858306885;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "ef9cfa64-abc1-4096-be5f-c71ad2953ac7",
+      "actions": [
+        {
+          "t": 65.00593177399423,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "409f6cccbb1947a3975b41ffcc874beb",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "8d0ab45e8f3244509f3f189bb0dd2fdc",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.00258772099914,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.00694999499683,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.83439496599749,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.00607943399518,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.02000764599507,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.00446177999402,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01010969699564,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "409f6cccbb1947a3975b41ffcc874beb",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "8d0ab45e8f3244509f3f189bb0dd2fdc",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.83438844199554,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 37048.777435026
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.00750628499372,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.36168479099433,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-804-escort-1",
+          "sent_t": 70.00284144799662,
+          "sent_mono": 37030.945886887,
+          "accepted": true,
+          "end_mono": 37041.65079152,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-804-escort-2",
+          "sent_t": 91.02239478899719,
+          "sent_mono": 37051.965441121,
+          "accepted": true,
+          "end_mono": 37166.851430727,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        }
+      ],
+      "trace_sha256": "06d88d32e9173bd65be9f15d3cd63ef07e63516524e32f9287d6c98e6f725d45",
+      "elapsed_sec": 308.0105718199993
+    },
+    {
+      "seed": 805,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        29.823,
+        53.17,
+        56.497,
+        65.595,
+        66.43,
+        108.605,
+        119.034,
+        148.223,
+        153.59,
+        162.481,
+        166.354,
+        194.506,
+        212.638
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=805",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[29.823,53.170,56.497,65.595,66.430,108.605,119.034,148.223,153.590,162.481,166.354,194.506,212.638]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=805",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed805-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 156.205,
+        "wait_served_p95_sec": 211.95000000000002,
+        "wait_served_mean_sec": 149.56266666666667,
+        "wait_including_censored_mean_sec": 141.41693333333333,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 14,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=53abd776b2e047b18236f17296e1b709",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=9ee9d50529364559a7c1c44cd0ea0a61",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=dbb89c4145ae4ce08180df36d83c05f1",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=7d2f3b81f71f44968d845528d0f5e0b6"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.13774984399788,
+          "C1": 12.875161465999554
+        },
+        "car_travel_mean_sec": 15.006455654998717,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 38.203374864999205
+        },
+        "first_valid_forecast_sec": 30.996755047999613,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 68.62302820300101,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 99.62571014899731,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 216.62536512099905,
+            "reason": "value=11;decision=REACTIVE"
+          },
+          {
+            "t": 247.62414264000108,
+            "reason": "value=7;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "03ff36b3-b113-4bc1-ad46-87b7cb292cdf",
+      "actions": [
+        {
+          "t": 65.02947172099812,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "465da0b7d0c94f39af7857d6bfb512ef",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "0637fe2c700e4d06946203ede1c1f364",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.03845501099568,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01807458099938,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.84358147199964,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.02671505400212,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.0195007059956,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01772150499892,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01726629799668,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "465da0b7d0c94f39af7857d6bfb512ef",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "0637fe2c700e4d06946203ede1c1f364",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.8435749420023,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 37354.554661181
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.02462277599989,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.68567827600054,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-805-escort-1",
+          "sent_t": 70.02548937699612,
+          "sent_mono": 37336.736574664,
+          "accepted": true,
+          "end_mono": 37347.438922708,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-805-escort-2",
+          "sent_t": 91.04373972200119,
+          "sent_mono": 37357.754824802,
+          "accepted": true,
+          "end_mono": 37487.982544835,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "ffd58e19b28e972d23d06717967c0e57a1e1a01ae94fadd3d2ed9cf38f226814",
+      "elapsed_sec": 305.7955621219953
+    },
+    {
+      "seed": 805,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        29.823,
+        53.17,
+        56.497,
+        65.595,
+        66.43,
+        108.605,
+        119.034,
+        148.223,
+        153.59,
+        162.481,
+        166.354,
+        194.506,
+        212.638
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=805",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[29.823,53.170,56.497,65.595,66.430,108.605,119.034,148.223,153.590,162.481,166.354,194.506,212.638]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=805",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed805-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 0,
+        "completion_rate": 0.0,
+        "wait_served_p50_sec": null,
+        "wait_served_p95_sec": null,
+        "wait_served_mean_sec": null,
+        "wait_including_censored_mean_sec": 197.53693333333334,
+        "right_censored_passengers": 15,
+        "queue_peak_observed": 15,
+        "bus_dispatches": 3,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=e9f54b4fa6be485aadb84fcfc3fa3341",
+          "success=False;reason=TIMEOUT;goal_id=3cdea8d3bbc6462c921950e32477f8ba"
+        ],
+        "bus_missions_succeeded": 0,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.141023178999603,
+          "C1": 12.87751203699736
+        },
+        "car_travel_mean_sec": 15.009267607998481,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 127.09476992100099
+        },
+        "first_valid_forecast_sec": 30.477403222001158,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 69.18998497300345,
+            "reason": "value=7.801947116851807;decision=PREDICTIVE"
+          },
+          {
+            "t": 100.18887181099853,
+            "reason": "value=6.4078779220581055;decision=PREDICTIVE"
+          },
+          {
+            "t": 221.18991653699777,
+            "reason": "value=13.015853881835938;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "805125ce-ad13-45a0-a46d-29c96e8fc4d4",
+      "actions": [
+        {
+          "t": 65.01633490100357,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "98f86e2303e44e2cadda756161b4e092",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "edd4aad4756242e99a7e0689027103d1",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01690806500119,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01500895799836,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.81169185000181,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01691222900263,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.0158642940005,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.0088864490026,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.00889900900074,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "98f86e2303e44e2cadda756161b4e092",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "edd4aad4756242e99a7e0689027103d1",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.8116854109976,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 37665.014349167
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01409662399965,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 118.25151420199836,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": false,
+          "reason": "/safety/finish_reset:queue_stale"
+        },
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-805-escort-1",
+          "sent_t": 70.01338679999753,
+          "sent_mono": 37647.216049566,
+          "accepted": true,
+          "end_mono": 37657.882070225,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-805-escort-2",
+          "sent_t": 91.03084178500285,
+          "sent_mono": 37668.233504238,
+          "accepted": true,
+          "end_mono": 37823.831014992,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "7f2b8242c2a31833fd50688499396b04571fd433053610c60af1cc7a439a332c",
+      "elapsed_sec": 310.5171494969982
+    },
+    {
+      "seed": 806,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        42.708,
+        52.141,
+        56.823,
+        57.081,
+        66.294,
+        108.522,
+        121.78,
+        142.361,
+        152.296,
+        154.168,
+        165.655,
+        202.314,
+        216.065
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=806",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[42.708,52.141,56.823,57.081,66.294,108.522,121.780,142.361,152.296,154.168,165.655,202.314,216.065]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=806",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed806-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 128.00600000000003,
+        "wait_served_p95_sec": 181.65,
+        "wait_served_mean_sec": 120.58550000000001,
+        "wait_including_censored_mean_sec": 117.53280000000001,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 13,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=ee0a0a331e0b4dcfbc965676de510b6c",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=d4afa9be57ca415b80fe30c171fa0d31",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=4ebf1a72ef5e4bdd9622560c137aa04c",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=7d43c06066314cdf95756cd89fdbb2d6"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.15206224299618,
+          "C1": 12.877597310995043
+        },
+        "car_travel_mean_sec": 15.014829776995612,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.647695339001075,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 60.18336519199511,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 91.18228139499843,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 187.18362961299863,
+            "reason": "value=9;decision=REACTIVE"
+          },
+          {
+            "t": 218.18248111599678,
+            "reason": "value=7;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "a978ed1a-d85b-4d6c-b21c-9007cbf5cbc2",
+      "actions": [
+        {
+          "t": 65.02230442799919,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "e09e2b20e66f44eba263dd74e757e170",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "616dad45fac649e7ba84e046414f5a40",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01780114400026,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.0179082600007,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.795928517,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01664329499908,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.0328785649981,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01422181900125,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01381687299727,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "e09e2b20e66f44eba263dd74e757e170",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "616dad45fac649e7ba84e046414f5a40",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.79592253599549,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 37972.641732906
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01571957599663,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 118.19711275000009,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-806-escort-1",
+          "sent_t": 70.02279890899808,
+          "sent_mono": 37954.868608352,
+          "accepted": true,
+          "end_mono": 37965.535315255,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-806-escort-2",
+          "sent_t": 91.03265026200097,
+          "sent_mono": 37975.878460198,
+          "accepted": true,
+          "end_mono": 38131.434947607,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "63be0419ccb4c92a6b8bab38a3d09cfcccfd530fe46042e0eb714d26c207d5ed",
+      "elapsed_sec": 307.60226027599856
+    },
+    {
+      "seed": 806,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        42.708,
+        52.141,
+        56.823,
+        57.081,
+        66.294,
+        108.522,
+        121.78,
+        142.361,
+        152.296,
+        154.168,
+        165.655,
+        202.314,
+        216.065
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=806",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[42.708,52.141,56.823,57.081,66.294,108.522,121.780,142.361,152.296,154.168,165.655,202.314,216.065]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=806",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed806-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 75.306,
+        "wait_served_p95_sec": 129.5,
+        "wait_served_mean_sec": 69.06883333333333,
+        "wait_including_censored_mean_sec": 76.31946666666666,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 9,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=0f85460517974f1b9b1766e7a0418635",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=18a105e943424260ac88678358bd9436",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=c8e28934fe4943b3b7c5d51bd3c211eb",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=0494056fad4b4bb5b5888428028c91d1"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.11598138500267,
+          "C1": 12.905253912998887
+        },
+        "car_travel_mean_sec": 15.010617649000778,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.441000446000544,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 60.47756872000173,
+            "reason": "value=7.042751789093018;decision=PREDICTIVE"
+          },
+          {
+            "t": 90.47887779500161,
+            "reason": "value=6.931640625;decision=PREDICTIVE"
+          },
+          {
+            "t": 134.47911257600208,
+            "reason": "value=6.019979953765869;decision=PREDICTIVE"
+          },
+          {
+            "t": 168.4776923449972,
+            "reason": "value=7.047573089599609;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "79e6c01c-686a-441d-a6ea-9c70197c01d2",
+      "actions": [
+        {
+          "t": 65.01237049399788,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "d3c5ec4bc5534d58ab47ff763db4aa04",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "28e547c35bd6495ca6df8f271ade5f7b",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01540882699919,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01531233599962,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.89457412299816,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01331756100262,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.03696577400115,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01199523000105,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01279832600267,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "d3c5ec4bc5534d58ab47ff763db4aa04",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "28e547c35bd6495ca6df8f271ade5f7b",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.89456585500011,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 38278.313116019
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01278068999818,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.2804610710009,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-806-escort-1",
+          "sent_t": 70.01441630000045,
+          "sent_mono": 38260.432964952,
+          "accepted": true,
+          "end_mono": 38271.193344405,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-806-escort-2",
+          "sent_t": 91.03184579299705,
+          "sent_mono": 38281.450394563,
+          "accepted": true,
+          "end_mono": 38408.841830211,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "a72fce71c6fd51916e596d1d2eafcb43c25ec96ad6d947c214beef3e4f9f10c3",
+      "elapsed_sec": 305.6033041749979
+    },
+    {
+      "seed": 807,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        26.027,
+        53.599,
+        54.646,
+        54.836,
+        64.858,
+        96.212,
+        125.226,
+        143.82,
+        144.804,
+        151.717,
+        158.336,
+        229.745,
+        230.835
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=807",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[26.027,53.599,54.646,54.836,64.858,96.212,125.226,143.820,144.804,151.717,158.336,229.745,230.835]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=807",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed807-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 108.95100000000002,
+        "wait_served_p95_sec": 158.55,
+        "wait_served_mean_sec": 113.08791666666669,
+        "wait_including_censored_mean_sec": 109.20926666666668,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 12,
+        "bus_dispatches": 5,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=385110a26dd94d7a86e74f459dd29f4f",
+          "success=False;reason=ROUTE_INVALID_OR_STALE;goal_id=051e8f2d1bfe48b08622160c6fdcb7c0",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=f0455ffb50ad4e068b389cf3836d5c5e",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=3247653d0a4b4bbca862981092eb5e82",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=a30c9976319546de9f8b5749532c75c2"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.139356642997882,
+          "C1": 12.90452884300612
+        },
+        "car_travel_mean_sec": 15.021942743002,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.636784190006438,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 58.17638440200244,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 89.17569876700145,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 119.1766803280043,
+            "reason": "value=8;decision=REACTIVE"
+          },
+          {
+            "t": 163.17713221200393,
+            "reason": "value=9;decision=REACTIVE"
+          },
+          {
+            "t": 233.17677677500615,
+            "reason": "value=7;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "c05835a3-3d76-416c-a811-47ac13e9c438",
+      "actions": [
+        {
+          "t": 65.02127226300217,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "2d5f5e12b2234e9d834c788f8b79e1eb",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "1087b71ca78e466bb4dc747b9e26a03c",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01436156900309,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01718666600209,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.89715704500122,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01971221400163,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01466085900029,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01051552900026,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.0094280600024,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "2d5f5e12b2234e9d834c788f8b79e1eb",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "1087b71ca78e466bb4dc747b9e26a03c",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.89715194900054,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 38586.329151754
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01189254600467,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 118.1365446100026,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-807-escort-1",
+          "sent_t": 70.01570397600153,
+          "sent_mono": 38568.447702914,
+          "accepted": true,
+          "end_mono": 38579.149303107,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-807-escort-2",
+          "sent_t": 91.03195452799991,
+          "sent_mono": 38589.463953502,
+          "accepted": true,
+          "end_mono": 38744.301323562,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "6394e24d626220dad071245fc6f629a6c108850b3e131406bc2277a9d13d4ba3",
+      "elapsed_sec": 308.00794016599684
+    },
+    {
+      "seed": 807,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        26.027,
+        53.599,
+        54.646,
+        54.836,
+        64.858,
+        96.212,
+        125.226,
+        143.82,
+        144.804,
+        151.717,
+        158.336,
+        229.745,
+        230.835
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=807",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[26.027,53.599,54.646,54.836,64.858,96.212,125.226,143.820,144.804,151.717,158.336,229.745,230.835]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=807",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed807-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 106.15100000000001,
+        "wait_served_p95_sec": 155.75,
+        "wait_served_mean_sec": 111.68791666666668,
+        "wait_including_censored_mean_sec": 108.08926666666667,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 12,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=e0624bfb69524a9b9a6c821f3a37a028",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=ee22ed0470524aa38da6485753f49681",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=9de75654f2fd4539be389df191f4b458",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=c6eee0406e7841f98725e173414e9c71"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.144477030000417,
+          "C1": 12.888305715998285
+        },
+        "car_travel_mean_sec": 15.016391372999351,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.83798500499688,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 57.92725066799903,
+            "reason": "value=6.549854278564453;decision=PREDICTIVE"
+          },
+          {
+            "t": 88.92615357099567,
+            "reason": "value=6.931640625;decision=PREDICTIVE"
+          },
+          {
+            "t": 160.92641206199914,
+            "reason": "value=10.323655128479004;decision=PREDICTIVE"
+          },
+          {
+            "t": 233.92729228299868,
+            "reason": "value=6.757021903991699;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "1dba6ea0-2d4b-433c-b221-5cefe8e82137",
+      "actions": [
+        {
+          "t": 65.01687009699526,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "56ac18971d8b4fbcaa26d9084c055f9a",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "26d46442dad249c48c2c2c85767482d6",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01492602499638,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.00898422399769,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.74829916699673,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01622532300098,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01372563000041,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.00257009900088,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.00888088899956,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "56ac18971d8b4fbcaa26d9084c055f9a",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "26d46442dad249c48c2c2c85767482d6",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.74829361400043,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 38894.288177098
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.00360741699842,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 118.08188409599825,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-807-escort-1",
+          "sent_t": 70.00443621399609,
+          "sent_mono": 38876.544318892,
+          "accepted": true,
+          "end_mono": 38887.372271839,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-807-escort-2",
+          "sent_t": 91.01897469999676,
+          "sent_mono": 38897.558857522,
+          "accepted": true,
+          "end_mono": 39052.92391726,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "5f08e92975ba3a52f764dcec4dd946088d39c88a63b950d1b8e37bb8559828b6",
+      "elapsed_sec": 308.1115358809984
+    },
+    {
+      "seed": 808,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        25.931,
+        59.043,
+        62.399,
+        63.532,
+        67.002,
+        99.473,
+        104.035,
+        147.349,
+        154.609,
+        156.029,
+        163.475,
+        190.577,
+        193.418
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=808",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[25.931,59.043,62.399,63.532,67.002,99.473,104.035,147.349,154.609,156.029,163.475,190.577,193.418]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=808",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed808-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 90.998,
+        "wait_served_p95_sec": 145.65,
+        "wait_served_mean_sec": 89.59983333333334,
+        "wait_including_censored_mean_sec": 95.18186666666666,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 9,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=c0e39706a5a84b8c8b50cc85b1e5b3f8",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=69fc4930073049c4a050217be01ecab1",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=88505e237cfc4ebfb0b87a960a45dd4c",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=addb527488394228ada2464a03478fc5"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.15105073199811,
+          "C1": 12.874832091001736
+        },
+        "car_travel_mean_sec": 15.012941411499924,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 31.01630318500247,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 66.85228374000144,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 97.85037960900081,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 150.8502523770003,
+            "reason": "value=6;decision=REACTIVE"
+          },
+          {
+            "t": 193.85074872300174,
+            "reason": "value=6;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "69098995-a005-4c04-b904-42e5278e6af2",
+      "actions": [
+        {
+          "t": 65.01054124400252,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "4133dbc269274ea18eecab62c243d20a",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "69f448aa6adf4f5d817b330d1b3d33d8",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.00770480099891,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01038132399844,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.85122556499846,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01031487100408,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01875558000029,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.00418155600346,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.00415332899865,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "4133dbc269274ea18eecab62c243d20a",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "69f448aa6adf4f5d817b330d1b3d33d8",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.85122065500036,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 39202.95225063
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01153170500038,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.4874138439991,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-808-escort-1",
+          "sent_t": 70.01139384000271,
+          "sent_mono": 39185.112423212,
+          "accepted": true,
+          "end_mono": 39195.76608978,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-808-escort-2",
+          "sent_t": 91.015045619999,
+          "sent_mono": 39206.116074797,
+          "accepted": true,
+          "end_mono": 39336.268978586,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "da03b1124fa94eb1620cb350d41df514654ee1a9d4cf2a492ac65d08af417acd",
+      "elapsed_sec": 308.4677615440014
+    },
+    {
+      "seed": 808,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        25.931,
+        59.043,
+        62.399,
+        63.532,
+        67.002,
+        99.473,
+        104.035,
+        147.349,
+        154.609,
+        156.029,
+        163.475,
+        190.577,
+        193.418
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=808",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[25.931,59.043,62.399,63.532,67.002,99.473,104.035,147.349,154.609,156.029,163.475,190.577,193.418]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=808",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed808-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 91.69800000000002,
+        "wait_served_p95_sec": 146.3,
+        "wait_served_mean_sec": 91.26650000000001,
+        "wait_including_censored_mean_sec": 96.51520000000001,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 9,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=5b2fea3d47974f51a7dd504ec4fe8e51",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=247915cdf01641368ce36c9b0f18aeec",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=4babc30e8f094885a40c481e5b94b183",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=eb747a84b7e74676ac3a1aaecc6da282"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.12815761600359,
+          "C1": 12.900651103998825
+        },
+        "car_travel_mean_sec": 15.014404360001208,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 30.813750442001037,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 67.5154370550008,
+            "reason": "value=6.518989086151123;decision=PREDICTIVE"
+          },
+          {
+            "t": 97.51499558500655,
+            "reason": "value=6.931640625;decision=PREDICTIVE"
+          },
+          {
+            "t": 151.51443404700694,
+            "reason": "value=6.910253524780273;decision=PREDICTIVE"
+          },
+          {
+            "t": 197.51249743800145,
+            "reason": "value=6.735344886779785;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "2394669d-4e1e-4267-be23-8de78dc03cb4",
+      "actions": [
+        {
+          "t": 65.01776810900628,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "0cc3f1d8bd8c4dd1a77f293e7e40ca97",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "c94850b21fec4e9ea2189fd84b6a2c9e",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.04725123600656,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01397614400048,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.72635190100118,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01664515200537,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01688757400552,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01216018600098,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.0123784430034,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "0cc3f1d8bd8c4dd1a77f293e7e40ca97",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "c94850b21fec4e9ea2189fd84b6a2c9e",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.72634534500685,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 39508.021113516
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01590748900344,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.17372965700633,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-808-escort-1",
+          "sent_t": 70.01422155300679,
+          "sent_mono": 39490.308988554,
+          "accepted": true,
+          "end_mono": 39501.113595182,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-808-escort-2",
+          "sent_t": 91.02295160500216,
+          "sent_mono": 39511.317718617,
+          "accepted": true,
+          "end_mono": 39638.765509893,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "58d6bf66a726309ef3e64e07df9892336e18573c1338b14a3eb06d25a1d2da53",
+      "elapsed_sec": 305.19949174200156
+    },
+    {
+      "seed": 809,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        16.509,
+        56.891,
+        58.083,
+        64.653,
+        65.071,
+        123.1,
+        128.747,
+        141.089,
+        145.283,
+        147.386,
+        160.368,
+        190.953,
+        201.297
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=809",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[16.509,56.891,58.083,64.653,65.071,123.100,128.747,141.089,145.283,147.386,160.368,190.953,201.297]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=809",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed809-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 160.34699999999998,
+        "wait_served_p95_sec": 214.75,
+        "wait_served_mean_sec": 153.69899999999998,
+        "wait_including_censored_mean_sec": 146.118,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 15,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=aafa9fa2e01b4dd5bb0fe7801b1f9c5f",
+          "success=False;reason=TIMEOUT;goal_id=93b54bb4cf124c4e96970580a55b525f",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=d3ac7ef4c98f48b993e5cacb353cf32f",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=d4f74a7191a54464bb5f4311e0ef2229"
+        ],
+        "bus_missions_succeeded": 2,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.092297328003042,
+          "C1": 12.880815167998662
+        },
+        "car_travel_mean_sec": 14.986556248000852,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 39.101556996
+        },
+        "first_valid_forecast_sec": 30.49978805000137,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 67.86313904199778,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 98.86148048099858,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 219.8623004839974,
+            "reason": "value=11;decision=REACTIVE"
+          },
+          {
+            "t": 249.862806567995,
+            "reason": "value=7;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "5196d405-486b-4728-aeef-7648f47ff2ee",
+      "actions": [
+        {
+          "t": 65.00592300300195,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "8bb6cdacbc764c0380e1e49f65474da1",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "06f8a8917d7948bcbbf42a7685cb160f",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.00392978799937,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.00272603199846,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.7621226859992,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01818158599781,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.0476435160017,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.0145977459979,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01671846799582,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "8bb6cdacbc764c0380e1e49f65474da1",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "06f8a8917d7948bcbbf42a7685cb160f",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.76211826800136,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 39814.247590305
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01573205099703,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.94078325699957,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-809-escort-1",
+          "sent_t": 70.02108712599875,
+          "sent_mono": 39796.506558516,
+          "accepted": true,
+          "end_mono": 39807.217017074,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-809-escort-2",
+          "sent_t": 91.03863954800181,
+          "sent_mono": 39817.524111142,
+          "accepted": true,
+          "end_mono": 39950.366826225,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "34051842e10632297ac15779420765be9393bb2e3126cd3a763b60975a435eb9",
+      "elapsed_sec": 306.20694493200426
+    },
+    {
+      "seed": 809,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        16.509,
+        56.891,
+        58.083,
+        64.653,
+        65.071,
+        123.1,
+        128.747,
+        141.089,
+        145.283,
+        147.386,
+        160.368,
+        190.953,
+        201.297
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=809",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[16.509,56.891,58.083,64.653,65.071,123.100,128.747,141.089,145.283,147.386,160.368,190.953,201.297]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=809",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed809-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 154.897,
+        "wait_served_p95_sec": 209.05,
+        "wait_served_mean_sec": 148.49900000000002,
+        "wait_including_censored_mean_sec": 141.95800000000003,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 15,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=e220749773df4c8888232f2b2b1ab911",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=0cc7e8f1947d45c78470672504b2ea2e",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=79087e42786445f79e4ce400250484d0",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=46fe204c02f74f3aab3ecde290dbc2ff"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.151273452996975,
+          "C1": 12.877967519998492
+        },
+        "car_travel_mean_sec": 15.014620486497734,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 29.90242987000238
+        },
+        "first_valid_forecast_sec": 30.527826527999423,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 68.41444769100053,
+            "reason": "value=7.827085018157959;decision=PREDICTIVE"
+          },
+          {
+            "t": 98.41643788800138,
+            "reason": "value=6.4078779220581055;decision=PREDICTIVE"
+          },
+          {
+            "t": 214.4157637860044,
+            "reason": "value=11.33938217163086;decision=PREDICTIVE"
+          },
+          {
+            "t": 245.41491603600298,
+            "reason": "value=6.773536205291748;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "576ee813-c124-4b9f-ac6b-e3acf640f3af",
+      "actions": [
+        {
+          "t": 65.01393092800572,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "842b3e954e8e4e7f96d5170e9d108949",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "6db077bc44914a4c9cbdcaf1b81fac04",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01463479300583,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.07131216100242,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.81655066199892,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01488256599987,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01802150800359,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.0061488680003,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.0076747100029,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "842b3e954e8e4e7f96d5170e9d108949",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "6db077bc44914a4c9cbdcaf1b81fac04",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.81654816600349,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 40122.530342837
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01238124600059,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.37043408799946,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-809-escort-1",
+          "sent_t": 70.01295883800049,
+          "sent_mono": 40104.726753312,
+          "accepted": true,
+          "end_mono": 40115.381837218,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-809-escort-2",
+          "sent_t": 91.03871637300472,
+          "sent_mono": 40125.752510932,
+          "accepted": true,
+          "end_mono": 40297.476833715,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "7d318a70fae6669227233ef7ded8a5f59f18512d588aa26243508947d512be5e",
+      "elapsed_sec": 308.21768594600144
+    },
+    {
+      "seed": 810,
+      "policy": "reactive",
+      "status": "PASS",
+      "schedule": [
+        36.439,
+        54.655,
+        61.178,
+        66.051,
+        67.098,
+        98.206,
+        126.245,
+        147.025,
+        159.284,
+        163.492,
+        167.954,
+        213.638,
+        215.467
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=810",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[36.439,54.655,61.178,66.051,67.098,98.206,126.245,147.025,159.284,163.492,167.954,213.638,215.467]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=reactive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=810",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed810-reactive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 154.699,
+        "wait_served_p95_sec": 210.95000000000002,
+        "wait_served_mean_sec": 146.84391666666667,
+        "wait_including_censored_mean_sec": 137.67120000000003,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 13,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=646b3a83bb0c4568977ed7f65b016c75",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=1e3ca2d51d484d12b988fcc0e6b2df45",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=df39758a498946d0bb67ea284e12c6a4",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=03d201755ab04e78aa39035e0098ed73"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.13822807699762,
+          "C1": 12.882311470995774
+        },
+        "car_travel_mean_sec": 15.010269773996697,
+        "crossing_wait_sec": {
+          "robot": 0.0,
+          "bus": 35.301965263002785
+        },
+        "first_valid_forecast_sec": 30.992581348000385,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 69.58939622299658,
+            "reason": "value=7;decision=REACTIVE"
+          },
+          {
+            "t": 100.58928006300266,
+            "reason": "value=8;decision=REACTIVE"
+          },
+          {
+            "t": 215.5877629509996,
+            "reason": "value=10;decision=REACTIVE"
+          },
+          {
+            "t": 245.58973934499954,
+            "reason": "value=7;decision=REACTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "b2885e1d-c116-48af-bba4-61c378df5601",
+      "actions": [
+        {
+          "t": 65.0231864439993,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "1c67e12a18c24d69b44dbddebe7d672f",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "07ad6c8e38e04d99a78ae905a8120954",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.02016651399754,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01931673500076,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.81040416200267,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01969210000243,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.02236187800008,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.01371080800163,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.0132252149997,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "1c67e12a18c24d69b44dbddebe7d672f",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "07ad6c8e38e04d99a78ae905a8120954",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.81039590699947,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 40432.362499713
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01888264699664,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.13552555900242,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": false,
+          "reason": "/safety/finish_reset:queue_stale"
+        },
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-810-escort-1",
+          "sent_t": 70.01476988299692,
+          "sent_mono": 40414.566872133,
+          "accepted": true,
+          "end_mono": 40425.382731471,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-810-escort-2",
+          "sent_t": 91.03524572499737,
+          "sent_mono": 40435.587348095,
+          "accepted": true,
+          "end_mono": 40562.933835725,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "275869a8cd6db29c45787cb612576b68e4910e2bb718da7de4bfbd4184bb73c5",
+      "elapsed_sec": 309.9580419699996
+    },
+    {
+      "seed": 810,
+      "policy": "predictive",
+      "status": "PASS",
+      "schedule": [
+        36.439,
+        54.655,
+        61.178,
+        66.051,
+        67.098,
+        98.206,
+        126.245,
+        147.025,
+        159.284,
+        163.492,
+        167.954,
+        213.638,
+        215.467
+      ],
+      "commands": {
+        "scenario_runner": [
+          "smart_hub_sim",
+          "scenario_runner",
+          "--ros-args",
+          "-p",
+          "m3_mode:=true",
+          "-p",
+          "m4_mode:=true",
+          "-p",
+          "m6_mode:=true",
+          "-p",
+          "publish_queue:=false",
+          "-p",
+          "seed:=810",
+          "-p",
+          "initial_passengers:=2",
+          "-p",
+          "passenger_arrivals_sec:=[36.439,54.655,61.178,66.051,67.098,98.206,126.245,147.025,159.284,163.492,167.954,213.638,215.467]"
+        ],
+        "passenger_detector": [
+          "smart_hub_perception",
+          "passenger_detector"
+        ],
+        "demand_predictor": [
+          "smart_hub_prediction",
+          "demand_predictor"
+        ],
+        "safety_supervisor": [
+          "smart_hub_safety",
+          "safety_supervisor"
+        ],
+        "crossing_arbiter": [
+          "smart_hub_control",
+          "crossing_arbiter",
+          "--ros-args",
+          "-p",
+          "dispatch_policy:=predictive"
+        ],
+        "route_planner": [
+          "smart_hub_control",
+          "route_planner"
+        ],
+        "robot_manager": [
+          "smart_hub_control",
+          "robot_manager"
+        ],
+        "bus_manager": [
+          "smart_hub_control",
+          "bus_manager"
+        ],
+        "parking_manager": [
+          "smart_hub_control",
+          "parking_manager"
+        ],
+        "traffic_monitor": [
+          "smart_hub_control",
+          "traffic_monitor"
+        ],
+        "dashboard_marker_publisher": [
+          "smart_hub_bringup",
+          "dashboard_marker_publisher"
+        ],
+        "metrics_logger": [
+          "smart_hub_bringup",
+          "metrics_logger",
+          "--ros-args",
+          "-p",
+          "scenario_id:=S8",
+          "-p",
+          "seed:=810",
+          "-p",
+          "output_dir:=/home/secondbekbolot/workspaces/projects/university/smart-mobility-hub/.cache/acceptance/adc7955/run2/s8/s8-raw/seed810-predictive/metrics"
+        ]
+      },
+      "safety": {
+        "collisions": 0,
+        "physical_crossing_overlap": 0,
+        "crossing_owner_conflicts": 0,
+        "new_crossing_grants_during_pedestrian": 0,
+        "entries_into_c_during_pedestrian": 0,
+        "double_allocations": 0,
+        "duplicate_dispatches": 0,
+        "spontaneous_robot_restarts": 0
+      },
+      "metrics": {
+        "passengers_total": 15,
+        "passengers_boarded": 12,
+        "completion_rate": 0.8,
+        "wait_served_p50_sec": 135.449,
+        "wait_served_p95_sec": 191.10000000000002,
+        "wait_served_mean_sec": 127.37725000000002,
+        "wait_including_censored_mean_sec": 122.09786666666668,
+        "right_censored_passengers": 3,
+        "queue_peak_observed": 13,
+        "bus_dispatches": 4,
+        "bus_results": [
+          "success=False;reason=SAFETY_STOP;goal_id=ed0dcf1109414385ba41bd75a0db7570",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=62adb154c7904a989a40a2aee160c9fc",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=5bc5061a7b7043baa1f1405693c7090a",
+          "success=True;reason=DOCKED_BOARDED_DOOR_CLOSED;goal_id=d4469b5a92804f25bc244b2bef9e73f3"
+        ],
+        "bus_missions_succeeded": 3,
+        "robot_missions": 2,
+        "robot_missions_succeeded": 1,
+        "robot_results": [
+          "SAFETY_STOP",
+          "ARRIVED"
+        ],
+        "car_travel_time_sec": {
+          "C2": 17.14191397599643,
+          "C1": 12.878407853000681
+        },
+        "car_travel_mean_sec": 15.010160914498556,
+        "crossing_wait_sec": {
+          "robot": 22.949657331999333,
+          "bus": 0.0
+        },
+        "first_valid_forecast_sec": 31.133518178001395,
+        "final_parking": {
+          "P1": "OCCUPIED",
+          "P2": "FREE",
+          "P3": "FREE"
+        }
+      },
+      "details": {
+        "collisions": [],
+        "physical_crossing_overlap": [],
+        "crossing_owner_conflicts": [],
+        "new_crossing_grants_during_pedestrian": [],
+        "entries_into_c_during_pedestrian": [],
+        "double_allocations": [],
+        "duplicate_dispatches": [],
+        "dispatches": [
+          {
+            "t": 69.27800840100099,
+            "reason": "value=7.833760738372803;decision=PREDICTIVE"
+          },
+          {
+            "t": 100.27736730300239,
+            "reason": "value=7.781825542449951;decision=PREDICTIVE"
+          },
+          {
+            "t": 196.27766352600156,
+            "reason": "value=8.670654296875;decision=PREDICTIVE"
+          },
+          {
+            "t": 226.27898930099764,
+            "reason": "value=7.821061134338379;decision=PREDICTIVE"
+          }
+        ],
+        "spontaneous_robot_restarts": []
+      },
+      "checks": [],
+      "run_id": "bf7c02b0-e00c-42ae-bb72-471fae430f07",
+      "actions": [
+        {
+          "t": 65.01659560100234,
+          "action": "parking_requests",
+          "results": {
+            "C1": {
+              "success": true,
+              "slot": "P3",
+              "reservation_id": "95664280502d4d9cb52d574002b431c3",
+              "reason": "RESERVED"
+            },
+            "C2": {
+              "success": true,
+              "slot": "P2",
+              "reservation_id": "8172567951664f25986a3360316e36d7",
+              "reason": "RESERVED"
+            }
+          }
+        },
+        {
+          "t": 80.01371281700267,
+          "action": "pedestrian_on"
+        },
+        {
+          "t": 85.01271464599995,
+          "action": "pedestrian_off"
+        },
+        {
+          "t": 87.80140692999703,
+          "action": "clear_stop",
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates"
+        },
+        {
+          "t": 90.01659992700297,
+          "action": "obstruction_on"
+        },
+        {
+          "t": 120.01464080000005,
+          "action": "obstruction_off"
+        },
+        {
+          "t": 200.00956157199835,
+          "action": "depart",
+          "vehicle": "C1",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        },
+        {
+          "t": 215.01046787499945,
+          "action": "depart",
+          "vehicle": "C2",
+          "release": {
+            "success": true,
+            "reason": "RELEASED"
+          }
+        }
+      ],
+      "reservations": {
+        "C1": {
+          "success": true,
+          "slot": "P3",
+          "reservation_id": "95664280502d4d9cb52d574002b431c3",
+          "reason": "RESERVED"
+        },
+        "C2": {
+          "success": true,
+          "slot": "P2",
+          "reservation_id": "8172567951664f25986a3360316e36d7",
+          "reason": "RESERVED"
+        }
+      },
+      "clears": [
+        {
+          "t": 87.80140171200037,
+          "success": true,
+          "reason": "cleared_waiting_for_new_candidates",
+          "mono": 40738.547388638
+        }
+      ],
+      "ready": [
+        {
+          "t": 75.01294950600277,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        },
+        {
+          "t": 117.13186957300059,
+          "success": true,
+          "message": "READY_ACCEPTED"
+        }
+      ],
+      "reset_attempts": [
+        {
+          "success": true,
+          "reason": "ALL_M4_PARTICIPANTS_ACKNOWLEDGED"
+        }
+      ],
+      "escorts": [
+        {
+          "request_id": "s8-810-escort-1",
+          "sent_t": 70.0119772409962,
+          "sent_mono": 40720.75796332,
+          "accepted": true,
+          "end_mono": 40731.574409433,
+          "status": 6,
+          "reason": "SAFETY_STOP",
+          "success": false
+        },
+        {
+          "request_id": "s8-810-escort-2",
+          "sent_t": 91.0352750719976,
+          "sent_mono": 40741.781261605,
+          "accepted": true,
+          "end_mono": 40891.973639158,
+          "status": 4,
+          "reason": "ARRIVED",
+          "success": true
+        }
+      ],
+      "trace_sha256": "61c122a7559c73f41c9fb74fb036c7220a1d68ca041e58b4f460b276a77c593f",
+      "elapsed_sec": 306.11170359099924
+    }
+  ],
+  "clocks": "monotonic episode time; wall-backed ROS stamps; no /clock",
+  "fixtures": "scripted kinematic cars (D17), obstacle O on Cs-J, pedestrian flag, verifier operator heartbeat and readiness",
+  "status": "FAIL",
+  "paired": {
+    "pairs": [
+      {
+        "seed": 801,
+        "delta_wait_including_censored_mean_sec": 105.34666666666666,
+        "delta_wait_served_mean_sec": null,
+        "delta_wait_served_p95_sec": null,
+        "delta_completion_rate": -0.8,
+        "delta_queue_peak_observed": 6
+      },
+      {
+        "seed": 802,
+        "delta_wait_including_censored_mean_sec": 3.34666666666665,
+        "delta_wait_served_mean_sec": 4.183333333333323,
+        "delta_wait_served_p95_sec": 1.9499999999999886,
+        "delta_completion_rate": 0.0,
+        "delta_queue_peak_observed": 1
+      },
+      {
+        "seed": 803,
+        "delta_wait_including_censored_mean_sec": 22.799999999999997,
+        "delta_wait_served_mean_sec": 28.5,
+        "delta_wait_served_p95_sec": 38.25,
+        "delta_completion_rate": 0.0,
+        "delta_queue_peak_observed": 4
+      },
+      {
+        "seed": 804,
+        "delta_wait_including_censored_mean_sec": 9.553333333333313,
+        "delta_wait_served_mean_sec": 12.445166666666694,
+        "delta_wait_served_p95_sec": -18.150000000000006,
+        "delta_completion_rate": -0.33333333333333337,
+        "delta_queue_peak_observed": 0
+      },
+      {
+        "seed": 805,
+        "delta_wait_including_censored_mean_sec": 56.120000000000005,
+        "delta_wait_served_mean_sec": null,
+        "delta_wait_served_p95_sec": null,
+        "delta_completion_rate": -0.8,
+        "delta_queue_peak_observed": 1
+      },
+      {
+        "seed": 806,
+        "delta_wait_including_censored_mean_sec": -41.21333333333335,
+        "delta_wait_served_mean_sec": -51.51666666666668,
+        "delta_wait_served_p95_sec": -52.150000000000006,
+        "delta_completion_rate": 0.0,
+        "delta_queue_peak_observed": -4
+      },
+      {
+        "seed": 807,
+        "delta_wait_including_censored_mean_sec": -1.1200000000000045,
+        "delta_wait_served_mean_sec": -1.4000000000000057,
+        "delta_wait_served_p95_sec": -2.8000000000000114,
+        "delta_completion_rate": 0.0,
+        "delta_queue_peak_observed": 0
+      },
+      {
+        "seed": 808,
+        "delta_wait_including_censored_mean_sec": 1.3333333333333428,
+        "delta_wait_served_mean_sec": 1.6666666666666714,
+        "delta_wait_served_p95_sec": 0.6500000000000057,
+        "delta_completion_rate": 0.0,
+        "delta_queue_peak_observed": 0
+      },
+      {
+        "seed": 809,
+        "delta_wait_including_censored_mean_sec": -4.159999999999968,
+        "delta_wait_served_mean_sec": -5.19999999999996,
+        "delta_wait_served_p95_sec": -5.699999999999989,
+        "delta_completion_rate": 0.0,
+        "delta_queue_peak_observed": 0
+      },
+      {
+        "seed": 810,
+        "delta_wait_including_censored_mean_sec": -15.573333333333352,
+        "delta_wait_served_mean_sec": -19.466666666666654,
+        "delta_wait_served_p95_sec": -19.849999999999994,
+        "delta_completion_rate": 0.0,
+        "delta_queue_peak_observed": 0
+      }
+    ],
+    "n_pairs": 10,
+    "mean_delta_wait_including_censored_sec": 13.643333333333327,
+    "bootstrap_95ci_over_seeds": [
+      -8.152666666666677,
+      40.06266666666666
+    ],
+    "note": "delta = predictive - reactive on identical seeds; negative favours predictive. Resampled over episodes (seeds), not windows."
+  },
+  "elapsed_sec": 6152.051050076996
+}

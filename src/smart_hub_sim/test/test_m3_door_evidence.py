@@ -4,6 +4,7 @@ from copy import deepcopy
 import importlib.util
 import json
 from pathlib import Path
+import time
 from types import SimpleNamespace
 
 import pytest
@@ -124,10 +125,10 @@ def test_physics_opening_and_protective_closure_are_measured(harness):
     at(BASE, lambda: node._goal_id(String(data='goal')))
     at(OPEN - 100, lambda: node._door_request(Bool(data=True)))
     assert not node.world.door_open
-    at(OPEN, node._step)
+    at(OPEN, lambda: node._physics_step(time.monotonic()))
     assert node.world.door_open
     node._active_command = lambda agent, now: (0.1, 0.0) if agent == 'bus' else (0.0, 0.0)
-    at(OPEN + 7_900_000_000, node._step)
+    at(OPEN + 7_900_000_000, lambda: node._physics_step(time.monotonic()))
     assert not node.world.door_open
     at(OPEN + 7_900_000_100, lambda: node._goal_id(String(data='')))
     observed = duration.assess_source(events, node._run_id, 'goal', False)

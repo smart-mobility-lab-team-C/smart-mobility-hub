@@ -43,7 +43,12 @@ class DemandPredictor(Node):
                          if self.forecast_model == 'ridge' else 'persistence')
         self.queue = None
         self.samples = deque(maxlen=61)
-        self.events = deque()
+        self.events = deque()        # (source stamp, kind) of accepted track transitions
+        self.seen_events = set()     # (entity_id, event) already counted in this run
+        self.last_sample_stamp = None
+        self.rejected = {'old_run': 0, 'duplicate': 0, 'future': 0, 'late': 0,
+                         'late_shifted': 0}
+        self.ages = deque(maxlen=600)   # (source age, receipt age) of used queue samples
         self.inference_ms = deque(maxlen=600)
         self.run_id = ''
         self.publisher = self.create_publisher(DemandPrediction, '/hub/demand', 10)
@@ -61,22 +66,43 @@ class DemandPredictor(Node):
             self.queue = None
             self.samples.clear()
             self.events.clear()
+            self.seen_events.clear()
+            self.last_sample_stamp = None
 
     def on_queue(self, message):
         """Retain source stamp and monotonic receipt separately."""
         self.queue = (message, time.monotonic())
 
     def on_event(self, message):
-        """Store only observed track transitions within the current history span."""
-        if message.scenario_id == 'perception' and message.event in (
+        """Keep each track transition once, by source time, for the current run only."""
+        if message.scenario_id != 'perception' or message.event not in (
                 'TRACK_ENTRY', 'TRACK_EXIT'):
-            self.events.append((time.monotonic(), message.event))
+            return
+        if message.run_id != self.run_id:
+            self.rejected['old_run'] += 1
+            return
+        key = (message.entity_id, message.event)
+        if key in self.seen_events:
+            self.rejected['duplicate'] += 1
+            return
+        stamp = message.header.stamp.sec + message.header.stamp.nanosec * 1e-9
+        if stamp > self.get_clock().now().nanoseconds * 1e-9:
+            self.rejected['future'] += 1
+            return
+        if self.last_sample_stamp is not None and stamp <= self.last_sample_stamp:
+            # Late-event policy: history is never rewritten. A transition at most 1 s
+            # late counts in the next sample; anything older is counted and dropped.
+            if stamp <= self.last_sample_stamp - 1.0:
+                self.rejected['late'] += 1
+                return
+            self.rejected['late_shifted'] += 1
+            stamp = self.last_sample_stamp + 1e-6
+        self.seen_events.add(key)
+        self.events.append((stamp, message.event))
 
     def tick(self):
         """Publish explicit invalidity until a contiguous history is available."""
         now = time.monotonic()
-        while self.events and now - self.events[0][0] > 61:
-            self.events.popleft()
         message = DemandPrediction()
         message.header.stamp = self.get_clock().now().to_msg()
         message.header.frame_id = 'map'
@@ -95,16 +121,28 @@ class DemandPredictor(Node):
                      math.isfinite(queue.confidence) and
                      self.confidence_min <= queue.confidence <= 1 and
                      0 <= age <= 1.0 and now - received <= 0.5)
+        # Contiguous one-second history (A section 9.2): each sample needs a new source
+        # stamp 0.5-1.5 s after the previous one; a repeat, reorder or gap restarts warm-up.
+        if valid and self.last_sample_stamp is not None and not (
+                0.5 <= stamp - self.last_sample_stamp <= 1.5):
+            valid = False
         if not valid:
             self.samples.clear()
+            self.last_sample_stamp = None
             self.publisher.publish(message)
             return
-        second_start = now - 1.0
-        entries = sum(second_start < at <= now and kind == 'TRACK_ENTRY'
+        previous = self.last_sample_stamp if self.last_sample_stamp is not None else stamp - 1.0
+        entries = sum(previous < at <= stamp and kind == 'TRACK_ENTRY'
                       for at, kind in self.events)
-        exits = sum(second_start < at <= now and kind == 'TRACK_EXIT'
+        exits = sum(previous < at <= stamp and kind == 'TRACK_EXIT'
                     for at, kind in self.events)
+        while self.events and self.events[0][0] <= stamp:
+            self.events.popleft()
+        self.last_sample_stamp = stamp
+        self.ages.append((age, now - received))
         self.samples.append((int(queue.count), entries, exits))
+        # The forecast carries the acquisition stamp of the queue sample it is based on.
+        message.header.stamp = queue.header.stamp
         if len(self.samples) < FEATURE_SPAN:
             self.publisher.publish(message)
             return
@@ -127,7 +165,12 @@ class DemandPredictor(Node):
                 'model_id': self.model_id, 'samples': len(ordered),
                 'p50_ms': ordered[len(ordered) // 2],
                 'p95_ms': ordered[int(0.95 * (len(ordered) - 1))],
-                'max_ms': ordered[-1]}))
+                'max_ms': ordered[-1],
+                'source_age_p95_sec': sorted(a for a, _ in self.ages)[
+                    int(0.95 * (len(self.ages) - 1))] if self.ages else None,
+                'receipt_age_p95_sec': sorted(r for _, r in self.ages)[
+                    int(0.95 * (len(self.ages) - 1))] if self.ages else None,
+                'rejected_events': dict(self.rejected)}))
 
 
 def main(args=None):
